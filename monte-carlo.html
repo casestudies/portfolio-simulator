@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Portföy Analiz Merkezi v11 — Ultra-Dense Institutional Edition</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg:    #05080e;
+  --surf:  #090e17;
+  --card:  #0d1520;
+  --bdr:   #132030;
+  --bdr2:  #1c2e42;
+  --text:  #ccd8e8;
+  --sub:   #8a9db5;
+  --muted: #4d6278;
+  --dim:   #162030;
+  --cyan:  #38bdf8;
+  --green: #34d399;
+  --red:   #f87171;
+  --orange:#fb923c;
+  --gold:  #f59e0b;
+  --teal:  #2dd4bf;
+  --blue:  #60a5fa;
+  --purple:#a78bfa;
+}
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { font-size:13px; -webkit-text-size-adjust:100%; }
+body { 
+  background:var(--bg); 
+  color:var(--text); 
+  font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+  padding:12px;
+  line-height:1.4;
+}
+
+/* Mobile & Structural Layout Framework */
+.container { max-width:1440px; margin:0 auto; display:flex; flex-direction:column; gap:12px; }
+header { 
+  background:var(--surf); border:1px solid var(--bdr); padding:12px 16px; 
+  border-radius:6px; display:flex; justify-content:between; align-items:center; flex-wrap:wrap; gap:12px;
+}
+.header-title h1 { font-size:1.4rem; font-weight:700; color:#fff; letter-spacing:-0.02em; display:flex; align-items:center; gap:8px; }
+.header-title h1 span { color:var(--cyan); font-size:0.8rem; background:var(--dim); padding:2px 6px; border-radius:4px; border:1px solid var(--bdr2); }
+.header-title p { font-size:0.85rem; color:var(--sub); margin-top:2px; }
+.header-actions { display:flex; gap:8px; align-items:center; }
+
+.btn {
+  background:var(--dim); border:1px solid var(--bdr2); color:var(--text); padding:6px 12px;
+  border-radius:4px; cursor:pointer; font-weight:600; font-size:0.85rem; display:inline-flex;
+  align-items:center; gap:6px; transition:all 0.15s ease; user-select:none; -webkit-tap-highlight-color:transparent;
+}
+.btn:active { transform:scale(0.97); }
+.btn:hover { background:var(--bdr2); color:#fff; }
+.btn-primary { background:linear-gradient(135deg, #0284c7, #0369a1); border-color:#38bdf8; color:#fff; }
+.btn-primary:hover { background:linear-gradient(135deg, #0369a1, #075985); }
+.btn-success { background:linear-gradient(135deg, #059669, #047857); border-color:#34d399; color:#fff; }
+.btn-success:hover { background:linear-gradient(135deg, #047857, #065f46); }
+
+/* Master Tabs Navigation */
+.tabs-navigation {
+  display:flex; gap:4px; background:var(--surf); border:1px solid var(--bdr);
+  padding:4px; border-radius:6px; overflow-x:auto; scrollbar-width:none;
+}
+.tabs-navigation::-webkit-scrollbar { display:none; }
+.tab-btn {
+  background:transparent; border:none; color:var(--sub); padding:8px 14px;
+  font-size:0.9rem; font-weight:600; border-radius:4px; cursor:pointer; white-space:nowrap;
+  transition:all 0.15s ease; display:flex; align-items:center; gap:6px;
+}
+.tab-btn:hover { color:#fff; background:var(--dim); }
+.tab-btn.active { background:var(--card); color:var(--cyan); border:1px solid var(--bdr2); box-shadow:0 2px 4px rgba(0,0,0,0.2); }
+
+/* Core Dashboard Layout Modules */
+.main-grid { display:grid; grid-template-columns:340px 1fr; gap:12px; }
+@media (max-width:1024px) { .main-grid { grid-template-columns:1fr; } }
+
+.sidebar-panel { display:flex; flex-direction:column; gap:12px; }
+.dashboard-content { display:flex; flex-direction:column; gap:12px; }
+
+.panel-card {
+  background:var(--surf); border:1px solid var(--bdr); border-radius:6px;
+  display:flex; flex-direction:column; overflow:hidden;
+}
+.panel-header {
+  background:var(--card); border-bottom:1px solid var(--bdr); padding:10px 12px;
+  display:flex; justify-content:between; align-items:center; gap:8px;
+}
+.panel-header h2 { font-size:0.95rem; font-weight:700; color:#fff; display:flex; align-items:center; gap:6px; }
+.panel-body { padding:12px; display:flex; flex-direction:column; gap:10px; }
+
+/* Precise Input Group Form Factors */
+.input-group { display:flex; flex-direction:column; gap:4px; }
+.input-label-row { display:flex; justify-content:space-between; align-items:center; }
+.input-label-row label { font-size:0.85rem; font-weight:600; color:var(--sub); }
+.input-value-badge { font-family:monospace; font-weight:700; font-size:0.85rem; color:var(--cyan); background:var(--dim); padding:1px 5px; border-radius:3px; }
+.input-wrapper { position:relative; display:flex; align-items:center; }
+.input-wrapper input[type="text"], 
+.input-wrapper input[type="number"],
+.input-wrapper select {
+  width:100%; background:var(--card); border:1px solid var(--bdr2); color:#fff;
+  padding:8px 10px; border-radius:4px; font-size:0.95rem; font-family:-apple-system, sans-serif;
+  transition:border-color 0.15s ease;
+}
+.input-wrapper input:focus, .input-wrapper select:focus { border-color:var(--cyan); outline:none; }
+.input-wrapper .input-unit { position:absolute; right:10px; font-size:0.8rem; font-weight:600; color:var(--muted); pointer-events:none; }
+.input-wrapper-has-unit input { padding-right:45px; }
+
+/* Custom Sliders for Seamless Mobile Gesture Manipulation */
+.slider-container { display:flex; align-items:center; gap:8px; margin-top:2px; }
+.slider-container input[type="range"] {
+  flex:1; -webkit-appearance:none; background:var(--bdr2); height:5px; border-radius:3px; outline:none;
+}
+.slider-container input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance:none; width:15px; height:15px; border-radius:50%; background:var(--cyan); cursor:pointer; transition:transform 0.1s;
+}
+.slider-container input[type="range"]::-webkit-slider-thumb:active { transform:scale(1.2); }
+
+/* KPI Scorecard Matrices */
+.kpi-matrix { display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:10px; }
+.kpi-card {
+  background:var(--surf); border:1px solid var(--bdr); border-radius:6px; padding:12px;
+  display:flex; flex-direction:column; gap:4px; position:relative; overflow:hidden;
+}
+.kpi-card::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--bdr2); }
+.kpi-card.cyan::before { background:var(--cyan); }
+.kpi-card.green::before { background:var(--green); }
+.kpi-card.red::before { background:var(--red); }
+.kpi-card.orange::before { background:var(--orange); }
+.kpi-card.purple::before { background:var(--purple); }
+.kpi-title { font-size:0.8rem; font-weight:600; color:var(--sub); text-transform:uppercase; letter-spacing:0.02em; }
+.kpi-value { font-size:1.4rem; font-weight:700; color:#fff; font-family:monospace; white-space:nowrap; }
+.kpi-subtext { font-size:0.75rem; color:var(--muted); display:flex; align-items:center; gap:4px; }
+
+/* Analytics Interactive Layouts */
+.analytics-block { display:grid; grid-template-columns:1fr; gap:12px; }
+.chart-container { position:relative; width:100%; height:320px; background:var(--surf); border:1px solid var(--bdr); border-radius:6px; padding:10px; }
+
+/* Micro-Tab Mechanics for Sub-Views */
+.sub-tabs { display:flex; gap:4px; border-bottom:1px solid var(--bdr); padding-bottom:6px; margin-bottom:8px; }
+.sub-tab-btn {
+  background:transparent; border:none; color:var(--sub); font-size:0.8rem; font-weight:600;
+  padding:4px 10px; border-radius:3px; cursor:pointer; transition:all 0.1s;
+}
+.sub-tab-btn.active { background:var(--dim); color:#fff; border:1px solid var(--bdr2); }
+
+/* High-Density Tabular Infrastructures (Monospace Alignment Critical) */
+.table-responsive { width:100%; overflow-x:auto; border:1px solid var(--bdr); border-radius:6px; background:var(--surf); }
+.dense-table { width:100%; border-collapse:collapse; text-align:left; font-size:0.85rem; }
+.dense-table th {
+  background:var(--card); color:var(--sub); font-weight:600; padding:8px 10px;
+  border-bottom:1px solid var(--bdr); white-space:nowrap; font-size:0.8rem;
+}
+.dense-table td { padding:7px 10px; border-bottom:1px solid var(--bdr); white-space:nowrap; vertical-align:middle; }
+.dense-table tbody tr:hover { background:var(--dim); }
+.font-mono { font-family:monospace; font-weight:600; }
+
+/* Year-by-Year Parameter Matrix Styles */
+.year-matrix-grid { display:flex; flex-direction:column; gap:6px; max-height:480px; overflow-y:auto; padding-right:4px; }
+.year-param-row {
+  background:var(--card); border:1px solid var(--bdr); border-radius:4px; padding:6px 10px;
+  display:grid; grid-template-columns:60px 1fr 1fr; gap:12px; align-items:center;
+}
+@media (max-width:480px) {
+  .year-param-row { grid-template-columns:1fr; gap:6px; }
+}
+.year-param-label { font-weight:700; color:#fff; font-size:0.85rem; display:flex; align-items:center; gap:4px; }
+
+/* Monte Carlo Controls Layout Optimization */
+.simulation-meta-controls {
+  display:grid; grid-template-columns:1fr 1fr 180px; gap:10px; align-items:end; background:var(--card);
+  padding:10px; border:1px solid var(--bdr2); border-radius:4px; margin-bottom:10px;
+}
+@media (max-width:768px) { .simulation-meta-controls { grid-template-columns:1fr; } }
+
+/* Utility Styles */
+.hidden { display:none !important; }
+.flex-between { display:flex; justify-content:space-between; align-items:center; }
+.text-green { color:var(--green) !important; }
+.text-red { color:var(--red) !important; }
+.text-cyan { color:var(--cyan) !important; }
+.text-orange { color:var(--orange) !important; }
+.text-purple { color:var(--purple) !important; }
+
+/* Interactive Simulation Scenario Cards */
+.scenario-cards-container { display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:10px; margin-top:8px; }
+.scenario-pill-card {
+  background:var(--card); border:1px solid var(--bdr); border-radius:5px; padding:10px;
+  display:flex; flex-direction:column; gap:4px; border-left:4px solid var(--muted);
+}
+.scenario-pill-card.success { border-left-color:var(--green); }
+.scenario-pill-card.danger { border-left-color:var(--red); }
+.scenario-pill-card.warning { border-left-color:var(--orange); }
+
+/* Print & PDF Hardening Adjustments */
+@media print {
+  body { background:#fff; color:#000; padding:0; }
+  .no-print, .tabs-navigation, .sidebar-panel, .simulation-meta-controls, input, select, button { display:none !important; }
+  .main-grid { grid-template-columns:1fr; }
+  .panel-card, .table-responsive, .kpi-card { border:1px solid #ccc !important; background:#fff !important; color:#000 !important; }
+  .kpi-value, .font-mono { color:#000 !important; font-family:Courier, monospace !important; }
+  .chart-container { height:260px !important; page-break-inside:avoid; }
+  th { background:#f0f0f0 !important; color:#000 !important; }
+  td { border-bottom:1px solid #eee !important; color:#000 !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div class="header-title">
+      <h1>Portföy Analiz Merkezi <span>v11.0 Enterprise</span></h1>
+      <p>Kronolojik Nakit Akış Motoru, Sekans Risk Modellemesi & Monte Carlo Simülasyonu</p>
+    </div>
+    <div class="header-actions no-print">
+      <button class="btn btn-success" onclick="executeCoreEngine()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg> Motoru Tetikle</button>
+      <button class="btn" onclick="window.print()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9V2h12v7"></path><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg> PDF Rapor Al</button>
+    </div>
+  </header>
+
+  <nav class="tabs-navigation no-print">
+    <button class="tab-btn active" onclick="switchMainTab('deterministic')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line></svg> Deterministik Kronolojik Analiz</button>
+    <button class="tab-btn" onclick="switchMainTab('montecarlo')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg> Monte Carlo Stokastik Simülasyon</button>
+    <button class="tab-btn" onclick="switchMainTab('advanced_scenarios')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg> Gelecek Sürüm — Simülasyon & Görselleştirme Önerileri</button>
+  </nav>
+
+  <div class="main-grid">
+    
+    <aside class="sidebar-panel no-print">
+      
+      <section class="panel-card">
+        <div class="panel-header">
+          <h2><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg> Başlangıç Parametreleri</h2>
+        </div>
+        <div class="panel-body">
+          <div class="input-group">
+            <div class="input-label-row">
+              <label for="p_initial">Başlangıç Portföyü</label>
+              <div class="input-value-badge" id="val_p_initial">$500K</div>
+            </div>
+            <div class="input-wrapper input-wrapper-has-unit">
+              <input type="number" id="p_initial" value="500000" inputmode="decimal" oninput="syncInputValue('p_initial')">
+              <span class="input-unit">USD</span>
+            </div>
+            <div class="slider-container">
+              <input type="range" id="slide_p_initial" min="10000" max="10000000" step="10000" value="500000" oninput="syncSliderValue('p_initial')">
+            </div>
+          </div>
+          
+          <div class="input-group">
+            <div class="input-label-row">
+              <label for="p_years">Simülasyon Süresi</label>
+              <div class="input-value-badge" id="val_p_years">30 Yıl</div>
+            </div>
+            <div class="input-wrapper input-wrapper-has-unit">
+              <input type="number" id="p_years" value="30" inputmode="numeric" oninput="syncInputValue('p_years'); buildYearlyParameterMatrix();">
+              <span class="input-unit">Yıl</span>
+            </div>
+            <div class="slider-container">
+              <input type="range" id="slide_p_years" min="5" max="50" step="1" value="30" oninput="syncSliderValue('p_years'); buildYearlyParameterMatrix();">
+            </div>
+          </div>
+
+          <div class="input-group">
+            <div class="input-label-row">
+              <label for="p_inflation">Yıllık Sabit Enflasyon</label>
+              <div class="input-value-badge" id="val_p_inflation">%3.0</div>
+            </div>
+            <div class="input-wrapper input-wrapper-has-unit">
+              <input type="number" id="p_inflation" value="3.0" step="0.1" inputmode="decimal" oninput="syncInputValue('p_inflation')">
+              <span class="input-unit">%</span>
+            </div>
+            <div class="slider-container">
+              <input type="range" id="slide_p_inflation" min="0" max="25" step="0.1" value="3.0" oninput="syncSliderValue('p_inflation')">
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel-card">
+        <div class="panel-header">
+          <h2><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg> Yapısal Nakit Akış Düzenekleri</h2>
+        </div>
+        <div class="panel-body">
+          <div class="input-group">
+            <div class="input-label-row">
+              <label id="lbl_flow_type">Yıllık Çekim Miktarı</label>
+              <div class="input-value-badge" id="val_p_flow_val">$20K</div>
+            </div>
+            <div class="input-wrapper input-wrapper-has-unit">
+              <input type="number" id="p_flow_val" value="20000" inputmode="decimal" oninput="syncInputValue('p_flow_val')">
+              <span class="input-unit">USD</span>
+            </div>
+            <div class="slider-container">
+              <input type="range" id="slide_p_flow_val" min="0" max="500000" step="2500" value="20000" oninput="syncSliderValue('p_flow_val')">
+            </div>
+          </div>
+
+          <div class="input-group">
+            <div class="input-label-row">
+              <label for="p_flow_mode">Nakit Akış Modeli Sınıfı</label>
+            </div>
+            <div class="input-wrapper">
+              <select id="p_flow_mode" onchange="adjustCashFlowLabelUI()">
+                <option value="withdrawal_pct">Portföy Yüzdesi Olarak Çekim (%)</option>
+                <option value="withdrawal_fixed" selected>Sabit Çekim Miktarı (Enflasyon Ayarlı)</option>
+                <option value="deposit_fixed">Sabit Düzenli Ekleme/Yatırım (Enflasyon Ayarlı)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel-card">
+        <div class="panel-header">
+          <h2><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> Yıllık Getiri &amp; Enflasyon İnce Ayar Matrisi</h2>
+        </div>
+        <div class="panel-body">
+          <p style="font-size:0.8rem; color:var(--muted); line-height:1.3; margin-bottom:4px;">
+            Aşağıdaki girdileri kullanarak her bir yılın getiri ve enflasyon oranını özelleştirebilirsiniz. Mobil uyumluluk için slider/girdi mekanizması optimize edilmiştir.
+          </p>
+          <div class="year-matrix-grid" id="yearly_matrix_container">
+            </div>
+        </div>
+      </section>
+    </aside>
+
+    <main class="dashboard-content">
+      
+      <div id="main_tab_deterministic_view" class="main-tab-content-wrapper">
+        
+        <div class="kpi-matrix" style="margin-bottom:12px;">
+          <div class="kpi-card cyan">
+            <div class="kpi-title">Nominal Nihai Bakiye</div>
+            <div class="kpi-value" id="kpi_nominal_bal">$0.00</div>
+            <div class="kpi-subtext">Nominal Akış Sonu</div>
+          </div>
+          <div class="kpi-card purple">
+            <div class="kpi-title">Reel (Enflasyon Ayarlı) Bakiye</div>
+            <div class="kpi-value" id="kpi_real_bal">$0.00</div>
+            <div class="kpi-subtext">Bugünün Satın Alma Gücü</div>
+          </div>
+          <div class="kpi-card green">
+            <div class="kpi-title">Kümülatif Kazanılan Getiri</div>
+            <div class="kpi-value" id="kpi_cum_interest">$0.00</div>
+            <div class="kpi-subtext text-green">Toplam İçsel Nemalandırma</div>
+          </div>
+          <div class="kpi-card red">
+            <div class="kpi-title">Kümülatif Çekilen/Eklenen Sermaye</div>
+            <div class="kpi-value" id="kpi_cum_flows">$0.00</div>
+            <div class="kpi-subtext text-red" id="kpi_flows_subtitle">Toplam Yapısal Çekim</div>
+          </div>
+        </div>
+
+        <div class="analytics-block" style="margin-bottom:12px;">
+          <div class="panel-card">
+            <div class="panel-header">
+              <h2><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg> Deterministik Varlık Gelişim Eğrisi &amp; Akış Değişimleri</h2>
+            </div>
+            <div class="panel-body">
+              <div class="chart-container">
+                <canvas id="canvas_deterministic_chart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel-card">
+          <div class="panel-header">
+            <h2><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg> Detaylı Yıllık Muhasebe Defteri</h2>
+          </div>
+          <div class="panel-body" style="padding:0;">
+            <div class="table-responsive">
+              <table class="dense-table" id="table_deterministic_ledger">
+                <thead>
+                  <tr>
+                    <th>Dönem</th>
+                    <th>Yıllık Getiri</th>
+                    <th>Yıllık Enflasyon</th>
+                    <th>Kazanılan Getiri</th>
+                    <th>Kümülatif Getiri</th>
+                    <th>Dönem İçi Akış</th>
+                    <th>Nominal Bakiye</th>
+                    <th>Reel Bakiye</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div id="main_tab_montecarlo_view" class="main-tab-content-wrapper hidden">
+        
+        <div class="kpi-matrix" style="margin-bottom:12px;">
+          <div class="kpi-card cyan">
+            <div class="kpi-title">Portföy Başarı İhtimali</div>
+            <div class="kpi-value" id="kpi_mc_success_pct">0.0%</div>
+            <div class="kpi-subtext text-cyan">Sıfırlanmama Olasılığı</div>
+          </div>
+          <div class="kpi-card green">
+            <div class="kpi-title">Medyan (P50) Tahmini Bakiye</div>
+            <div class="kpi-value" id="kpi_mc_p50_bal">$0.00</div>
+            <div class="kpi-subtext">Beklenen Orta Senaryo</div>
+          </div>
+          <div class="kpi-card red">
+            <div class="kpi-title">Riske Maruz Değer (P10)</div>
+            <div class="kpi-value" id="kpi_mc_p10_bal">$0.00</div>
+            <div class="kpi-subtext text-red">Kötümser Aşırı Alt Senaryo</div>
+          </div>
+          <div class="kpi-card orange">
+            <div class="kpi-title">İyimser Gelecek (P90)</div>
+            <div class="kpi-value" id="kpi_mc_p90_bal">$0.00</div>
+            <div class="kpi-subtext text-orange">Kuvvetli Üst Piyasa Koşulu</div>
+          </div>
+        </div>
+
+        <div class="simulation-meta-controls">
+          <div class="input-group">
+            <label style="font-size:0.85rem; font-weight:600; color:var(--sub);">Simülasyon Tekrar Sayısı</label>
+            <div class="input-wrapper">
+              <select id="p_mc_sim_count">
+                <option value="250">250 İterasyon (Hızlı Mobil)</option>
+                <option value="500" selected>500 İterasyon (Dengeli Standart)</option>
+                <option value="1000">1000 İterasyon (Yüksek Doğruluk Enstitü)</option>
+              </select>
+            </div>
+          </div>
+          <div class="input-group">
+            <label style="font-size:0.85rem; font-weight:600; color:var(--sub);">İçsel Oynaklık Modeli (Standart Sapma)</label>
+            <div class="input-wrapper input-wrapper-has-unit">
+              <input type="number" id="p_mc_volatility" value="12.0" step="0.5" inputmode="decimal">
+              <span class="input-unit">%</span>
+            </div>
+          </div>
+          <button class="btn btn-primary" style="height:36px; width:100%; display:flex; justify-content:center; align-items:center;" onclick="executeMonteCarloSimulation()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg> Simülasyonu Çalıştır
+          </button>
+        </div>
+
+        <div class="analytics-block" style="margin-bottom:12px;">
+          <div class="panel-card">
+            <div class="panel-header">
+              <h2><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg> Stokastik Persentil Dağılım Eğrileri (Enflasyon Ayarlı / Real)</h2>
+            </div>
+            <div class="panel-body">
+              <div class="chart-container">
+                <canvas id="canvas_montecarlo_chart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel-card">
+          <div class="panel-header">
+            <h2><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg> Dönemsel Dağılım ve İflas Riski İstatistikleri</h2>
+          </div>
+          <div class="panel-body" style="padding:0;">
+            <div class="table-responsive">
+              <table class="dense-table" id="table_montecarlo_percentiles">
+                <thead>
+                  <tr>
+                    <th>Yıl</th>
+                    <th>P10 (Kötümser %10)</th>
+                    <th>P30 (Zayıf %30)</th>
+                    <th>P50 (Medyan %50)</th>
+                    <th>P70 (İyi %70)</th>
+                    <th>P90 (İyimser %90)</th>
+                    <th>Kümülatif İflas Olasılığı</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div id="main_tab_advanced_scenarios_view" class="main-tab-content-wrapper hidden">
+        
+        <div class="kpi-matrix" style="margin-bottom:12px;">
+          <div class="kpi-card cyan">
+            <div class="kpi-title">Maksimum Zarar Risk Göstergesi (Max DD)</div>
+            <div class="kpi-value id-metric" id="kpi_scen_max_dd">-%18.4</div>
+            <div class="kpi-subtext">Peak-to-Trough Stres Testi</div>
+          </div>
+          <div class="kpi-card green">
+            <div class="kpi-title">Sharpe Oranı Modellemesi</div>
+            <div class="kpi-value id-metric" id="kpi_scen_sharpe">1.42</div>
+            <div class="kpi-subtext text-green">Risk-Ayarlı Getiri Katsayısı</div>
+          </div>
+          <div class="kpi-card orange">
+            <div class="kpi-title">Sortino Kayıp Rasyosu</div>
+            <div class="kpi-value id-metric" id="kpi_scen_sortino">1.89</div>
+            <div class="kpi-subtext text-orange">Negatif Volatilite Verimliliği</div>
+          </div>
+          <div class="kpi-card purple">
+            <div class="kpi-title">Sermaye Koruma Katsayısı</div>
+            <div class="kpi-value id-metric" id="kpi_scen_preservation">94.2%</div>
+            <div class="kpi-subtext text-purple">Enflasyon Karşısı Direnç</div>
+          </div>
+        </div>
+
+        <div class="panel-card" style="margin-bottom:12px;">
+          <div class="panel-header">
+            <h2><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon></svg> İleri Seviye Makroekonomik Senaryo ve Stres Testi Konfigüratörü</h2>
+          </div>
+          <div class="panel-body">
+            <div class="simulation-meta-controls" style="background:transparent; border:none; padding:0; margin-bottom:0; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));">
+              <div class="input-group">
+                <label style="font-size:0.85rem; font-weight:600; color:var(--sub);">Makroekonomik Rejim Modeli</label>
+                <div class="input-wrapper">
+                  <select id="p_scen_macro_regime" onchange="applyMacroRegimePreset()">
+                    <option value="custom">Özelleştirilmiş Kullanıcı Matrisi</option>
+                    <option value="stagflation" selected>Stagflasyon Senaryosu (Düşük Getiri / Yüksek Enflasyon)</option>
+                    <option value="bull_boom">Büyüme &amp; Boğa Piyasası Dönemi (Yüksek Getiri / Kontrollü Enflasyon)</option>
+                    <option value="lost_decade">Kayıp On Yıl Krizi (Negatif Reel Faiz Rejimi)</option>
+                  </select>
+                </div>
+              </div>
+              <div class="input-group">
+                <label style="font-size:0.85rem; font-weight:600; color:var(--sub);">Riskli Varlık Tahsis Oranı (Beta)</label>
+                <div class="input-wrapper input-wrapper-has-unit">
+                  <input type="number" id="p_scen_asset_allocation" value="60" min="0" max="100" step="5" inputmode="numeric" oninput="executeAdvancedScenariosEngine()">
+                  <span class="input-unit">%</span>
+                </div>
+              </div>
+              <button class="btn btn-success" style="height:36px; display:flex; justify-content:center; align-items:center;" onclick="executeAdvancedScenariosEngine()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> Senaryoyu Analiz Et
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="analytics-block" style="margin-bottom:12px;">
+          <div class="panel-card">
+            <div class="panel-header">
+              <h2><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><activity width="14" height="14"></activity></svg> Stres Testi Makro Patikaları Karşılaştırma Grafiği</h2>
+            </div>
+            <div class="panel-body">
+              <div class="chart-container">
+                <canvas id="canvas_scenarios_chart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="scenario-cards-container">
+          <div class="scenario-pill-card danger" id="card_scen_1">
+            <span style="font-size:0.85rem; font-weight:700; color:#fff;">Stagflasyon Patikası Etkisi</span>
+            <p style="font-size:0.8rem; color:var(--sub); margin-top:2px;" id="text_scen_1">Yüksek enflasyon, nominal getirileri aşındırarak portföyün satın alma gücünü hızla tüketebilir. Güvenli liman varlık ağırlığının artırılması önerilir.</p>
+          </div>
+          <div class="scenario-pill-card success" id="card_scen_2">
+            <span style="font-size:0.85rem; font-weight:700; color:#fff;">Risk Ayarlı Performans Optimizasyonu</span>
+            <p style="font-size:0.8rem; color:var(--sub); margin-top:2px;" id="text_scen_2">Sharpe oranının optimize edilmesi, birim risk başına düşen getiriyi en üst düzeye çıkarır. Portföy oynaklığı kontrol altındadır.</p>
+          </div>
+          <div class="scenario-pill-card warning" id="card_scen_3">
+            <span style="font-size:0.85rem; font-weight:700; color:#fff;">Maksimum Çekilme Uyarısı</span>
+            <p style="font-size:0.8rem; color:var(--sub); margin-top:2px;" id="text_scen_3">Simüle edilen kriz patikalarında maksimum peak-to-trough düşüş eşiği izlenmektedir. Likidite tamponu seviyenizi kontrol edin.</p>
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<script>
+/**
+ * QuantArchitect Institutional Financial Engine Core Systems Software v11
+ * Global State Context, Component Interconnect Architecture and Storage Cache
+ */
+let globalDeterministicChartInstance = null;
+let globalMonteCarloChartInstance = null;
+let globalScenariosChartInstance = null;
+let globalMainActiveTabId = 'deterministic';
+
+// Multi-Year Dynamic Input Memory States Arrays
+let currentYearlyReturnsMemoryArray = [];
+let currentYearlyInflationMemoryArray = [];
+
+/**
+ * Universal Currency & Numerical Formatter Logic for Premium FinTech Layouts
+ * Formats data like 496100 to $496.1 K or standard strict vertical scans formats.
+ */
+function fmt(num) {
+  if (num === null || num === undefined || isNaN(num)) return '—';
+  const absNum = Math.abs(num);
+  let formattedString = '';
+
+  if (absNum >= 1000000) {
+    formattedString = '$' + (num / 1000000).toFixed(1) + ' M';
+  } else if (absNum >= 1000) {
+    formattedString = '$' + (num / 1000).toFixed(1) + ' K';
+  } else {
+    formattedString = '$' + num.toFixed(0);
+  }
+  return formattedString;
+}
+
+/**
+ * Global Switch Framework for Primary Operational Workflow Panes
+ */
+function switchMainTab(targetTabId) {
+  globalMainActiveTabId = targetTabId;
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('.main-tab-content-wrapper').forEach(pane => pane.classList.add('hidden'));
+
+  // Highlight precise trigger target button elements
+  const activeTriggerButtonIndex = targetTabId === 'deterministic' ? 0 : (targetTabId === 'montecarlo' ? 1 : 2);
+  document.querySelectorAll('.tab-btn')[activeTriggerButtonIndex].classList.add('active');
+  
+  // Unhide corresponding container node targets
+  document.getElementById(`main_tab_${targetTabId}_view`).classList.remove('hidden');
+  
+  // Force compute recalculation loops to align layout context engine trees
+  executeCoreEngine();
+}
+
+/**
+ * Bidirectional Data Sync Mechanisms: Input Fields to Variable States Controls
+ */
+function syncInputValue(inputId) {
+  const inputEl = document.getElementById(inputId);
+  const sliderEl = document.getElementById(`slide_${inputId}`);
+  let numVal = parseFloat(inputEl.value) || 0;
+
+  // Sync range bounding boxes safely
+  if (sliderEl) {
+    if (numVal > parseFloat(sliderEl.max)) sliderEl.max = numVal * 1.5;
+    if (numVal < parseFloat(sliderEl.min)) sliderEl.min = numVal;
+    sliderEl.value = numVal;
+  }
+
+  updateValueBadgeUI(inputId, numVal);
+}
+
+function syncSliderValue(inputId) {
+  const inputEl = document.getElementById(inputId);
+  const sliderEl = document.getElementById(`slide_${inputId}`);
+  const numVal = parseFloat(sliderEl.value);
+
+  if (inputEl) {
+    inputEl.value = numVal;
+  }
+
+  updateValueBadgeUI(inputId, numVal);
+}
+
+function updateValueBadgeUI(inputId, value) {
+  const badgeEl = document.getElementById(`val_${inputId}`);
+  if (!badgeEl) return;
+
+  if (inputId === 'p_initial' || inputId === 'p_flow_val') {
+    badgeEl.textContent = fmt(value);
+  } else if (inputId === 'p_years') {
+    badgeEl.textContent = value + ' Yıl';
+  } else if (inputId === 'p_inflation') {
+    badgeEl.textContent = '%' + value.toFixed(1);
+  }
+}
+
+function adjustCashFlowLabelUI() {
+  const mode = document.getElementById('p_flow_mode').value;
+  const labelEl = document.getElementById('lbl_flow_type');
+  const badgeEl = document.getElementById('val_p_flow_val');
+  const valInput = document.getElementById('p_flow_val');
+  const rawValue = parseFloat(valInput.value) || 0;
+
+  if (mode === 'withdrawal_pct') {
+    labelEl.textContent = 'Yıllık Çekim Oranı (%)';
+    badgeEl.textContent = '%' + rawValue.toFixed(1);
+  } else if (mode === 'withdrawal_fixed') {
+    labelEl.textContent = 'Yıllık Çekim Miktarı';
+    badgeEl.textContent = fmt(rawValue);
+  } else {
+    labelEl.textContent = 'Sabit Yıllık Ekleme';
+    badgeEl.textContent = fmt(rawValue);
+  }
+  executeCoreEngine();
+}
+
+/**
+ * Dynamic Chronological Parameter Matrix DOM Element Renderer Factory
+ * Employs highly ergonomic user sliders combined with explicit number pads.
+ */
+function buildYearlyParameterMatrix() {
+  const targetYearsCount = parseInt(document.getElementById('p_years').value) || 30;
+  const container = document.getElementById('yearly_matrix_container');
+  if (!container) return;
+
+  // Preserve existing user state values if available, else pad with defaults
+  const historicReturns = [...currentYearlyReturnsMemoryArray];
+  const historicInflation = [...currentYearlyInflationMemoryArray];
+
+  container.innerHTML = '';
+  currentYearlyReturnsMemoryArray = [];
+  currentYearlyInflationMemoryArray = [];
+
+  // Default parameters based on macro configurations input settings
+  const baseInflation = parseFloat(document.getElementById('p_inflation').value) || 3.0;
+  // Historical premium default long-run equity sequence rate configuration
+  const defaultReturnPacing = 8.0; 
+
+  for (let i = 1; i <= targetYearsCount; i++) {
+    const returnVal = (historicReturns[i - 1] !== undefined) ? historicReturns[i - 1] : defaultReturnPacing;
+    const inflationVal = (historicInflation[i - 1] !== undefined) ? historicInflation[i - 1] : baseInflation;
+
+    currentYearlyReturnsMemoryArray.push(returnVal);
+    currentYearlyInflationMemoryArray.push(inflationVal);
+
+    const row = document.createElement('div');
+    row.className = 'year-param-row';
+    row.innerHTML = `
+      <div class="year-param-label">Yıl ${i}</div>
+      <div class="input-group" style="gap:2px;">
+        <span style="font-size:0.75rem; color:var(--sub);">Getiri: <b class="text-cyan" id="lbl_m_r_${i}">%${returnVal.toFixed(1)}</b></span>
+        <div class="input-wrapper input-wrapper-has-unit">
+          <input type="number" step="0.5" id="m_r_${i}" value="${returnVal}" inputmode="decimal" style="padding:4px 6px; font-size:0.85rem;" oninput="updateYearlyMatrixState(${i}, 'return')">
+          <span class="input-unit" style="right:4px; font-size:0.7rem;">%</span>
+        </div>
+      </div>
+      <div class="input-group" style="gap:2px;">
+        <span style="font-size:0.75rem; color:var(--sub);">Enflasyon: <b class="text-orange" id="lbl_m_inf_${i}">%${inflationVal.toFixed(1)}</b></span>
+        <div class="input-wrapper input-wrapper-has-unit">
+          <input type="number" step="0.5" id="m_inf_${i}" value="${inflationVal}" inputmode="decimal" style="padding:4px 6px; font-size:0.85rem;" oninput="updateYearlyMatrixState(${i}, 'inflation')">
+          <span class="input-unit" style="right:4px; font-size:0.7rem;">%</span>
+        </div>
+      </div>
+    `;
+    container.appendChild(row);
+  }
+}
+
+function updateYearlyMatrixState(yearIndex, type) {
+  if (type === 'return') {
+    const el = document.getElementById(`m_r_${yearIndex}`);
+    const val = parseFloat(el.value) || 0;
+    currentYearlyReturnsMemoryArray[yearIndex - 1] = val;
+    document.getElementById(`lbl_m_r_${yearIndex}`).textContent = '%' + val.toFixed(1);
+  } else {
+    const el = document.getElementById(`m_inf_${yearIndex}`);
+    const val = parseFloat(el.value) || 0;
+    currentYearlyInflationMemoryArray[yearIndex - 1] = val;
+    document.getElementById(`lbl_m_inf_${yearIndex}`).textContent = '%' + val.toFixed(1);
+  }
+}
+
+/**
+ * CORE EXECUTION DISPATCH ENGINE - ROUTER
+ */
+function executeCoreEngine() {
+  // Always synchronize initial configuration parameter states values
+  const initFields = ['p_initial', 'p_years', 'p_inflation', 'p_flow_val'];
+  initFields.forEach(f => {
+    const valEl = document.getElementById(f);
+    if (valEl) updateValueBadgeUI(f, parseFloat(valEl.value) || 0);
+  });
+
+  if (globalMainActiveTabId === 'deterministic') {
+    calculateDeterministicPathways();
+  } else if (globalMainActiveTabId === 'montecarlo') {
+    executeMonteCarloSimulation();
+  } else if (globalMainActiveTabId === 'advanced_scenarios') {
+    executeAdvancedScenariosEngine();
+  }
+}
+
+/**
+ * 1. DETERMINISTIC CHRONOLOGICAL PATHWAYS ENGINE SYSTEM
+ */
+function calculateDeterministicPathways() {
+  const initialCapital = parseFloat(document.getElementById('p_initial').value) || 0;
+  const runtimeDuration = parseInt(document.getElementById('p_years').value) || 30;
+  const flowValue = parseFloat(document.getElementById('p_flow_val').value) || 0;
+  const flowMode = document.getElementById('p_flow_mode').value;
+
+  let currentNominalBalance = initialCapital;
+  let currentRealBalance = initialCapital;
+  
+  let cumulativeInterestEarned = 0;
+  let cumulativeFlowsProcessed = 0;
+  let structuralCumulativeInflationIndex = 1.0;
+
+  const labels = [];
+  const nominalDataPoints = [];
+  const realDataPoints = [];
+  const flowDataPoints = [];
+
+  const tbody = document.querySelector('#table_deterministic_ledger tbody');
+  tbody.innerHTML = '';
+
+  // Initial Zero Epoch Baseline Row Injector Logic State
+  labels.push('Başlangıç');
+  nominalDataPoints.push(initialCapital);
+  realDataPoints.push(initialCapital);
+  flowDataPoints.push(0);
+
+  let appendHtmlBuffer = '';
+
+  for (let year = 1; year <= runtimeDuration; year++) {
+    const yearReturn = currentYearlyReturnsMemoryArray[year - 1] !== undefined ? currentYearlyReturnsMemoryArray[year - 1] : 8.0;
+    const yearInflation = currentYearlyInflationMemoryArray[year - 1] !== undefined ? currentYearlyInflationMemoryArray[year - 1] : 3.0;
+
+    // Portfolio bankruptcy loop break check for safe operational guardrails
+    if (currentNominalBalance < 0) currentNominalBalance = 0;
+    if (currentRealBalance < 0) currentRealBalance = 0;
+
+    // Apply compound pacing index metrics
+    structuralCumulativeInflationIndex *= (1 + yearInflation / 100);
+
+    // Compute active current dynamic flow amount
+    let actualPeriodFlow = 0;
+    if (flowMode === 'withdrawal_pct') {
+      actualPeriodFlow = -(currentNominalBalance * (flowValue / 100));
+    } else if (flowMode === 'withdrawal_fixed') {
+      actualPeriodFlow = -(flowValue * structuralCumulativeInflationIndex);
+    } else if (flowMode === 'deposit_fixed') {
+      actualPeriodFlow = (flowValue * structuralCumulativeInflationIndex);
+    }
+
+    // Handle interest growth formulas
+    const nominalInterestGenerated = currentNominalBalance * (yearReturn / 100);
+    cumulativeInterestEarned += nominalInterestGenerated;
+    cumulativeFlowsProcessed += actualPeriodFlow;
+
+    // Execute state changes transformations
+    currentNominalBalance = currentNominalBalance + nominalInterestGenerated + actualPeriodFlow;
+    if (currentNominalBalance < 0) currentNominalBalance = 0;
+
+    // Calculate inflation-adjusted real purchasing curves values
+    currentRealBalance = currentNominalBalance / structuralCumulativeInflationIndex;
+
+    // Append to linear coordinates datasets
+    labels.push(`Yıl ${year}`);
+    nominalDataPoints.push(currentNominalBalance);
+    realDataPoints.push(currentRealBalance);
+    flowDataPoints.push(actualPeriodFlow);
+
+    // High Density Matrix Table Construction Rows
+    const flowTextClass = actualPeriodFlow >= 0 ? 'text-green' : 'text-red';
+    const flowPrefix = actualPeriodFlow > 0 ? '+' : '';
+
+    appendHtmlBuffer += `
+      <tr>
+        <td class="font-mono">Yıl ${year}</td>
+        <td class="font-mono ${yearReturn >= 0 ? 'text-green' : 'text-red'}">%${yearReturn.toFixed(1)}</td>
+        <td class="font-mono text-orange">%${yearInflation.toFixed(1)}</td>
+        <td class="font-mono text-green">+${fmt(nominalInterestGenerated)}</td>
+        <td class="font-mono text-cyan">${fmt(cumulativeInterestEarned)}</td>
+        <td class="font-mono ${flowTextClass}">${flowPrefix}${fmt(actualPeriodFlow)}</td>
+        <td class="font-mono" style="color:#fff; font-weight:700;">${currentNominalBalance <= 0 ? 'TÜKENDİ' : fmt(currentNominalBalance)}</td>
+        <td class="font-mono text-purple" style="font-weight:700;">${currentRealBalance <= 0 ? 'TÜKENDİ' : fmt(currentRealBalance)}</td>
+      </tr>
+    `;
+  }
+
+  tbody.innerHTML = appendHtmlBuffer;
+
+  // Push state transformations outward directly into screen dashboards
+  document.getElementById('kpi_nominal_bal').textContent = fmt(currentNominalBalance);
+  document.getElementById('kpi_real_bal').textContent = fmt(currentRealBalance);
+  document.getElementById('kpi_cum_interest').textContent = fmt(cumulativeInterestEarned);
+  document.getElementById('kpi_cum_flows').textContent = fmt(Math.abs(cumulativeFlowsProcessed));
+  
+  const subtitleEl = document.getElementById('kpi_flows_subtitle');
+  if (subtitleEl) {
+    subtitleEl.textContent = flowMode.startsWith('withdrawal') ? 'Toplam Yapısal Çekim' : 'Toplam Yapısal Yatırım';
+    subtitleEl.className = flowMode.startsWith('withdrawal') ? 'kpi-subtext text-red' : 'kpi-subtext text-green';
+  }
+
+  // Draw chart logic
+  renderDeterministicChartModule(labels, nominalDataPoints, realDataPoints, flowDataPoints);
+}
+
+function renderDeterministicChartModule(labels, nominal, real, flows) {
+  const ctx = document.getElementById('canvas_deterministic_chart');
+  if (!ctx) return;
+
+  if (globalDeterministicChartInstance) {
+    globalDeterministicChartInstance.destroy();
+  }
+
+  globalDeterministicChartInstance = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: 'Nominal Varlık Dengesi',
+          data: nominal,
+          borderColor: '#38bdf8',
+          backgroundColor: 'rgba(56, 189, 248, 0.05)',
+          borderWidth: 2.5,
+          tension: 0.15,
+          fill: true
+        },
+        {
+          label: 'Reel Satın Alma Gücü (Enflasyon Ayarlı)',
+          data: real,
+          borderColor: '#a78bfa',
+          backgroundColor: 'transparent',
+          borderWidth: 2,
+          borderDash: [4, 4],
+          tension: 0.1
+        },
+        {
+          label: 'Yıllık Nakit Akış Boyutu',
+          data: flows,
+          type: 'bar',
+          backgroundColor: flows.map(v => v >= 0 ? 'rgba(52, 211, 153, 0.4)' : 'rgba(248, 113, 113, 0.4)'),
+          borderColor: flows.map(v => v >= 0 ? '#34d399' : '#f87171'),
+          borderWidth: 1,
+          yAxisID: 'yFlow'
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: { grid: { color: '#132030' }, ticks: { color: '#8a9db5' } },
+        y: { grid: { color: '#132030' }, ticks: { color: '#8a9db5', callback: value => fmt(value) } },
+        yFlow: { position: 'right', grid: { display: false }, ticks: { color: '#4d6278', callback: value => fmt(value) } }
+      },
+      plugins: {
+        legend: { labels: { color: '#ccd8e8', boxWidth: 12, font: { size: 11 } } },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              return context.dataset.label + ': ' + fmt(context.raw);
+            }
+          }
+        }
+      }
+    }
+  });
+}
+
+/**
+ * 2. MONTE CARLO STOCHASTIC SIMULATION CORE MODULE ENGINE
+ */
+function executeMonteCarloSimulation() {
+  const initialCapital = parseFloat(document.getElementById('p_initial').value) || 0;
+  const runtimeDuration = parseInt(document.getElementById('p_years').value) || 30;
+  const flowValue = parseFloat(document.getElementById('p_flow_val').value) || 0;
+  const flowMode = document.getElementById('p_flow_mode').value;
+  const baseInflation = parseFloat(document.getElementById('p_inflation').value) || 3.0;
+
+  const iterationsCount = parseInt(document.getElementById('p_mc_sim_count').value) || 500;
+  const assetVolatility = parseFloat(document.getElementById('p_mc_volatility').value) || 12.0;
+
+  // Dynamic distribution trajectory storage arrays matrix allocation
+  let executionPathwaysTrajectoriesMatrix = []; // Matrix of sizes: iterationsCount x (runtimeDuration + 1)
+  
+  // Statistical processing loops initialization
+  for (let sim = 0; sim < iterationsCount; sim++) {
+    let trajectoryArray = [initialCapital];
+    let nominalBal = initialCapital;
+    let inflationCumulativeCompoundingScale = 1.0;
+
+    for (let yr = 1; yr <= runtimeDuration; yr++) {
+      // Box-Muller Transformation Algorithm Gaussian Normalization Variant
+      let u1 = Math.random(); if (u1 === 0) u1 = 0.00001;
+      let u2 = Math.random();
+      let normalStandardZ = Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2.0 * Math.PI * u2);
+
+      // Deterministic return matched dynamically if customized by fine-tuning matrix arrays
+      const dynamicExpectedReturn = currentYearlyReturnsMemoryArray[yr - 1] !== undefined ? currentYearlyReturnsMemoryArray[yr - 1] : 8.0;
+      const stochasticSampledReturn = (dynamicExpectedReturn / 100) + (assetVolatility / 100) * normalStandardZ;
+      
+      const deterministicInflation = currentYearlyInflationMemoryArray[yr - 1] !== undefined ? currentYearlyInflationMemoryArray[yr - 1] : baseInflation;
+      inflationCumulativeCompoundingScale *= (1 + deterministicInflation / 100);
+
+      if (nominalBal <= 0) {
+        nominalBal = 0;
+      } else {
+        let periodFlow = 0;
+        if (flowMode === 'withdrawal_pct') {
+          periodFlow = -(nominalBal * (flowValue / 100));
+        } else if (flowMode === 'withdrawal_fixed') {
+          periodFlow = -(flowValue * inflationCumulativeCompoundingScale);
+        } else if (flowMode === 'deposit_fixed') {
+          periodFlow = (flowValue * inflationCumulativeCompoundingScale);
+        }
+
+        nominalBal = nominalBal * (1 + stochasticSampledReturn) + periodFlow;
+        if (nominalBal < 0) nominalBal = 0;
+      }
+
+      // Convert path coordinates immediately into real data terms
+      const realPricedEquivalent = nominalBal / inflationCumulativeCompoundingScale;
+      trajectoryArray.push(realPricedEquivalent);
+    }
+    executionPathwaysTrajectoriesMatrix.push(trajectoryArray);
+  }
+
+  // Extract distributions arrays sorting matrices row by row for percentile mapping
+  let labels = ['Başlangıç'];
+  let p10Curves = [initialCapital];
+  let p30Curves = [initialCapital];
+  let p50Curves = [initialCapital];
+  let p70Curves = [initialCapital];
+  let p90Curves = [initialCapital];
+  let collapseRiskTrajectory = [0];
+
+  const tbody = document.querySelector('#table_montecarlo_percentiles tbody');
+  tbody.innerHTML = '';
+  let appendHtmlBuffer = '';
+
+  for (let yr = 1; yr <= runtimeDuration; yr++) {
+    labels.push(`Yıl ${yr}`);
+    
+    // Sort all outputs arrays for target year interval slice
+    let yearlyCrossSectionDataPoints = [];
+    let absoluteBankruptcyEventsCount = 0;
+
+    for (let sim = 0; sim < iterationsCount; sim++) {
+      const balanceValue = executionPathwaysTrajectoriesMatrix[sim][yr];
+      yearlyCrossSectionDataPoints.push(balanceValue);
+      if (balanceValue <= 0) {
+        absoluteBankruptcyEventsCount++;
+      }
+    }
+
+    yearlyCrossSectionDataPoints.sort((a, b) => a - b);
+
+    // Locate statistical index pointers
+    const idx10 = Math.floor(iterationsCount * 0.10);
+    const idx30 = Math.floor(iterationsCount * 0.30);
+    const idx50 = Math.floor(iterationsCount * 0.50);
+    const idx70 = Math.floor(iterationsCount * 0.70);
+    const idx90 = Math.floor(iterationsCount * 0.90);
+
+    const valP10 = yearlyCrossSectionDataPoints[idx10];
+    const valP30 = yearlyCrossSectionDataPoints[idx30];
+    const valP50 = yearlyCrossSectionDataPoints[idx50];
+    const valP70 = yearlyCrossSectionDataPoints[idx70];
+    const valP90 = yearlyCrossSectionDataPoints[idx90];
+    const riskPct = (absoluteBankruptcyEventsCount / iterationsCount) * 100;
+
+    p10Curves.push(valP10);
+    p30Curves.push(valP30);
+    p50Curves.push(valP50);
+    p70Curves.push(valP70);
+    p90Curves.push(valP90);
+    collapseRiskTrajectory.push(riskPct);
+
+    appendHtmlBuffer += `
+      <tr>
+        <td class="font-mono">Yıl ${yr}</td>
+        <td class="font-mono text-red">${fmt(valP10)}</td>
+        <td class="font-mono text-orange">${fmt(valP30)}</td>
+        <td class="font-mono text-cyan">${fmt(valP50)}</td>
+        <td class="font-mono text-green">${fmt(valP70)}</td>
+        <td class="font-mono text-green">${fmt(valP90)}</td>
+        <td class="font-mono ${riskPct > 20 ? 'text-red' : 'text-green'}" style="font-weight:700;">%${riskPct.toFixed(1)}</td>
+      </tr>
+    `;
+  }
+
+  tbody.innerHTML = appendHtmlBuffer;
+
+  // Set top summary scorecard values matrices
+  const finalSuccessProbabilityMetric = 100 - collapseRiskTrajectory[runtimeDuration];
+  document.getElementById('kpi_mc_success_pct').textContent = finalSuccessProbabilityMetric.toFixed(1) + '%';
+  document.getElementById('kpi_mc_p50_bal').textContent = fmt(p50Curves[runtimeDuration]);
+  document.getElementById('kpi_mc_p10_bal').textContent = fmt(p10Curves[runtimeDuration]);
+  document.getElementById('kpi_mc_p90_bal').textContent = fmt(p90Curves[runtimeDuration]);
+
+  // Handle color state warnings based on quantitative thresholds
+  const successKpiCard = document.getElementById('kpi_mc_success_pct').parentElement;
+  successKpiCard.className = 'kpi-card ' + (finalSuccessProbabilityMetric >= 85 ? 'green' : (finalSuccessProbabilityMetric >= 60 ? 'orange' : 'red'));
+
+  renderMonteCarloChartModule(labels, p10Curves, p30Curves, p50Curves, p70Curves, p90Curves);
+}
+
+function renderMonteCarloChartModule(labels, p10, p30, p50, p70, p90) {
+  const ctx = document.getElementById('canvas_montecarlo_chart');
+  if (!ctx) return;
+
+  if (globalMonteCarloChartInstance) {
+    globalMonteCarloChartInstance.destroy();
+  }
+
+  globalMonteCarloChartInstance = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [
+        { label: 'P90 (İyimser Üst Sınır)', data: p90, borderColor: '#10b981', backgroundColor: 'transparent', borderWidth: 1.5, radius: 0 },
+        { label: 'P70 (İyi Koşullar)', data: p70, borderColor: '#34d399', backgroundColor: 'transparent', borderWidth: 1.5, radius: 0 },
+        { label: 'P50 (Medyan Orta Patika)', data: p50, borderColor: '#38bdf8', backgroundColor: 'rgba(56, 189, 248, 0.05)', borderWidth: 2.5, radius: 0, fill: true },
+        { label: 'P30 (Zayıf Dönemler)', data: p30, borderColor: '#fb923c', backgroundColor: 'transparent', borderWidth: 1.5, radius: 0 },
+        { label: 'P10 (Kötümser Alt Eşik)', data: p10, borderColor: '#f87171', backgroundColor: 'transparent', borderWidth: 1.5, radius: 0 }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: { grid: { color: '#132030' }, ticks: { color: '#8a9db5' } },
+        y: { grid: { color: '#132030' }, ticks: { color: '#8a9db5', callback: value => fmt(value) } }
+      },
+      plugins: {
+        legend: { position: 'top', labels: { color: '#ccd8e8', boxWidth: 10 } },
+        tooltip: { callbacks: { label: context => context.dataset.label + ': ' + fmt(context.raw) } }
+      }
+    }
+  });
+}
+
+/**
+ * 3. NEW ENHANCED COMPONENT: ADVANCED MACROECONOMIC SCENARIOS & SYSTEM STRESS TESTS
+ * Fully functional implementation of institutional metrics modeling (MaxDD, Sharpe, Sortino)
+ * Optimized color palettes ensuring no repetitive hues or clashing gradients.
+ */
+function applyMacroRegimePreset() {
+  const regimeSelection = document.getElementById('p_scen_macro_regime').value;
+  const runtimeDuration = parseInt(document.getElementById('p_years').value) || 30;
+
+  if (regimeSelection === 'custom') return;
+
+  let sampledReturnTarget = 8.0;
+  let sampledInflationTarget = 3.0;
+
+  if (regimeSelection === 'stagflation') {
+    sampledReturnTarget = 3.5;
+    sampledInflationTarget = 7.5;
+  } else if (regimeSelection === 'bull_boom') {
+    sampledReturnTarget = 12.5;
+    sampledInflationTarget = 2.0;
+  } else if (regimeSelection === 'lost_decade') {
+    sampledReturnTarget = 1.0;
+    sampledInflationTarget = 4.0;
+  }
+
+  // Re-populate internal operational vectors
+  for (let i = 0; i < runtimeDuration; i++) {
+    currentYearlyReturnsMemoryArray[i] = sampledReturnTarget;
+    currentYearlyInflationMemoryArray[i] = sampledInflationTarget;
+  }
+
+  // Refresh active parameter components visibility
+  buildYearlyParameterMatrix();
+  executeAdvancedScenariosEngine();
+}
+
+function executeAdvancedScenariosEngine() {
+  const initialCapital = parseFloat(document.getElementById('p_initial').value) || 0;
+  const runtimeDuration = parseInt(document.getElementById('p_years').value) || 30;
+  const flowValue = parseFloat(document.getElementById('p_flow_val').value) || 0;
+  const flowMode = document.getElementById('p_flow_mode').value;
+  const betaAllocation = parseFloat(document.getElementById('p_scen_asset_allocation').value) || 60;
+
+  // Real-time tracking vectors for performance analysis
+  let labels = ['Başlangıç'];
+  let baselineCurve = [initialCapital];
+  let crisisCurve = [initialCapital];
+  let optimizedCurve = [initialCapital];
+
+  let runningBaseBal = initialCapital;
+  let runningCrisisBal = initialCapital;
+  let runningOptBal = initialCapital;
+
+  let baseInflationIndex = 1.0;
+  let peakValueTrack = initialCapital;
+  let maximumDrawdownValue = 0;
+
+  // Volatility evaluation array for risk metrics computation
+  let annualReturnSamples = [];
+
+  for (let yr = 1; yr <= runtimeDuration; yr++) {
+    labels.push(`Yıl ${yr}`);
+
+    const baseR = currentYearlyReturnsMemoryArray[yr - 1] !== undefined ? currentYearlyReturnsMemoryArray[yr - 1] : 8.0;
+    const baseInf = currentYearlyInflationMemoryArray[yr - 1] !== undefined ? currentYearlyInflationMemoryArray[yr - 1] : 3.0;
+    
+    baseInflationIndex *= (1 + baseInf / 100);
+
+    let flowAmount = 0;
+    if (flowMode === 'withdrawal_pct') {
+      flowAmount = -(runningBaseBal * (flowValue / 100));
+    } else if (flowMode === 'withdrawal_fixed') {
+      flowAmount = -(flowValue * baseInflationIndex);
+    } else if (flowMode === 'deposit_fixed') {
+      flowAmount = (flowValue * baseInflationIndex);
+    }
+
+    // Baseline processing calculation loop
+    let netReturnBase = (baseR / 100) * (betaAllocation / 100);
+    annualReturnSamples.push(netReturnBase);
+
+    runningBaseBal = runningBaseBal * (1 + netReturnBase) + flowAmount;
+    if (runningBaseBal < 0) runningBaseBal = 0;
+    baselineCurve.push(runningBaseBal / baseInflationIndex);
+
+    // Crisis pathway generation formulas (Deep Shock Pattern Injection)
+    let crisisR = netReturnBase - 0.05; // 500 bps severe institutional reduction
+    runningCrisisBal = runningCrisisBal * (1 + crisisR) + flowAmount;
+    if (runningCrisisBal < 0) runningCrisisBal = 0;
+    crisisCurve.push(runningCrisisBal / baseInflationIndex);
+
+    // Smart Optimized Portfolio Pathway Construction Logic
+    let optimizedR = netReturnBase + 0.02; // Alpha injection via portfolio diversification overlay
+    runningOptBal = runningOptBal * (1 + optimizedR) + flowAmount;
+    if (runningOptBal < 0) runningOptBal = 0;
+    optimizedCurve.push(runningOptBal / baseInflationIndex);
+
+    // Monitor peak value for continuous drawdowns processing
+    if (runningBaseBal > peakValueTrack) {
+      peakValueTrack = runningBaseBal;
+    }
+    let currentDd = (peakValueTrack - runningBaseBal) / peakValueTrack;
+    if (currentDd > maximumDrawdownValue) {
+      maximumDrawdownValue = currentDd;
+    }
+  }
+
+  // Mathematical foundations for institutional risk metrics
+  let calculatedSharpe = 1.0;
+  let calculatedSortino = 1.2;
+  
+  if (annualReturnSamples.length > 1) {
+    const averageReturnMetric = annualReturnSamples.reduce((a, b) => a + b, 0) / annualReturnSamples.length;
+    const squaredVariances = annualReturnSamples.map(v => Math.pow(v - averageReturnMetric, 2));
+    const varianceSum = squaredVariances.reduce((a, b) => a + b, 0);
+    const standardDeviation = Math.sqrt(varianceSum / (annualReturnSamples.length - 1)) || 0.01;
+    
+    // Assume risk-free benchmark equivalent to 2.5% fixed macro baseline yield
+    calculatedSharpe = (averageReturnMetric - 0.025) / standardDeviation;
+    if (calculatedSharpe < 0) calculatedSharpe = 0;
+
+    const negativeVariances = annualReturnSamples.filter(v => v < 0.025).map(v => Math.pow(v - 0.025, 2));
+    const downsideDeviation = Math.sqrt(negativeVariances.reduce((a, b) => a + b, 0) / (annualReturnSamples.length || 1)) || 0.01;
+    calculatedSortino = (averageReturnMetric - 0.025) / downsideDeviation;
+    if (calculatedSortino < 0) calculatedSortino = 0;
+  }
+
+  const capitalPreservationFactor = (baselineCurve[runtimeDuration] / initialCapital) * 100;
+
+  // Map state values directly into DOM text components node structures
+  document.getElementById('kpi_scen_max_dd').textContent = `-%${(maximumDrawdownValue * 100).toFixed(1)}`;
+  document.getElementById('kpi_scen_sharpe').textContent = calculatedSharpe.toFixed(2);
+  document.getElementById('kpi_scen_sortino').textContent = calculatedSortino.toFixed(2);
+  document.getElementById('kpi_scen_preservation').textContent = `${capitalPreservationFactor.toFixed(1)}%`;
+
+  // Dynamic content injection into structural textual insight description matrices
+  document.getElementById('text_scen_1').textContent = `Mevcut rejim kapsamında enflasyon düzeyi %${(currentYearlyInflationMemoryArray[0] || 3).toFixed(1)} bandında seyretmektedir. Bu durum, portföyün reel varlık üretim hızını doğrudan baskılamaktadır.`;
+  document.getElementById('text_scen_2').textContent = `Risk-ayarlı getiri katsayınız (Sharpe: ${calculatedSharpe.toFixed(2)}), tahsis edilen %${betaAllocation} riskli varlık ağırlığına göre hesaplanmıştır. Birim volatilite başına finansal performans dengelidir.`;
+  document.getElementById('text_scen_3').textContent = `Maksimum tepe-dip kayıp marjı %${(maximumDrawdownValue * 100).toFixed(1)} olarak gerçekleşmiştir. Tarihsel kriz senaryolarına karşı dayanıklılık durumunuz bu oran üzerinden izlenir.`;
+
+  renderAdvancedScenariosChart(labels, baselineCurve, crisisCurve, optimizedCurve);
+}
+
+function renderAdvancedScenariosChart(labels, baseline, crisis, optimized) {
+  const ctx = document.getElementById('canvas_scenarios_chart');
+  if (!ctx) return;
+
+  if (globalScenariosChartInstance) {
+    globalScenariosChartInstance.destroy();
+  }
+
+  globalScenariosChartInstance = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: 'Makro Optimizasyonlu Portföy Patikası',
+          data: optimized,
+          borderColor: '#2dd4bf', // Teal for optimized premium alpha
+          backgroundColor: 'transparent',
+          borderWidth: 2.5,
+          tension: 0.12
+        },
+        {
+          label: 'Mevcut Matris Referans Çizgisi (Reel)',
+          data: baseline,
+          borderColor: '#38bdf8', // Cyan for standard baseline asset curves
+          backgroundColor: 'rgba(56, 189, 248, 0.04)',
+          borderWidth: 2,
+          tension: 0.1,
+          fill: true
+        },
+        {
+          label: 'Sistemik Kriz & Stres Testi Rotası',
+          data: crisis,
+          borderColor: '#f87171', // Bright distinct Ruby Red for stress breakdown tracking
+          backgroundColor: 'transparent',
+          borderWidth: 1.8,
+          borderDash: [5, 5],
+          tension: 0.1
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: { grid: { color: '#132030' }, ticks: { color: '#8a9db5' } },
+        y: { grid: { color: '#132030' }, ticks: { color: '#8a9db5', callback: value => fmt(value) } }
+      },
+      plugins: {
+        legend: { position: 'top', labels: { color: '#ccd8e8', font: { size: 11 } } },
+        tooltip: { callbacks: { label: context => context.dataset.label + ': ' + fmt(context.raw) } }
+      }
+    }
+  });
+}
+
+/**
+ * INITIALIZATION ENTRY POINT TRIGGER
+ */
+window.addEventListener('DOMContentLoaded', () => {
+  // Setup bidirectional sync parameters states bindings initially
+  const inputsList = ['p_initial', 'p_years', 'p_inflation', 'p_flow_val'];
+  inputsList.forEach(id => {
+    const val = parseFloat(document.getElementById(id).value) || 0;
+    updateValueBadgeUI(id, val);
+  });
+
+  // Construct parameter tuning matrix blocks
+  buildYearlyParameterMatrix();
+  
+  // Fire core multi-asset operational engine routine
+  executeCoreEngine();
+});
+</script>
+
+</body>
+</html>
