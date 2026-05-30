@@ -3146,6 +3146,139 @@ body.show-metric-dock .tabs-wrap{
   background:linear-gradient(90deg,var(--terra),#d38c48) !important;
 }
 
+
+/* Strategic feature additions — no tax/fee/FX, no asset allocation layer. */
+.flow-mode{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:5px;
+  margin:10px 0 2px;
+  padding:4px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:#f4ecdf;
+}
+.flow-mode button{
+  border:0;
+  border-radius:999px;
+  min-height:34px;
+  background:transparent;
+  color:var(--stone);
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  cursor:pointer;
+}
+.flow-mode button.active{
+  background:#fffdf8;
+  color:var(--terra);
+  box-shadow:0 5px 14px rgba(56,42,25,.07);
+}
+.snapshot-strip{
+  margin-top:16px;
+  padding-top:14px;
+  border-top:1px solid var(--line);
+  display:grid;
+  grid-template-columns:minmax(220px,.75fr) minmax(0,1.25fr);
+  gap:12px;
+  align-items:start;
+}
+.snapshot-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.snapshot-list{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  padding-bottom:4px;
+  -webkit-overflow-scrolling:touch;
+}
+.snapshot-chip{
+  flex:0 0 auto;
+  border:1px solid rgba(222,212,196,.86);
+  background:#fffdf8;
+  border-radius:999px;
+  min-height:34px;
+  padding:7px 10px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  color:var(--stone);
+  font-size:10px;
+  font-weight:850;
+  white-space:nowrap;
+}
+.snapshot-chip strong{color:var(--ink)}
+.snapshot-chip button{
+  border:0;background:transparent;color:var(--terra);cursor:pointer;font-weight:900;font-size:14px;line-height:1;
+}
+.strategy-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:12px;
+}
+.strategy-card{
+  border:1px solid var(--line);
+  background:#fffdf8;
+  border-radius:18px;
+  padding:14px;
+}
+.strategy-card .stat-value{font-size:24px}
+.memo-box{
+  border:1px solid var(--line);
+  background:#fffdf8;
+  border-radius:20px;
+  padding:18px;
+  color:var(--stone);
+  font-size:13px;
+  line-height:1.65;
+}
+.memo-box h3{
+  font-family:"Cormorant Garamond",Georgia,serif;
+  color:var(--ink);
+  font-size:28px;
+  font-weight:600;
+  margin:0 0 8px;
+}
+.memo-box h4{
+  color:var(--ink);
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.14em;
+  margin:16px 0 6px;
+}
+.memo-box ul{margin:6px 0 0 18px}
+.memo-box li{margin:4px 0}
+.bridge-note{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:10px;
+  margin-top:14px;
+}
+.bridge-note .stat-card{padding:12px}
+.bridge-note .stat-value{font-size:22px}
+.mc-target-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:18px;
+  margin-top:18px;
+}
+.mc-target-readout{
+  margin-top:14px;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
+}
+.mc-threshold-ok{color:var(--olive)!important}
+.mc-threshold-watch{color:var(--gold)!important}
+.mc-threshold-risk{color:var(--ruby)!important}
+@media(max-width:980px){
+  .snapshot-strip,.strategy-grid,.bridge-note,.mc-target-grid,.mc-target-readout{grid-template-columns:1fr}
+}
+@media(max-width:640px){
+  .snapshot-actions{display:grid;grid-template-columns:1fr}
+  .snapshot-actions .btn,.snapshot-actions .field{width:100%}
+}
+
 </style>
 </head>
 <body>
@@ -3178,9 +3311,14 @@ body.show-metric-dock .tabs-wrap{
     </div>
 
     <div class="input-card">
-      <div class="input-head"><span>Aylık Net Nakit Akışı</span><span class="num text-terra" id="lbl-monthly">-$1,800</span></div>
-      <div class="input-row"><span class="prefix">$</span><input id="inp-monthly" class="field num" type="number" value="-1800" step="100" oninput="calculateAll()"></div>
-      <div class="hint">Pozitif değer düzenli katkı, negatif değer düzenli çekimdir. Motor bunu yıllık <span class="num">12×</span> olarak işler.</div>
+      <div class="input-head"><span>Aylık Nakit Planı</span><span class="num text-terra" id="lbl-monthly">-$1,800</span></div>
+      <div class="flow-mode" aria-label="Aylık nakit akışı yönü">
+        <button id="flow-withdraw" class="active" type="button" onclick="setRecurringFlowMode('withdraw')">Çekim</button>
+        <button id="flow-contribute" type="button" onclick="setRecurringFlowMode('contribute')">Katkı</button>
+        <button id="flow-net" type="button" onclick="setRecurringFlowMode('net')">Net</button>
+      </div>
+      <div class="input-row"><span class="prefix">$</span><input id="inp-monthly" class="field num" type="number" value="1800" step="100" oninput="calculateAll()"></div>
+      <div class="hint" id="flow-mode-hint">Varsayılan mod çekimdir: girilen tutar portföyden aylık çıkış olarak yıllık <span class="num">12×</span> hesaplanır.</div>
     </div>
 
     <div class="input-card">
@@ -3265,12 +3403,13 @@ body.show-metric-dock .tabs-wrap{
       </article>
 
       <article class="hud-card small">
-        <div class="hud-label">Gelir Dengesi <span>Yıllık fazla / açık</span></div>
-        <div class="hud-value num" id="v-margin">—</div>
+        <div class="hud-label">Sequence Risk <span>İlk 5 yıl şok testi</span></div>
+        <div class="hud-value num" id="v-sequence">—</div>
         <div class="hud-rows">
-          <div class="hud-row"><span>Getiri eksi çıkış</span></div>
-          <div class="hud-row"><span>Karar okuması</span><strong>Dinamik</strong></div>
+          <div class="hud-row"><span>Final değer etkisi</span><strong class="num" id="v-sequence-loss">—</strong></div>
+          <div class="hud-row"><span>Karar okuması</span><strong id="v-sequence-note">Dinamik</strong></div>
         </div>
+        <span id="v-margin" style="display:none">—</span>
       </article>
 
       <article class="hud-card small">
@@ -3301,7 +3440,7 @@ body.show-metric-dock .tabs-wrap{
         <article class="dock-card"><span>MOIC</span><strong class="num" data-copy-from="v-moic">—</strong></article>
         <article class="dock-card"><span>Drawdown</span><strong class="num text-ruby" data-copy-from="v-maxdd">—</strong></article>
         <article class="dock-card"><span>SWR</span><strong class="num" data-copy-from="v-swr">—</strong></article>
-        <article class="dock-card"><span>Gelir</span><strong class="num" data-copy-from="v-margin">—</strong></article>
+        <article class="dock-card"><span>Seq. Risk</span><strong class="num" data-copy-from="v-sequence">—</strong></article>
       </div>
     </section>
 
@@ -3362,6 +3501,23 @@ body.show-metric-dock .tabs-wrap{
           <button class="quick" onclick="quickSet(30,8)">30 Yıl / %8</button>
           <button class="quick" onclick="quickSet(10,40)">10 Yıl / %40</button>
         </div>
+        <div class="snapshot-strip">
+          <div>
+            <div class="section-title" style="margin:0 0 8px">
+              <svg class="lux-icon" viewBox="0 0 24 24"><path d="M5 5h14v14H5z"/><path d="M8 9h8M8 13h5"/></svg>
+              Senaryo Hafızası
+            </div>
+            <div class="hint">Mevcut varsayımı kilitleyin; sonra senaryo karşılaştırmasında aynı nakit planıyla birlikte izleyin.</div>
+          </div>
+          <div>
+            <div class="snapshot-actions">
+              <input id="snapshot-name" class="field small" value="Ana Senaryo" aria-label="Snapshot adı">
+              <button class="btn terra" type="button" onclick="saveSnapshot()">Senaryoyu Kilitle</button>
+              <button class="btn olive" type="button" onclick="clearSnapshots()">Temizle</button>
+            </div>
+            <div id="snapshot-list" class="snapshot-list" style="margin-top:9px"></div>
+          </div>
+        </div>
       </div>
 
       <div class="chart-shell">
@@ -3384,7 +3540,28 @@ body.show-metric-dock .tabs-wrap{
         <p class="viz-rationale" id="main-rationale">Bu ana eğri, müşterinin nominal büyüme algısı ile gerçek satın alma gücü arasındaki farkı aynı anda görünür kılar; danışman için en kritik anlatı budur.</p>
       </div>
 
-      <div class="table-wrap">
+      
+      <div class="chart-shell">
+        <div class="chart-head">
+          <div>
+            <div class="chart-title">
+              <svg class="lux-icon" viewBox="0 0 24 24"><path d="M4 18h16"/><path d="M6 15v3"/><path d="M10 10v8"/><path d="M14 13v5"/><path d="M18 6v12"/></svg>
+              Servet Köprüsü
+            </div>
+            <p class="panel-kicker">Başlangıç sermayesinden nihai bakiyeye giden yolu; düzenli akışlar, özel nakit olayları ve yatırım sonucuyla ayrıştırır.</p>
+          </div>
+        </div>
+        <div class="canvas-wrap small"><canvas id="bridgeChart"></canvas></div>
+        <div class="bridge-note">
+          <div class="stat-card"><div class="stat-label">Başlangıç</div><div class="stat-value num" id="bridge-start">—</div></div>
+          <div class="stat-card"><div class="stat-label">Net Nakit Akışı</div><div class="stat-value num" id="bridge-flow">—</div></div>
+          <div class="stat-card"><div class="stat-label">Yatırım Sonucu</div><div class="stat-value num" id="bridge-return">—</div></div>
+          <div class="stat-card"><div class="stat-label">Nihai Bakiye</div><div class="stat-value num" id="bridge-final">—</div></div>
+        </div>
+        <p class="viz-rationale">Servet köprüsü, “sonuç kaç para?” sorusunu “sonuç hangi finansal motorlardan geldi?” sorusuna çevirir; yatırım getirisi, yaşam gideri ve özel nakit kararlarının etkisi ayrışır.</p>
+      </div>
+
+<div class="table-wrap">
         <table class="fin-table">
           <thead><tr><th>Yıl</th><th>Getiri</th><th>Faiz/Kazanç</th><th>Düzenli Akış</th><th>Özel Akış</th><th>Küm. Yatırım</th><th>Küm. Çekim</th><th>Nominal</th><th>Reel</th><th>Azami Düşüş</th><th>Gelir/Çıkış</th></tr></thead>
           <tbody id="main-tbody"></tbody>
@@ -3462,9 +3639,11 @@ body.show-metric-dock .tabs-wrap{
           </div>
         </div>
 
-        <div class="form-grid three" style="margin-bottom:14px">
+        <div class="form-grid four" style="margin-bottom:14px">
           <label><span class="form-label">Yeni Senaryo Adı</span><input id="sc-name" class="field small" value="Alternatif"></label>
           <label><span class="form-label">Yıllık Getiri %</span><input id="sc-rate" class="field small num" type="number" value="18" step="0.5"></label>
+          <label><span class="form-label">Aylık Akış $</span><input id="sc-monthly" class="field small num" type="number" value="-1800" step="100"></label>
+          <label><span class="form-label">Enflasyon %</span><input id="sc-inflation" class="field small num" type="number" value="40" step="0.5"></label>
           <label><span class="form-label">Süre</span><input id="sc-years" class="field small num" type="number" value="15" min="1" max="50"></label>
         </div>
 
@@ -3484,7 +3663,7 @@ body.show-metric-dock .tabs-wrap{
 
       <div class="table-wrap">
         <table class="fin-table">
-          <thead><tr><th>Senaryo</th><th>Süre</th><th>Getiri</th><th>Nominal</th><th>Reel</th><th>MOIC</th><th>Net CAGR / XIRR</th><th>TWRR</th><th>Azami Düşüş</th><th>Gelir Dengesi</th><th>Status</th></tr></thead>
+          <thead><tr><th>Senaryo</th><th>Süre</th><th>Getiri</th><th>Aylık Akış</th><th>Enflasyon</th><th>Nominal</th><th>Reel</th><th>MOIC</th><th>Net CAGR</th><th>Azami Düşüş</th><th>Durum</th></tr></thead>
           <tbody id="scenario-tbody"></tbody>
         </table>
       </div>
@@ -3599,6 +3778,19 @@ body.show-metric-dock .tabs-wrap{
             <div class="slider-note">Negatif çarpıklık, az sayıdaki kötü yılın daha sert olmasını simüle eder. Aile ofisi risk yönetiminde genellikle daha ihtiyatlıdır.</div>
           </div>
         </div>
+        <div class="mc-target-grid">
+          <div class="slider-card">
+            <div class="slider-top"><span>Sermaye Koruma Eşiği</span><strong class="num" id="lbl-mc-floor">$100,000</strong></div>
+            <input id="mc-floor" class="field small num" type="number" value="100000" step="10000" oninput="onMCSliderChange()">
+            <div class="slider-note">Başarı tanımı yalnızca “sıfırlanmadı” değildir; portföyün bu eşik üzerinde kalma olasılığı ayrıca ölçülür.</div>
+          </div>
+          <div class="slider-card">
+            <div class="slider-top"><span>Hedef Başarı Olasılığı</span><strong class="num" id="lbl-mc-target">%85</strong></div>
+            <input type="range" id="mc-target" class="range olive" min="50" max="99" value="85" step="1" oninput="onMCSliderChange()">
+            <div class="range-labels"><span>%50</span><span>%99</span></div>
+            <div class="slider-note">Family office karar eşiği: koruma olasılığı bu hedefin altına düşerse plan kırmızı/izleme moduna geçer.</div>
+          </div>
+        </div>
       </div>
 
       <div class="stat-grid" id="mc-stat-grid">
@@ -3606,6 +3798,8 @@ body.show-metric-dock .tabs-wrap{
         <div class="stat-card mc-summary mc-median-card"><div class="stat-label">P50 Medyan</div><div class="stat-value num" id="mc-p50">—</div></div>
         <div class="stat-card mc-summary mc-optimistic-card"><div class="stat-label">P90 İyimser</div><div class="stat-value num" id="mc-p90">—</div></div>
         <div class="stat-card mc-summary mc-pessimistic-card"><div class="stat-label">P10 Kötümser</div><div class="stat-value num" id="mc-p10">—</div></div>
+        <div class="stat-card"><div class="stat-label">Eşik Üstü Olasılık</div><div class="stat-value num" id="mc-floor-prob">—</div><div class="hint" id="mc-floor-readout">Koruma eşiğine göre hesaplanır.</div></div>
+        <div class="stat-card"><div class="stat-label">Hedef Kararı</div><div class="stat-value num" id="mc-target-status">—</div><div class="hint" id="mc-target-readout">Hedef başarı olasılığı ile karşılaştırılır.</div></div>
       </div>
 
       <div class="chart-shell">
@@ -3642,6 +3836,7 @@ body.show-metric-dock .tabs-wrap{
             <button class="mini-tab" onclick="showTools('stress',this)">Stres Testi</button>
             <button class="mini-tab" onclick="showTools('rolling',this)">Dönemsel CAGR (Rolling CAGR)</button>
             <button class="mini-tab" onclick="showTools('guide',this)">Kavram Rehberi</button>
+            <button class="mini-tab" onclick="showTools('memo',this)">Yönetici Memo</button>
           </div>
         </div>
 
@@ -3665,6 +3860,14 @@ body.show-metric-dock .tabs-wrap{
           <div class="canvas-wrap"><canvas id="rollingChart"></canvas></div>
           <div id="rolling-stats" class="stat-grid" style="margin-top:14px"></div>
           <p class="viz-rationale">Dönemsel CAGR (Rolling CAGR) grafiği, ortalama getiri yanılgısını kırar. Aynı uzun dönem ortalamaya sahip stratejilerin ara dönem deneyimleri çok farklı olabilir; bu görsel yatırımcı davranış riskini görünür kılar.</p>
+        </div>
+
+        <div id="tools-memo" style="display:none">
+          <div class="memo-box" id="memo-output"></div>
+          <div class="btn-row" style="margin-top:12px">
+            <button class="btn primary" onclick="updateMemo()">Memo Güncelle</button>
+            <button class="btn terra" onclick="window.print()">PDF Rapor</button>
+          </div>
         </div>
 
         <div id="tools-guide" style="display:none">
@@ -3714,6 +3917,11 @@ body.show-metric-dock .tabs-wrap{
               <div class="guide-text">Sharpe toplam oynaklığa göre, Sortino ise ağırlıkla kötü yönlü oynaklığa göre getiri kalitesini okur.</div>
               <div class="guide-example"><strong>Örnek gösterim:</strong> İki portföy aynı %12 getiriye sahipse, daha düşük oynaklık ve daha az negatif yıl üreten portföyün risk ayarlı kalitesi daha yüksektir.</div>
             </div>
+            <div class="guide-card olive">
+              <div class="guide-title">Sequence Risk</div>
+              <div class="guide-text">Getirilerin sırası, özellikle portföyden çekim yapılıyorsa ortalama getiriden daha kritik olabilir.</div>
+              <div class="guide-example"><strong>Örnek gösterim:</strong> İlk 5 yıldaki zayıf getiri aynı uzun dönem CAGR içinde bile portföy ömrünü kısaltabilir; bu yüzden erken dönem şok testi ayrıca izlenir.</div>
+            </div>
             <div class="guide-card">
               <div class="guide-title">Güvenli Çekim Oranı (SWR)</div>
               <div class="guide-text">Portföyü tüketmeden sürdürülebilecek yıllık çıkış oranını arar. Mutlak cevap değil, senaryo disiplinidir.</div>
@@ -3732,6 +3940,8 @@ let activeTab = 'projection';
 let activeChartType = 'growth';
 let activeTool = 'swr';
 let batchDirection = 'withdraw';
+let recurringFlowMode = 'withdraw';
+let savedSnapshots = [];
 let charts = { main:null, scenario:null, mc:null, rolling:null };
 let cashflows = [];
 let customYears = Array.from({length:15},(_,i)=>({id:Date.now()+i, year:i+1, rate:22}));
@@ -4663,6 +4873,446 @@ function buildRolling(){
       <div class="hint">En iyi ${formatPct(Math.max(...vals))} · En zayıf ${formatPct(Math.min(...vals))}</div>
     </div>`;
   }).join('');
+}
+
+
+
+/* Strategic product additions — implemented without tax/fee/FX, life-event templates or asset allocation model. */
+function setRecurringFlowMode(mode){
+  recurringFlowMode = ['withdraw','contribute','net'].includes(mode) ? mode : 'withdraw';
+  ['withdraw','contribute','net'].forEach(k => {
+    const el = $('flow-'+k);
+    if(el) el.classList.toggle('active', k === recurringFlowMode);
+  });
+  const hint = $('flow-mode-hint');
+  if(hint){
+    hint.innerHTML = recurringFlowMode === 'withdraw'
+      ? 'Çekim modu: girilen tutar portföyden aylık çıkış olarak yıllık <span class="num">12×</span> hesaplanır.'
+      : recurringFlowMode === 'contribute'
+        ? 'Katkı modu: girilen tutar portföye aylık düzenli sermaye girişi olarak eklenir.'
+        : 'Net mod: pozitif değer katkı, negatif değer çekim olarak doğrudan kullanılır.';
+  }
+  calculateAll();
+}
+
+function getInputs(){
+  const rawMonthly = num('inp-monthly',1800);
+  let monthly;
+  if(recurringFlowMode === 'withdraw') monthly = -Math.abs(rawMonthly);
+  else if(recurringFlowMode === 'contribute') monthly = Math.abs(rawMonthly);
+  else monthly = rawMonthly;
+  return {
+    initial: Math.max(0, num('inp-capital',100000)),
+    monthly,
+    inflation: num('inp-inf',0)/100,
+    years: clamp(intNum('slip-years',15),1,60),
+    rate: num('slip-rate',22)/100
+  };
+}
+
+function computeSequenceRisk(res){
+  const years = res.years;
+  const baseRates = getRateSchedule(years);
+  const stressWindow = Math.min(5, years);
+  const stressedRates = baseRates.map((r,i)=> i < stressWindow ? clamp(r - 0.20, -0.85, 2.5) : r);
+  const stressed = simulate({years, customRates:stressedRates});
+  const finalLoss = res.final > 0 ? clamp((res.final - stressed.final) / res.final, -1, 1) : 1;
+  let yearsLost = 0;
+  if(res.depletedYear || stressed.depletedYear){
+    const baseLife = res.depletedYear || years + 1;
+    const stressLife = stressed.depletedYear || years + 1;
+    yearsLost = Math.max(0, baseLife - stressLife);
+  }
+  const level = finalLoss >= 0.35 || yearsLost >= 5 ? 'Yüksek' : finalLoss >= 0.15 || yearsLost >= 2 ? 'Orta' : 'Düşük';
+  return {stressed, finalLoss, yearsLost, level};
+}
+
+function updateHUD(res){
+  const seq = computeSequenceRisk(res);
+  $('v-nominal').textContent = formatMoney(res.final,false);
+  $('v-real-inline').textContent = formatMoneyLong(res.realFinal);
+  $('v-netgain').textContent = formatMoneyLong(res.netGain);
+  $('v-moic').textContent = res.moic === null ? '—' : res.moic.toFixed(2)+'×';
+  $('v-invested').textContent = formatMoney(res.totalInvested);
+  $('v-cagr').textContent = formatPct(res.netCagr);
+  if($('v-xirr')) $('v-xirr').textContent = formatPct(res.xirr);
+  $('v-twrr').textContent = formatPct(res.twrr);
+  if($('v-margin')) $('v-margin').textContent = res.avgWithdrawal > 0 ? formatMoney(res.margin) : 'Biriktirme';
+  $('v-maxdd').textContent = formatPct(res.maxDD);
+  $('v-vol').textContent = formatPct(res.vol);
+  $('v-breakeven').textContent = res.avgWithdrawal <= 0 ? 'Çıkış yok' : (res.breakEvenYear ? res.breakEvenYear+'. yıl' : 'Kırılmadı');
+
+  if($('v-sequence')){
+    $('v-sequence').textContent = seq.level;
+    $('v-sequence').className = 'hud-value num ' + (seq.level === 'Yüksek' ? 'text-ruby' : seq.level === 'Orta' ? 'text-gold' : 'text-olive');
+  }
+  if($('v-sequence-loss')) $('v-sequence-loss').textContent = formatPct(seq.finalLoss);
+  if($('v-sequence-note')) $('v-sequence-note').textContent = seq.yearsLost > 0 ? seq.yearsLost + ' yıl kısalma' : 'Erken şok testi';
+
+  const healthy = res.avgWithdrawal <= 0 || res.margin >= 0;
+  const lifeText = res.depletedYear ? res.depletedYear + '. yıl' : 'Sürdürülebilir';
+  const swr = estimateSafeWithdrawalRate();
+  if($('v-swr')) $('v-swr').textContent = swr === null ? '—' : formatPct(swr);
+  if($('v-depletion')) $('v-depletion').textContent = lifeText;
+  $('v-status').textContent = res.depletedYear ? 'Sermaye tükendi' : (healthy ? 'Gelir planı dayanıklı' : 'Ana para kullanılıyor');
+  const pill = $('v-status-pill');
+  pill.textContent = res.depletedYear ? 'Risk' : (healthy ? 'Sağlam' : 'İzle');
+  pill.className = 'pill ' + (res.depletedYear || !healthy ? 'negative' : 'positive');
+  const lifeCard = $('life-card');
+  if(lifeCard) lifeCard.classList.toggle('state-risk', !!res.depletedYear || !healthy);
+  $('sidebar-summary').innerHTML = `Final <strong class="num">${formatMoneyLong(res.final)}</strong>; bugünkü satın alma gücü <strong class="num">${formatMoneyLong(res.realFinal)}</strong>; portföy ömrü <strong class="num">${res.depletedYear ? res.depletedYear+'. yıl' : 'sürdürülebilir'}</strong>; sequence risk <strong>${seq.level.toLowerCase()}</strong>.`;
+  if(typeof syncMetricDock === 'function') syncMetricDock();
+}
+
+function renderBridgeChart(res){
+  const ctx = $('bridgeChart');
+  if(!ctx) return;
+  const recurring = res.monthly * 12 * res.years;
+  const eventNet = cashflows.reduce((s,c)=>s+c.amount,0);
+  const investment = res.final - res.initial - recurring - eventNet;
+  if($('bridge-start')) $('bridge-start').textContent = formatMoney(res.initial);
+  if($('bridge-flow')) $('bridge-flow').textContent = formatMoney(recurring + eventNet);
+  if($('bridge-return')) $('bridge-return').textContent = formatMoney(investment);
+  if($('bridge-final')) $('bridge-final').textContent = formatMoney(res.final);
+  destroyChart('bridge');
+  charts.bridge = new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels:['Başlangıç','Düzenli akış','Özel nakit','Yatırım sonucu','Nihai bakiye'],
+      datasets:[{
+        label:'Servet köprüsü',
+        data:[res.initial, recurring, eventNet, investment, res.final],
+        backgroundColor:[
+          'rgba(100,112,73,.62)',
+          recurring >= 0 ? 'rgba(100,112,73,.62)' : 'rgba(127,39,55,.58)',
+          eventNet >= 0 ? 'rgba(100,112,73,.52)' : 'rgba(127,39,55,.48)',
+          investment >= 0 ? 'rgba(206,90,55,.72)' : 'rgba(127,39,55,.62)',
+          'rgba(168,132,66,.72)'
+        ],
+        borderWidth:0
+      }]
+    },
+    options:{
+      ...chartBaseOptions('money'),
+      plugins:{...chartBaseOptions('money').plugins, legend:{display:false}},
+      scales:{x:{grid:{display:false}},y:{ticks:{callback:v=>formatMoney(v)},grid:{color:'rgba(222,212,196,.55)'}}}
+    }
+  });
+}
+
+function calculateAll(){
+  const inp = getInputs();
+  $('lbl-capital').textContent = formatMoneyLong(inp.initial);
+  $('lbl-monthly').textContent = formatMoneyLong(inp.monthly);
+  $('lbl-monthly').className = 'num ' + (inp.monthly < 0 ? 'text-terra' : inp.monthly > 0 ? 'text-olive' : '');
+  $('lbl-inf').textContent = formatPct(inp.inflation);
+  $('lbl-years').textContent = inp.years + ' Yıl';
+  $('lbl-rate').textContent = formatPct(inp.rate);
+
+  lastResult = simulate();
+  updateHUD(lastResult);
+  renderTable(lastResult);
+  renderMainChart(lastResult);
+  renderBridgeChart(lastResult);
+  renderCashflows();
+  renderSnapshots();
+  if(activeTab === 'scenario') renderScenarioComparison();
+  if(activeTab === 'target') solveRequiredReturn(false);
+  if(activeTool === 'swr') calculateSWR();
+  if(activeTool === 'stress') runStressTests();
+  if(activeTool === 'rolling') buildRolling();
+  if(activeTool === 'memo') updateMemo();
+  updateAllRangeFills();
+}
+
+function saveSnapshot(){
+  const inp = getInputs();
+  const name = $('snapshot-name')?.value?.trim() || 'Kilitli Senaryo';
+  const sc = {
+    id:Date.now(),
+    name,
+    rate:inp.rate*100,
+    years:inp.years,
+    monthly:inp.monthly,
+    inflation:inp.inflation*100,
+    snapshot:true
+  };
+  savedSnapshots.push(sc);
+  scenarios.push(sc);
+  renderSnapshots();
+  renderScenarioComparison();
+}
+function removeSnapshot(id){
+  savedSnapshots = savedSnapshots.filter(s=>String(s.id)!==String(id));
+  scenarios = scenarios.filter(s=>String(s.id)!==String(id));
+  renderSnapshots();
+  if(activeTab === 'scenario') renderScenarioComparison();
+}
+function clearSnapshots(){
+  const ids = new Set(savedSnapshots.map(s=>String(s.id)));
+  savedSnapshots = [];
+  scenarios = scenarios.filter(s=>!ids.has(String(s.id)));
+  renderSnapshots();
+  if(activeTab === 'scenario') renderScenarioComparison();
+}
+function applySnapshot(id){
+  const s = savedSnapshots.find(x=>String(x.id)===String(id));
+  if(!s) return;
+  $('slip-years').value = s.years;
+  $('slip-rate').value = s.rate;
+  $('inp-inf').value = s.inflation;
+  recurringFlowMode = s.monthly < 0 ? 'withdraw' : s.monthly > 0 ? 'contribute' : 'net';
+  $('inp-monthly').value = Math.abs(s.monthly);
+  setRecurringFlowMode(recurringFlowMode);
+  onProjectionSlider();
+}
+function renderSnapshots(){
+  const list = $('snapshot-list');
+  if(!list) return;
+  if(!savedSnapshots.length){
+    list.innerHTML = '<div class="hint" style="margin:0">Henüz kilitli senaryo yok.</div>';
+    return;
+  }
+  list.innerHTML = savedSnapshots.map(s=>`
+    <div class="snapshot-chip">
+      <strong>${s.name}</strong>
+      <span>${Number(s.years)}Y · ${Number(s.rate).toFixed(1)}% · ${formatMoney(s.monthly)}/ay</span>
+      <button onclick="applySnapshot('${s.id}')" title="Uygula">↺</button>
+      <button onclick="removeSnapshot('${s.id}')" title="Sil">×</button>
+    </div>
+  `).join('');
+}
+
+function resetScenarios(){
+  const inp = getInputs();
+  scenarios = [
+    {id:1,name:'Koruyucu',rate:Math.min(8, inp.rate*100),years:inp.years,monthly:inp.monthly,inflation:inp.inflation*100},
+    {id:2,name:'Ana Senaryo',rate:inp.rate*100,years:inp.years,monthly:inp.monthly,inflation:inp.inflation*100},
+    {id:3,name:'Yüksek Enflasyon',rate:inp.rate*100,years:inp.years,monthly:inp.monthly,inflation:Math.max(inp.inflation*100+10, inp.inflation*100)},
+    {id:4,name:'Yüksek Çekim',rate:inp.rate*100,years:inp.years,monthly:inp.monthly<0?inp.monthly*1.35:inp.monthly,inflation:inp.inflation*100},
+    {id:5,name:'Erken Kriz',rate:inp.rate*100,years:inp.years,monthly:inp.monthly,inflation:inp.inflation*100,shock:true}
+  ];
+  savedSnapshots.forEach(s=>scenarios.push(s));
+  renderScenarioComparison();
+}
+function addScenario(){
+  if(scenarios.length >= 8) return;
+  const name = $('sc-name').value.trim() || 'Alternatif';
+  const rate = num('sc-rate',18);
+  const years = clamp(intNum('sc-years',getInputs().years),1,50);
+  const monthly = num('sc-monthly',getInputs().monthly);
+  const inflation = num('sc-inflation',getInputs().inflation*100);
+  scenarios.push({id:Date.now(),name,rate,years,monthly,inflation});
+  renderScenarioComparison();
+}
+function updateScenario(id,key,value){
+  const sc = scenarios.find(s=>String(s.id)===String(id));
+  if(!sc) return;
+  if(key==='name') sc.name = value || 'Senaryo';
+  if(key==='rate') sc.rate = parseFloat(value) || 0;
+  if(key==='years') sc.years = clamp(parseInt(value,10)||1,1,50);
+  if(key==='monthly') sc.monthly = parseFloat(value) || 0;
+  if(key==='inflation') sc.inflation = parseFloat(value) || 0;
+  renderScenarioComparison(false);
+}
+function renderScenarioList(){
+  const list = $('scenario-list');
+  if(!list) return;
+  list.innerHTML = scenarios.map((s,idx)=>`
+    <div class="scenario-card">
+      <div class="scenario-card-head">
+        <div class="scenario-name"><span class="pill" style="border-color:${chartColors[idx%chartColors.length]};color:${chartColors[idx%chartColors.length]}">${idx+1}</span> ${s.name}</div>
+        <button class="small-x" onclick="removeScenario('${s.id}')">×</button>
+      </div>
+      <div class="form-grid">
+        <label><span class="form-label">Ad</span><input class="field small" value="${s.name}" oninput="updateScenario('${s.id}','name',this.value)"></label>
+        <label><span class="form-label">Getiri %</span><input class="field small num" type="number" step="0.5" value="${Number(s.rate).toFixed(1)}" oninput="updateScenario('${s.id}','rate',this.value)"></label>
+        <label><span class="form-label">Aylık Akış $</span><input class="field small num" type="number" step="100" value="${Number(s.monthly ?? getInputs().monthly).toFixed(0)}" oninput="updateScenario('${s.id}','monthly',this.value)"></label>
+        <label><span class="form-label">Enflasyon %</span><input class="field small num" type="number" step="0.5" value="${Number(s.inflation ?? getInputs().inflation*100).toFixed(1)}" oninput="updateScenario('${s.id}','inflation',this.value)"></label>
+        <label><span class="form-label">Süre</span><input class="field small num" type="number" min="1" max="50" value="${s.years}" oninput="updateScenario('${s.id}','years',this.value)"></label>
+      </div>
+    </div>
+  `).join('');
+}
+function renderScenarioComparison(rebuildList=true){
+  if(scenarios.length === 0) resetScenarios();
+  if(rebuildList) renderScenarioList();
+  const results = scenarios.map(s => {
+    let customRates = null;
+    if(s.shock){
+      const base = (s.rate||0)/100;
+      customRates = Array.from({length:s.years},(_,i)=> i<3 ? clamp(base-.25,-.85,2.5) : base);
+    }
+    return {scenario:s, result:simulate({years:s.years, rate:(s.rate||0)/100, monthly:s.monthly ?? getInputs().monthly, inflation:(s.inflation ?? getInputs().inflation*100)/100, customRates})};
+  });
+  const maxYears = Math.max(...results.map(x=>x.result.years));
+  const labels = Array.from({length:maxYears},(_,i)=>'Y'+(i+1));
+  destroyChart('scenario');
+  if($('scenarioChart')){
+    charts.scenario = new Chart($('scenarioChart'), {
+      type:'line',
+      data:{
+        labels,
+        datasets:results.map((x,idx)=>({
+          label:`${x.scenario.name}`,
+          data:Array.from({length:maxYears},(_,i)=> x.result.rows[i] ? x.result.rows[i].nominal : null),
+          borderColor:chartColors[idx%chartColors.length],
+          backgroundColor:chartColors[idx%chartColors.length]+'18',
+          tension:.28,
+          pointRadius:1.8,
+          spanGaps:false
+        }))
+      },
+      options:chartBaseOptions('money')
+    });
+  }
+  if($('scenario-tbody')){
+    $('scenario-tbody').innerHTML = results.map(x=>{
+      const r = x.result;
+      const healthy = r.avgWithdrawal <= 0 || r.margin >= 0;
+      return `<tr>
+        <td>${x.scenario.name}</td>
+        <td class="num">${r.years}</td>
+        <td class="num">${formatPct((x.scenario.rate||0)/100)}</td>
+        <td class="num">${formatMoneyLong(x.scenario.monthly ?? getInputs().monthly)}</td>
+        <td class="num">${formatPct((x.scenario.inflation ?? getInputs().inflation*100)/100)}</td>
+        <td class="num">${formatMoneyLong(r.final)}</td>
+        <td class="num text-olive">${formatMoneyLong(r.realFinal)}</td>
+        <td class="num">${r.moic ? r.moic.toFixed(2)+'×' : '—'}</td>
+        <td class="num">${formatPct(r.netCagr)}</td>
+        <td class="num text-ruby">${formatPct(r.maxDD)}</td>
+        <td>${r.depletedYear ? '<span class="pill negative">Tükenme</span>' : healthy ? '<span class="pill positive">Sağlam</span>' : '<span class="pill negative">Açık</span>'}</td>
+      </tr>`;
+    }).join('');
+  }
+}
+
+function onMCSliderChange(){
+  $('lbl-mc-vol').textContent = '%'+intNum('mc-vol',20);
+  $('lbl-mc-iter').textContent = intNum('mc-iter',800);
+  $('lbl-mc-crash').textContent = '%'+intNum('mc-crash',5);
+  $('lbl-mc-skew').textContent = num('mc-skew',0).toFixed(1);
+  if($('lbl-mc-floor')) $('lbl-mc-floor').textContent = formatMoneyLong(num('mc-floor', getInputs().initial));
+  if($('lbl-mc-target')) $('lbl-mc-target').textContent = '%'+intNum('mc-target',85);
+  updateAllRangeFills();
+}
+function runMonteCarlo(){
+  onMCSliderChange();
+  const base = getInputs();
+  const years = base.years;
+  const iter = intNum('mc-iter',800);
+  const vol = num('mc-vol',20)/100;
+  const crashP = num('mc-crash',5)/100;
+  const skew = num('mc-skew',0);
+  const floor = Math.max(0,num('mc-floor',base.initial));
+  const targetProb = intNum('mc-target',85);
+  const paths = [];
+  const finals = [];
+  let survivors = 0;
+  let floorPass = 0;
+
+  for(let i=0;i<iter;i++){
+    const rates = [];
+    for(let y=0;y<years;y++){
+      let z = randN();
+      if(skew !== 0) z = z + skew * (z*z - 1) * 0.18;
+      let r = base.rate + vol*z;
+      if(Math.random() < crashP) r -= 0.20 + Math.random()*0.30;
+      r = clamp(r,-0.95,2.5);
+      rates.push(r);
+    }
+    const sim = simulate({years,customRates:rates});
+    paths.push(sim.rows.map(r=>r.nominal));
+    finals.push(sim.final);
+    if(!sim.depletedYear && sim.final > 0) survivors++;
+    if(!sim.depletedYear && sim.final >= floor) floorPass++;
+  }
+  finals.sort((a,b)=>a-b);
+  const pctByYear = [];
+  for(let y=0;y<years;y++){
+    const vals = paths.map(p=>p[y] ?? 0).sort((a,b)=>a-b);
+    pctByYear.push({year:y+1,p10:percentile(vals,.10),p25:percentile(vals,.25),p50:percentile(vals,.50),p75:percentile(vals,.75),p90:percentile(vals,.90)});
+  }
+  const survivalRate = (survivors/iter)*100;
+  const floorRate = (floorPass/iter)*100;
+  const p50Final = percentile(finals,.50), p90Final = percentile(finals,.90), p10Final = percentile(finals,.10);
+  $('mc-survival').textContent = survivalRate.toFixed(1)+'%';
+  $('mc-survival').className = 'stat-value num ' + (survivalRate >= 85 ? 'text-olive' : survivalRate >= 65 ? 'text-gold' : 'text-ruby');
+  $('mc-p50').textContent = formatMoney(p50Final,false); $('mc-p50').className = 'stat-value num text-gold';
+  $('mc-p90').textContent = formatMoney(p90Final,false); $('mc-p90').className = 'stat-value num text-olive';
+  $('mc-p10').textContent = formatMoney(p10Final,false); $('mc-p10').className = 'stat-value num text-ruby';
+  if($('mc-floor-prob')){
+    $('mc-floor-prob').textContent = floorRate.toFixed(1)+'%';
+    $('mc-floor-prob').className = 'stat-value num ' + (floorRate >= targetProb ? 'mc-threshold-ok' : floorRate >= targetProb-15 ? 'mc-threshold-watch' : 'mc-threshold-risk');
+  }
+  if($('mc-floor-readout')) $('mc-floor-readout').textContent = `Eşik: ${formatMoneyLong(floor)} final sermaye.`;
+  if($('mc-target-status')){
+    const ok = floorRate >= targetProb;
+    $('mc-target-status').textContent = ok ? 'Geçti' : 'Altında';
+    $('mc-target-status').className = 'stat-value num ' + (ok ? 'mc-threshold-ok' : 'mc-threshold-risk');
+  }
+  if($('mc-target-readout')) $('mc-target-readout').textContent = `Hedef ${targetProb}% · gerçekleşen ${floorRate.toFixed(1)}%.`;
+  $('mc-tbody-pct').innerHTML = pctByYear.map(r=>`
+    <tr><td>Yıl ${r.year}</td><td class="num mc-p10">${formatMoneyLong(r.p10)}</td><td class="num mc-p25">${formatMoneyLong(r.p25)}</td><td class="num mc-p50">${formatMoneyLong(r.p50)}</td><td class="num mc-p75">${formatMoneyLong(r.p75)}</td><td class="num mc-p90">${formatMoneyLong(r.p90)}</td></tr>
+  `).join('');
+
+  destroyChart('mc');
+  charts.mc = new Chart($('mcChart'),{
+    type:'line',
+    data:{labels:pctByYear.map(r=>'Yıl '+r.year),datasets:[
+      {label:'P90 İyimser',data:pctByYear.map(r=>r.p90),borderColor:'rgba(100,112,73,.70)',backgroundColor:'rgba(100,112,73,.06)',tension:.28,pointRadius:0},
+      {label:'P75 Üst Çeyrek',data:pctByYear.map(r=>r.p75),borderColor:'rgba(168,132,66,.72)',tension:.28,pointRadius:0},
+      {label:'P50 Medyan',data:pctByYear.map(r=>r.p50),borderColor:css('--terra'),borderWidth:3,tension:.28,pointRadius:0},
+      {label:'P25 Alt Çeyrek',data:pctByYear.map(r=>r.p25),borderColor:'rgba(127,39,55,.58)',tension:.28,pointRadius:0},
+      {label:'P10 Kötümser',data:pctByYear.map(r=>r.p10),borderColor:css('--ruby'),backgroundColor:'rgba(127,39,55,.08)',tension:.28,pointRadius:0}
+    ]},
+    options:chartBaseOptions('money')
+  });
+}
+
+function showTools(which, btn){
+  activeTool = which;
+  ['swr','stress','rolling','guide','memo'].forEach(k => { if($('tools-'+k)) $('tools-'+k).style.display = k===which ? 'block':'none'; });
+  if(btn){
+    btn.parentElement.querySelectorAll('.mini-tab').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+  if(which==='swr') calculateSWR();
+  if(which==='stress') runStressTests();
+  if(which==='rolling') buildRolling();
+  if(which==='memo') updateMemo();
+}
+
+function updateMemo(){
+  const r = lastResult || simulate();
+  const seq = computeSequenceRisk(r);
+  const healthy = !r.depletedYear && (r.avgWithdrawal<=0 || r.margin>=0);
+  const swr = estimateSafeWithdrawalRate();
+  const tone = healthy && seq.level !== 'Yüksek' ? 'Plan uygulanabilir görünüyor' : 'Plan izleme ve revizyon gerektiriyor';
+  const output = $('memo-output');
+  if(!output) return;
+  output.innerHTML = `
+    <h3>Yönetici Yatırım Notu</h3>
+    <p><strong>Ana karar:</strong> ${tone}. Seçili varsayımlar altında nihai nominal bakiye <strong class="num">${formatMoneyLong(r.final)}</strong>, bugünkü satın alma gücü <strong class="num">${formatMoneyLong(r.realFinal)}</strong> seviyesindedir.</p>
+    <h4>Varsayım Seti</h4>
+    <ul>
+      <li>Başlangıç sermayesi: <strong class="num">${formatMoneyLong(r.initial)}</strong></li>
+      <li>Aylık nakit planı: <strong class="num">${formatMoneyLong(r.monthly)}</strong> (${r.monthly < 0 ? 'çekim' : r.monthly > 0 ? 'katkı' : 'nötr'})</li>
+      <li>Analiz süresi: <strong>${r.years} yıl</strong>; yıllık strateji getirisi: <strong class="num">${formatPct(getInputs().rate)}</strong>; enflasyon: <strong class="num">${formatPct(r.inflation)}</strong></li>
+    </ul>
+    <h4>Servet Dayanıklılığı</h4>
+    <ul>
+      <li>Portföy ömrü: <strong>${r.depletedYear ? r.depletedYear+'. yılda tükeniyor' : 'seçili dönemde sürdürülebilir'}</strong></li>
+      <li>Sequence Risk: <strong>${seq.level}</strong>; ilk 5 yıl şok testinde final etki <strong class="num">${formatPct(seq.finalLoss)}</strong></li>
+      <li>SWR göstergesi: <strong class="num">${swr===null?'—':formatPct(swr)}</strong>; gelir dengesi: <strong class="num">${r.avgWithdrawal>0?formatMoneyLong(r.margin):'düzenli çıkış yok'}</strong></li>
+    </ul>
+    <h4>Önerilen Aksiyon</h4>
+    <ul>
+      <li>${healthy ? 'Mevcut çekim planı ana senaryoda korunabilir; ancak Monte Carlo eşik olasılığı ile doğrulanmalıdır.' : 'Çekim seviyesi, getiri varsayımı veya süre yeniden kalibre edilmelidir.'}</li>
+      <li>Senaryo Hafızası ile bu varsayım kilitlenip koruyucu, yüksek enflasyon ve erken kriz senaryoları karşılaştırılmalıdır.</li>
+      <li>Monte Carlo sekmesinde sermaye koruma eşiği aile sermayesinin kabul edilebilir minimum seviyesi olarak belirlenmelidir.</li>
+    </ul>
+  `;
 }
 
 
