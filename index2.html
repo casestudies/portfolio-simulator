@@ -1,0 +1,2400 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Aethelgard Wealth Architecture Studio | Portföy Simülasyonu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+/*
+Değerlendirilen yorumlardan final tasarıma alınan kararlar:
+1) Executive HUD sadeleştirildi: 8 parçalı veri dökümü yerine 3 bloklu hiyerarşik vitrin.
+2) Kutu/border yoğunluğu azaltıldı; premium paper, soft-shadow ve whitespace sistemi kuruldu.
+3) Tablar mobilde keşfedilebilir hale getirildi; scroll hint, büyük touch target ve ARIA yapısı eklendi.
+4) PDF Rapor modu gerçek A4 executive brief davranışına yaklaştırıldı.
+5) Nakit akışı ölçeklenebilirliği eleştirisi kapsam dışı bırakıldı; Seri Program / Batch akışı korunup güçlendirildi.
+*/
+:root{
+  --paper:#f7f2e8;
+  --paper-2:#efe6d8;
+  --surface:#fffdf8;
+  --surface-2:#fbf6ec;
+  --ink:#171411;
+  --stone:#6f665c;
+  --muted:#9b9286;
+  --line:#ded3c2;
+  --soft-line:rgba(222,211,194,.58);
+  --terra:#E8642A;
+  --terra-2:#C94D1F;
+  --olive:#768A3D;
+  --olive-2:#4F6429;
+  --ruby:#8F183B;
+  --gold:#B58B3A;
+  --sand:#D8A969;
+  --ok:#768A3D;
+  --warn:#B58B3A;
+  --bad:#A14A36;
+  --shadow:0 24px 70px rgba(56,42,25,.10);
+  --shadow-soft:0 14px 40px rgba(56,42,25,.075);
+  --radius-xl:16px;
+  --radius-lg:12px;
+  --radius-md:8px;
+  --radius-sm:4px;
+  --sans:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --serif:"Cormorant Garamond",Georgia,"Times New Roman",serif;
+  --mono:"JetBrains Mono","SFMono-Regular",Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  min-height:100vh;
+  color:var(--ink);
+  font-family:var(--sans);
+  line-height:1.48;
+  background:
+    radial-gradient(circle at 6% -12%, rgba(232,100,42,.14), transparent 34rem),
+    radial-gradient(circle at 100% 3%, rgba(118,138,61,.13), transparent 38rem),
+    linear-gradient(180deg,#fbf8f1 0%,var(--paper) 74%,#f4edde 100%);
+  padding:22px;
+}
+button,input,select,textarea{font:inherit}
+button{touch-action:manipulation}
+a{color:inherit}
+::selection{background:rgba(232,100,42,.22)}
+::-webkit-scrollbar{width:9px;height:9px}
+::-webkit-scrollbar-thumb{background:#d7ccbb;border-radius:99px}
+::-webkit-scrollbar-track{background:transparent}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.serif{font-family:var(--serif)}
+.text-terra{color:var(--terra)}
+.text-olive{color:var(--olive)}
+.text-ruby{color:var(--ruby)}
+.text-gold{color:var(--gold)}
+.text-muted{color:var(--muted)}
+.app{
+  max-width:1780px;
+  margin:0 auto;
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
+.brand-row{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:18px;
+  padding:4px 4px 2px;
+}
+.brand-title{
+  margin:0;
+  font-family:var(--serif);
+  font-size:clamp(34px,4vw,64px);
+  font-weight:500;
+  line-height:.9;
+  letter-spacing:-.045em;
+}
+.brand-kicker{
+  margin:10px 0 0;
+  color:var(--stone);
+  text-transform:uppercase;
+  letter-spacing:.22em;
+  font-size:11px;
+  font-weight:850;
+}
+.brand-actions{display:flex;gap:9px;flex-wrap:wrap;justify-content:flex-end}
+.btn{
+  min-height:44px;
+  border:0;
+  border-radius:999px;
+  padding:11px 16px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  cursor:pointer;
+  background:linear-gradient(180deg,#fffdf8,#f2e8da);
+  color:var(--ink);
+  box-shadow:inset 0 0 0 1px rgba(205,191,174,.9),0 10px 24px rgba(56,42,25,.055);
+  text-transform:uppercase;
+  letter-spacing:.105em;
+  font-size:10px;
+  font-weight:900;
+  white-space:nowrap;
+  transition:transform .18s ease, box-shadow .18s ease, color .18s ease, background .18s ease;
+}
+.btn:hover{transform:translateY(-1px);box-shadow:inset 0 0 0 1px rgba(232,100,42,.45),0 16px 32px rgba(232,100,42,.10)}
+.btn:active{transform:translateY(0)}
+.btn.primary{background:linear-gradient(135deg,#171411,#3a2a22);color:#fff7e9}
+.btn.terra{color:var(--terra)}
+.btn.olive{color:var(--olive)}
+.btn.ruby{color:var(--ruby)}
+.btn.ghost{background:transparent;box-shadow:inset 0 0 0 1px var(--soft-line)}
+.btn.small{min-height:36px;padding:8px 12px;font-size:9px}
+.btn.icon{width:44px;padding:0}
+.icon{
+  width:18px;
+  height:18px;
+  stroke:currentColor;
+  stroke-width:1.7;
+  fill:none;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  flex:0 0 auto;
+}
+.top-shell{
+  position:sticky;
+  top:0;
+  z-index:70;
+  padding:10px;
+  margin-inline:-10px;
+  border-radius:28px;
+  background:rgba(247,242,232,.84);
+  backdrop-filter:blur(18px) saturate(1.05);
+  box-shadow:0 16px 44px rgba(56,42,25,.09);
+}
+.hud{
+  display:grid;
+  grid-template-columns:minmax(320px,1.35fr) minmax(260px,.86fr) minmax(280px,.92fr);
+  gap:10px;
+}
+.hud-block{
+  position:relative;
+  overflow:hidden;
+  border-radius:24px;
+  padding:18px 19px;
+  background:
+    radial-gradient(circle at 0% 0%,rgba(255,255,255,.92),transparent 36%),
+    linear-gradient(145deg,#fffdf8 0%,#f4eadb 100%);
+  box-shadow:inset 0 0 0 1px rgba(205,191,174,.72),0 12px 28px rgba(56,42,25,.065);
+}
+.hud-block::after{
+  content:"";
+  position:absolute;
+  right:-36px;
+  bottom:-42px;
+  width:126px;
+  height:126px;
+  border-radius:50%;
+  opacity:.12;
+  background:var(--terra);
+}
+.hud-block.performance::after{background:var(--gold)}
+.hud-block.risk::after{background:var(--olive)}
+.hud-label{
+  position:relative;
+  z-index:1;
+  color:var(--stone);
+  text-transform:uppercase;
+  letter-spacing:.145em;
+  font-size:10px;
+  font-weight:900;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.hud-main{
+  position:relative;
+  z-index:1;
+  margin-top:12px;
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:14px;
+}
+.hud-value{
+  font-family:var(--serif);
+  font-size:clamp(36px,4.25vw,64px);
+  font-weight:600;
+  line-height:.88;
+  letter-spacing:-.055em;
+  white-space:nowrap;
+}
+.hud-real{
+  min-width:142px;
+  border-radius:16px;
+  padding:10px 12px;
+  background:rgba(118,138,61,.075);
+  color:var(--olive);
+}
+.hud-real span,.subtle-label{
+  display:block;
+  color:var(--stone);
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+  font-weight:850;
+}
+.hud-real strong{
+  display:block;
+  margin-top:4px;
+  font-family:var(--mono);
+  font-size:13px;
+  font-variant-numeric:tabular-nums;
+}
+.hud-mini-grid{
+  position:relative;
+  z-index:1;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:9px;
+  margin-top:15px;
+}
+.hud-mini{
+  min-width:0;
+  border-radius:16px;
+  padding:10px;
+  background:rgba(255,253,248,.72);
+  box-shadow:inset 0 0 0 1px rgba(222,211,194,.62);
+}
+.hud-mini .k{
+  color:var(--stone);
+  text-transform:uppercase;
+  letter-spacing:.12em;
+  font-size:8.5px;
+  font-weight:900;
+  white-space:nowrap;
+}
+.hud-mini .v{
+  margin-top:5px;
+  font-family:var(--mono);
+  font-size:16px;
+  font-weight:800;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.hud-note{
+  position:relative;
+  z-index:1;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-top:14px;
+  padding-top:12px;
+  border-top:1px solid rgba(222,211,194,.72);
+  color:var(--stone);
+  font-size:11px;
+}
+.pill{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  border-radius:999px;
+  padding:6px 10px;
+  background:#fffdf8;
+  box-shadow:inset 0 0 0 1px rgba(222,211,194,.88);
+  color:var(--stone);
+  font-size:10px;
+  letter-spacing:.05em;
+  font-weight:900;
+  white-space:nowrap;
+}
+.pill.ok{color:var(--olive);background:rgba(118,138,61,.08);box-shadow:inset 0 0 0 1px rgba(118,138,61,.22)}
+.pill.bad{color:var(--bad);background:rgba(161,74,54,.07);box-shadow:inset 0 0 0 1px rgba(161,74,54,.20)}
+.pill.warn{color:var(--gold);background:rgba(168,132,66,.09);box-shadow:inset 0 0 0 1px rgba(168,132,66,.22)}
+.tabs-wrap{
+  margin-top:10px;
+  overflow-x:auto;
+  padding-bottom:2px;
+}
+.tabs{
+  min-width:max-content;
+  display:flex;
+  gap:6px;
+}
+.tab{
+  min-height:48px;
+  border:0;
+  background:transparent;
+  border-radius:16px;
+  padding:10px 14px;
+  cursor:pointer;
+  color:var(--stone);
+  text-transform:uppercase;
+  letter-spacing:.105em;
+  font-size:10px;
+  font-weight:900;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  position:relative;
+  transition:background .18s ease,color .18s ease,transform .18s ease;
+}
+.tab::after{
+  content:"";
+  position:absolute;
+  left:18px;
+  right:18px;
+  bottom:7px;
+  height:2px;
+  border-radius:99px;
+  transform:scaleX(0);
+  transform-origin:center;
+  background:linear-gradient(90deg,var(--terra),var(--gold));
+  transition:transform .22s ease;
+}
+.tab:hover{background:rgba(255,253,248,.62);color:var(--ink)}
+.tab[aria-selected="true"]{
+  color:var(--ink);
+  background:linear-gradient(180deg,#fffdf8,#f3e8d8);
+  box-shadow:inset 0 0 0 1px rgba(205,191,174,.74);
+}
+.tab[aria-selected="true"]::after{transform:scaleX(1)}
+.workspace{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(310px,360px);
+  gap:18px;
+  align-items:start;
+}
+.main{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
+.controls{
+  position:sticky;
+  top:240px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+.panel,.chart-card,.control-card{
+  border-radius:var(--radius-lg);
+  background:rgba(255,253,248,.82);
+  box-shadow:var(--shadow-soft);
+  border:1px solid rgba(222,211,194,.62);
+}
+.panel{padding:22px}
+.chart-card{padding:22px}
+.control-card{padding:18px}
+.panel-head,.chart-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:16px;
+  margin-bottom:18px;
+}
+.title{
+  margin:0;
+  display:flex;
+  align-items:center;
+  gap:9px;
+  text-transform:uppercase;
+  letter-spacing:.13em;
+  font-size:12px;
+  font-weight:950;
+}
+.kicker{
+  margin:7px 0 0;
+  color:var(--stone);
+  max-width:760px;
+  font-size:13px;
+}
+.control-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;
+}
+.control-grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.slider-card{
+  border-radius:24px;
+  padding:18px;
+  background:linear-gradient(180deg,#fffdf8,#f7efe3);
+  box-shadow:inset 0 0 0 1px rgba(222,211,194,.72);
+}
+.slider-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  gap:12px;
+  margin-bottom:14px;
+}
+.slider-top span{
+  color:var(--stone);
+  text-transform:uppercase;
+  letter-spacing:.13em;
+  font-size:10px;
+  font-weight:900;
+}
+.slider-top strong{font-family:var(--mono);font-size:15px}
+.range{
+  width:100%;
+  min-height:44px;
+  -webkit-appearance:none;
+  appearance:none;
+  background:transparent;
+  cursor:pointer;
+}
+.range::-webkit-slider-runnable-track{
+  height:12px;
+  border-radius:999px;
+  background:linear-gradient(90deg,var(--track-color,var(--terra)) 0 var(--fill,50%),#e8dece var(--fill,50%) 100%);
+  box-shadow:inset 0 0 0 1px rgba(205,191,174,.86);
+}
+.range::-moz-range-track{
+  height:12px;
+  border-radius:999px;
+  background:linear-gradient(90deg,var(--track-color,var(--terra)) 0 var(--fill,50%),#e8dece var(--fill,50%) 100%);
+  box-shadow:inset 0 0 0 1px rgba(205,191,174,.86);
+}
+.range::-webkit-slider-thumb{
+  -webkit-appearance:none;
+  width:28px;
+  height:28px;
+  border-radius:50%;
+  margin-top:-8px;
+  background:var(--track-color,var(--terra));
+  border:4px solid #fffaf0;
+  box-shadow:0 8px 22px rgba(56,42,25,.24);
+  transition:transform .16s ease, box-shadow .16s ease;
+}
+.range::-moz-range-thumb{
+  width:28px;
+  height:28px;
+  border-radius:50%;
+  background:var(--track-color,var(--terra));
+  border:4px solid #fffaf0;
+  box-shadow:0 8px 22px rgba(56,42,25,.24);
+}
+.range:hover::-webkit-slider-thumb{transform:scale(1.12);box-shadow:0 12px 26px rgba(56,42,25,.28)}
+.range.olive{--track-color:var(--olive)}
+.range.ruby{--track-color:var(--ruby)}
+.range.gold{--track-color:var(--gold)}
+.range-labels{
+  display:flex;
+  justify-content:space-between;
+  color:var(--muted);
+  font-size:10px;
+  font-weight:800;
+  text-transform:uppercase;
+  margin-top:-2px;
+}
+.field-group{display:flex;flex-direction:column;gap:7px}
+.label{
+  color:var(--stone);
+  text-transform:uppercase;
+  letter-spacing:.13em;
+  font-size:9.5px;
+  font-weight:900;
+}
+.field,select,textarea{
+  width:100%;
+  border:0;
+  outline:0;
+  color:var(--ink);
+  border-radius:15px;
+  background:#fffdf8;
+  box-shadow:inset 0 0 0 1px rgba(222,211,194,.82);
+  padding:12px 13px;
+  min-height:44px;
+}
+textarea{resize:vertical;min-height:98px}
+.field:focus,select:focus,textarea:focus{
+  box-shadow:inset 0 0 0 2px rgba(232,100,42,.42),0 0 0 4px rgba(232,100,42,.08);
+}
+.input-line{
+  display:grid;
+  grid-template-columns:auto 1fr;
+  align-items:center;
+  gap:6px;
+  border-radius:15px;
+  background:#fffdf8;
+  box-shadow:inset 0 0 0 1px rgba(222,211,194,.82);
+  padding:0 12px;
+}
+.input-line .prefix{color:var(--muted);font-weight:900}
+.input-line input{
+  border:0;
+  outline:0;
+  background:transparent;
+  min-height:46px;
+  width:100%;
+  font-family:var(--mono);
+  font-variant-numeric:tabular-nums;
+  font-weight:750;
+}
+.card-list{display:flex;flex-direction:column;gap:10px}
+.cash-list{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  max-height:260px;
+  overflow:auto;
+  padding-right:2px;
+}
+.cash-item{
+  border-radius:16px;
+  background:#fffdf8;
+  box-shadow:inset 0 0 0 1px rgba(222,211,194,.72);
+  padding:11px 12px;
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:10px;
+  align-items:center;
+}
+.cash-title{font-weight:850;font-size:13px}
+.cash-meta{margin-top:3px;color:var(--muted);font-size:11px}
+.remove{
+  border:0;
+  background:rgba(143,24,59,.06);
+  color:var(--ruby);
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  cursor:pointer;
+  font-size:18px;
+}
+.metric-row{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:12px;
+}
+.stat{
+  border-radius:20px;
+  padding:15px;
+  background:#fffdf8;
+  box-shadow:inset 0 0 0 1px rgba(222,211,194,.68);
+}
+.stat .k{
+  color:var(--stone);
+  text-transform:uppercase;
+  letter-spacing:.13em;
+  font-size:9px;
+  font-weight:900;
+}
+.stat .v{
+  margin-top:8px;
+  font-family:var(--serif);
+  font-size:30px;
+  line-height:.95;
+  font-weight:650;
+  letter-spacing:-.035em;
+}
+.stat .s{
+  margin-top:8px;
+  color:var(--muted);
+  font-size:11px;
+}
+.chart-actions{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}
+.mini-tab{
+  min-height:34px;
+  border:0;
+  border-radius:999px;
+  padding:8px 11px;
+  background:#fffdf8;
+  color:var(--stone);
+  box-shadow:inset 0 0 0 1px rgba(222,211,194,.86);
+  cursor:pointer;
+  text-transform:uppercase;
+  letter-spacing:.095em;
+  font-size:9px;
+  font-weight:900;
+}
+.mini-tab.active{background:var(--ink);color:#fff7e9;box-shadow:none}
+.canvas-wrap{height:390px;position:relative}
+.canvas-wrap.small{height:310px}
+.canvas-wrap.tall{height:440px}
+.viz-note{
+  margin-top:14px;
+  border-radius:18px;
+  padding:13px 15px;
+  background:rgba(168,132,66,.075);
+  color:#5d503b;
+  font-size:12.5px;
+  line-height:1.55;
+}
+.table-wrap{
+  overflow:auto;
+  border-radius:22px;
+  background:#fffdf8;
+  box-shadow:inset 0 0 0 1px rgba(222,211,194,.72),var(--shadow-soft);
+}
+table{width:100%;border-collapse:collapse}
+.fin-table{min-width:1040px;text-align:right;font-size:12px}
+.fin-table th{
+  position:sticky;
+  top:0;
+  z-index:2;
+  background:#f5ecdf;
+  color:var(--stone);
+  padding:12px 13px;
+  border-bottom:1px solid var(--line);
+  text-transform:uppercase;
+  letter-spacing:.11em;
+  font-size:9px;
+  font-weight:950;
+  white-space:nowrap;
+}
+.fin-table td{
+  padding:12px 13px;
+  border-bottom:1px solid rgba(222,211,194,.52);
+  white-space:nowrap;
+}
+.fin-table th:first-child,.fin-table td:first-child{text-align:left}
+.fin-table tbody tr:hover td{background:#fbf6ee}
+.row-warning td{background:rgba(168,132,66,.07)}
+.row-ruined td{background:rgba(143,24,59,.06)}
+.scenario-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:12px;
+}
+.scenario-card{
+  border-radius:22px;
+  padding:16px;
+  background:#fffdf8;
+  box-shadow:inset 0 0 0 1px rgba(222,211,194,.72);
+}
+.scenario-card-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+  margin-bottom:12px;
+}
+.scenario-name{
+  border:0;
+  outline:0;
+  background:transparent;
+  font-weight:900;
+  font-size:14px;
+  min-width:0;
+  width:100%;
+}
+.scenario-form{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+}
+.scenario-form .field{padding:9px 10px;min-height:38px;border-radius:12px}
+.guide-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:13px;
+}
+.guide-card{
+  border-radius:22px;
+  background:#fffdf8;
+  padding:18px;
+  box-shadow:inset 0 0 0 1px rgba(222,211,194,.70);
+}
+.guide-title{
+  font-family:var(--serif);
+  font-size:26px;
+  line-height:.95;
+  font-weight:650;
+  letter-spacing:-.02em;
+}
+.guide-text{
+  color:var(--stone);
+  margin-top:10px;
+  font-size:12.5px;
+}
+.guide-example{
+  margin-top:11px;
+  border-radius:15px;
+  padding:10px 12px;
+  background:rgba(118,138,61,.075);
+  color:#394325;
+  font-size:11.5px;
+}
+.tool-switch{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.heatmap{overflow:auto;border-radius:20px;background:#fffdf8;box-shadow:inset 0 0 0 1px rgba(222,211,194,.72)}
+.heatmap table{min-width:720px;text-align:center;font-size:11px}
+.heatmap th,.heatmap td{padding:10px;border-bottom:1px solid rgba(222,211,194,.52);border-right:1px solid rgba(222,211,194,.42)}
+.heatmap th{background:#f5ecdf;color:var(--stone);text-transform:uppercase;letter-spacing:.09em;font-size:9px}
+.hm-safe{background:rgba(118,138,61,.18);color:var(--olive);font-weight:900}
+.hm-watch{background:rgba(168,132,66,.18);color:#745921;font-weight:900}
+.hm-risk{background:rgba(143,24,59,.12);color:var(--ruby);font-weight:900}
+.drawer-hint{
+  display:none;
+  color:var(--muted);
+  font-size:11px;
+  margin-top:6px;
+}
+.tab-panel{display:none;flex-direction:column;gap:18px}
+.tab-panel.active{display:flex}
+.info{
+  display:inline-grid;
+  place-items:center;
+  width:18px;
+  height:18px;
+  border-radius:50%;
+  background:#fffdf8;
+  box-shadow:inset 0 0 0 1px rgba(205,191,174,.9);
+  color:var(--stone);
+  font-size:11px;
+  font-weight:900;
+  position:relative;
+  cursor:help;
+}
+.info[data-tip]::after{
+  content:attr(data-tip);
+  position:absolute;
+  left:50%;
+  bottom:calc(100% + 8px);
+  transform:translateX(-50%) translateY(4px);
+  width:min(270px,calc(100vw - 34px));
+  background:#211c17;
+  color:#fff7e9;
+  padding:10px 12px;
+  border-radius:14px;
+  opacity:0;
+  pointer-events:none;
+  z-index:200;
+  font-size:11px;
+  line-height:1.45;
+  text-transform:none;
+  letter-spacing:0;
+  font-weight:500;
+  box-shadow:0 16px 32px rgba(0,0,0,.18);
+  transition:opacity .16s ease,transform .16s ease;
+}
+.info:hover::after,.info:focus::after{opacity:1;transform:translateX(-50%) translateY(0)}
+.focus-ring:focus-visible,.btn:focus-visible,.tab:focus-visible,.mini-tab:focus-visible,.remove:focus-visible{
+  outline:3px solid rgba(232,100,42,.32);
+  outline-offset:3px;
+}
+.mobile-note{display:none}
+@media (max-width:1240px){
+  .hud{grid-template-columns:1fr}
+  .hud-main{align-items:center}
+  .workspace{grid-template-columns:1fr}
+  .controls{position:relative;top:auto;order:-1}
+  .control-card.collapsible{padding:0}
+  .control-card.collapsible > .control-inner{padding:18px}
+}
+@media (max-width:820px){
+  body{padding:12px}
+  .brand-row{align-items:flex-start;flex-direction:column}
+  .brand-actions{justify-content:flex-start}
+  .top-shell{border-radius:20px;margin-inline:0;padding:8px}
+  .hud-block{border-radius:18px;padding:15px}
+  .hud-main{display:block}
+  .hud-real{margin-top:12px;width:100%}
+  .hud-mini-grid{grid-template-columns:repeat(3,minmax(112px,1fr));overflow-x:auto;padding-bottom:4px}
+  .tabs-wrap::after{
+    content:"← kaydır →";
+    display:block;
+    color:var(--muted);
+    font-size:10px;
+    margin:5px 0 0 6px;
+  }
+  .workspace{gap:14px}
+  .control-grid,.control-grid.three,.metric-row{grid-template-columns:1fr}
+  .panel,.chart-card{padding:16px;border-radius:18px}
+  .panel-head,.chart-head{display:block}
+  .chart-actions{justify-content:flex-start;margin-top:12px}
+  .canvas-wrap{height:320px}
+  .canvas-wrap.tall{height:350px}
+  .scenario-form{grid-template-columns:1fr}
+  .mobile-note{display:block}
+}
+
+/* Rebuild v2 — metric-first, Monte Carlo-first, lower border fatigue */
+:root{
+  --paper:#f8f7f4;
+  --paper-2:#f1ede4;
+  --surface:#ffffff;
+  --surface-2:#faf9f6;
+  --ink:#1a1918;
+  --stone:#7c7971;
+  --muted:#9f9a91;
+  --line:#e5e2da;
+  --soft-line:rgba(229,226,218,.54);
+  --terra:#E8642A;
+  --terra-2:#C94D1F;
+  --olive:#768A3D;
+  --olive-2:#4f5936;
+  --ruby:#A14A36;
+  --gold:#a88945;
+  --sand:#d49e92;
+  --ok:#768A3D;
+  --warn:#a88945;
+  --bad:#A14A36;
+  --shadow:0 18px 48px rgba(44,38,31,.07);
+  --shadow-soft:0 10px 28px rgba(44,38,31,.045);
+  --radius-xl:22px;
+  --radius-lg:18px;
+  --radius-md:14px;
+  --radius-sm:10px;
+}
+body{
+  background:
+    radial-gradient(circle at 0% -16%, rgba(232,100,42,.07), transparent 30rem),
+    radial-gradient(circle at 100% 0%, rgba(118,138,61,.06), transparent 34rem),
+    var(--paper);
+  padding:20px 26px;
+}
+.app{gap:12px}
+.brand-row{
+  padding:0 2px 2px;
+  align-items:flex-end;
+}
+.brand-title{
+  font-size:clamp(30px,2.9vw,44px);
+  line-height:.94;
+  letter-spacing:-.035em;
+}
+.brand-kicker{margin-top:7px;font-size:9.5px;letter-spacing:.20em}
+.btn{
+  min-height:38px;
+  padding:9px 13px;
+  box-shadow:none;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.62);
+}
+.btn.primary{background:var(--ink);color:#fff}
+.btn:hover{box-shadow:0 8px 22px rgba(232,100,42,.07);border-color:rgba(232,100,42,.36)}
+.top-shell{
+  top:0;
+  margin-inline:-8px;
+  padding:6px 8px;
+  border-radius:16px;
+  background:rgba(248,247,244,.92);
+  backdrop-filter:blur(16px);
+  box-shadow:0 10px 28px rgba(44,38,31,.055);
+}
+.hud{
+  grid-template-columns:minmax(260px,1.12fr) minmax(348px,1.36fr) minmax(326px,1.18fr);
+  gap:8px;
+}
+.hud-block{
+  min-height:68px;
+  border-radius:13px;
+  padding:9px 12px;
+  border:0;
+  box-shadow:none;
+  background:transparent;
+  overflow:visible;
+}
+.hud-block::after{display:none}
+.hud-block.hero{
+  background:linear-gradient(90deg,rgba(255,255,255,.80),rgba(255,255,255,.44));
+  border-left:3px solid var(--terra);
+  box-shadow:0 8px 22px rgba(44,38,31,.045);
+}
+.hud-block.performance{border-left:1px solid rgba(168,137,69,.22)}
+.hud-block.risk{border-left:1px solid rgba(118,138,61,.22)}
+.hud-label{
+  font-size:8.5px;
+  letter-spacing:.13em;
+  gap:6px;
+}
+.hud-main{
+  margin-top:4px;
+  align-items:center;
+}
+.hud-value{
+  font-size:clamp(27px,2.55vw,40px);
+  letter-spacing:-.04em;
+  line-height:.94;
+}
+.hud-note{
+  margin-top:4px;
+  padding-top:3px;
+  border-top:0;
+  font-size:9.5px;
+}
+.hud-real{
+  min-width:132px;
+  padding:2px 0 2px 12px;
+  border-left:1px solid var(--line);
+  border-radius:0;
+  background:transparent;
+}
+.hud-real span,.subtle-label{font-size:8px}
+.hud-real strong{font-size:12px;color:var(--olive)}
+.hud-mini-grid{
+  margin-top:6px;
+  gap:6px;
+}
+.hud-mini{
+  padding:3px 5px;
+  border-radius:0;
+  background:transparent;
+  box-shadow:none;
+  border-left:1px solid var(--soft-line);
+}
+.hud-mini:first-child{border-left:0}
+.hud-mini .k{font-size:7.8px;letter-spacing:.10em}
+.hud-mini .v{
+  font-size:14px;
+  margin-top:3px;
+}
+.metric-delta{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  margin-left:6px;
+  padding:2px 6px;
+  border-radius:999px;
+  font-family:var(--mono);
+  font-size:8.4px;
+  font-weight:800;
+  line-height:1.2;
+  background:rgba(124,121,113,.08);
+  color:var(--stone);
+  vertical-align:middle;
+  opacity:.9;
+}
+.metric-delta.up{background:rgba(118,138,61,.11);color:var(--olive)}
+.metric-delta.down{background:rgba(143,24,59,.10);color:var(--ruby)}
+.metric-delta.flash{animation:metricPulse .55s ease}
+@keyframes metricPulse{0%{transform:translateY(-1px);opacity:.35}100%{transform:translateY(0);opacity:.92}}
+.pill{
+  padding:4px 8px;
+  font-size:8.8px;
+  box-shadow:none;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.55);
+}
+.tabs-wrap{
+  margin-top:4px;
+  padding:0;
+}
+.tabs{gap:4px}
+.tab{
+  min-height:34px;
+  padding:5px 10px;
+  border-radius:999px;
+  font-size:8.8px;
+  letter-spacing:.08em;
+  box-shadow:none;
+  background:transparent;
+}
+.tab svg{width:14px;height:14px}
+.tab:hover{background:rgba(255,255,255,.58);box-shadow:none}
+.tab.active{
+  color:var(--terra);
+  background:rgba(255,255,255,.72);
+  box-shadow:inset 0 -2px 0 var(--terra);
+}
+.workspace{
+  grid-template-columns:minmax(0,1fr) minmax(292px,332px);
+  gap:18px;
+}
+.controls{
+  top:126px;
+  gap:12px;
+}
+.panel,.chart-card,.control-card{
+  border:0;
+  box-shadow:none;
+  background:rgba(255,255,255,.52);
+  border-radius:16px;
+}
+.panel,.chart-card{padding:18px}
+.control-card{padding:15px}
+.panel-head,.chart-head{
+  margin-bottom:13px;
+  padding-bottom:10px;
+  border-bottom:1px solid rgba(229,226,218,.68);
+}
+.title{font-size:11px;letter-spacing:.12em}
+.kicker{font-size:12px;margin-top:5px}
+.slider-card{
+  border-radius:13px;
+  padding:13px;
+  background:rgba(255,255,255,.58);
+  box-shadow:none;
+  border:0;
+}
+.slider-top{font-size:9px;margin-bottom:10px}
+.range{height:9px}
+.range::-webkit-slider-thumb{width:24px;height:24px}
+.range::-moz-range-thumb{width:24px;height:24px}
+.field-group{
+  background:rgba(255,255,255,.48);
+  border-radius:12px;
+  padding:9px 10px;
+}
+.input-line{border-bottom:1px solid rgba(229,226,218,.82)}
+.metric-row{
+  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:6px;
+  background:rgba(255,255,255,.42);
+  border-radius:16px;
+  padding:8px 4px;
+}
+.stat{
+  border-radius:0;
+  padding:9px 12px;
+  background:transparent;
+  box-shadow:none;
+  border-left:1px solid var(--soft-line);
+}
+.metric-row .stat:first-child{border-left:0}
+.stat .k{font-size:8px;letter-spacing:.11em}
+.stat .v{font-size:24px;margin-top:5px}
+.stat .s{font-size:10px;margin-top:5px}
+.chart-card{
+  background:linear-gradient(180deg,rgba(255,255,255,.58),rgba(255,255,255,.34));
+}
+.canvas-wrap{height:330px}
+.canvas-wrap.tall{height:360px}
+.table-wrap{
+  border:0;
+  box-shadow:none;
+  background:rgba(255,255,255,.52);
+  border-radius:14px;
+}
+.fin-table th{
+  background:rgba(250,249,246,.92);
+  border-bottom:1px solid var(--line);
+}
+.fin-table td{border-bottom:1px solid rgba(229,226,218,.46)}
+.fin-table tr.ruin-row td{background:rgba(161,74,54,.07)}
+.fin-table tr.break-row td{background:rgba(168,137,69,.07)}
+.control-grid.four{grid-template-columns:repeat(4,minmax(0,1fr))}
+.mc-panel-priority{
+  background:
+    linear-gradient(90deg,rgba(118,138,61,.08),rgba(255,255,255,.36) 45%,rgba(232,100,42,.055)),
+    rgba(255,255,255,.54);
+}
+.mc-threshold-line{
+  color:var(--olive);
+  font-weight:900;
+}
+.viz-note{
+  border:0;
+  border-left:3px solid var(--gold);
+  background:rgba(168,137,69,.06);
+}
+@media (max-width:1240px){
+  .hud{grid-template-columns:1fr}
+  .controls{top:auto}
+}
+@media (max-width:820px){
+  body{padding:10px}
+  .top-shell{padding:7px;margin-inline:0;border-radius:14px}
+  .hud-block{min-height:auto;padding:10px}
+  .hud-main{display:block}
+  .hud-real{margin-top:8px;padding-left:0;border-left:0}
+  .hud-mini-grid{grid-template-columns:repeat(3,minmax(100px,1fr))}
+  .tab{min-height:40px}
+  .panel,.chart-card{padding:14px}
+  .control-grid.four{grid-template-columns:1fr}
+  .metric-row{grid-template-columns:1fr 1fr}
+  .metric-row .stat:nth-child(odd){border-left:0}
+  .canvas-wrap,.canvas-wrap.tall{height:320px}
+}
+
+@media print{
+  @page{size:A4;margin:14mm}
+  body{padding:0;background:#fff;color:#111}
+  .app{max-width:none}
+  .brand-row{padding:0 0 10mm;border-bottom:1px solid #d8d0c4}
+  .brand-actions,.tabs-wrap,.controls,.no-print,.chart-actions,.tool-switch,.btn,.mini-tab{display:none !important}
+  .top-shell{position:static;padding:0;margin:0;background:#fff;box-shadow:none;backdrop-filter:none}
+  .hud{grid-template-columns:1fr 1fr;gap:6mm;margin:8mm 0}
+  .hud-block{box-shadow:none;border:1px solid #d8d0c4;background:#fff;border-radius:0;break-inside:avoid}
+  .workspace{display:block}
+  .tab-panel{display:flex !important;break-before:page}
+  #panel-projection{break-before:auto}
+  .panel,.chart-card,.table-wrap{box-shadow:none;border:1px solid #d8d0c4;background:#fff;border-radius:0;break-inside:avoid}
+  .canvas-wrap{height:92mm}
+  .viz-note{border:1px solid #d8d0c4;background:#fff}
+  .fin-table{font-size:9px;min-width:0}
+  .fin-table th,.fin-table td{padding:5px}
+}
+
+/* Director v3 — angular, vivid metric-focused refinement */
+:root{
+  --paper:#f7f2e8;
+  --paper-2:#efe3d2;
+  --surface:#fffdf8;
+  --surface-2:#fbf4e8;
+  --terra:#E8642A;
+  --terra-2:#C94D1F;
+  --olive:#768A3D;
+  --olive-2:#4F6429;
+  --ruby:#8F183B;
+  --gold:#B58B3A;
+  --sand:#D8A969;
+  --ok:#768A3D;
+  --warn:#B58B3A;
+  --bad:#A14A36;
+  --radius-xl:16px;
+  --radius-lg:12px;
+  --radius-md:8px;
+  --radius-sm:4px;
+}
+body{
+  background:
+    radial-gradient(circle at 6% -14%, rgba(232,100,42,.16), transparent 34rem),
+    radial-gradient(circle at 97% 2%, rgba(118,138,61,.16), transparent 38rem),
+    radial-gradient(circle at 82% 92%, rgba(143,24,59,.08), transparent 32rem),
+    linear-gradient(180deg,#fbf8f1 0%,var(--paper) 74%,#f4edde 100%);
+}
+.top-shell,
+.hud-block,
+.panel,
+.chart-card,
+.slider-card,
+.input-card,
+.cash-row,
+.scenario-card,
+.stat,
+.guide-card,
+.table-wrap,
+.info-card,
+.mc-panel-priority{
+  border-radius:var(--radius-md);
+}
+.btn,
+.tab,
+.pill,
+.mini-tab,
+.segment,
+.quick,
+.seg{
+  border-radius:var(--radius-sm);
+}
+.range,
+.range::-webkit-slider-thumb,
+.range::-moz-range-thumb{
+  border-radius:4px;
+}
+.range::-webkit-slider-thumb,
+.range::-moz-range-thumb{
+  width:24px;
+  height:24px;
+}
+.metric-delta,
+.status-chip,
+.legend,
+.badge{
+  border-radius:3px;
+}
+.hud-block{
+  box-shadow:0 12px 32px rgba(56,42,25,.065);
+}
+.hud-block.hero{
+  box-shadow:0 16px 42px rgba(232,100,42,.10);
+}
+.hud-block.ruby-accent,
+.mc-panel-priority{
+  background:
+    linear-gradient(135deg,rgba(143,24,59,.055),transparent 40%),
+    linear-gradient(180deg,#fffdf8,#fbf4e8);
+}
+.executive-strip{
+  border-radius:0;
+}
+.chart-card,
+.panel{
+  border-color:rgba(222,211,194,.42);
+}
+.cardless-zone,
+.gridless{
+  border:0;
+  box-shadow:none;
+  background:transparent;
+}
+.tab.active{
+  color:var(--ink);
+  box-shadow:inset 0 -2px 0 var(--terra);
+}
+.tab[data-tab="mc"].active,
+.tab[data-tab="mc"]:hover{
+  box-shadow:inset 0 -2px 0 var(--ruby);
+}
+.btn.terra,
+.text-terra{color:var(--terra)}
+.text-olive{color:var(--olive)}
+.text-ruby{color:var(--ruby)}
+.pill.ruby{
+  color:var(--ruby);
+  background:rgba(143,24,59,.055);
+  box-shadow:inset 0 0 0 1px rgba(143,24,59,.18);
+}
+.pill.bad{
+  color:var(--bad);
+  background:rgba(161,74,54,.06);
+  box-shadow:inset 0 0 0 1px rgba(161,74,54,.18);
+}
+.mc-floor-note,
+.ruby-note{
+  border-left:3px solid var(--ruby);
+  color:var(--ruby);
+}
+@media (max-width:700px){
+  .top-shell,.hud-block,.panel,.chart-card,.slider-card{border-radius:8px}
+}
+
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="brand-row">
+    <div>
+      <h1 class="brand-title">Aethelgard<br>Wealth Architecture Studio</h1>
+      <p class="brand-kicker">Executive portfolio simulation · family office grade</p>
+    </div>
+    <div class="brand-actions no-print">
+      <button class="btn ghost" onclick="loadSampleScenario()" aria-label="Örnek senaryoyu yükle">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M3 12h18M12 3v18"/></svg> Örnek Senaryo
+      </button>
+      <button class="btn primary" onclick="window.print()" aria-label="PDF rapor oluştur">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg> PDF Rapor
+      </button>
+    </div>
+  </header>
+
+  <section class="top-shell">
+    <div class="hud" aria-label="Yönetici metrik vitrini">
+      <article class="hud-block hero">
+        <div class="hud-label">Ana Servet Değeri <span class="info" tabindex="0" data-tip="Nominal bakiye güncel para cinsinden sonucu, reel güç enflasyon sonrası satın alma karşılığını gösterir.">i</span></div>
+        <div class="hud-main">
+          <div>
+            <div class="hud-value" id="hud-nominal">—</div>
+            <div class="hud-note"><span>Net servet etkisi</span><strong class="num" id="hud-netgain">—</strong></div>
+          </div>
+          <div class="hud-real">
+            <span>Reel Satın Alma Gücü</span>
+            <strong id="hud-real">—</strong>
+          </div>
+        </div>
+      </article>
+      <article class="hud-block performance">
+        <div class="hud-label">Performans & Çarpan</div>
+        <div class="hud-mini-grid">
+          <div class="hud-mini"><div class="k">Net CAGR</div><div class="v" id="hud-cagr">—</div></div>
+          <div class="hud-mini"><div class="k">TWRR</div><div class="v" id="hud-twrr">—</div></div>
+          <div class="hud-mini"><div class="k">MOIC</div><div class="v" id="hud-moic">—</div></div>
+        </div>
+        <div class="hud-note"><span>Break-even</span><strong id="hud-breakeven">—</strong></div>
+      </article>
+      <article class="hud-block risk">
+        <div class="hud-label">Risk & Dayanıklılık</div>
+        <div class="hud-mini-grid">
+          <div class="hud-mini"><div class="k">Max DD</div><div class="v text-ruby" id="hud-dd">—</div></div>
+          <div class="hud-mini"><div class="k">Sharpe</div><div class="v" id="hud-sharpe">—</div></div>
+          <div class="hud-mini"><div class="k">Ömür</div><div class="v" id="hud-life">—</div></div>
+        </div>
+        <div class="hud-note"><span>Durum</span><span class="pill" id="hud-status">—</span></div>
+      </article>
+    </div>
+    <nav class="tabs-wrap no-print" aria-label="Analiz sekmeleri">
+      <div class="tabs" role="tablist">
+        <button class="tab" role="tab" aria-selected="true" aria-controls="panel-projection" id="tab-projection" onclick="switchTab('projection',this)">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M3 19h18"/><path d="M5 16l4-5 4 3 6-8"/></svg> Stratejik Projeksiyon
+        </button>
+        <button class="tab" role="tab" aria-selected="false" aria-controls="panel-scenarios" id="tab-scenarios" onclick="switchTab('scenarios',this)">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h16"/><path d="M8 3v4M16 10v4M12 17v4"/></svg> Senaryo Karşılaştırma
+        </button>
+        <button class="tab" role="tab" aria-selected="false" aria-controls="panel-montecarlo" id="tab-montecarlo" onclick="switchTab('montecarlo',this)">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="M7.5 4.21l9 5.19M7.5 19.79V14.6l-4.5-2.6M16.5 19.79V14.6l4.5-2.6M3.27 6.96 12 12l8.73-5.04M12 22V12"/></svg> Monte Carlo
+        </button>
+        <button class="tab" role="tab" aria-selected="false" aria-controls="panel-target" id="tab-target" onclick="switchTab('target',this)">
+          <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><path d="M12 7v5l3 2"/></svg> Hedef Çözüm
+        </button>
+        <button class="tab" role="tab" aria-selected="false" aria-controls="panel-advanced" id="tab-advanced" onclick="switchTab('advanced',this)">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M4 20V4"/><path d="M4 20h16"/><path d="M7 16l3-4 3 2 5-8"/></svg> Gelişmiş Araçlar
+        </button>
+        <button class="tab" role="tab" aria-selected="false" aria-controls="panel-guide" id="tab-guide" onclick="switchTab('guide',this)">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z"/></svg> Kavramlar
+        </button>
+      </div>
+    </nav>
+  </section>
+
+  <div class="workspace">
+    <main class="main">
+      <section id="panel-projection" class="tab-panel active" role="tabpanel" aria-labelledby="tab-projection">
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <h2 class="title"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Ana Varsayım Kumandası</h2>
+              <p class="kicker">Yıl ve beklenen getiri kontrolleri ana içerikte tutulur; kullanıcı stratejik sonucu görürken varsayımı dokunsal şekilde ayarlayabilir.</p>
+            </div>
+            <div class="pill warn">Slider track canlı dolum</div>
+          </div>
+          <div class="control-grid three">
+            <div class="slider-card">
+              <div class="slider-top"><span>Analiz Süresi</span><strong id="lbl-years">20 Yıl</strong></div>
+              <input id="sl-years" class="range" type="range" min="1" max="40" step="1" value="20" oninput="onSliderChange()" aria-label="Analiz süresi">
+              <div class="range-labels"><span>1</span><span>40 yıl</span></div>
+            </div>
+            <div class="slider-card">
+              <div class="slider-top"><span>Beklenen Getiri</span><strong id="lbl-rate">%18</strong></div>
+              <input id="sl-rate" class="range olive" type="range" min="-20" max="70" step="1" value="18" oninput="onSliderChange()" aria-label="Beklenen yıllık getiri">
+              <div class="range-labels"><span>-20%</span><span>70%</span></div>
+            </div>
+            <div class="slider-card">
+              <div class="slider-top"><span>Enflasyon</span><strong id="lbl-inf">%35</strong></div>
+              <input id="sl-inf" class="range gold" type="range" min="0" max="90" step="1" value="35" oninput="onSliderChange()" aria-label="Yıllık enflasyon">
+              <div class="range-labels"><span>0%</span><span>90%</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="metric-row">
+          <div class="stat"><div class="k">XIRR</div><div class="v num" id="stat-xirr">—</div><div class="s">Nakit akışlarına göre iç verim</div></div>
+          <div class="stat"><div class="k">Sortino</div><div class="v num" id="stat-sortino">—</div><div class="s">Negatif volatiliteye duyarlı</div></div>
+          <div class="stat"><div class="k">Dağıtım / Çekim</div><div class="v num" id="stat-withdrawn">—</div><div class="s">Toplam portföy çıkışı</div></div>
+          <div class="stat"><div class="k">Yatırılan Sermaye</div><div class="v num" id="stat-paidin">—</div><div class="s">Başlangıç + katkılar</div></div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-head">
+            <div>
+              <h2 class="title">Servet Yörüngesi</h2>
+              <p class="kicker" id="executive-brief">—</p>
+            </div>
+            <div class="chart-actions no-print">
+              <button class="mini-tab active" onclick="switchChart('growth',this)">Büyüme</button>
+              <button class="mini-tab" onclick="switchChart('realgap',this)">Reel Fark</button>
+              <button class="mini-tab" onclick="switchChart('drawdown',this)">Drawdown</button>
+              <button class="mini-tab" onclick="switchChart('coverage',this)">Gelir Karşılama</button>
+              <button class="mini-tab" onclick="switchChart('bridge',this)">Servet Köprüsü</button>
+            </div>
+          </div>
+          <div class="canvas-wrap tall"><canvas id="mainChart"></canvas></div>
+          <div class="viz-note" id="chart-rationale">Stratejik değer: Nominal ve reel çizgiyi birlikte göstermek, enflasyonun yarattığı servet illüzyonunu yöneticinin tek bakışta görmesini sağlar.</div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <h2 class="title">Yıllık Ledger</h2>
+              <p class="kicker">Negatif yıllar, portföyün tükendiği dönemler ve break-even geçişi koşullu biçimlendirme ile görünür.</p>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table class="fin-table">
+              <thead>
+                <tr>
+                  <th>Yıl</th><th>Getiri</th><th>Başlangıç</th><th>Faiz / Kazanç</th><th>Net Nakit Akışı</th><th>Nominal Bakiye</th><th>Reel Güç</th><th>Drawdown</th><th>Kapsama</th>
+                </tr>
+              </thead>
+              <tbody id="projection-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="panel-scenarios" class="tab-panel" role="tabpanel" aria-labelledby="tab-scenarios">
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <h2 class="title">Senaryo Karşılaştırma</h2>
+              <p class="kicker">En fazla 5 senaryo; baz, korumacı, agresif veya özel müşteri vakaları yan yana ölçülür.</p>
+            </div>
+            <button class="btn terra no-print" onclick="addScenario()">+ Senaryo</button>
+          </div>
+          <div class="scenario-grid" id="scenario-grid"></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-head">
+            <div><h2 class="title">Senaryo Final Yörüngeleri</h2><p class="kicker">Stratejik değer: Parametre farklarının servet ömrü ve reel sonuç üzerindeki etkisini görselleştirir.</p></div>
+          </div>
+          <div class="canvas-wrap"><canvas id="scenarioChart"></canvas></div>
+        </div>
+        <div class="table-wrap">
+          <table class="fin-table">
+            <thead><tr><th>Senaryo</th><th>Yıl</th><th>Getiri</th><th>Enflasyon</th><th>Final Nominal</th><th>Final Reel</th><th>CAGR</th><th>MOIC</th><th>Max DD</th><th>Durum</th></tr></thead>
+            <tbody id="scenario-tbody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="panel-montecarlo" class="tab-panel" role="tabpanel" aria-labelledby="tab-montecarlo">
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <h2 class="title">Monte Carlo Engine</h2>
+              <p class="kicker">Box-Muller normal dağılım, kriz şoku ve skew parametresi ile portföy dayanıklılığı test edilir.</p>
+            </div>
+            <button class="btn primary no-print" onclick="runMonteCarlo()">Simülasyonu Çalıştır</button>
+          </div>
+          <div class="control-grid four">
+            <div class="slider-card">
+              <div class="slider-top"><span>Volatilite</span><strong id="lbl-mc-vol">%24</strong></div>
+              <input id="mc-vol" class="range ruby" type="range" min="1" max="80" value="24" oninput="onMonteCarloControl()" aria-label="Volatilite">
+            </div>
+            <div class="slider-card">
+              <div class="slider-top"><span>İterasyon</span><strong id="lbl-mc-iter">1000</strong></div>
+              <input id="mc-iter" class="range olive" type="range" min="200" max="5000" step="100" value="1000" oninput="onMonteCarloControl()" aria-label="Monte Carlo iterasyon sayısı">
+            </div>
+            <div class="slider-card">
+              <div class="slider-top"><span>Kriz Olasılığı</span><strong id="lbl-mc-crash">%8</strong></div>
+              <input id="mc-crash" class="range gold" type="range" min="0" max="30" value="8" oninput="onMonteCarloControl()" aria-label="Kriz olasılığı">
+            </div>
+            <div class="slider-card mc-panel-priority">
+              <div class="slider-top"><span>Sermaye Koruma Eşiği <em style="color:var(--ruby);font-style:normal">/ vişne hedef çizgisi</em></span><strong id="lbl-mc-floor">%100</strong></div>
+              <input id="mc-floor" class="range olive" type="range" min="0" max="200" step="5" value="100" oninput="onMonteCarloControl()" aria-label="Sermaye koruma eşiği, başlangıç sermayesi yüzdesi">
+              <div class="slider-note">Final bakiyenin başlangıç sermayesinin bu yüzdesinin üstünde kalma olasılığı ölçülür.</div>
+            </div>
+          </div>
+        </div>
+        <div class="metric-row">
+          <div class="stat"><div class="k">Hayatta Kalma</div><div class="v num" id="mc-survival">—</div><div class="s">Final bakiye > 0</div></div>
+          <div class="stat"><div class="k">Sermaye Koruma</div><div class="v num text-olive" id="mc-protection">—</div><div class="s" id="mc-protection-sub">Eşik: —</div></div>
+          <div class="stat"><div class="k">P50 Medyan</div><div class="v num" id="mc-p50">—</div><div class="s">Tipik sonuç</div></div>
+          <div class="stat"><div class="k">P10 Kötümser</div><div class="v num text-ruby" id="mc-p10">—</div><div class="s">Downside koridor</div></div>
+          <div class="stat"><div class="k">P90 İyimser</div><div class="v num text-olive" id="mc-p90">—</div><div class="s">Upside koridor</div></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-head">
+            <div><h2 class="title">Olasılık Fan Grafiği</h2><p class="kicker">Stratejik değer: Tek çizgili tahmin yerine belirsizlik koridorunu gösterir; aile ofisi kararlarında riskin şekli daha hızlı okunur.</p></div>
+          </div>
+          <div class="canvas-wrap tall"><canvas id="mcChart"></canvas></div>
+        </div>
+        <div class="table-wrap">
+          <table class="fin-table">
+            <thead><tr><th>Yıl</th><th>P10</th><th>P25</th><th>P50</th><th>P75</th><th>P90</th></tr></thead>
+            <tbody id="mc-tbody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="panel-target" class="tab-panel" role="tabpanel" aria-labelledby="tab-target">
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <h2 class="title">Hedef Çözümleyici</h2>
+              <p class="kicker">Belirlenen servet hedefine ulaşmak için gerekli yıllık getiri veya aylık nakit katkısı hesaplanır.</p>
+            </div>
+            <button class="btn primary no-print" onclick="solveTarget()">Hedefi Çöz</button>
+          </div>
+          <div class="control-grid">
+            <div class="slider-card">
+              <div class="slider-top"><span>Hedef Yıl</span><strong id="lbl-target-year">15 Yıl</strong></div>
+              <input id="target-year" class="range" type="range" min="1" max="40" value="15" oninput="onTargetControl()" aria-label="Hedef yıl">
+            </div>
+            <div class="slider-card">
+              <div class="slider-top"><span>Hedef Servet</span><strong id="lbl-target-balance">$2.0M</strong></div>
+              <input id="target-balance" class="range olive" type="range" min="100000" max="10000000" step="50000" value="2000000" oninput="onTargetControl()" aria-label="Hedef servet">
+            </div>
+          </div>
+        </div>
+        <div class="metric-row">
+          <div class="stat"><div class="k">Gerekli Getiri</div><div class="v num" id="target-rate">—</div><div class="s">Mevcut nakit akışlarıyla</div></div>
+          <div class="stat"><div class="k">Gerekli Aylık Katkı</div><div class="v num" id="target-monthly">—</div><div class="s">Mevcut getiri varsayımıyla</div></div>
+          <div class="stat"><div class="k">Hedefe Mesafe</div><div class="v num" id="target-gap">—</div><div class="s">Bugünkü senaryoya göre</div></div>
+          <div class="stat"><div class="k">Reel Hedef</div><div class="v num" id="target-real">—</div><div class="s">Enflasyon sonrası karşılık</div></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-head"><div><h2 class="title">Hedef Yolu</h2><p class="kicker">Stratejik değer: Hedef çizgisi ile mevcut yol arasındaki açık, karar vericiye katkı/getiri disiplini ihtiyacını gösterir.</p></div></div>
+          <div class="canvas-wrap"><canvas id="targetChart"></canvas></div>
+        </div>
+      </section>
+
+      <section id="panel-advanced" class="tab-panel" role="tabpanel" aria-labelledby="tab-advanced">
+        <div class="chart-card">
+          <div class="chart-head">
+            <div><h2 class="title">Gelişmiş Analizler</h2><p class="kicker">SWR haritası, kriz stresleri ve rolling return okuması servet planının kırılgan noktalarını gösterir.</p></div>
+          </div>
+          <div class="tool-switch no-print">
+            <button class="mini-tab active" onclick="switchTool('swr',this)">SWR Heatmap</button>
+            <button class="mini-tab" onclick="switchTool('stress',this)">Stres Testleri</button>
+            <button class="mini-tab" onclick="switchTool('rolling',this)">Rolling Returns</button>
+          </div>
+          <div id="tool-swr">
+            <div class="viz-note">Stratejik değer: Çekim oranı ve getiri kombinasyonlarını aynı tabloda göstermek, hangi yaşam standardının sürdürülebilir olduğunu hızlıca ortaya koyar.</div>
+            <div id="swr-output" class="heatmap" style="margin-top:14px"></div>
+          </div>
+          <div id="tool-stress" style="display:none">
+            <div id="stress-cards" class="scenario-grid"></div>
+          </div>
+          <div id="tool-rolling" style="display:none">
+            <div class="canvas-wrap"><canvas id="rollingChart"></canvas></div>
+            <div id="rolling-stats" class="metric-row" style="margin-top:14px"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="panel-guide" class="tab-panel" role="tabpanel" aria-labelledby="tab-guide">
+        <div class="panel">
+          <div class="panel-head">
+            <div><h2 class="title">Kavramlar / Guide</h2><p class="kicker">Finansal kavramlar karar anında anlaşılabilir olmalı; rehber kartları bu nedenle korunup genişletildi.</p></div>
+          </div>
+          <div class="guide-grid">
+            <div class="guide-card"><div class="guide-title">CAGR</div><div class="guide-text">Final değerin başlangıç değerine göre yıllık bileşik büyüme hızıdır. Düzgünleştirilmiş bir performans ölçüsüdür.</div><div class="guide-example"><strong>Not:</strong> Büyük nakit giriş/çıkışları olduğunda tek başına yeterli değildir.</div></div>
+            <div class="guide-card"><div class="guide-title">TWRR</div><div class="guide-text">Nakit akışlarından arındırılmış strateji getirisidir. Portföy yöneticisinin saf yatırım performansını okumaya yarar.</div></div>
+            <div class="guide-card"><div class="guide-title">XIRR</div><div class="guide-text">Düzensiz katkı ve çekimleri dikkate alan iç verim oranıdır. Gerçek yatırımcı deneyimini daha iyi temsil eder.</div></div>
+            <div class="guide-card"><div class="guide-title">MOIC</div><div class="guide-text">Invested capital üzerinde kaç kat değer üretildiğini gösterir: final bakiye + dağıtımlar / yatırılan sermaye.</div></div>
+            <div class="guide-card"><div class="guide-title">Max Drawdown</div><div class="guide-text">Zirveden en derin düşüş. Psikolojik ve operasyonel dayanıklılık sınırını temsil eder.</div></div>
+            <div class="guide-card"><div class="guide-title">Sequence Risk</div><div class="guide-text">İlk yıllardaki kötü getirilerin uzun vadeli sonucu orantısız şekilde bozmasıdır. Özellikle çekim yapılan portföylerde kritiktir.</div></div>
+            <div class="guide-card"><div class="guide-title">SWR</div><div class="guide-text">Portföyü tüketmeden çekilebilecek tahmini yıllık oran. Kesin güvence değil, planlama pusulasıdır.</div></div>
+            <div class="guide-card"><div class="guide-title">Reel Güç</div><div class="guide-text">Nominal servetin enflasyona göre düzeltilmiş satın alma gücüdür. Yüksek enflasyonda ana karar metriklerinden biridir.</div></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <aside class="controls no-print" aria-label="Varsayım ve nakit akışı paneli">
+      <div class="control-card">
+        <h2 class="title">Sermaye Temelleri</h2>
+        <p class="kicker">Başlangıç sermayesi ve aylık net nakit akışı tüm simülasyon motorunun temelidir.</p>
+        <div class="card-list" style="margin-top:14px">
+          <label class="field-group">
+            <span class="label">Başlangıç Kapitali</span>
+            <span class="input-line"><span class="prefix">$</span><input id="inp-capital" type="number" value="250000" min="0" step="1000" oninput="calculateAll()" aria-label="Başlangıç kapitali"></span>
+          </label>
+          <label class="field-group">
+            <span class="label">Aylık Net Nakit Akışı <span class="info" tabindex="0" data-tip="Pozitif değer portföye katkı, negatif değer portföyden çekim anlamına gelir. Yıllıklaştırma otomatik yapılır.">i</span></span>
+            <span class="input-line"><span class="prefix">$</span><input id="inp-monthly" type="number" value="1800" step="100" oninput="calculateAll()" aria-label="Aylık net nakit akışı"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="control-card">
+        <h2 class="title">Nakit Programı</h2>
+        <p class="kicker">Tekil olay veya Seri Program / Batch sermaye girişi-çıkışı ekleyin.</p>
+        <div class="control-grid" style="margin-top:14px">
+          <label class="field-group"><span class="label">Tip</span><select id="cash-type"><option value="contribution">Katkı / Giriş</option><option value="withdrawal">Çekim / Çıkış</option></select></label>
+          <label class="field-group"><span class="label">Periyot</span><select id="cash-frequency"><option value="once">Tekil</option><option value="annual">Yıllık Seri</option><option value="monthly">Aylık Seri</option></select></label>
+          <label class="field-group"><span class="label">Başlangıç Yılı</span><input id="cash-start" class="field num" type="number" value="5" min="1"></label>
+          <label class="field-group"><span class="label">Bitiş Yılı</span><input id="cash-end" class="field num" type="number" value="10" min="1"></label>
+        </div>
+        <div class="card-list" style="margin-top:10px">
+          <label class="field-group"><span class="label">Tutar</span><span class="input-line"><span class="prefix">$</span><input id="cash-amount" type="number" value="50000" step="1000"></span></label>
+          <label class="field-group"><span class="label">Açıklama</span><input id="cash-note" class="field" type="text" value="Sermaye Çıkışı / Batch"></label>
+          <button class="btn terra" onclick="addCashProgram()">Program Ekle</button>
+        </div>
+        <div class="cash-list" id="cash-list" style="margin-top:14px"></div>
+      </div>
+
+      <div class="control-card">
+        <h2 class="title">Manuel Yıllık Getiri</h2>
+        <p class="kicker">İsteğe bağlı özel seri; boş bırakılırsa beklenen getiri sabit kullanılır.</p>
+        <textarea id="custom-returns" placeholder="Örnek: 12, -8, 24, 18, 10" oninput="calculateAll()"></textarea>
+        <div class="drawer-hint mobile-note">Mobil ipucu: değerleri virgül, boşluk veya satır sonu ile ayırabilirsiniz.</div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<script>
+"use strict";
+
+let activeChartType = "growth";
+let activeTool = "swr";
+let mainChart = null, scenarioChart = null, mcChart = null, rollingChart = null, targetChart = null;
+let calculatedData = [];
+let calculatedMetrics = null;
+let cashPrograms = [
+  {id:1, type:"withdrawal", frequency:"once", start:7, end:7, amount:120000, note:"Gayrimenkul Alımı"},
+  {id:2, type:"contribution", frequency:"annual", start:3, end:6, amount:25000, note:"Bonus Katkısı"}
+];
+let scenarios = [
+  {id:1, name:"Baz Plan", years:20, rate:18, inflation:35, monthly:1800},
+  {id:2, name:"Korumacı", years:20, rate:11, inflation:32, monthly:1800},
+  {id:3, name:"Agresif", years:20, rate:28, inflation:38, monthly:2500}
+];
+
+const css = getComputedStyle(document.documentElement);
+const colors = {
+  ink: css.getPropertyValue("--ink").trim(),
+  terra: css.getPropertyValue("--terra").trim(),
+  olive: css.getPropertyValue("--olive").trim(),
+  ruby: css.getPropertyValue("--ruby").trim(),
+  gold: css.getPropertyValue("--gold").trim(),
+  stone: css.getPropertyValue("--stone").trim(),
+  line: css.getPropertyValue("--line").trim(),
+  surface: css.getPropertyValue("--surface").trim()
+};
+const chartPalette = [colors.terra, colors.olive, colors.ruby, colors.gold, "#8b6f56", "#344c64"];
+
+Chart.defaults.font.family = 'Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+Chart.defaults.color = colors.stone;
+Chart.defaults.plugins.legend.labels.usePointStyle = true;
+Chart.defaults.plugins.legend.labels.boxWidth = 8;
+Chart.defaults.plugins.tooltip.backgroundColor = "rgba(23,20,17,.94)";
+Chart.defaults.plugins.tooltip.titleColor = "#fff7e9";
+Chart.defaults.plugins.tooltip.bodyColor = "#fff7e9";
+Chart.defaults.plugins.tooltip.padding = 12;
+Chart.defaults.plugins.tooltip.cornerRadius = 12;
+Chart.defaults.animation.duration = 420;
+
+function $(id){ return document.getElementById(id); }
+function val(id){ return parseFloat($(id).value) || 0; }
+function intVal(id){ return parseInt($(id).value,10) || 0; }
+function clamp(n,min,max){ return Math.max(min, Math.min(max,n)); }
+function pct(v,d=2){ return v==null || !isFinite(v) ? "—" : `${v>0?"+":""}${v.toFixed(d)}%`; }
+function money(v){
+  if(v==null || !isFinite(v)) return "—";
+  const sign = v < 0 ? "-" : "";
+  const a = Math.abs(v);
+  if(a >= 1e9) return `${sign}$${(a/1e9).toFixed(2)}B`;
+  if(a >= 1e6) return `${sign}$${(a/1e6).toFixed(2)}M`;
+  if(a >= 1e3) return `${sign}$${(a/1e3).toFixed(1)}K`;
+  return `${sign}$${Math.round(a).toLocaleString("tr-TR")}`;
+}
+function fullMoney(v){
+  if(v==null || !isFinite(v)) return "—";
+  const sign = v < 0 ? "-" : "";
+  return `${sign}$${Math.round(Math.abs(v)).toLocaleString("tr-TR")}`;
+}
+function multiple(v){ return v==null || !isFinite(v) ? "—" : `${v.toFixed(2)}x`; }
+
+function setRangeFill(el){
+  const min = parseFloat(el.min || 0), max = parseFloat(el.max || 100), value = parseFloat(el.value || 0);
+  const p = ((value-min)/(max-min))*100;
+  el.style.setProperty("--fill", `${clamp(p,0,100)}%`);
+}
+
+function updateAllRangeFills(){
+  document.querySelectorAll(".range").forEach(setRangeFill);
+}
+
+function parseCustomReturns(){
+  const raw = $("custom-returns").value.trim();
+  if(!raw) return null;
+  const arr = raw.split(/[\s,;]+/).map(Number).filter(Number.isFinite);
+  return arr.length ? arr : null;
+}
+
+function programAnnualAmount(program, year){
+  const sign = program.type === "withdrawal" ? -1 : 1;
+  const start = Math.max(1, parseInt(program.start,10) || 1);
+  const end = Math.max(start, parseInt(program.end,10) || start);
+  if(program.frequency === "once") return year === start ? sign * program.amount : 0;
+  if(year < start || year > end) return 0;
+  if(program.frequency === "monthly") return sign * program.amount * 12;
+  return sign * program.amount;
+}
+
+function totalProgramFlow(year, programs = cashPrograms){
+  return programs.reduce((sum,p)=>sum+programAnnualAmount(p,year),0);
+}
+
+function calcXIRR(flows){
+  if(!flows || flows.length < 2) return null;
+  const npv = r => flows.reduce((s,f)=>s + f.amount/Math.pow(1+r,f.t),0);
+  const dnpv = r => flows.reduce((s,f)=>s - f.t*f.amount/Math.pow(1+r,f.t+1),0);
+  for(const seed of [0.08,0.18,0.35,-0.15,0.6]){
+    let r = seed;
+    for(let i=0;i<100;i++){
+      const d = dnpv(r);
+      if(Math.abs(d) < 1e-12) break;
+      const step = npv(r)/d;
+      r -= step;
+      r = clamp(r,-0.999,20);
+      if(Math.abs(step) < 1e-9){
+        const res = r*100;
+        if(isFinite(res) && res > -99 && res < 2000) return res;
+        break;
+      }
+    }
+  }
+  return null;
+}
+
+function simulate(opts){
+  const years = opts.years;
+  const capital = Math.max(0, opts.capital);
+  const monthly = opts.monthly || 0;
+  const inflation = opts.inflation || 0;
+  const programs = opts.programs || [];
+  const rates = Array.isArray(opts.rate) ? opts.rate : null;
+  const fixedRate = !rates ? (opts.rate || 0) : null;
+
+  let balance = capital;
+  let peak = capital;
+  let cumulativeInterest = 0;
+  let paidIn = capital;
+  let withdrawn = 0;
+  let data = [{
+    year:0, start:capital, rate:0, interest:0, baseFlow:0, programFlow:0, netFlow:0,
+    balance:capital, realBalance:capital, drawdown:0, peak:capital, paidIn, withdrawn,
+    coverage:null, cumulativeInterest
+  }];
+
+  for(let y=1; y<=years; y++){
+    const start = balance;
+    const rate = rates ? (rates[y-1] ?? rates[rates.length-1]) : fixedRate;
+    const baseFlow = monthly * 12;
+    const programFlow = totalProgramFlow(y, programs);
+    const netFlow = baseFlow + programFlow;
+    const interest = balance > 0 ? balance * (rate/100) : 0;
+
+    if(netFlow > 0) paidIn += netFlow;
+    if(netFlow < 0) withdrawn += Math.abs(netFlow);
+
+    balance = Math.max(0, balance + interest + netFlow);
+    peak = Math.max(peak, balance);
+    const drawdown = peak > 0 ? ((balance-peak)/peak)*100 : 0;
+    const realBalance = balance / Math.pow(1 + inflation/100, y);
+    cumulativeInterest += interest > 0 ? interest : 0;
+    const annualWithdrawal = Math.max(0, -netFlow);
+    const coverage = annualWithdrawal > 0 ? interest / annualWithdrawal : null;
+
+    data.push({
+      year:y, start, rate, interest, baseFlow, programFlow, netFlow,
+      balance, realBalance, drawdown, peak, paidIn, withdrawn, coverage, cumulativeInterest
+    });
+  }
+  return data;
+}
+
+function metrics(data, opts){
+  const first = data[0], last = data[data.length-1];
+  const years = Math.max(1,last.year);
+  const ruinRow = data.find(d=>d.year>0 && d.balance <= 0);
+  const ruined = Boolean(ruinRow);
+  let breakEvenYear = null;
+  for(const d of data.slice(1)){
+    if(d.interest > Math.max(0,-d.netFlow) && Math.max(0,-d.netFlow)>0){ breakEvenYear = d.year; break; }
+  }
+  const rates = data.slice(1).map(d=>d.rate);
+  const twrr = rates.length ? (Math.pow(rates.reduce((p,r)=>p*(1+r/100),1),1/rates.length)-1)*100 : null;
+  const cagr = first.balance > 0 && last.balance > 0 ? (Math.pow(last.balance/first.balance,1/years)-1)*100 : null;
+  const maxDD = Math.min(...data.map(d=>d.drawdown));
+  const mean = rates.reduce((a,b)=>a+b,0) / (rates.length || 1);
+  const variance = rates.length > 1 ? rates.reduce((a,b)=>a + Math.pow(b-mean,2),0)/(rates.length-1) : 0;
+  const vol = Math.sqrt(variance);
+  const sharpe = vol > .001 ? (mean-3)/vol : null;
+  const downside = rates.map(r=>r-3).filter(r=>r<0);
+  const downVar = downside.length ? downside.reduce((a,b)=>a+b*b,0)/(rates.length || 1) : 0;
+  const sortino = downVar > 0 ? (mean-3)/Math.sqrt(downVar) : null;
+  const paidIn = last.paidIn;
+  const withdrawn = last.withdrawn;
+  const moic = paidIn > 0 ? (last.balance + withdrawn) / paidIn : null;
+
+  const xirrFlows = [{t:0, amount:-first.balance}];
+  data.slice(1).forEach((d,i)=>{
+    let amount = -d.netFlow;
+    if(i === data.length-2) amount += last.balance;
+    xirrFlows.push({t:d.year, amount});
+  });
+  const xirr = calcXIRR(xirrFlows);
+  const sequenceRisk = data.slice(1,6).reduce((s,d)=>s+d.rate,0) / Math.max(1, Math.min(5,data.length-1));
+
+  return {
+    finalBal:last.balance, finalReal:last.realBalance, totalGain:last.balance - first.balance,
+    cagr, twrr, xirr, maxDD, vol, sharpe, sortino, paidIn, withdrawn, moic,
+    ruined, ruinYear:ruinRow?.year || null, breakEvenYear, sequenceRisk,
+    life: ruined ? `${ruinRow.year}. yıl` : `${years}+ yıl`
+  };
+}
+
+function currentOpts(){
+  const custom = parseCustomReturns();
+  const years = intVal("sl-years");
+  return {
+    years,
+    rate: custom ? custom.slice(0,years) : val("sl-rate"),
+    capital: val("inp-capital"),
+    monthly: val("inp-monthly"),
+    inflation: val("sl-inf"),
+    programs: cashPrograms
+  };
+}
+
+function onSliderChange(){
+  $("lbl-years").textContent = `${intVal("sl-years")} Yıl`;
+  $("lbl-rate").textContent = `%${val("sl-rate").toFixed(0)}`;
+  $("lbl-inf").textContent = `%${val("sl-inf").toFixed(0)}`;
+  calculateAll();
+}
+
+
+const hudMetricFormats = {
+  money:(d)=>`${d>=0?"+":"−"}${money(Math.abs(d))}`,
+  pct:(d)=>`${d>=0?"+":"−"}${Math.abs(d).toFixed(1)} puan`,
+  ratio:(d)=>`${d>=0?"+":"−"}${Math.abs(d).toFixed(2)}x`,
+  number:(d)=>`${d>=0?"+":"−"}${Math.abs(d).toFixed(2)}`
+};
+
+function writeMetric(id, text, raw, format="number", reverse=false){
+  const el = $(id);
+  if(!el) return;
+  const oldRaw = el.dataset.raw === undefined ? null : Number(el.dataset.raw);
+  el.textContent = text;
+  if(Number.isFinite(raw)) el.dataset.raw = raw;
+  let chip = el.parentElement?.querySelector(`.metric-delta[data-for="${id}"]`);
+  if(oldRaw !== null && Number.isFinite(oldRaw) && Number.isFinite(raw)){
+    const delta = raw - oldRaw;
+    if(Math.abs(delta) > 1e-9){
+      if(!chip){
+        chip = document.createElement("span");
+        chip.className = "metric-delta";
+        chip.dataset.for = id;
+        el.insertAdjacentElement("afterend", chip);
+      }
+      const positive = reverse ? delta < 0 : delta > 0;
+      chip.className = `metric-delta ${positive ? "up" : "down"} flash`;
+      chip.textContent = hudMetricFormats[format] ? hudMetricFormats[format](delta) : hudMetricFormats.number(delta);
+      setTimeout(()=>chip?.classList.remove("flash"), 620);
+    }
+  }
+}
+
+
+function updateHUD(m){
+  $("hud-nominal").textContent = m.finalBal > 0 ? money(m.finalBal) : "TÜKENDİ";
+  $("hud-real").textContent = m.finalReal > 0 ? money(m.finalReal) : "TÜKENDİ";
+  $("hud-netgain").textContent = fullMoney(m.totalGain);
+  $("hud-cagr").textContent = pct(m.cagr);
+  $("hud-twrr").textContent = pct(m.twrr);
+  $("hud-moic").textContent = multiple(m.moic);
+  $("hud-breakeven").textContent = m.breakEvenYear ? `Yıl ${m.breakEvenYear}` : "Yok";
+  $("hud-dd").textContent = `${m.maxDD.toFixed(1)}%`;
+  $("hud-sharpe").textContent = m.sharpe == null ? "—" : m.sharpe.toFixed(2);
+  $("hud-life").textContent = m.life;
+  const status = $("hud-status");
+  status.className = `pill ${m.ruined ? "bad" : (m.maxDD < -35 ? "warn" : "ok")}`;
+  status.textContent = m.ruined ? `Tükendi · Yıl ${m.ruinYear}` : (m.maxDD < -35 ? "Riskli ama aktif" : "Sürdürülebilir");
+
+  $("stat-xirr").textContent = pct(m.xirr);
+  $("stat-sortino").textContent = m.sortino == null ? "—" : m.sortino.toFixed(2);
+  $("stat-withdrawn").textContent = money(m.withdrawn);
+  $("stat-paidin").textContent = money(m.paidIn);
+
+  const gap = m.finalBal - m.finalReal;
+  $("executive-brief").textContent = m.ruined
+    ? `Bu plan ${m.ruinYear}. yılda tükeniyor. Ana müdahale alanları: çekim temposu, ilk 5 yıl getiri dizisi ve enflasyon baskısı.`
+    : `Bu plan ${currentOpts().years} yıl sonunda ${money(m.finalBal)} nominal değer ve ${money(m.finalReal)} reel güç üretir. Enflasyon farkı yaklaşık ${money(gap)} seviyesindedir.`;
+}
+
+function renderTable(data,m){
+  const tbody = $("projection-tbody");
+  tbody.innerHTML = "";
+  data.slice(1).forEach(d=>{
+    const tr = document.createElement("tr");
+    if(d.balance <= 0) tr.classList.add("row-ruined");
+    else if(m.breakEvenYear === d.year) tr.classList.add("row-warning");
+    const coverage = d.coverage == null ? "—" : `${d.coverage.toFixed(2)}x`;
+    tr.innerHTML = `
+      <td><strong>Yıl ${d.year}</strong></td>
+      <td class="num ${d.rate<0?"text-ruby":"text-olive"}">${pct(d.rate,1)}</td>
+      <td class="num">${fullMoney(d.start)}</td>
+      <td class="num ${d.interest<0?"text-ruby":"text-olive"}">${fullMoney(d.interest)}</td>
+      <td class="num ${d.netFlow<0?"text-ruby":"text-olive"}">${fullMoney(d.netFlow)}</td>
+      <td class="num"><strong>${fullMoney(d.balance)}</strong></td>
+      <td class="num text-olive">${fullMoney(d.realBalance)}</td>
+      <td class="num text-ruby">${d.drawdown.toFixed(1)}%</td>
+      <td class="num">${coverage}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function chartBaseOptions(format = "money"){
+  return {
+    responsive:true,
+    maintainAspectRatio:false,
+    interaction:{mode:"index",intersect:false},
+    plugins:{
+      legend:{position:"bottom"},
+      tooltip:{
+        callbacks:{
+          label:(ctx)=>{
+            const v = ctx.parsed.y;
+            const val = format === "pct" ? `${v.toFixed(2)}%` : (format === "ratio" ? `${v.toFixed(2)}x` : fullMoney(v));
+            return `${ctx.dataset.label}: ${val}`;
+          }
+        }
+      }
+    },
+    scales:{
+      x:{grid:{display:false},border:{display:false},ticks:{maxRotation:0}},
+      y:{grid:{color:"rgba(111,102,92,.13)"},border:{display:false},ticks:{callback:(v)=> format==="pct" ? `${v}%` : (format==="ratio" ? `${v}x` : money(v))}}
+    }
+  };
+}
+
+function renderMainChart(data,m){
+  const ctx = $("mainChart");
+  if(mainChart) mainChart.destroy();
+  const labels = data.map(d=>`Yıl ${d.year}`);
+  let config;
+  const rationale = $("chart-rationale");
+  if(activeChartType === "growth"){
+    rationale.textContent = "Stratejik değer: Nominal ve reel çizgiyi birlikte göstermek, enflasyonun yarattığı servet illüzyonunu yöneticinin tek bakışta görmesini sağlar.";
+    config = {
+      type:"line",
+      data:{labels,datasets:[
+        {label:"Nominal Bakiye", data:data.map(d=>d.balance), borderColor:colors.terra, backgroundColor:"rgba(232,100,42,.10)", fill:true, tension:.34, pointRadius:0, borderWidth:2.6},
+        {label:"Reel Satın Alma Gücü", data:data.map(d=>d.realBalance), borderColor:colors.olive, backgroundColor:"rgba(118,138,61,.06)", fill:false, tension:.34, pointRadius:0, borderWidth:2.3}
+      ]},
+      options:chartBaseOptions("money")
+    };
+  } else if(activeChartType === "realgap"){
+    rationale.textContent = "Stratejik değer: Nominal sonuç ile reel güç arasındaki farkı izole eder; yüksek enflasyonda karar kalitesini artırır.";
+    config = {
+      type:"bar",
+      data:{labels,datasets:[
+        {label:"Nominal", data:data.map(d=>d.balance), backgroundColor:"rgba(232,100,42,.45)", borderRadius:3},
+        {label:"Reel", data:data.map(d=>d.realBalance), backgroundColor:"rgba(118,138,61,.45)", borderRadius:3}
+      ]},
+      options:chartBaseOptions("money")
+    };
+  } else if(activeChartType === "drawdown"){
+    rationale.textContent = "Stratejik değer: Final servet kadar yolculuk riski de önemlidir; drawdown grafiği psikolojik ve operasyonel dayanıklılığı ölçer.";
+    config = {
+      type:"line",
+      data:{labels,datasets:[{label:"Drawdown", data:data.map(d=>d.drawdown), borderColor:css.getPropertyValue("--bad").trim() || colors.terra, backgroundColor:"rgba(161,74,54,.10)", fill:true, tension:.28, pointRadius:0, borderWidth:2.4}]},
+      options:chartBaseOptions("pct")
+    };
+  } else if(activeChartType === "coverage"){
+    rationale.textContent = "Stratejik değer: Yıllık yatırım kazancının yıllık çekimi kaç kat karşıladığını gösterir; sürdürülebilir yaşam standardı için kritik erken uyarıdır.";
+    config = {
+      type:"line",
+      data:{labels:data.slice(1).map(d=>`Yıl ${d.year}`),datasets:[
+        {label:"Gelir Karşılama Oranı", data:data.slice(1).map(d=>d.coverage ?? null), borderColor:colors.gold, backgroundColor:"rgba(168,132,66,.12)", fill:true, tension:.26, pointRadius:2, borderWidth:2.4},
+        {label:"1.0x Eşik", data:data.slice(1).map(()=>1), borderColor:"rgba(23,20,17,.35)", borderDash:[6,6], pointRadius:0, borderWidth:1.5}
+      ]},
+      options:chartBaseOptions("ratio")
+    };
+  } else {
+    rationale.textContent = "Stratejik değer: Servet Köprüsü final değerin hangi kaynaklardan oluştuğunu açıklar; danışman görüşmelerinde hikâyeyi sayıya bağlar.";
+    const initial = data[0].balance;
+    const contributions = Math.max(0, data[data.length-1].paidIn - initial);
+    const withdrawals = data[data.length-1].withdrawn;
+    const returns = data[data.length-1].balance - initial - contributions + withdrawals;
+    config = {
+      type:"bar",
+      data:{labels:["Başlangıç","Katkılar","Çekimler","Yatırım Getirisi","Final"],datasets:[{
+        label:"Servet Köprüsü", data:[initial,contributions,-withdrawals,returns,data[data.length-1].balance],
+        backgroundColor:[colors.terra,colors.olive,colors.ruby,colors.gold,colors.ink],
+        borderRadius:3
+      }]},
+      options:chartBaseOptions("money")
+    };
+  }
+  mainChart = new Chart(ctx, config);
+}
+
+function switchChart(type,btn){
+  activeChartType = type;
+  document.querySelectorAll(".chart-actions .mini-tab").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  renderMainChart(calculatedData, calculatedMetrics);
+}
+
+function calculateAll(){
+  updateAllRangeFills();
+  const opts = currentOpts();
+  calculatedData = simulate(opts);
+  calculatedMetrics = metrics(calculatedData, opts);
+  updateHUD(calculatedMetrics);
+  renderTable(calculatedData, calculatedMetrics);
+  renderMainChart(calculatedData, calculatedMetrics);
+  renderCashPrograms();
+  renderScenarios();
+  renderAdvanced();
+  solveTarget(false);
+}
+
+function switchTab(name,btn){
+  document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-selected","false"));
+  btn.setAttribute("aria-selected","true");
+  document.querySelectorAll(".tab-panel").forEach(p=>p.classList.remove("active"));
+  $(`panel-${name}`).classList.add("active");
+  setTimeout(()=>{
+    if(name==="scenarios") renderScenarios();
+    if(name==="montecarlo" && !mcChart) runMonteCarlo();
+    if(name==="target") solveTarget(false);
+    if(name==="advanced") renderAdvanced();
+  },40);
+}
+
+function addCashProgram(){
+  const type = $("cash-type").value;
+  const frequency = $("cash-frequency").value;
+  const start = Math.max(1, intVal("cash-start"));
+  const end = frequency === "once" ? start : Math.max(start, intVal("cash-end"));
+  const amount = Math.abs(val("cash-amount"));
+  if(!amount) return;
+  cashPrograms.push({
+    id:Date.now(), type, frequency, start, end, amount,
+    note:$("cash-note").value.trim() || (type==="withdrawal" ? "Sermaye Çıkışı" : "Sermaye Girişi")
+  });
+  calculateAll();
+}
+
+function removeCashProgram(id){
+  cashPrograms = cashPrograms.filter(p=>p.id !== id);
+  calculateAll();
+}
+
+function renderCashPrograms(){
+  const list = $("cash-list");
+  list.innerHTML = "";
+  if(!cashPrograms.length){
+    list.innerHTML = `<div class="cash-item"><div><div class="cash-title">Henüz program yok</div><div class="cash-meta">Tekil veya seri nakit akışı ekleyebilirsiniz.</div></div></div>`;
+    return;
+  }
+  cashPrograms.slice().sort((a,b)=>a.start-b.start).forEach(p=>{
+    const div = document.createElement("div");
+    div.className = "cash-item";
+    const signClass = p.type === "withdrawal" ? "text-ruby" : "text-olive";
+    const years = p.frequency === "once" ? `Yıl ${p.start}` : `Yıl ${p.start}–${p.end}`;
+    const freq = p.frequency === "monthly" ? "Aylık seri" : (p.frequency === "annual" ? "Yıllık seri" : "Tekil");
+    div.innerHTML = `
+      <div>
+        <div class="cash-title">${p.note}</div>
+        <div class="cash-meta">${years} · ${freq} · <span class="${signClass} num">${p.type==="withdrawal"?"−":"+"}${money(p.amount)}</span></div>
+      </div>
+      <button class="remove" onclick="removeCashProgram(${p.id})" aria-label="Nakit programını sil">×</button>`;
+    list.appendChild(div);
+  });
+}
+
+function renderScenarios(){
+  const grid = $("scenario-grid");
+  grid.innerHTML = "";
+  scenarios.forEach((s,i)=>{
+    const card = document.createElement("div");
+    card.className = "scenario-card";
+    card.innerHTML = `
+      <div class="scenario-card-head">
+        <input class="scenario-name" value="${s.name}" oninput="updateScenario(${s.id},'name',this.value)" aria-label="Senaryo adı">
+        <button class="remove" onclick="removeScenario(${s.id})" aria-label="Senaryoyu sil">×</button>
+      </div>
+      <div class="scenario-form">
+        <label class="field-group"><span class="label">Yıl</span><input class="field num" type="number" value="${s.years}" min="1" max="40" oninput="updateScenario(${s.id},'years',this.value)"></label>
+        <label class="field-group"><span class="label">Getiri %</span><input class="field num" type="number" value="${s.rate}" min="-50" max="100" oninput="updateScenario(${s.id},'rate',this.value)"></label>
+        <label class="field-group"><span class="label">Enflasyon %</span><input class="field num" type="number" value="${s.inflation}" min="0" max="100" oninput="updateScenario(${s.id},'inflation',this.value)"></label>
+        <label class="field-group"><span class="label">Aylık $</span><input class="field num" type="number" value="${s.monthly}" oninput="updateScenario(${s.id},'monthly',this.value)"></label>
+      </div>`;
+    grid.appendChild(card);
+  });
+
+  const results = scenarios.map(s=>{
+    const data = simulate({years:+s.years, rate:+s.rate, capital:val("inp-capital"), monthly:+s.monthly, inflation:+s.inflation, programs:cashPrograms});
+    return {scenario:s, data, metrics:metrics(data,{})};
+  });
+
+  if(scenarioChart) scenarioChart.destroy();
+  const maxYears = Math.max(...scenarios.map(s=>+s.years), 1);
+  scenarioChart = new Chart($("scenarioChart"), {
+    type:"line",
+    data:{
+      labels:Array.from({length:maxYears+1},(_,i)=>`Yıl ${i}`),
+      datasets:results.map((r,i)=>({
+        label:r.scenario.name,
+        data:Array.from({length:maxYears+1},(_,y)=> r.data[y]?.balance ?? null),
+        borderColor:chartPalette[i%chartPalette.length],
+        backgroundColor:chartPalette[i%chartPalette.length]+"22",
+        tension:.28,
+        pointRadius:0,
+        borderWidth:2.3
+      }))
+    },
+    options:chartBaseOptions("money")
+  });
+
+  const tbody = $("scenario-tbody");
+  tbody.innerHTML = "";
+  results.forEach((r,i)=>{
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td><strong>${r.scenario.name}</strong></td>
+      <td class="num">${r.scenario.years}</td>
+      <td class="num">${pct(+r.scenario.rate,1)}</td>
+      <td class="num">${pct(+r.scenario.inflation,1)}</td>
+      <td class="num">${fullMoney(r.metrics.finalBal)}</td>
+      <td class="num text-olive">${fullMoney(r.metrics.finalReal)}</td>
+      <td class="num">${pct(r.metrics.cagr)}</td>
+      <td class="num">${multiple(r.metrics.moic)}</td>
+      <td class="num text-ruby">${r.metrics.maxDD.toFixed(1)}%</td>
+      <td>${r.metrics.ruined ? `<span class="pill bad">Tükendi</span>` : `<span class="pill ok">Aktif</span>`}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function updateScenario(id,key,value){
+  const s = scenarios.find(x=>x.id===id);
+  if(!s) return;
+  s[key] = key === "name" ? value : Number(value);
+  renderScenarios();
+}
+
+function addScenario(){
+  if(scenarios.length >= 5) return;
+  scenarios.push({id:Date.now(), name:`Senaryo ${scenarios.length+1}`, years:intVal("sl-years"), rate:val("sl-rate"), inflation:val("sl-inf"), monthly:val("inp-monthly")});
+  renderScenarios();
+}
+
+function removeScenario(id){
+  scenarios = scenarios.filter(s=>s.id !== id);
+  if(!scenarios.length) addScenario();
+  renderScenarios();
+}
+
+function randN(){
+  let u=0,v=0;
+  while(u===0) u=Math.random();
+  while(v===0) v=Math.random();
+  return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);
+}
+
+function percentile(arr,p){
+  if(!arr.length) return null;
+  const a = arr.slice().sort((x,y)=>x-y);
+  const idx = (a.length-1)*p;
+  const lo = Math.floor(idx), hi = Math.ceil(idx);
+  if(lo === hi) return a[lo];
+  return a[lo] + (a[hi]-a[lo])*(idx-lo);
+}
+
+function onMonteCarloControl(){
+  $("lbl-mc-vol").textContent = `%${val("mc-vol").toFixed(0)}`;
+  $("lbl-mc-iter").textContent = intVal("mc-iter").toLocaleString("tr-TR");
+  $("lbl-mc-crash").textContent = `%${val("mc-crash").toFixed(0)}`;
+  updateAllRangeFills();
+}
+
+function runMonteCarlo(){
+  onMonteCarloControl(false);
+  const opts = currentOpts();
+  const expected = Array.isArray(opts.rate) ? val("sl-rate") : opts.rate;
+  const vol = val("mc-vol");
+  const iter = intVal("mc-iter");
+  const crashProb = val("mc-crash")/100;
+  const floorPct = $("mc-floor") ? val("mc-floor") : 100;
+  const preservationThreshold = opts.initial * (floorPct/100);
+  const byYear = Array.from({length:opts.years+1},()=>[]);
+  let survivors = 0;
+  let protectors = 0;
+
+  for(let i=0;i<iter;i++){
+    const rates = [];
+    for(let y=1;y<=opts.years;y++){
+      let r = expected + randN()*vol;
+      if(Math.random() < crashProb) r -= (24 + Math.random()*42);
+      r += (Math.pow(randN(),2)-1) * 1.2;
+      rates.push(clamp(r,-85,180));
+    }
+    const data = simulate({...opts, rate:rates});
+    data.forEach((d,y)=>byYear[y].push(d.balance));
+    const finalBalance = data[data.length-1].balance;
+    if(finalBalance > 0) survivors++;
+    if(finalBalance >= preservationThreshold) protectors++;
+  }
+
+  const pctRows = byYear.map((arr,y)=>({
+    year:y,
+    p10:percentile(arr,.10), p25:percentile(arr,.25), p50:percentile(arr,.50), p75:percentile(arr,.75), p90:percentile(arr,.90)
+  }));
+  const last = pctRows[pctRows.length-1];
+  writeMetric("mc-survival", `${((survivors/iter)*100).toFixed(1)}%`, survivors/iter*100, "pct");
+  writeMetric("mc-protection", `${((protectors/iter)*100).toFixed(1)}%`, protectors/iter*100, "pct");
+  $("mc-protection-sub").innerHTML = `Eşik: <span class="mc-threshold-line">${fullMoney(preservationThreshold)}</span>`;
+  writeMetric("mc-p50", money(last.p50), last.p50, "money");
+  writeMetric("mc-p10", money(last.p10), last.p10, "money");
+  writeMetric("mc-p90", money(last.p90), last.p90, "money");
+
+  if(mcChart) mcChart.destroy();
+  mcChart = new Chart($("mcChart"), {
+    type:"line",
+    data:{
+      labels:pctRows.map(r=>`Yıl ${r.year}`),
+      datasets:[
+        {label:"P90", data:pctRows.map(r=>r.p90), borderColor:colors.olive, backgroundColor:"rgba(118,138,61,.10)", pointRadius:0, tension:.24, borderWidth:2},
+        {label:"P75", data:pctRows.map(r=>r.p75), borderColor:"rgba(118,138,61,.55)", pointRadius:0, tension:.24, borderWidth:1.5},
+        {label:"P50", data:pctRows.map(r=>r.p50), borderColor:colors.gold, backgroundColor:"rgba(168,137,69,.08)", pointRadius:0, tension:.24, borderWidth:2.8},
+        {label:"P25", data:pctRows.map(r=>r.p25), borderColor:"rgba(232,100,42,.52)", pointRadius:0, tension:.24, borderWidth:1.5},
+        {label:"P10", data:pctRows.map(r=>r.p10), borderColor:colors.ruby, backgroundColor:"rgba(143,24,59,.10)", pointRadius:0, tension:.24, borderWidth:2},
+        {label:"Sermaye Koruma Eşiği", data:pctRows.map(()=>preservationThreshold), borderColor:colors.ruby, pointRadius:0, tension:0, borderWidth:1.8, borderDash:[7,5]}
+      ]
+    },
+    options:chartBaseOptions("money")
+  });
+
+  const tbody = $("mc-tbody");
+  tbody.innerHTML = "";
+  pctRows.slice(1).forEach(r=>{
+    const tr = document.createElement("tr");
+    const cls = r.p50 >= preservationThreshold ? "text-olive" : "text-ruby";
+    tr.innerHTML = `<td><strong>Yıl ${r.year}</strong></td><td class="num text-ruby">${fullMoney(r.p10)}</td><td class="num">${fullMoney(r.p25)}</td><td class="num"><strong>${fullMoney(r.p50)}</strong></td><td class="num">${fullMoney(r.p75)}</td><td class="num text-olive">${fullMoney(r.p90)}</td>`;
+    if(r.p10 < preservationThreshold && r.p50 >= preservationThreshold) tr.classList.add("break-row");
+    if(r.p50 < 0) tr.classList.add("ruin-row");
+    tbody.appendChild(tr);
+  });
+}
+
+
+function onTargetControl(){
+  $("lbl-target-year").textContent = `${intVal("target-year")} Yıl`;
+  $("lbl-target-balance").textContent = money(val("target-balance"));
+  updateAllRangeFills();
+  solveTarget(false);
+}
+
+function solveTarget(show=true){
+  onTargetControl();
+  const capital = val("inp-capital");
+  const target = val("target-balance");
+  const years = intVal("target-year");
+  const inflation = val("sl-inf");
+  const monthly = val("inp-monthly");
+  const programs = cashPrograms;
+
+  const finalAtRate = rate => simulate({years, rate, capital, monthly, inflation, programs}).at(-1).balance;
+  let lo=-95, hi=300;
+  for(let i=0;i<80;i++){
+    const mid=(lo+hi)/2;
+    if(finalAtRate(mid) >= target) hi=mid; else lo=mid;
+  }
+  const neededRate = hi;
+
+  const finalAtMonthly = m => simulate({years, rate:val("sl-rate"), capital, monthly:m, inflation, programs}).at(-1).balance;
+  let mlo=-200000, mhi=200000;
+  for(let i=0;i<80;i++){
+    const mid=(mlo+mhi)/2;
+    if(finalAtMonthly(mid) >= target) mhi=mid; else mlo=mid;
+  }
+  const neededMonthly = mhi;
+  const currentFinal = simulate({years, rate:val("sl-rate"), capital, monthly, inflation, programs}).at(-1).balance;
+  const realTarget = target / Math.pow(1+inflation/100, years);
+
+  $("target-rate").textContent = neededRate > 299 ? "Ulaşılamaz" : pct(neededRate);
+  $("target-monthly").textContent = money(neededMonthly);
+  $("target-gap").textContent = fullMoney(target-currentFinal);
+  $("target-real").textContent = money(realTarget);
+
+  if(targetChart) targetChart.destroy();
+  const base = simulate({years, rate:val("sl-rate"), capital, monthly, inflation, programs});
+  const solved = simulate({years, rate:neededRate, capital, monthly, inflation, programs});
+  targetChart = new Chart($("targetChart"), {
+    type:"line",
+    data:{
+      labels:base.map(d=>`Yıl ${d.year}`),
+      datasets:[
+        {label:"Mevcut Yol", data:base.map(d=>d.balance), borderColor:colors.terra, pointRadius:0, tension:.3, borderWidth:2.5},
+        {label:"Gerekli Getiri Yolu", data:solved.map(d=>d.balance), borderColor:colors.olive, pointRadius:0, tension:.3, borderWidth:2.5},
+        {label:"Hedef", data:base.map(()=>target), borderColor:colors.ruby, borderDash:[6,6], pointRadius:0, borderWidth:1.6}
+      ]
+    },
+    options:chartBaseOptions("money")
+  });
+}
+
+function switchTool(name,btn){
+  activeTool = name;
+  document.querySelectorAll(".tool-switch .mini-tab").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  ["swr","stress","rolling"].forEach(t=>$(`tool-${t}`).style.display = t===name ? "block" : "none");
+  renderAdvanced();
+}
+
+function renderAdvanced(){
+  renderSWR();
+  renderStress();
+  renderRolling();
+}
+
+function renderSWR(){
+  const rates = [4,6,8,10,12,15,18,22,26];
+  const withdrawals = [2,3,4,5,6,7,8,10,12];
+  const capital = val("inp-capital");
+  const years = intVal("sl-years");
+  let html = `<table><thead><tr><th>Çekim / Getiri</th>${rates.map(r=>`<th>${r}%</th>`).join("")}</tr></thead><tbody>`;
+  withdrawals.forEach(w=>{
+    html += `<tr><th>${w}% SWR</th>`;
+    rates.forEach(r=>{
+      const annualWithdrawal = -(capital*w/100);
+      const data = simulate({years, rate:r, capital, monthly:annualWithdrawal/12, inflation:val("sl-inf"), programs:[]});
+      const last = data.at(-1).balance;
+      const cls = last > capital ? "hm-safe" : (last > 0 ? "hm-watch" : "hm-risk");
+      const label = last > capital ? "Güvenli" : (last > 0 ? "İzle" : "Risk");
+      html += `<td class="${cls}">${label}</td>`;
+    });
+    html += `</tr>`;
+  });
+  html += `</tbody></table>`;
+  $("swr-output").innerHTML = html;
+}
+
+function renderStress(){
+  const stress = [
+    {name:"2008 Tipi Likidite Şoku", returns:[-38,23,13,0,13,29,11]},
+    {name:"Dot-com / Uzun Toparlanma", returns:[-10,-13,-23,26,9,3,14]},
+    {name:"Enflasyon Rejimi", returns:[-12,7,5,-4,11,9,8]},
+    {name:"Pandemi Şoku", returns:[-19,31,18,-18,24,12,10]}
+  ];
+  const wrap = $("stress-cards");
+  wrap.innerHTML = "";
+  stress.forEach(s=>{
+    const years = intVal("sl-years");
+    const extended = Array.from({length:years},(_,i)=>s.returns[i] ?? val("sl-rate"));
+    const data = simulate({...currentOpts(), rate:extended});
+    const m = metrics(data,{});
+    const div = document.createElement("div");
+    div.className = "scenario-card";
+    div.innerHTML = `<div class="scenario-card-head"><strong>${s.name}</strong><span class="pill ${m.ruined?"bad":"ok"}">${m.ruined?"Tükendi":"Aktif"}</span></div>
+      <div class="metric-row" style="grid-template-columns:1fr 1fr">
+        <div class="stat"><div class="k">Final</div><div class="v num">${money(m.finalBal)}</div></div>
+        <div class="stat"><div class="k">Max DD</div><div class="v num text-ruby">${m.maxDD.toFixed(1)}%</div></div>
+      </div>`;
+    wrap.appendChild(div);
+  });
+}
+
+function renderRolling(){
+  const custom = parseCustomReturns();
+  const baseSeries = custom && custom.length >= 8 ? custom : [18,-12,24,31,8,-7,14,22,5,17,-18,29,12,9,21,-6,15,11,28,4,19,-10,13,16,7,23];
+  const windowSize = 5;
+  const rolls = [];
+  for(let i=0;i<=baseSeries.length-windowSize;i++){
+    const slice = baseSeries.slice(i,i+windowSize);
+    const cagr = (Math.pow(slice.reduce((p,r)=>p*(1+r/100),1),1/windowSize)-1)*100;
+    rolls.push({label:`${i+1}-${i+windowSize}`, cagr});
+  }
+  if(rollingChart) rollingChart.destroy();
+  rollingChart = new Chart($("rollingChart"), {
+    type:"bar",
+    data:{labels:rolls.map(r=>r.label),datasets:[{label:"5Y Rolling CAGR", data:rolls.map(r=>r.cagr), backgroundColor:rolls.map(r=>r.cagr>=0?"rgba(118,138,61,.55)":"rgba(143,24,59,.45)"), borderRadius:3}]},
+    options:chartBaseOptions("pct")
+  });
+  const min = Math.min(...rolls.map(r=>r.cagr)), max = Math.max(...rolls.map(r=>r.cagr)), avg = rolls.reduce((s,r)=>s+r.cagr,0)/rolls.length;
+  $("rolling-stats").innerHTML = `
+    <div class="stat"><div class="k">En Zayıf 5Y</div><div class="v num text-ruby">${pct(min)}</div></div>
+    <div class="stat"><div class="k">Ortalama 5Y</div><div class="v num">${pct(avg)}</div></div>
+    <div class="stat"><div class="k">En Güçlü 5Y</div><div class="v num text-olive">${pct(max)}</div></div>
+    <div class="stat"><div class="k">Gözlem</div><div class="v num">${rolls.length}</div></div>`;
+}
+
+function loadSampleScenario(){
+  $("inp-capital").value = 250000;
+  $("inp-monthly").value = 1800;
+  $("sl-years").value = 20;
+  $("sl-rate").value = 18;
+  $("sl-inf").value = 35;
+  $("custom-returns").value = "";
+  cashPrograms = [
+    {id:1, type:"withdrawal", frequency:"once", start:7, end:7, amount:120000, note:"Gayrimenkul Alımı"},
+    {id:2, type:"contribution", frequency:"annual", start:3, end:6, amount:25000, note:"Bonus Katkısı"}
+  ];
+  onSliderChange();
+  runMonteCarlo();
+}
+
+document.addEventListener("keydown", (e)=>{
+  const active = document.activeElement;
+  if(!active.classList?.contains("tab")) return;
+  if(!["ArrowLeft","ArrowRight"].includes(e.key)) return;
+  e.preventDefault();
+  const tabs = [...document.querySelectorAll(".tab")];
+  const idx = tabs.indexOf(active);
+  const next = e.key === "ArrowRight" ? (idx+1)%tabs.length : (idx-1+tabs.length)%tabs.length;
+  tabs[next].focus();
+  tabs[next].click();
+});
+
+window.addEventListener("resize", ()=>{
+  [mainChart, scenarioChart, mcChart, targetChart, rollingChart].forEach(c=>c?.resize());
+});
+
+onSliderChange();
+onMonteCarloControl();
+onTargetControl();
+renderCashPrograms();
+renderScenarios();
+runMonteCarlo();
+renderAdvanced();
+</script>
+</body>
+</html>
