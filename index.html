@@ -3279,6 +3279,212 @@ body.show-metric-dock .tabs-wrap{
   .snapshot-actions .btn,.snapshot-actions .field{width:100%}
 }
 
+
+/* ═══════════════════════════════════════════════════════════════════
+   /* ═══════════════════════════════════════════════════════════════════
+   SMART DOCK — scroll-triggered, slider-reactive, semantic colour
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Dock base: always rendered, hidden off-screen by default ── */
+.metric-dock{
+  position:fixed !important;
+  top:0 !important;
+  left:0 !important;
+  right:0 !important;
+  z-index:300 !important;
+  height:54px !important;
+  padding:0 24px !important;
+  background:rgba(255,253,248,.97) !important;
+  border-bottom:1.5px solid rgba(198,91,54,.15) !important;
+  box-shadow:0 3px 20px rgba(32,27,21,.07) !important;
+  backdrop-filter:blur(18px) !important;
+  -webkit-backdrop-filter:blur(18px) !important;
+  display:flex !important;
+  align-items:center !important;
+  /* Hidden by default; scroll reveals it */
+  transform:translateY(-100%) !important;
+  opacity:0 !important;
+  pointer-events:none !important;
+  transition:transform .26s cubic-bezier(.4,0,.2,1), opacity .2s ease !important;
+}
+
+/* ── Shown state (scroll-triggered via JS) ── */
+.metric-dock.dock-visible{
+  transform:translateY(0) !important;
+  opacity:1 !important;
+  pointer-events:auto !important;
+}
+
+/* ── Inner layout ── */
+.metric-dock-inner{
+  max-width:100% !important;
+  width:100% !important;
+  margin:0 !important;
+  display:flex !important;
+  align-items:stretch !important;
+  gap:0 !important;
+  height:100% !important;
+  overflow-x:auto !important;
+  -webkit-overflow-scrolling:touch !important;
+  scroll-snap-type:x mandatory !important;
+  scrollbar-width:none !important;
+}
+.metric-dock-inner::-webkit-scrollbar{ display:none !important; }
+
+/* ── Cards ── */
+.dock-card{
+  flex:0 0 auto !important;
+  min-width:0 !important;
+  padding:0 16px !important;
+  height:54px !important;
+  display:flex !important;
+  flex-direction:column !important;
+  justify-content:center !important;
+  background:transparent !important;
+  border:none !important;
+  border-right:1px solid rgba(222,212,196,.45) !important;
+  border-radius:0 !important;
+  box-shadow:none !important;
+  scroll-snap-align:start !important;
+}
+.dock-card:last-child{ border-right:none !important; }
+
+/* ── First card: terra accent stripe ── */
+.dock-card.dock-primary{
+  border-left:3px solid var(--terra) !important;
+  padding-left:13px !important;
+  min-width:158px !important;
+}
+
+/* ── Labels ── */
+.dock-card span{
+  display:block !important;
+  color:#9a9087 !important;
+  font-size:8px !important;
+  font-weight:700 !important;
+  letter-spacing:.14em !important;
+  text-transform:uppercase !important;
+  line-height:1 !important;
+  white-space:nowrap !important;
+  margin-bottom:3px !important;
+  font-family:'Inter',sans-serif !important;
+}
+
+/* ── Values ── */
+.dock-card strong{
+  display:block !important;
+  font-family:'Cormorant Garamond',Georgia,serif !important;
+  font-size:20px !important;
+  font-weight:500 !important;
+  line-height:1 !important;
+  color:var(--ink) !important;
+  white-space:nowrap !important;
+  letter-spacing:-.02em !important;
+  margin:0 !important;
+  transition:color .22s ease !important;
+}
+
+/* ── Sub-values ── */
+.dock-card em{
+  display:block !important;
+  font-size:9px !important;
+  font-style:normal !important;
+  color:#9a9087 !important;
+  margin-top:2px !important;
+  white-space:nowrap !important;
+  line-height:1 !important;
+  font-family:'Inter',sans-serif !important;
+}
+.dock-card em b{ color:var(--ink) !important; font-weight:600 !important; }
+
+/* ── Semantic balance colours — applied via JS class ── */
+/* State: surplus (final > initial) — olive green */
+.dock-card.dock-primary.state-surplus strong{
+  color:var(--olive, #5e6b42) !important;
+}
+/* State: reduced (0 < final < initial) — warm amber */
+.dock-card.dock-primary.state-reduced strong{
+  color:var(--terra) !important;
+}
+/* State: depleted (final <= 0) — ruby */
+.dock-card.dock-primary.state-depleted strong{
+  color:var(--ruby, #8b2e2e) !important;
+}
+
+/* ── Value flash on update ── */
+@keyframes dock-val-flash{
+  0%{ opacity:.3; transform:scale(.97); }
+  60%{ opacity:1; transform:scale(1.01); }
+  100%{ opacity:1; transform:scale(1); }
+}
+.dock-val-flash strong{
+  animation:dock-val-flash .3s cubic-bezier(.4,0,.2,1) !important;
+}
+
+/* ── When dock is visible: push sticky tabs below it ── */
+.metric-dock.dock-visible ~ * .tabs-wrap,
+body.dock-visible .tabs-wrap{
+  top:54px !important;
+}
+
+/* ── Fade edge for horizontal overflow ── */
+.metric-dock::after{
+  content:'';
+  position:absolute;
+  top:0; right:0; bottom:0;
+  width:28px;
+  background:linear-gradient(to left, rgba(255,253,248,.97), transparent);
+  pointer-events:none;
+  display:none;
+  z-index:1;
+}
+
+/* ── Desktop: all cards visible, no scroll ── */
+@media (min-width:900px){
+  .metric-dock{ height:56px !important; padding:0 28px !important; }
+  .dock-card{ height:56px !important; padding:0 18px !important; }
+  .dock-card strong{ font-size:22px !important; }
+  .dock-card.dock-primary{ min-width:168px !important; }
+  .metric-dock-inner{ overflow-x:visible !important; }
+  .metric-dock.dock-visible ~ * .tabs-wrap,
+  body.dock-visible .tabs-wrap{ top:56px !important; }
+}
+
+/* ── Tablet: compact, scroll ── */
+@media (max-width:899px) and (min-width:540px){
+  .metric-dock{ height:50px !important; padding:0 14px !important; }
+  .dock-card{ height:50px !important; padding:0 12px !important; }
+  .dock-card strong{ font-size:17px !important; }
+  .metric-dock::after{ display:block !important; }
+  .metric-dock.dock-visible ~ * .tabs-wrap,
+  body.dock-visible .tabs-wrap{ top:50px !important; }
+}
+
+/* ── Mobile ── */
+@media (max-width:539px){
+  .metric-dock{ height:48px !important; padding:0 0 0 12px !important; }
+  .dock-card{ height:48px !important; padding:0 11px !important; }
+  .dock-card.dock-primary{ min-width:130px !important; border-left-width:2px !important; }
+  .dock-card strong{ font-size:15px !important; }
+  .dock-card span{ font-size:7px !important; letter-spacing:.1em !important; }
+  .dock-card em{ display:none !important; }
+  .metric-dock::after{ display:block !important; }
+  .metric-dock.dock-visible ~ * .tabs-wrap,
+  body.dock-visible .tabs-wrap{ top:48px !important; }
+}
+
+/* ── MC Run button: scroll-offset fix ── */
+/* When dock is visible, anchor-scrolled sections need offset */
+html{ scroll-padding-top:120px !important; }
+
+/* MC panel-head: button stays accessible, never under sticky bar */
+#tab-mc .panel-head{
+  position:relative !important;
+  z-index:1 !important;
+}
+#tab-mc .panel-head .btn{
+  flex-shrink:0 !important;
+}
 </style>
 </head>
 <body>
@@ -3749,7 +3955,6 @@ body.show-metric-dock .tabs-wrap{
             </div>
             <p class="panel-kicker">Box-Muller normal dağılım üretimi, opsiyonel kriz şoku ve çarpıklık ayarı ile yüzdelik patikaları hesaplar.</p>
           </div>
-          <button class="btn primary" onclick="runMonteCarlo()">Simülasyonu Çalıştır</button>
         </div>
 
         <div class="control-grid four">
@@ -3793,6 +3998,10 @@ body.show-metric-dock .tabs-wrap{
         </div>
       </div>
 
+      <button class="btn primary" onclick="runMonteCarlo()" style="width:100%;padding:15px 24px;font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;border-radius:14px;display:flex;align-items:center;justify-content:center;gap:9px;margin:4px 0 2px;">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        Simülasyonu Çalıştır
+      </button>
       <div class="stat-grid" id="mc-stat-grid">
         <div class="stat-card mc-summary mc-survival-card"><div class="stat-label">Sermaye Koruyucu Olasılığı</div><div class="stat-value num" id="mc-survival">—</div></div>
         <div class="stat-card mc-summary mc-median-card"><div class="stat-label">P50 Medyan</div><div class="stat-value num" id="mc-p50">—</div></div>
@@ -4215,7 +4424,9 @@ function updateHUD(res){
   const lifeCard = $('life-card');
   if(lifeCard) lifeCard.classList.toggle('state-risk', !!res.depletedYear || !healthy);
   $('sidebar-summary').innerHTML = `Final <strong class="num">${formatMoneyLong(res.final)}</strong>; bugünkü satın alma gücü <strong class="num">${formatMoneyLong(res.realFinal)}</strong>; portföy ömrü <strong class="num">${res.depletedYear ? res.depletedYear+'. yıl' : 'sürdürülebilir'}</strong>.`;
-  if(typeof syncMetricDock === 'function') syncMetricDock();
+  // Store result globally for dock real-time updates
+  window._lastCalcResult = res;
+  if(typeof syncMetricDock === 'function') syncMetricDock(res);
 }
 
 function renderTable(res){
@@ -4961,7 +5172,9 @@ function updateHUD(res){
   const lifeCard = $('life-card');
   if(lifeCard) lifeCard.classList.toggle('state-risk', !!res.depletedYear || !healthy);
   $('sidebar-summary').innerHTML = `Final <strong class="num">${formatMoneyLong(res.final)}</strong>; bugünkü satın alma gücü <strong class="num">${formatMoneyLong(res.realFinal)}</strong>; portföy ömrü <strong class="num">${res.depletedYear ? res.depletedYear+'. yıl' : 'sürdürülebilir'}</strong>; sequence risk <strong>${seq.level.toLowerCase()}</strong>.`;
-  if(typeof syncMetricDock === 'function') syncMetricDock();
+  // Store result globally for dock real-time updates
+  window._lastCalcResult = res;
+  if(typeof syncMetricDock === 'function') syncMetricDock(res);
 }
 
 function renderBridgeChart(res){
@@ -5331,54 +5544,79 @@ function initialize(){
 
 initialize();
 
-// Stable compact metric dock: separate fixed layer with hysteresis, no layout morph and no slow-scroll jitter.
-function syncMetricDock(){
+// ── SMART METRIC DOCK: scroll-triggered, semantic colours, flash ──
+function syncMetricDock(res){
+  // Copy text values from HUD elements → dock
   document.querySelectorAll('[data-copy-from]').forEach(el => {
-    const src = document.getElementById(el.getAttribute('data-copy-from'));
-    if(src) el.textContent = src.textContent;
+    const srcEl = document.getElementById(el.getAttribute('data-copy-from'));
+    if(!srcEl) return;
+    const next = srcEl.textContent;
+    if(el.textContent !== next){
+      el.textContent = next;
+    }
   });
+
+  // Semantic colour on primary dock card (balance)
+  const primaryCard = document.querySelector('.dock-card.dock-primary');
+  if(primaryCard && res){
+    primaryCard.classList.remove('state-surplus','state-reduced','state-depleted');
+    if(res.depletedYear || res.final <= 0){
+      primaryCard.classList.add('state-depleted');
+    } else if(res.final > res.initial){
+      primaryCard.classList.add('state-surplus');
+    } else {
+      primaryCard.classList.add('state-reduced');
+    }
+    // Flash card on value change
+    primaryCard.classList.remove('dock-val-flash');
+    void primaryCard.offsetWidth;
+    primaryCard.classList.add('dock-val-flash');
+  }
 }
+
+// ── Scroll-triggered dock visibility ──
 (function(){
-  const hud = document.querySelector('.executive-hud.gallery-ledger-hud');
   const dock = document.querySelector('.metric-dock');
-  if(!hud || !dock) return;
+  const hud  = document.querySelector('.executive-hud');
+  if(!dock) return;
+
   let visible = false;
-  let ticking = false;
-  let showAt = 0;
-  let hideAt = 0;
+  let raf = null;
 
-  function measure(){
-    const top = hud.getBoundingClientRect().top + window.scrollY;
-    const height = hud.offsetHeight || 0;
-    showAt = top + height + 28;
-    hideAt = Math.max(0, top + height - 96);
+  function getThreshold(){
+    // Show dock once the HUD's bottom edge has scrolled off-screen
+    if(!hud) return 120;
+    const rect = hud.getBoundingClientRect();
+    return (rect.bottom + window.scrollY) - 40;
   }
 
-  function apply(){
-    ticking = false;
+  function update(){
+    raf = null;
     const y = window.scrollY || window.pageYOffset || 0;
-    if(!visible && y > showAt){
-      visible = true;
-      document.body.classList.add('show-metric-dock');
-      dock.setAttribute('aria-hidden','false');
-    } else if(visible && y < hideAt){
-      visible = false;
-      document.body.classList.remove('show-metric-dock');
-      dock.setAttribute('aria-hidden','true');
+    const threshold = getThreshold();
+    const shouldShow = y > threshold;
+    if(shouldShow !== visible){
+      visible = shouldShow;
+      dock.classList.toggle('dock-visible', visible);
+      document.body.classList.toggle('dock-visible', visible);
+      dock.setAttribute('aria-hidden', visible ? 'false' : 'true');
     }
   }
 
-  function request(){
-    if(!ticking){
-      ticking = true;
-      window.requestAnimationFrame(apply);
-    }
+  function onScroll(){
+    if(!raf) raf = window.requestAnimationFrame(update);
   }
 
-  measure();
-  syncMetricDock();
-  window.addEventListener('resize', () => { measure(); request(); }, {passive:true});
-  window.addEventListener('scroll', request, {passive:true});
+  window.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', update, {passive:true});
+  update();
+
+  // Real-time slider sync
+  document.addEventListener('input', function(e){
+    if(e.target && (e.target.type === 'range' || e.target.type === 'number')){
+      requestAnimationFrame(() => syncMetricDock(window._lastCalcResult));
+    }
+  }, {passive:true});
 })();
 
 </script>
