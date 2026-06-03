@@ -324,8 +324,9 @@ a{color:inherit}
   font-variant-numeric:tabular-nums;
 }
 .range-labels{position:relative;z-index:1;display:flex;justify-content:space-between;color:var(--muted);font-size:9px;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
-.choice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin:13px 0}
+.choice-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;margin:13px 0}
 .choice-card{min-height:auto}
+.risk-example{position:relative;z-index:1;margin-top:10px;padding:10px 11px;border:1px solid rgba(127,39,55,.16);background:rgba(127,39,55,.045);border-radius:12px;color:var(--ruby);font-size:11px;line-height:1.45;font-weight:700}
 .choice-card select{
   position:relative;
   z-index:1;
@@ -423,7 +424,8 @@ table{width:100%;border-collapse:collapse}
   .hero-actions{justify-content:flex-start}
   .control-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .results-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .form-grid,.r-summary,.choice-grid{grid-template-columns:1fr 1fr}
+  .form-grid,.r-summary{grid-template-columns:1fr 1fr}
+  .choice-grid{grid-template-columns:1fr}
 }
 @media (max-width:620px){
   body{padding:10px}
@@ -461,6 +463,394 @@ table{width:100%;border-collapse:collapse}
   .chart-grid,.chart-grid.equal,.interpretation,.rcalc-grid{grid-template-columns:1fr}
   .canvas-wrap{height:260px}
 }
+
+/* v8 UX refinements: compact HUD, explicit applied values, quieter risk education */
+.result-strip{
+  grid-template-columns:repeat(7,minmax(0,1fr)) !important;
+  gap:7px !important;
+  padding:7px !important;
+  top:0 !important;
+  border-radius:16px !important;
+}
+.metric{
+  min-height:62px !important;
+  padding:8px 9px !important;
+  border-radius:12px !important;
+}
+.metric.hero-metric,.metric.good,.metric.bad{
+  border-left-width:3px !important;
+}
+.metric-label{
+  font-size:7.4px !important;
+  letter-spacing:.105em !important;
+  line-height:1.15 !important;
+}
+.metric-value{
+  font-size:20px !important;
+  margin-top:4px !important;
+  line-height:.98 !important;
+}
+.metric-sub{
+  font-size:8.2px !important;
+  margin-top:4px !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+.choice-grid{
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  margin:10px 0 13px !important;
+}
+.applied-line{
+  position:relative;
+  z-index:1;
+  padding:7px 9px;
+  border:1px solid rgba(100,112,73,.16);
+  background:rgba(100,112,73,.055);
+  color:var(--olive);
+  border-radius:10px;
+  font-size:10px;
+  line-height:1.25;
+}
+.applied-line.warn{
+  border-color:rgba(127,39,55,.22);
+  background:rgba(127,39,55,.055);
+  color:var(--ruby);
+}
+.risk-details{
+  margin-top:12px;
+  border:1px solid rgba(226,216,201,.9);
+  background:rgba(255,253,248,.72);
+  border-radius:14px;
+  padding:10px 12px;
+}
+.risk-details summary{
+  cursor:pointer;
+  color:var(--stone);
+  font-size:10px;
+  letter-spacing:.11em;
+  text-transform:uppercase;
+  font-weight:900;
+}
+.risk-details p{
+  margin-top:9px;
+  color:var(--stone);
+  font-size:12px;
+  line-height:1.5;
+}
+.risk-details .risk-example{
+  margin-top:8px;
+  font-size:10.5px;
+}
+@media (max-width:1240px){
+  .result-strip{
+    display:flex !important;
+    overflow-x:auto !important;
+    grid-template-columns:none !important;
+    gap:7px !important;
+    position:sticky !important;
+    top:0 !important;
+    scroll-snap-type:x mandatory;
+  }
+  .result-strip .metric{
+    flex:0 0 158px !important;
+    scroll-snap-align:start;
+  }
+  .result-strip .metric:first-child{
+    flex-basis:184px !important;
+  }
+}
+@media (max-width:860px){
+  .choice-grid{grid-template-columns:1fr !important}
+  .result-strip{
+    margin-left:-2px;
+    margin-right:-2px;
+    padding:6px !important;
+  }
+  .result-strip .metric{
+    flex-basis:148px !important;
+    min-height:58px !important;
+  }
+  .result-strip .metric:first-child{
+    flex-basis:176px !important;
+  }
+  .metric-value{font-size:18px !important}
+}
+@media (max-width:560px){
+  .result-strip{
+    grid-template-columns:none !important;
+  }
+  .control-row{
+    grid-template-columns:1fr !important;
+  }
+}
+
+
+/* v9 refinement: compact executive HUD + scalable concepts tab */
+.result-strip{
+  grid-template-columns:repeat(7,minmax(0,1fr)) !important;
+  gap:7px !important;
+  padding:7px !important;
+  border-radius:16px !important;
+}
+.metric{
+  padding:9px 10px !important;
+  border-radius:12px !important;
+  min-height:78px !important;
+  display:flex !important;
+  flex-direction:column !important;
+  justify-content:center !important;
+}
+.metric-label{
+  font-size:7.8px !important;
+  letter-spacing:.105em !important;
+  line-height:1.18 !important;
+}
+.metric-value{
+  font-size:clamp(23px,1.85vw,33px) !important;
+  margin-top:5px !important;
+  line-height:.95 !important;
+}
+.metric-sub{
+  margin-top:5px !important;
+  font-size:8.5px !important;
+  line-height:1.15 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+.mode-tabs{
+  display:grid !important;
+  grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+}
+.mode-btn{
+  flex:unset !important;
+}
+.risk-mode-grid{
+  grid-template-columns:minmax(260px,420px) !important;
+}
+.concept-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:13px;
+}
+.concept-card{
+  position:relative;
+  overflow:hidden;
+  border:1px solid rgba(226,216,201,.95);
+  background:linear-gradient(180deg,#fffefa,#fbf6ee);
+  border-radius:18px;
+  padding:18px;
+  min-height:242px;
+  box-shadow:0 10px 24px rgba(56,42,25,.04);
+}
+.concept-card::after{
+  content:"";
+  position:absolute;
+  inset:auto -30px -38px auto;
+  width:96px;
+  height:96px;
+  border-radius:50%;
+  background:rgba(198,91,54,.055);
+  pointer-events:none;
+}
+.concept-card.olive::after{background:rgba(100,112,73,.075)}
+.concept-card.ruby::after{background:rgba(127,39,55,.06)}
+.concept-kicker{
+  color:var(--muted);
+  font-size:9px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  font-weight:800;
+}
+.concept-card h3{
+  font-family:"Cormorant Garamond",Georgia,serif;
+  font-size:29px;
+  line-height:1;
+  font-weight:600;
+  margin:10px 0 10px;
+  letter-spacing:-.02em;
+}
+.concept-card p{
+  color:var(--stone);
+  font-size:12px;
+  line-height:1.58;
+}
+.concept-example{
+  margin-top:14px;
+  padding:11px 12px;
+  border:1px solid rgba(205,191,174,.7);
+  background:#fffdf8;
+  border-radius:12px;
+  color:var(--ink);
+  font-size:11px;
+  line-height:1.45;
+  font-weight:700;
+}
+@media (max-width:1360px){
+  .result-strip{
+    display:flex !important;
+    overflow-x:auto !important;
+    grid-template-columns:none !important;
+    gap:7px !important;
+    scroll-snap-type:x mandatory;
+  }
+  .result-strip .metric{
+    flex:0 0 158px !important;
+    scroll-snap-align:start;
+  }
+  .result-strip .metric:first-child,
+  .result-strip .metric:nth-child(2){
+    flex-basis:190px !important;
+  }
+  .concept-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:860px){
+  .mode-tabs{grid-template-columns:1fr !important}
+  .concept-grid{grid-template-columns:1fr}
+  .concept-card{min-height:auto}
+  .risk-mode-grid{grid-template-columns:1fr !important}
+}
+@media (max-width:620px){
+  .result-strip{
+    position:relative !important;
+    top:auto !important;
+    padding:6px !important;
+    margin-left:-2px;
+    margin-right:-2px;
+  }
+  .result-strip .metric{
+    flex:0 0 152px !important;
+    min-height:70px !important;
+    padding:8px 9px !important;
+  }
+  .result-strip .metric:first-child,
+  .result-strip .metric:nth-child(2){
+    flex-basis:182px !important;
+  }
+  .metric-value{font-size:22px !important}
+  .metric-sub{font-size:8px !important}
+}
+
+
+/* v10 refinement: advanced tab clarity, compact risk-mode row, stronger run CTA, denser HUD */
+.run-sim.btn.primary{
+  min-height:52px !important;
+  padding:13px 24px !important;
+  font-size:11px !important;
+  letter-spacing:.13em !important;
+  box-shadow:0 12px 26px rgba(198,91,54,.14) !important;
+}
+.panel-head .run-sim{
+  min-width:150px !important;
+  align-self:center !important;
+}
+.hero-actions .run-sim{
+  min-width:190px !important;
+}
+.param-toolbar{
+  display:grid;
+  grid-template-columns:minmax(0,1fr);
+  gap:10px;
+  margin:6px 0 16px;
+}
+.risk-mode-compact{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(170px,230px);
+  align-items:center;
+  gap:14px;
+  padding:10px 12px;
+  border:1px solid rgba(226,216,201,.95);
+  background:linear-gradient(180deg,#fffefa,#fbf6ee);
+  border-radius:14px;
+  box-shadow:0 8px 20px rgba(56,42,25,.035);
+}
+.risk-mode-compact .compact-label{
+  color:var(--ink);
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  line-height:1.2;
+}
+.risk-mode-compact .compact-label span{
+  color:var(--muted);
+  font-size:9px;
+  letter-spacing:.08em;
+  margin-left:6px;
+}
+.risk-mode-compact p{
+  color:var(--stone);
+  font-size:11px;
+  line-height:1.38;
+  margin-top:4px;
+}
+.risk-mode-compact select{
+  width:100%;
+  min-height:40px;
+  border:1px solid var(--line);
+  border-radius:11px;
+  background:#fffdf8;
+  color:var(--ink);
+  padding:8px 10px;
+  font-weight:850;
+  outline:0;
+}
+.result-strip{
+  grid-template-columns:repeat(7,minmax(118px,1fr)) !important;
+  gap:6px !important;
+  padding:6px !important;
+}
+.metric{
+  min-height:70px !important;
+  padding:8px 8px !important;
+  justify-content:center !important;
+}
+.metric-label{
+  font-size:7.2px !important;
+  letter-spacing:.09em !important;
+  line-height:1.12 !important;
+}
+.metric-value{
+  font-size:25px !important;
+  margin-top:5px !important;
+  line-height:.95 !important;
+}
+.metric-sub{
+  font-size:8.2px !important;
+  margin-top:5px !important;
+  line-height:1.15 !important;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+@media (max-width:1360px){
+  .result-strip .metric{
+    flex:0 0 150px !important;
+  }
+  .result-strip .metric:first-child,
+  .result-strip .metric:nth-child(2){
+    flex-basis:178px !important;
+  }
+}
+@media (max-width:860px){
+  .risk-mode-compact{
+    grid-template-columns:1fr;
+    gap:8px;
+  }
+  .panel-head .run-sim,
+  .hero-actions .run-sim{
+    min-width:0 !important;
+  }
+}
+@media (max-width:620px){
+  .run-sim.btn.primary{
+    min-height:50px !important;
+    padding:12px 18px !important;
+  }
+  .metric-value{font-size:21px !important}
+}
+
 </style>
 </head>
 <body>
@@ -479,6 +869,11 @@ table{width:100%;border-collapse:collapse}
   </header>
 
   <section class="result-strip" aria-label="Özet sonuçlar">
+    <div class="metric bad">
+      <div class="metric-label">P5 Final Sermaye</div>
+      <div class="metric-value mono" id="hudP5">—</div>
+      <div class="metric-sub" id="hudP5Sub">Kötü senaryo bandı</div>
+    </div>
     <div class="metric hero-metric">
       <div class="metric-label">Medyan Final Sermaye</div>
       <div class="metric-value mono" id="hudMedian">—</div>
@@ -487,17 +882,17 @@ table{width:100%;border-collapse:collapse}
     <div class="metric good">
       <div class="metric-label">Hedefe Ulaşma</div>
       <div class="metric-value mono" id="hudTarget">—</div>
-      <div class="metric-sub">Target hit probability</div>
+      <div class="metric-sub">P(hedefe en az bir temas)</div>
     </div>
     <div class="metric">
       <div class="metric-label">Kârda Bitme</div>
       <div class="metric-value mono" id="hudProfit">—</div>
-      <div class="metric-sub">Final sermaye > başlangıç</div>
+      <div class="metric-sub">P(final &gt; başlangıç)</div>
     </div>
     <div class="metric bad">
       <div class="metric-label">Kritik Sermaye Riski</div>
       <div class="metric-value mono" id="hudRuin">—</div>
-      <div class="metric-sub">Eşik altına temas</div>
+      <div class="metric-sub">P(eşik altına temas)</div>
     </div>
     <div class="metric">
       <div class="metric-label">Expected R</div>
@@ -513,7 +908,8 @@ table{width:100%;border-collapse:collapse}
 
   <nav class="mode-tabs" aria-label="Parametre modları">
     <button class="mode-btn active" type="button" data-mode="basic">Temel Mod · Strateji Çekirdeği</button>
-    <button class="mode-btn" type="button" data-mode="advanced">Gelişmiş Risk Ayarları</button>
+    <button class="mode-btn" type="button" data-mode="advanced">Gelişmiş Risk Ayarları · Ek Katman</button>
+    <button class="mode-btn" type="button" data-mode="concepts">Kavramlar · Model Rehberi</button>
   </nav>
 
   <section id="basic" class="mode-panel active">
@@ -521,24 +917,22 @@ table{width:100%;border-collapse:collapse}
       <div class="panel-head">
         <div>
           <div class="panel-title"><svg viewBox="0 0 24 24"><path d="M4 19V5"/><path d="M4 19h16"/><path d="M8 16l3-4 3 2 5-7"/></svg>Temel Parametreler</div>
-          <p class="panel-copy">Bu bölüm stratejinin ana sonucunu belirler. Her parametre hem slider ile hem de sağdaki manuel kutuyla düzenlenebilir.</p>
+          <p class="panel-copy">Bu bölüm stratejinin ana sonucunu belirleyen çekirdek varsayımlardır. Gelişmiş Risk Ayarları bunların yerine geçmez; bu temel setin üzerine eklenen stres ve risk kontrol katmanıdır.</p>
         </div>
         <button class="btn primary run-sim" type="button">Çalıştır</button>
       </div>
 
-      <div class="choice-grid">
-        <article class="choice-card olive">
-          <div class="control-top"><div><div class="control-label">Risk Modeli</div><div class="control-code mono">riskMode</div></div></div>
-          <p class="control-help"><strong>Bileşik risk</strong> mevcut sermayeye göre risk alır. <strong>Sabit risk</strong> başlangıç sermayesine göre aynı nominal riski korur; büyüme daha yavaş ama daha okunabilir olur.</p>
-          <select id="riskMode">
-            <option value="compounding">Bileşik risk · mevcut sermaye üzerinden</option>
-            <option value="fixed">Sabit risk · başlangıç sermayesi üzerinden</option>
+      <div class="param-toolbar">
+        <div class="risk-mode-compact">
+          <div>
+            <div class="compact-label">Risk Modeli <span class="mono">riskMode</span></div>
+            <p><strong>Bileşik</strong>: risk mevcut sermayeye göre değişir. <strong>Sabit</strong>: risk başlangıç sermayesine göre aynı nominal tutarda kalır.</p>
+          </div>
+          <select id="riskMode" aria-label="Risk modeli">
+            <option value="compounding">Bileşik risk</option>
+            <option value="fixed">Sabit risk</option>
           </select>
-        </article>
-        <article class="choice-card">
-          <div class="control-top"><div><div class="control-label">Maliyet Tanımı</div><div class="control-code mono">tradeCostR</div></div></div>
-          <p class="control-help">Maliyet artık equity yüzdesi değildir. Komisyon, spread ve slippage toplamı doğrudan R cinsinden girilir. Örnek: 0.05R, her trade’de riske edilen tutarın %5’i kadar maliyet demektir.</p>
-        </article>
+        </div>
       </div>
 
       <div class="control-grid" id="basicControls"></div>
@@ -576,11 +970,53 @@ table{width:100%;border-collapse:collapse}
       <div class="panel-head">
         <div>
           <div class="panel-title"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Gelişmiş Risk Ayarları</div>
-          <p class="panel-copy">Bu bölüm stratejinin edge’ini değil, dağılımın ne kadar genişleyeceğini ve kötü günlerde sistemin ne kadar hasar alacağını belirler.</p>
+          <p class="panel-copy"><strong>Ek parametre katmanıdır.</strong> Temel Parametreler aktif kalır; bu bölüm yalnızca onların üzerine break-even, volatilite, şok ve günlük zarar freni gibi stres/risk ayarlarını ekler. Buradaki değerler tek başına simülasyon seti değildir.</p>
         </div>
         <button class="btn primary run-sim" type="button">Çalıştır</button>
       </div>
       <div class="control-grid" id="advancedControls"></div>
+    </div>
+  </section>
+
+  <section id="concepts" class="mode-panel">
+    <div class="panel">
+      <div class="panel-head">
+        <div>
+          <div class="panel-title"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M12 4h9"/><path d="M4 9h16"/><path d="M4 15h16"/><path d="M4 4h.01"/><path d="M4 20h.01"/></svg>Kavramlar ve Model Rehberi</div>
+          <p class="panel-copy">Bu alan parametre ekranını kalabalıklaştırmadan model mantığını açıklar. Yeni kavramlar gerektiğinde aynı yapıya eklenebilir.</p>
+        </div>
+        <button class="btn primary run-sim" type="button">Çalıştır</button>
+      </div>
+
+      <div class="concept-grid">
+        <article class="concept-card">
+          <div class="concept-kicker mono">tradeCostR</div>
+          <h3>Maliyet Tanımı</h3>
+          <p>Maliyet artık equity yüzdesi değildir. Komisyon, spread ve slippage toplamı doğrudan <strong>R cinsinden trade başı maliyet</strong> olarak girilir.</p>
+          <div class="concept-example mono">Örnek: 0.05R maliyet = her trade’de riske edilen tutarın %5’i kadar toplam işlem sürtünmesi.</div>
+        </article>
+
+        <article class="concept-card ruby">
+          <div class="concept-kicker mono">riskPerTradePct</div>
+          <h3>Pozisyon büyüklüğü ≠ Risk yüzdesi</h3>
+          <p>Trade başına risk, pozisyon büyüklüğü değil stop olursa kaybedilecek tutardır. 80k pozisyon açmak tek başına %80 risk anlamına gelmez; stop mesafesi sonucu belirler.</p>
+          <div class="concept-example mono" id="riskMathLive">—</div>
+        </article>
+
+        <article class="concept-card olive">
+          <div class="concept-kicker mono">R-Multiple</div>
+          <h3>1R ne demek?</h3>
+          <p>1R, trade açarken baştan kabul edilen zarar birimidir. +2R, riske edilen tutarın iki katı kazanç; −1R, planlanan stop kaybı demektir.</p>
+          <div class="concept-example mono">Entry 100 · Stop 95 · Hedef 110 → Risk 5 puan · Ödül 10 puan · Hedef 2R.</div>
+        </article>
+
+        <article class="concept-card">
+          <div class="concept-kicker mono">P(final &gt; başlangıç)</div>
+          <h3>Kârda Bitme metriği</h3>
+          <p>Bu metrik percentile değildir. Tüm simülasyon yolları içinde final sermayesi başlangıç sermayesinden yüksek biten yolların oranıdır.</p>
+          <div class="concept-example mono">2.160 / 3.000 yol kârda biterse → Kârda Bitme %72.</div>
+        </article>
+      </div>
     </div>
   </section>
 
@@ -695,18 +1131,18 @@ table{width:100%;border-collapse:collapse}
     {group:"basic",key:"days",label:"Gün Sayısı",code:"days",min:30,max:365,step:1,value:180,suffix:"gün",tone:"terra",help:"Simülasyonun kaç işlem günü süreceğini belirler. 180 gün ve günlük 3 trade, yaklaşık 540 trade yolu üretir."},
     {group:"basic",key:"initialCapital",label:"Başlangıç Sermayesi",code:"initialCapital",min:1000,max:5000000,step:1000,value:100000,prefix:"₺",tone:"olive",help:"Tüm yollar bu sermayeyle başlar. Sabit risk modunda nominal risk bu tutara göre korunur."},
     {group:"basic",key:"iterations",label:"Simülasyon Sayısı",code:"iterations",min:500,max:10000,step:500,value:3000,suffix:"yol",tone:"terra",help:"Üretilecek bağımsız equity curve sayısıdır. Sayı arttıkça percentile sonuçları daha stabil olur; hesap süresi de artar."},
-    {group:"basic",key:"tradesPerDay",label:"Günlük Trade",code:"tradesPerDay",min:0.25,max:20,step:0.25,value:3,suffix:"adet",tone:"olive",help:"Her gün ortalama kaç işlem açıldığını belirler. Trade sayısı arttıkça trade başı maliyetin toplam etkisi büyür."},
+    {group:"basic",key:"tradesPerDay",label:"Günlük Trade",code:"tradesPerDay",min:0.25,max:150,step:0.25,value:3,suffix:"adet",tone:"olive",help:"Her gün ortalama kaç işlem açıldığını belirler. Üst limit 150; yüksek frekanslı testlerde trade başı maliyetin toplam etkisi hızla büyür."},
     {group:"basic",key:"winRate",label:"Kazanma Oranı",code:"winRate",min:5,max:90,step:0.5,value:48,suffix:"%",tone:"terra",help:"Trade’in kârlı kapanma olasılığıdır. Tek başına başarı değildir; ortalama kazanç R ve kayıp R ile birlikte değerlendirilir."},
-    {group:"basic",key:"avgWinR",label:"Ortalama Kazanç R",code:"avgWinR",min:0.2,max:8,step:0.05,value:1.8,suffix:"R",tone:"olive",help:"Kazanan trade’in ortalama ödülüdür. 2R, riske edilen birimin iki katı kâr anlamına gelir."},
-    {group:"basic",key:"avgLossR",label:"Ortalama Kayıp R",code:"avgLossR",min:0.2,max:5,step:0.05,value:1,suffix:"R",tone:"ruby",help:"Kaybeden trade’in ortalama zararıdır. 1R tipik stop-loss kaybıdır; 1.3R ve üstü stop disiplininin bozulduğunu gösterir."},
-    {group:"basic",key:"riskPerTradePct",label:"Trade Başına Risk",code:"riskPerTradePct",min:0.1,max:5,step:0.05,value:1,suffix:"%",tone:"ruby",help:"Her işlemde riske edilen sermaye yüzdesidir. Risk % arttıkça büyüme hızlanabilir; kötü senaryoda erime de hızlanır."},
-    {group:"basic",key:"tradeCostR",label:"Trade Başı Toplam Maliyet",code:"tradeCostR",min:0,max:0.5,step:0.01,value:0.05,suffix:"R",tone:"terra",help:"Komisyon, spread ve slippage toplamıdır. 0.05R, riske edilen tutarın %5’i kadar maliyet demektir."},
+    {group:"basic",key:"avgWinR",label:"Ortalama Kazanç R",code:"avgWinR",min:0.2,max:20,step:0.05,value:1.8,suffix:"R",tone:"olive",help:"Kazanan trade’in ortalama ödülüdür. 2R, riske edilen birimin iki katı kâr anlamına gelir."},
+    {group:"basic",key:"avgLossR",label:"Ortalama Kayıp R",code:"avgLossR",min:0.2,max:20,step:0.05,value:1,suffix:"R",tone:"ruby",help:"Kaybeden trade’in ortalama zararıdır. 1R tipik stop-loss kaybıdır; 1.3R ve üstü stop disiplini veya slippage kaynaklı kayıp genişlemesini gösterir. Ekstrem stres testi için limit 20R’ye kadar açıktır."},
+    {group:"basic",key:"riskPerTradePct",label:"Trade Başına Risk",code:"riskPerTradePct",min:0.1,max:100,step:0.1,value:1,suffix:"%",tone:"ruby",help:"Bu oran pozisyon büyüklüğü değil, stop olursa kaybedilecek 1R tutarının sermayeye oranıdır. 100k hesapta %4 risk, stop olursa 4k kayıp demektir. %100 mümkün ama tek -1R kayıpta hesabı sıfırladığı için ekstrem stres testidir."},
+    {group:"basic",key:"tradeCostR",label:"Trade Başı Toplam Maliyet",code:"tradeCostR",min:0,max:5,step:0.01,value:0.05,suffix:"R",tone:"terra",help:"Komisyon, spread ve slippage toplamıdır. 0.05R, riske edilen tutarın %5’i kadar maliyet demektir."},
     {group:"basic",key:"targetCapital",label:"Hedef Sermaye",code:"targetCapital",min:1000,max:10000000,step:1000,value:200000,prefix:"₺",tone:"olive",help:"Simülasyon yollarında bu seviyeye en az bir kez temas edilirse hedefe ulaşmış kabul edilir."},
     {group:"basic",key:"ruinThresholdPct",label:"Kritik Sermaye Eşiği",code:"ruinThresholdPct",min:5,max:90,step:1,value:50,suffix:"%",tone:"ruby",help:"Başlangıç sermayesinin bu yüzdesinin altı kritik bölgedir. 50%, sermayenin yarıya düşmesini kritik olay sayar."},
     {group:"advanced",key:"breakEvenRate",label:"Break-even Oranı",code:"breakEvenRate",min:0,max:40,step:1,value:5,suffix:"%",tone:"olive",help:"Ne kâr ne zarar kapanan trade oranıdır. Trade maliyeti yine düşer; bu yüzden break-even trade tamamen etkisiz değildir."},
-    {group:"advanced",key:"volatilityFactor",label:"Volatilite Çarpanı",code:"volatilityFactor",min:0,max:3,step:0.05,value:1,suffix:"x",tone:"terra",help:"Kazanç ve kayıp R sonuçlarının ne kadar dağıldığını belirler. Volatilite artarsa P5 ve P95 arasındaki fark büyür."},
+    {group:"advanced",key:"volatilityFactor",label:"Volatilite Çarpanı",code:"volatilityFactor",min:0,max:5,step:0.05,value:1,suffix:"x",tone:"terra",help:"Kazanç ve kayıp R sonuçlarının ne kadar dağıldığını belirler. Volatilite artarsa P5 ve P95 arasındaki fark büyür."},
     {group:"advanced",key:"shockProbability",label:"Şok Olasılığı",code:"shockProbability",min:0,max:20,step:0.5,value:3,suffix:"%",tone:"ruby",help:"Her işlem gününde olağan dışı kötü piyasa günü yaşanma olasılığıdır. Şoklar özellikle P5 ve drawdown metriklerini bozar."},
-    {group:"advanced",key:"shockImpactR",label:"Şok Etkisi",code:"shockImpactR",min:0,max:10,step:0.25,value:2,suffix:"R",tone:"ruby",help:"Şok gününde sermayeye eklenen negatif R etkisidir. 2R şok, trade başına riskin iki katı günlük darbe demektir."},
+    {group:"advanced",key:"shockImpactR",label:"Şok Etkisi",code:"shockImpactR",min:0,max:20,step:0.25,value:2,suffix:"R",tone:"ruby",help:"Şok gününde sermayeye eklenen negatif R etkisidir. 2R şok, trade başına riskin iki katı günlük darbe demektir."},
     {group:"advanced",key:"maxDailyLossPct",label:"Günlük Zarar Limiti",code:"maxDailyLossPct",min:0.5,max:20,step:0.25,value:5,suffix:"%",tone:"olive",help:"Gün içi zarar bu eşiğe ulaşınca o gün yeni trade açılmaz. Kötü serileri keser ama toparlanma hızını da sınırlayabilir."}
   ];
 
@@ -740,6 +1176,7 @@ table{width:100%;border-collapse:collapse}
           ${c.suffix ? `<span class="number-suffix">${c.suffix}</span>` : ""}
         </label>
       </div>
+      <div class="applied-line">Modelde kullanılan: <strong class="mono" id="${c.key}Applied">—</strong></div>
       <div class="range-labels"><span>${minLabel}</span><span>${maxLabel}</span></div>
     </article>`;
   }
@@ -747,10 +1184,33 @@ table{width:100%;border-collapse:collapse}
   function renderControls(){
     $("basicControls").innerHTML = controls.filter(c => c.group === "basic").map(controlMarkup).join("");
     $("advancedControls").innerHTML = controls.filter(c => c.group === "advanced").map(controlMarkup).join("");
-    controls.forEach(c => updateFill(c.key));
+    controls.forEach(c => setParam(c.key, c.value, "init"));
   }
 
   function getControl(key){ return controls.find(c => c.key === key); }
+
+  function formatControlValue(c, v){
+    if(!isFinite(v)) return "—";
+    const decimals = String(c.step).includes(".") ? String(c.step).split(".")[1].length : 0;
+    const core = c.prefix ? (c.prefix + fmtNum(v, decimals)) : fmtNum(v, decimals);
+    return core + (c.suffix ? " " + c.suffix : "");
+  }
+
+  function updateApplied(key, appliedValue, rawValue){
+    const c = getControl(key);
+    const el = $(key + "Applied");
+    const n = $(key + "Number");
+    if(!c || !el) return;
+    if(n && isFinite(appliedValue)) n.dataset.applied = String(appliedValue);
+    const cleanApplied = formatControlValue(c, appliedValue);
+    if(isFinite(rawValue) && Math.abs(rawValue - appliedValue) > 1e-9){
+      el.textContent = `${cleanApplied} · limit ${formatControlValue(c,c.min)}–${formatControlValue(c,c.max)}`;
+      el.closest(".applied-line")?.classList.add("warn");
+    } else {
+      el.textContent = cleanApplied;
+      el.closest(".applied-line")?.classList.remove("warn");
+    }
+  }
 
   function updateFill(key){
     const c = getControl(key);
@@ -764,16 +1224,33 @@ table{width:100%;border-collapse:collapse}
   function setParam(key, value, source){
     const c = getControl(key);
     if(!c) return;
-    let v = parseFloat(value);
-    if(!isFinite(v)) return;
-    v = clamp(v, c.min, c.max);
+    const raw = parseFloat(value);
+    if(!isFinite(raw)){
+      updateApplied(key, NaN, NaN);
+      return;
+    }
+    const applied = clamp(raw, c.min, c.max);
     const decimals = String(c.step).includes(".") ? String(c.step).split(".")[1].length : 0;
-    const str = decimals ? v.toFixed(decimals) : String(Math.round(v));
+    const str = decimals ? applied.toFixed(decimals) : String(Math.round(applied));
     const r = $(key + "Range");
     const n = $(key + "Number");
     if(r) r.value = str;
     if(n && source !== "typing") n.value = str;
+    if(n) n.dataset.applied = str;
     updateFill(key);
+    updateApplied(key, applied, raw);
+    if(key === "initialCapital" || key === "riskPerTradePct") updateRiskMath();
+  }
+
+  function updateRiskMath(){
+    const box = $("riskMathLive");
+    if(!box) return;
+    const capInput = $("initialCapitalNumber");
+    const riskInput = $("riskPerTradePctNumber");
+    const capital = parseFloat(capInput?.dataset?.applied ?? capInput?.value) || 100000;
+    const riskPct = parseFloat(riskInput?.dataset?.applied ?? riskInput?.value) || 1;
+    const riskAmt = capital * (riskPct / 100);
+    box.textContent = `${fmtMoney(capital)} sermayede modelin kullandığı ${fmtPct(riskPct,1)} risk = ${fmtMoney(riskAmt)} 1R. Örnek: 80k pozisyon + %5 stop = 4k risk = hesabın %4’ü.`;
   }
 
   function setupControlEvents(){
@@ -781,16 +1258,9 @@ table{width:100%;border-collapse:collapse}
       el.addEventListener("input", () => setParam(el.dataset.key, el.value, "range"));
     });
     document.querySelectorAll(".num-input").forEach(el => {
-      el.addEventListener("input", () => {
-        const c = getControl(el.dataset.key);
-        const v = parseFloat(el.value);
-        if(isFinite(v) && v >= c.min && v <= c.max){
-          const r = $(el.dataset.key + "Range");
-          if(r) r.value = String(v);
-          updateFill(el.dataset.key);
-        }
-      });
-      el.addEventListener("change", () => setParam(el.dataset.key, el.value, "change"));
+      el.addEventListener("input", () => setParam(el.dataset.key, el.value, "typing"));
+      el.addEventListener("change", () => setParam(el.dataset.key, el.value, "number"));
+      el.addEventListener("blur", () => setParam(el.dataset.key, el.value, "number"));
     });
   }
 
@@ -798,7 +1268,7 @@ table{width:100%;border-collapse:collapse}
     const p = {};
     controls.forEach(c => {
       const n = $(c.key + "Number");
-      const parsed = parseFloat(n.value);
+      const parsed = parseFloat(n?.dataset?.applied ?? n?.value);
       p[c.key] = clamp(isFinite(parsed) ? parsed : c.value, c.min, c.max);
     });
     p.riskMode = $("riskMode").value;
@@ -1205,6 +1675,8 @@ table{width:100%;border-collapse:collapse}
   }
 
   function renderMetrics(result){
+    $("hudP5").textContent = fmtMoney(result.p5);
+    $("hudP5Sub").textContent = "P5: yolların %5’i bu seviyenin altında";
     $("hudMedian").textContent = fmtMoney(result.p50);
     $("hudMedianSub").textContent = "Başlangıç: " + fmtMoney(result.p.initialCapital);
     $("hudTarget").textContent = fmtPct(result.targetProb,1);
@@ -1254,7 +1726,9 @@ table{width:100%;border-collapse:collapse}
 
     items.push(`Risk modeli: ${modeText}. ${p.riskMode === "fixed" ? "Büyüme daha lineer okunur; sermaye büyüdükçe risk oranı fiilen düşer." : "Sermaye büyüdükçe nominal risk de büyür; iyi senaryo hızlanır, kötü senaryo da sertleşir."}`);
 
-    if(p.riskPerTradePct >= 2 || result.avgDD >= 30 || result.ruinProb >= 15){
+    if(p.riskPerTradePct >= 25){
+      items.push("Bu parametrelerle strateji ekstrem riskli. Tek bir -1R kayıp bile sermayenin büyük bölümünü silebilir; bu ayar normal kullanım değil, stres testi gibi okunmalı.");
+    } else if(p.riskPerTradePct >= 5 || result.avgDD >= 30 || result.ruinProb >= 15){
       items.push("Bu parametrelerle strateji agresif. Ana büyüme motoru daha yüksek risk, fakat kötü senaryoda sermaye erimesi belirgin hızlanıyor.");
     } else {
       items.push("Bu parametrelerle risk seviyesi kontrollü görünüyor. Büyüme daha yavaş olabilir, ancak kötü senaryo hasarı daha sınırlı kalıyor.");
@@ -1309,8 +1783,9 @@ table{width:100%;border-collapse:collapse}
     setupControlEvents();
     setupModes();
     setupRCalc();
+    updateRiskMath();
     document.querySelectorAll(".run-sim").forEach(btn => btn.addEventListener("click", runAndRender));
-    $("riskMode").addEventListener("change", runAndRender);
+    $("riskMode").addEventListener("change", () => { updateRiskMath(); runAndRender(); });
     runAndRender();
   }
 
