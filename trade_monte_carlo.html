@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trade Monte Carlo Simülasyonu | R-Multiple Risk Laboratuvarı</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --paper:#f7f3eb;
+  --card:#fffdf8;
+  --soft:#fbf7ef;
+  --ink:#171411;
+  --stone:#6f675d;
+  --muted:#9b9287;
+  --line:#e2d8c9;
+  --line-strong:#cdbcaa;
+  --terra:#c65b36;
+  --olive:#647049;
+  --ruby:#7f2737;
+  --gold:#a88442;
+  --shadow:0 18px 48px rgba(56,42,25,.075);
+  --shadow-soft:0 10px 28px rgba(56,42,25,.052);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 8% -12%,rgba(198,91,54,.12),transparent 34rem),
+    radial-gradient(circle at 100% 4%,rgba(100,112,73,.12),transparent 38rem),
+    linear-gradient(180deg,#fbf8f1 0%,var(--paper) 100%);
+  color:var(--ink);
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  line-height:1.45;
+  padding:24px;
+}
+button,input,select{font:inherit}
+button{touch-action:manipulation}
+a{color:inherit}
+.mono{font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-variant-numeric:tabular-nums}
+.serif{font-family:"Cormorant Garamond",Georgia,serif}
+.app{max-width:1580px;margin:0 auto;display:grid;gap:18px}
+.hero{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:18px;
+  align-items:stretch;
+  padding:22px;
+  background:rgba(255,253,248,.88);
+  border:1px solid rgba(226,216,201,.92);
+  box-shadow:var(--shadow-soft);
+  backdrop-filter:blur(16px);
+  border-radius:22px;
+}
+.brand-kicker{
+  font-size:10px;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:var(--stone);
+  font-weight:800;
+  margin-bottom:8px;
+}
+.hero h1{
+  font-family:"Cormorant Garamond",Georgia,serif;
+  font-weight:500;
+  letter-spacing:-.04em;
+  line-height:.95;
+  font-size:clamp(38px,5vw,74px);
+}
+.hero-copy{
+  max-width:850px;
+  color:var(--stone);
+  font-size:14px;
+  margin-top:12px;
+}
+.hero-actions{display:flex;gap:10px;align-items:flex-start;justify-content:flex-end;flex-wrap:wrap}
+.btn{
+  border:1px solid var(--line-strong);
+  background:linear-gradient(180deg,#fffdf8,#f5ecdf);
+  color:var(--ink);
+  min-height:42px;
+  border-radius:999px;
+  padding:10px 15px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  cursor:pointer;
+  text-decoration:none;
+  font-size:10px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  font-weight:850;
+  white-space:nowrap;
+  transition:border-color .18s ease,transform .18s ease,box-shadow .18s ease,background .18s ease,color .18s ease;
+}
+.btn:hover{transform:translateY(-1px);border-color:var(--terra);box-shadow:0 10px 24px rgba(198,91,54,.10)}
+.btn.primary{background:linear-gradient(135deg,var(--terra),#9f3f24);border-color:var(--terra);color:#fffaf0}
+.btn.olive{color:var(--olive);border-color:rgba(100,112,73,.42)}
+.btn.ruby{color:var(--ruby);border-color:rgba(127,39,55,.34)}
+.btn.ghost{background:rgba(255,253,248,.66)}
+.btn svg{width:16px;height:16px;stroke:currentColor;stroke-width:1.7;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.mode-tabs{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  padding:8px;
+  background:rgba(255,253,248,.76);
+  border:1px solid var(--line);
+  border-radius:18px;
+  box-shadow:var(--shadow-soft);
+}
+.mode-btn{
+  flex:1 1 240px;
+  min-height:54px;
+  border:1px solid transparent;
+  background:transparent;
+  border-radius:14px;
+  color:var(--stone);
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  transition:.18s ease;
+}
+.mode-btn:hover{border-color:var(--line);background:#fffdf8;color:var(--ink)}
+.mode-btn.active{border-color:var(--line-strong);background:linear-gradient(180deg,#fffdf8,#f5ecdf);color:var(--ink);box-shadow:inset 0 0 0 1px rgba(255,255,255,.8)}
+.mode-panel{display:none}
+.mode-panel.active{display:block}
+.panel{
+  background:rgba(255,253,248,.92);
+  border:1px solid var(--line);
+  border-radius:24px;
+  padding:22px;
+  box-shadow:var(--shadow-soft);
+}
+.panel-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:16px;
+  padding-bottom:16px;
+  margin-bottom:18px;
+  border-bottom:1px solid var(--line);
+}
+.panel-title{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  font-size:12px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  font-weight:900;
+}
+.panel-title svg{width:18px;height:18px;stroke:currentColor;stroke-width:1.7;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.panel-copy{color:var(--stone);font-size:12px;max-width:780px;margin-top:6px}
+.control-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:13px;
+}
+.control-card{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  min-height:178px;
+  padding:15px;
+  background:linear-gradient(180deg,#fffefa,#fbf6ee);
+  border:1px solid rgba(226,216,201,.95);
+  border-radius:18px;
+  overflow:hidden;
+}
+.control-card::after{
+  content:"";
+  position:absolute;
+  inset:auto -26px -34px auto;
+  width:86px;height:86px;border-radius:50%;
+  background:rgba(198,91,54,.055);
+  pointer-events:none;
+}
+.control-card.olive::after{background:rgba(100,112,73,.07)}
+.control-card.ruby::after{background:rgba(127,39,55,.055)}
+.control-top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:8px;
+  position:relative;
+  z-index:1;
+}
+.control-label{
+  color:var(--ink);
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.12em;
+  line-height:1.25;
+  text-transform:uppercase;
+}
+.control-code{
+  color:var(--muted);
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.08em;
+}
+.control-help{
+  position:relative;
+  z-index:1;
+  color:var(--stone);
+  font-size:11px;
+  line-height:1.48;
+  min-height:48px;
+}
+.control-row{
+  position:relative;
+  z-index:1;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 118px;
+  gap:10px;
+  align-items:center;
+  margin-top:auto;
+}
+.range{
+  width:100%;
+  -webkit-appearance:none;
+  appearance:none;
+  height:32px;
+  background:transparent;
+  outline:none;
+  cursor:pointer;
+}
+.range::-webkit-slider-runnable-track{
+  height:8px;
+  border-radius:999px;
+  border:1px solid rgba(205,191,174,.9);
+  background:linear-gradient(90deg,var(--terra) 0 var(--fill,50%),#eadfce var(--fill,50%) 100%);
+}
+.range.olive::-webkit-slider-runnable-track{background:linear-gradient(90deg,var(--olive) 0 var(--fill,50%),#eadfce var(--fill,50%) 100%)}
+.range.ruby::-webkit-slider-runnable-track{background:linear-gradient(90deg,var(--ruby) 0 var(--fill,50%),#eadfce var(--fill,50%) 100%)}
+.range::-webkit-slider-thumb{
+  -webkit-appearance:none;
+  width:24px;height:24px;border-radius:50%;
+  margin-top:-9px;
+  border:3px solid #fffaf0;
+  background:var(--terra);
+  box-shadow:0 5px 15px rgba(56,42,25,.22);
+  transition:transform .14s ease;
+}
+.range.olive::-webkit-slider-thumb{background:var(--olive)}
+.range.ruby::-webkit-slider-thumb{background:var(--ruby)}
+.range::-webkit-slider-thumb:hover{transform:scale(1.10)}
+.range::-moz-range-track{
+  height:8px;border-radius:999px;border:1px solid rgba(205,191,174,.9);
+  background:linear-gradient(90deg,var(--terra) 0 var(--fill,50%),#eadfce var(--fill,50%) 100%);
+}
+.range.olive::-moz-range-track{background:linear-gradient(90deg,var(--olive) 0 var(--fill,50%),#eadfce var(--fill,50%) 100%)}
+.range.ruby::-moz-range-track{background:linear-gradient(90deg,var(--ruby) 0 var(--fill,50%),#eadfce var(--fill,50%) 100%)}
+.range::-moz-range-thumb{
+  width:24px;height:24px;border-radius:50%;
+  border:3px solid #fffaf0;background:var(--terra);
+  box-shadow:0 5px 15px rgba(56,42,25,.22);
+}
+.number-wrap{
+  display:flex;
+  align-items:center;
+  min-width:0;
+  border:1px solid var(--line);
+  background:#fffdf8;
+  border-radius:12px;
+  overflow:hidden;
+}
+.number-prefix,.number-suffix{
+  color:var(--muted);
+  font-size:11px;
+  padding:0 8px;
+  white-space:nowrap;
+}
+.num-input{
+  width:100%;
+  min-width:0;
+  border:0;
+  outline:0;
+  background:transparent;
+  padding:10px 2px;
+  color:var(--ink);
+  text-align:right;
+  font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+  font-size:12px;
+  font-weight:700;
+  font-variant-numeric:tabular-nums;
+}
+.range-labels{
+  position:relative;
+  z-index:1;
+  display:flex;
+  justify-content:space-between;
+  color:var(--muted);
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+.rcalc-grid{
+  display:grid;
+  grid-template-columns:1.05fr .95fr;
+  gap:16px;
+}
+.form-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.form-card{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+.form-label{
+  font-size:9px;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+  font-weight:900;
+  color:var(--stone);
+}
+.field,select.field{
+  width:100%;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#fffdf8;
+  color:var(--ink);
+  padding:11px 12px;
+  outline:0;
+  min-height:42px;
+}
+.field:focus{border-color:var(--terra);box-shadow:0 0 0 3px rgba(198,91,54,.08)}
+.r-summary{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+}
+.r-box{
+  border:1px solid var(--line);
+  background:#fffdf8;
+  border-radius:16px;
+  padding:14px;
+}
+.r-label{
+  color:var(--stone);
+  font-size:9px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  font-weight:900;
+}
+.r-value{
+  font-family:"Cormorant Garamond",Georgia,serif;
+  font-size:30px;
+  font-weight:600;
+  line-height:1;
+  margin-top:9px;
+}
+.note{
+  margin-top:12px;
+  padding:12px 14px;
+  border-left:3px solid var(--gold);
+  background:rgba(168,132,66,.06);
+  color:var(--stone);
+  font-size:12px;
+  line-height:1.55;
+  border-radius:0 12px 12px 0;
+}
+.result-strip{
+  position:sticky;
+  top:10px;
+  z-index:30;
+  display:grid;
+  grid-template-columns:1.15fr repeat(5,1fr);
+  gap:10px;
+  padding:10px;
+  border:1px solid rgba(205,191,174,.90);
+  border-radius:22px;
+  background:rgba(255,253,248,.88);
+  backdrop-filter:blur(18px);
+  box-shadow:var(--shadow);
+}
+.metric{
+  min-width:0;
+  background:linear-gradient(180deg,#fffefa,#fbf7ef);
+  border:1px solid rgba(226,216,201,.95);
+  border-radius:16px;
+  padding:13px 14px;
+}
+.metric.hero{border-left:4px solid var(--terra)}
+.metric.good{border-left:4px solid var(--olive)}
+.metric.bad{border-left:4px solid var(--ruby)}
+.metric-label{
+  color:var(--stone);
+  font-size:8.5px;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+  font-weight:900;
+}
+.metric-value{
+  font-family:"Cormorant Garamond",Georgia,serif;
+  font-size:28px;
+  line-height:1;
+  letter-spacing:-.025em;
+  font-weight:600;
+  margin-top:8px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.metric-sub{color:var(--stone);font-size:10px;margin-top:7px}
+.results-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:12px;
+}
+.stat-card{
+  border:1px solid var(--line);
+  background:#fffdf8;
+  border-radius:18px;
+  padding:15px;
+}
+.stat-label{
+  color:var(--stone);
+  font-size:9px;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+  font-weight:900;
+}
+.stat-value{
+  font-family:"Cormorant Garamond",Georgia,serif;
+  font-size:30px;
+  line-height:1;
+  margin-top:8px;
+  font-weight:600;
+}
+.stat-note{color:var(--muted);font-size:10px;margin-top:8px}
+.chart-grid{
+  display:grid;
+  grid-template-columns:1.35fr .65fr;
+  gap:16px;
+}
+.chart-grid.equal{grid-template-columns:1fr 1fr}
+.chart-shell{
+  background:rgba(255,253,248,.92);
+  border:1px solid var(--line);
+  border-radius:24px;
+  padding:20px;
+  box-shadow:var(--shadow-soft);
+}
+.chart-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:14px;
+  padding-bottom:14px;
+  margin-bottom:16px;
+  border-bottom:1px solid var(--line);
+}
+.chart-title{
+  font-size:11px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  font-weight:900;
+}
+.chart-copy{color:var(--stone);font-size:12px;margin-top:5px;max-width:680px}
+.canvas-wrap{height:360px;position:relative}
+.canvas-wrap.small{height:310px}
+.table-wrap{
+  overflow:auto;
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:#fffdf8;
+}
+table{width:100%;border-collapse:collapse}
+.fin-table{min-width:820px;text-align:right;font-size:12px}
+.fin-table th{
+  background:#f5ede2;
+  color:var(--stone);
+  font-size:9px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  font-weight:900;
+  padding:12px;
+  border-bottom:1px solid var(--line);
+  white-space:nowrap;
+}
+.fin-table td{
+  padding:12px;
+  border-bottom:1px solid rgba(226,216,201,.55);
+  white-space:nowrap;
+}
+.fin-table th:first-child,.fin-table td:first-child{text-align:left}
+.interpretation{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 320px;
+  gap:14px;
+}
+.callout{
+  border:1px solid var(--line);
+  background:linear-gradient(180deg,#fffdf8,#fbf6ee);
+  border-radius:20px;
+  padding:18px;
+}
+.callout h3{
+  font-family:"Cormorant Garamond",Georgia,serif;
+  font-size:30px;
+  font-weight:600;
+  line-height:1;
+  margin-bottom:10px;
+}
+.callout p,.callout li{color:var(--stone);font-size:13px;line-height:1.6}
+.callout ul{padding-left:18px;display:grid;gap:6px}
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  border:1px solid var(--line);
+  background:#fffdf8;
+  border-radius:999px;
+  padding:6px 10px;
+  font-size:10px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  font-weight:900;
+  color:var(--stone);
+}
+.badge.positive{color:var(--olive);border-color:rgba(100,112,73,.26);background:rgba(100,112,73,.06)}
+.badge.negative{color:var(--ruby);border-color:rgba(127,39,55,.24);background:rgba(127,39,55,.05)}
+.badge.terra{color:var(--terra);border-color:rgba(198,91,54,.30);background:rgba(198,91,54,.05)}
+.footer-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:4px 0 22px}
+.error-box{
+  display:none;
+  border:1px solid rgba(127,39,55,.25);
+  color:var(--ruby);
+  background:rgba(127,39,55,.055);
+  border-radius:16px;
+  padding:12px 14px;
+  font-size:12px;
+  line-height:1.5;
+}
+@media (max-width:1240px){
+  .control-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .result-strip{grid-template-columns:repeat(3,1fr);position:relative;top:auto}
+  .chart-grid,.chart-grid.equal,.interpretation,.rcalc-grid{grid-template-columns:1fr}
+}
+@media (max-width:860px){
+  body{padding:12px}
+  .hero{grid-template-columns:1fr}
+  .hero-actions{justify-content:flex-start}
+  .control-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .results-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .form-grid,.r-summary{grid-template-columns:1fr 1fr}
+}
+@media (max-width:560px){
+  .panel,.chart-shell,.hero{padding:15px;border-radius:16px}
+  .control-grid,.results-grid,.form-grid,.r-summary,.result-strip{grid-template-columns:1fr}
+  .control-row{grid-template-columns:1fr}
+  .number-wrap{max-width:none}
+  .canvas-wrap{height:300px}
+  .btn{width:100%}
+}
+@media print{
+  body{background:#fff;padding:0;color:#000}
+  .hero-actions,.mode-tabs,.footer-actions,.btn{display:none!important}
+  .app{max-width:none;gap:12px}
+  .hero,.panel,.chart-shell,.result-strip,.metric,.stat-card,.callout{
+    box-shadow:none!important;
+    border-color:#ddd!important;
+    background:#fff!important;
+    break-inside:avoid;
+  }
+  .result-strip{position:relative;top:auto;grid-template-columns:repeat(3,1fr)}
+  .mode-panel{display:block!important}
+  .control-grid{grid-template-columns:repeat(3,1fr)}
+  .chart-grid,.chart-grid.equal,.interpretation,.rcalc-grid{grid-template-columns:1fr}
+  .canvas-wrap{height:260px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="hero">
+    <div>
+      <div class="brand-kicker">Trade Monte Carlo</div>
+      <h1>Strateji Dayanıklılık Laboratuvarı</h1>
+      <p class="hero-copy">R-multiple mantığıyla binlerce olası equity curve üretir; hedefe ulaşma ihtimalini, kötü senaryo sermaye erimesini, drawdown riskini ve sonucu en fazla taşıyan parametreyi net gösterir.</p>
+    </div>
+    <div class="hero-actions">
+      <button class="btn primary run-sim" type="button"><svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9V3z"/></svg>Simülasyonu Çalıştır</button>
+      <button class="btn ghost" type="button" onclick="window.print()"><svg viewBox="0 0 24 24"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>PDF Rapor</button>
+      <a class="btn olive" href="./index.html"><svg viewBox="0 0 24 24"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>Ana Portföy</a>
+    </div>
+  </header>
+
+  <section class="result-strip" aria-label="Özet sonuçlar">
+    <div class="metric hero">
+      <div class="metric-label">Medyan Final Sermaye</div>
+      <div class="metric-value mono" id="hudMedian">—</div>
+      <div class="metric-sub" id="hudMedianSub">Simülasyon henüz çalışmadı.</div>
+    </div>
+    <div class="metric good">
+      <div class="metric-label">Hedefe Ulaşma</div>
+      <div class="metric-value mono" id="hudTarget">—</div>
+      <div class="metric-sub">Target hit probability</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Kârda Bitme</div>
+      <div class="metric-value mono" id="hudProfit">—</div>
+      <div class="metric-sub">Final sermaye > başlangıç</div>
+    </div>
+    <div class="metric bad">
+      <div class="metric-label">Kritik Sermaye Riski</div>
+      <div class="metric-value mono" id="hudRuin">—</div>
+      <div class="metric-sub">Eşik altına temas</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Expected R</div>
+      <div class="metric-value mono" id="hudER">—</div>
+      <div class="metric-sub">Trade başına teorik edge</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Health Score</div>
+      <div class="metric-value mono" id="hudHealth">—</div>
+      <div class="metric-sub">0–100 model skoru</div>
+    </div>
+  </section>
+
+  <nav class="mode-tabs" aria-label="Parametre modları">
+    <button class="mode-btn active" type="button" data-mode="basic">Temel Mod · Strateji Çekirdeği</button>
+    <button class="mode-btn" type="button" data-mode="advanced">Gelişmiş Risk Ayarları</button>
+  </nav>
+
+  <section id="basic" class="mode-panel active">
+    <div class="panel">
+      <div class="panel-head">
+        <div>
+          <div class="panel-title"><svg viewBox="0 0 24 24"><path d="M4 19V5"/><path d="M4 19h16"/><path d="M8 16l3-4 3 2 5-7"/></svg>Temel Parametreler</div>
+          <p class="panel-copy">Bu bölüm stratejinin ana sonucunu belirler. Kullanıcı slider ile hızlı ayar yapabilir veya sağdaki kutuya doğrudan değer yazabilir.</p>
+        </div>
+        <button class="btn primary run-sim" type="button">Çalıştır</button>
+      </div>
+      <div class="control-grid" id="basicControls"></div>
+    </div>
+
+    <div class="panel" style="margin-top:18px">
+      <div class="panel-head">
+        <div>
+          <div class="panel-title"><svg viewBox="0 0 24 24"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7H14a3.5 3.5 0 0 1 0 7H6"/></svg>R Hesaplayıcı</div>
+          <p class="panel-copy">R, trade’de başlangıçta riske edilen birim zarardır. Giriş, stop ve hedef fiyatıyla hedef R otomatik hesaplanır.</p>
+        </div>
+        <button class="btn olive" type="button" id="applyR">Hedef R’yi Kazanç R’ye Uygula</button>
+      </div>
+      <div class="rcalc-grid">
+        <div>
+          <div class="form-grid">
+            <label class="form-card"><span class="form-label">Yön</span><select class="field" id="rDirection"><option value="long">Long</option><option value="short">Short</option></select></label>
+            <label class="form-card"><span class="form-label">Entry Price</span><input class="field mono" id="rEntry" type="number" value="100" step="0.01"></label>
+            <label class="form-card"><span class="form-label">Stop-Loss Price</span><input class="field mono" id="rStop" type="number" value="95" step="0.01"></label>
+            <label class="form-card"><span class="form-label">Take-Profit Price</span><input class="field mono" id="rTarget" type="number" value="110" step="0.01"></label>
+          </div>
+          <div class="note">Örnek: Long işlemde entry 100, stop 95, hedef 110 ise risk birimi 5 puan, potansiyel kazanç 10 puan ve hedef 2R olur. Yani stop olursa −1R, hedef gelirse +2R.</div>
+        </div>
+        <div class="r-summary">
+          <div class="r-box"><div class="r-label">Risk Birimi</div><div class="r-value mono" id="riskUnit">—</div></div>
+          <div class="r-box"><div class="r-label">Hedef R</div><div class="r-value mono" id="targetR">—</div></div>
+          <div class="r-box"><div class="r-label">Risk / Reward</div><div class="r-value mono" id="riskReward">—</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="advanced" class="mode-panel">
+    <div class="panel">
+      <div class="panel-head">
+        <div>
+          <div class="panel-title"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Gelişmiş Risk Ayarları</div>
+          <p class="panel-copy">Bu bölüm stratejinin edge’ini değil, dağılımın ne kadar genişleyeceğini ve kötü günlerde sistemin ne kadar hasar alacağını belirler. Gereksiz mikro-parametreler bilinçli olarak kaldırıldı.</p>
+        </div>
+        <button class="btn primary run-sim" type="button">Çalıştır</button>
+      </div>
+      <div class="control-grid" id="advancedControls"></div>
+    </div>
+  </section>
+
+  <div class="error-box" id="errorBox"></div>
+
+  <section class="panel">
+    <div class="panel-head">
+      <div>
+        <div class="panel-title"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 14l3-3 3 2 5-7"/></svg>Sonuç Metrikleri</div>
+        <p class="panel-copy">Percentile sonuçları kötü, orta ve iyi senaryonun sermayeyi nereye taşıdığını doğrudan gösterir.</p>
+      </div>
+      <span class="badge terra" id="runMeta">Hazır</span>
+    </div>
+    <div class="results-grid">
+      <div class="stat-card"><div class="stat-label">P5 Final Sermaye</div><div class="stat-value mono" id="p5Final">—</div><div class="stat-note">Kötü senaryo bandı</div></div>
+      <div class="stat-card"><div class="stat-label">P25 Final Sermaye</div><div class="stat-value mono" id="p25Final">—</div><div class="stat-note">Zayıf ama olağan bant</div></div>
+      <div class="stat-card"><div class="stat-label">P50 Final Sermaye</div><div class="stat-value mono" id="p50Final">—</div><div class="stat-note">Medyan senaryo</div></div>
+      <div class="stat-card"><div class="stat-label">P75 Final Sermaye</div><div class="stat-value mono" id="p75Final">—</div><div class="stat-note">Güçlü senaryo</div></div>
+      <div class="stat-card"><div class="stat-label">P95 Final Sermaye</div><div class="stat-value mono" id="p95Final">—</div><div class="stat-note">Çok iyi senaryo bandı</div></div>
+      <div class="stat-card"><div class="stat-label">Ortalama Max Drawdown</div><div class="stat-value mono" id="avgDD">—</div><div class="stat-note">Equity peak’e göre ortalama çöküş</div></div>
+      <div class="stat-card"><div class="stat-label">En Kötü Max Drawdown</div><div class="stat-value mono" id="worstDD">—</div><div class="stat-note">En sert simülasyon yolu</div></div>
+      <div class="stat-card"><div class="stat-label">En Uzun Kayıp Serisi</div><div class="stat-value mono" id="maxStreak">—</div><div class="stat-note">Psikolojik baskı ölçüsü</div></div>
+    </div>
+  </section>
+
+  <section class="chart-grid">
+    <div class="chart-shell">
+      <div class="chart-head">
+        <div><div class="chart-title">Equity Curve Fan Chart</div><div class="chart-copy">P5, P25, P50, P75 ve P95 çizgileri stratejinin zaman içindeki dağılımını gösterir.</div></div>
+      </div>
+      <div class="canvas-wrap"><canvas id="fanChart"></canvas></div>
+    </div>
+    <div class="chart-shell">
+      <div class="chart-head">
+        <div><div class="chart-title">Final Equity Distribution</div><div class="chart-copy">Final sermaye sonuçlarının hangi bölgelerde yoğunlaştığını gösterir.</div></div>
+      </div>
+      <div class="canvas-wrap"><canvas id="distChart"></canvas></div>
+    </div>
+  </section>
+
+  <section class="chart-grid equal">
+    <div class="chart-shell">
+      <div class="chart-head">
+        <div><div class="chart-title">Percentile Outcome</div><div class="chart-copy">Başlangıç sermayesinin farklı olasılık dilimlerinde nereye taşındığı.</div></div>
+      </div>
+      <div class="canvas-wrap small"><canvas id="outcomeChart"></canvas></div>
+    </div>
+    <div class="chart-shell">
+      <div class="chart-head">
+        <div><div class="chart-title">Parametre Duyarlılığı</div><div class="chart-copy">Bu modelde sonucu en çok hangi parametrenin taşıdığını gösterir.</div></div>
+      </div>
+      <div class="canvas-wrap small"><canvas id="sensitivityChart"></canvas></div>
+    </div>
+  </section>
+
+  <section class="interpretation">
+    <div class="callout">
+      <h3>Model Yorumu</h3>
+      <ul id="interpretationList">
+        <li>Simülasyonu çalıştırınca bu alanda net strateji yorumu oluşur.</li>
+      </ul>
+    </div>
+    <div class="callout">
+      <h3>Parametre Mantığı</h3>
+      <p><strong>Temel Mod</strong> stratejinin edge, büyüme hızı ve hedefe ulaşma ihtimalini belirler. <strong>Gelişmiş Risk Ayarları</strong> ise kötü günlerin etkisini ve dağılım genişliğini kontrol eder. Bu ayrım, kullanıcıyı gereksiz parametreyle boğmadan modeli yönetilebilir tutar.</p>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head">
+      <div>
+        <div class="panel-title"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>Percentile Tablosu</div>
+        <p class="panel-copy">Kötü, orta ve iyi senaryo sonuçlarını tablo halinde karşılaştırır.</p>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table class="fin-table">
+        <thead><tr><th>Percentile</th><th>Başlangıç</th><th>Final Sermaye</th><th>Net P/L</th><th>Toplam Getiri</th></tr></thead>
+        <tbody id="percentileRows"><tr><td colspan="5">Simülasyon henüz çalışmadı.</td></tr></tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="footer-actions">
+    <button class="btn primary run-sim" type="button">Simülasyonu Yeniden Çalıştır</button>
+    <button class="btn ghost" type="button" onclick="window.scrollTo({top:0,behavior:'smooth'})">Yukarı Dön</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  const controls = [
+    {group:"basic",key:"days",label:"Gün Sayısı",code:"days",min:30,max:365,step:1,value:180,suffix:"gün",tone:"terra",help:"Simülasyonun kaç işlem günü süreceğini belirler. 180 gün ve günlük 3 trade, yaklaşık 540 trade yolu üretir."},
+    {group:"basic",key:"initialCapital",label:"Başlangıç Sermayesi",code:"initialCapital",min:1000,max:5000000,step:1000,value:100000,prefix:"₺",tone:"olive",help:"Tüm yollar bu sermayeyle başlar. Risk tutarı her trade’de mevcut sermayenin yüzdesi olarak hesaplanır."},
+    {group:"basic",key:"iterations",label:"Simülasyon Sayısı",code:"iterations",min:500,max:10000,step:500,value:3000,suffix:"yol",tone:"terra",help:"Üretilecek bağımsız equity curve sayısıdır. Sayı arttıkça percentile sonuçları daha stabil olur; hesap süresi de artar."},
+    {group:"basic",key:"tradesPerDay",label:"Günlük Trade",code:"tradesPerDay",min:0.25,max:20,step:0.25,value:3,suffix:"adet",tone:"olive",help:"Her gün ortalama kaç işlem açıldığını belirler. Trade sayısı arttıkça maliyet ve slippage etkisi daha görünür hale gelir."},
+    {group:"basic",key:"winRate",label:"Kazanma Oranı",code:"winRate",min:5,max:90,step:0.5,value:48,suffix:"%",tone:"terra",help:"Trade’in kârlı kapanma olasılığıdır. Tek başına başarı değildir; ortalama kazanç R ve kayıp R ile birlikte değerlendirilir."},
+    {group:"basic",key:"avgWinR",label:"Ortalama Kazanç R",code:"avgWinR",min:0.2,max:8,step:0.05,value:1.8,suffix:"R",tone:"olive",help:"Kazanan trade’in ortalama ödülüdür. 2R, riske edilen birimin iki katı kâr anlamına gelir."},
+    {group:"basic",key:"avgLossR",label:"Ortalama Kayıp R",code:"avgLossR",min:0.2,max:5,step:0.05,value:1,suffix:"R",tone:"ruby",help:"Kaybeden trade’in ortalama zararıdır. 1R tipik stop-loss kaybıdır; 1.3R ve üstü stop disiplininin bozulduğunu gösterir."},
+    {group:"basic",key:"riskPerTradePct",label:"Trade Başına Risk",code:"riskPerTradePct",min:0.1,max:5,step:0.05,value:1,suffix:"%",tone:"ruby",help:"Her işlemde mevcut sermayenin riske edilen yüzdesidir. Risk % arttıkça büyüme hızlanabilir; kötü senaryoda erime de hızlanır."},
+    {group:"basic",key:"costPerTradePct",label:"İşlem Maliyeti",code:"costPerTradePct",min:0,max:0.5,step:0.01,value:0.04,suffix:"%",tone:"terra",help:"Komisyon ve spread etkisini sermaye yüzdesi olarak düşer. Çok trade yapılan stratejilerde küçük maliyetler sonucu ciddi bozar."},
+    {group:"basic",key:"slippagePct",label:"Slippage",code:"slippagePct",min:0,max:0.5,step:0.01,value:0.03,suffix:"%",tone:"terra",help:"Beklenen fiyat ile gerçekleşen fiyat arasındaki kaymadır. Frekans yükseldikçe slippage stratejinin edge’ini aşındırır."},
+    {group:"basic",key:"targetCapital",label:"Hedef Sermaye",code:"targetCapital",min:1000,max:10000000,step:1000,value:200000,prefix:"₺",tone:"olive",help:"Simülasyon yollarında bu seviyeye en az bir kez temas edilirse hedefe ulaşmış kabul edilir."},
+    {group:"basic",key:"ruinThresholdPct",label:"Kritik Sermaye Eşiği",code:"ruinThresholdPct",min:5,max:90,step:1,value:50,suffix:"%",tone:"ruby",help:"Başlangıç sermayesinin bu yüzdesinin altı kritik bölgedir. 50%, sermayenin yarıya düşmesini kritik olay sayar."},
+    {group:"advanced",key:"breakEvenRate",label:"Break-even Oranı",code:"breakEvenRate",min:0,max:40,step:1,value:5,suffix:"%",tone:"olive",help:"Ne kâr ne zarar kapanan trade oranıdır. Maliyet yine düşer; bu yüzden break-even trade tamamen etkisiz değildir."},
+    {group:"advanced",key:"volatilityFactor",label:"Volatilite Çarpanı",code:"volatilityFactor",min:0,max:3,step:0.05,value:1,suffix:"x",tone:"terra",help:"Kazanç ve kayıp R sonuçlarının ne kadar dağıldığını belirler. Volatilite artarsa P5 ve P95 arasındaki fark büyür."},
+    {group:"advanced",key:"shockProbability",label:"Şok Olasılığı",code:"shockProbability",min:0,max:20,step:0.5,value:3,suffix:"%",tone:"ruby",help:"Her işlem gününde olağan dışı kötü piyasa günü yaşanma olasılığıdır. Şoklar özellikle P5 ve drawdown metriklerini bozar."},
+    {group:"advanced",key:"shockImpactR",label:"Şok Etkisi",code:"shockImpactR",min:0,max:10,step:0.25,value:2,suffix:"R",tone:"ruby",help:"Şok gününde sermayeye eklenen negatif R etkisidir. 2R şok, trade başına riskin iki katı günlük darbe demektir."},
+    {group:"advanced",key:"maxDailyLossPct",label:"Günlük Zarar Limiti",code:"maxDailyLossPct",min:0.5,max:20,step:0.25,value:5,suffix:"%",tone:"olive",help:"Gün içi zarar bu eşiğe ulaşınca o gün yeni trade açılmaz. Kötü serileri keser ama toparlanma hızını da sınırlayabilir."}
+  ];
+
+  const state = {charts:{}, last:null};
+
+  function $(id){ return document.getElementById(id); }
+  function clamp(v,min,max){ return Math.min(max, Math.max(min, v)); }
+  function fmtMoney(v){
+    if(!isFinite(v)) return "—";
+    return new Intl.NumberFormat("tr-TR",{style:"currency",currency:"TRY",maximumFractionDigits:0}).format(v);
+  }
+  function fmtPct(v,d=1){ return isFinite(v) ? new Intl.NumberFormat("tr-TR",{maximumFractionDigits:d,minimumFractionDigits:d}).format(v) + "%" : "—"; }
+  function fmtNum(v,d=2){ return isFinite(v) ? new Intl.NumberFormat("tr-TR",{maximumFractionDigits:d,minimumFractionDigits:d}).format(v) : "—"; }
+
+  function controlMarkup(c){
+    const minLabel = c.prefix ? c.prefix + fmtNum(c.min,0) : fmtNum(c.min, c.step < 1 ? 2 : 0) + (c.suffix ? " " + c.suffix : "");
+    const maxLabel = c.prefix ? c.prefix + fmtNum(c.max,0) : fmtNum(c.max, c.step < 1 ? 2 : 0) + (c.suffix ? " " + c.suffix : "");
+    return `<article class="control-card ${c.tone}" data-control="${c.key}">
+      <div class="control-top">
+        <div>
+          <div class="control-label">${c.label}</div>
+          <div class="control-code mono">${c.code}</div>
+        </div>
+      </div>
+      <p class="control-help">${c.help}</p>
+      <div class="control-row">
+        <input class="range ${c.tone}" id="${c.key}Range" data-key="${c.key}" type="range" min="${c.min}" max="${c.max}" step="${c.step}" value="${c.value}">
+        <label class="number-wrap" aria-label="${c.label}">
+          ${c.prefix ? `<span class="number-prefix">${c.prefix}</span>` : ""}
+          <input class="num-input" id="${c.key}Number" data-key="${c.key}" type="number" min="${c.min}" max="${c.max}" step="${c.step}" value="${c.value}">
+          ${c.suffix ? `<span class="number-suffix">${c.suffix}</span>` : ""}
+        </label>
+      </div>
+      <div class="range-labels"><span>${minLabel}</span><span>${maxLabel}</span></div>
+    </article>`;
+  }
+
+  function renderControls(){
+    $("basicControls").innerHTML = controls.filter(c => c.group === "basic").map(controlMarkup).join("");
+    $("advancedControls").innerHTML = controls.filter(c => c.group === "advanced").map(controlMarkup).join("");
+    controls.forEach(c => updateFill(c.key));
+  }
+
+  function getControl(key){ return controls.find(c => c.key === key); }
+
+  function updateFill(key){
+    const c = getControl(key);
+    const r = $(key + "Range");
+    if(!c || !r) return;
+    const v = parseFloat(r.value);
+    const pct = ((v - c.min) / (c.max - c.min)) * 100;
+    r.style.setProperty("--fill", clamp(pct,0,100).toFixed(2) + "%");
+  }
+
+  function setParam(key, value, source){
+    const c = getControl(key);
+    if(!c) return;
+    let v = parseFloat(value);
+    if(!isFinite(v)) return;
+    v = clamp(v, c.min, c.max);
+    const decimals = String(c.step).includes(".") ? String(c.step).split(".")[1].length : 0;
+    const str = decimals ? v.toFixed(decimals) : String(Math.round(v));
+    const r = $(key + "Range");
+    const n = $(key + "Number");
+    if(r && source !== "range") r.value = str;
+    if(n && source !== "number") n.value = str;
+    if(r && source === "range" && n) n.value = str;
+    if(n && source === "number" && r) r.value = str;
+    updateFill(key);
+  }
+
+  function setupControlEvents(){
+    document.querySelectorAll(".range").forEach(el => {
+      el.addEventListener("input", () => setParam(el.dataset.key, el.value, "range"));
+    });
+    document.querySelectorAll(".num-input").forEach(el => {
+      el.addEventListener("input", () => {
+        const c = getControl(el.dataset.key);
+        const v = parseFloat(el.value);
+        if(isFinite(v) && v >= c.min && v <= c.max) setParam(el.dataset.key, v, "number");
+      });
+      el.addEventListener("change", () => setParam(el.dataset.key, el.value, "number"));
+    });
+  }
+
+  function getParams(){
+    const p = {};
+    controls.forEach(c => {
+      const n = $(c.key + "Number");
+      p[c.key] = clamp(parseFloat(n.value), c.min, c.max);
+    });
+    if(p.breakEvenRate + p.winRate > 98) p.breakEvenRate = Math.max(0, 98 - p.winRate);
+    return p;
+  }
+
+  function setupModes(){
+    document.querySelectorAll(".mode-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".mode-btn").forEach(b => b.classList.remove("active"));
+        document.querySelectorAll(".mode-panel").forEach(p => p.classList.remove("active"));
+        btn.classList.add("active");
+        $(btn.dataset.mode).classList.add("active");
+      });
+    });
+  }
+
+  function calcR(){
+    const dir = $("rDirection").value;
+    const entry = parseFloat($("rEntry").value);
+    const stop = parseFloat($("rStop").value);
+    const target = parseFloat($("rTarget").value);
+    const risk = Math.abs(entry - stop);
+    const reward = dir === "long" ? (target - entry) : (entry - target);
+    const r = risk > 0 ? reward / risk : NaN;
+    $("riskUnit").textContent = isFinite(risk) && risk > 0 ? fmtNum(risk,2) : "—";
+    $("targetR").textContent = isFinite(r) ? fmtNum(r,2) + "R" : "—";
+    $("riskReward").textContent = isFinite(r) && r > 0 ? "1 : " + fmtNum(r,2) : "Geçersiz";
+    return r;
+  }
+
+  function setupRCalc(){
+    ["rDirection","rEntry","rStop","rTarget"].forEach(id => $(id).addEventListener("input", calcR));
+    $("applyR").addEventListener("click", () => {
+      const r = calcR();
+      if(isFinite(r) && r > 0) {
+        setParam("avgWinR", r, "number");
+        document.querySelector('[data-mode="basic"]').click();
+      }
+    });
+    calcR();
+  }
+
+  function mulberry32(seed){
+    let t = seed >>> 0;
+    return function(){
+      t += 0x6D2B79F5;
+      let r = Math.imul(t ^ (t >>> 15), 1 | t);
+      r ^= r + Math.imul(r ^ (r >>> 7), 61 | r);
+      return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  function createRng(){
+    const seed = Math.floor(Date.now() % 2147483647);
+    const rand = mulberry32(seed);
+    let spare = null;
+    return {
+      seed,
+      u(){ return rand(); },
+      normal(){
+        if(spare !== null){ const s = spare; spare = null; return s; }
+        let u = 0, v = 0;
+        while(u === 0) u = rand();
+        while(v === 0) v = rand();
+        const mag = Math.sqrt(-2 * Math.log(u));
+        const z0 = mag * Math.cos(2 * Math.PI * v);
+        spare = mag * Math.sin(2 * Math.PI * v);
+        return z0;
+      }
+    };
+  }
+
+  function poisson(lambda, rng){
+    if(lambda <= 0) return 0;
+    if(lambda > 30){
+      return Math.max(0, Math.round(lambda + Math.sqrt(lambda) * rng.normal()));
+    }
+    const L = Math.exp(-lambda);
+    let k = 0, p = 1;
+    do { k++; p *= rng.u(); } while(p > L);
+    return k - 1;
+  }
+
+  function percentile(sorted, pct){
+    if(!sorted.length) return NaN;
+    const idx = (sorted.length - 1) * pct;
+    const lo = Math.floor(idx), hi = Math.ceil(idx);
+    if(lo === hi) return sorted[lo];
+    return sorted[lo] + (sorted[hi] - sorted[lo]) * (idx - lo);
+  }
+
+  function expectedR(p){
+    const winP = p.winRate / 100;
+    const beP = p.breakEvenRate / 100;
+    const lossP = Math.max(0, 1 - winP - beP);
+    const costR = p.riskPerTradePct > 0 ? (p.costPerTradePct + p.slippagePct) / p.riskPerTradePct : 0;
+    return winP * p.avgWinR - lossP * p.avgLossR - costR;
+  }
+
+  function runSimulation(){
+    const errorBox = $("errorBox");
+    errorBox.style.display = "none";
+    const p = getParams();
+    if(p.targetCapital <= 0 || p.initialCapital <= 0){
+      errorBox.textContent = "Başlangıç ve hedef sermaye pozitif olmalı.";
+      errorBox.style.display = "block";
+      return null;
+    }
+
+    const rng = createRng();
+    const days = Math.round(p.days);
+    const iterations = Math.round(p.iterations);
+    const initial = p.initialCapital;
+    const ruinLevel = initial * (p.ruinThresholdPct / 100);
+    const finals = [];
+    const dds = [];
+    const streaks = [];
+    const paths = [];
+    let targetHits = 0, profitCount = 0, ruinCount = 0;
+    let totalTrades = 0, grossProfitR = 0, grossLossR = 0;
+
+    for(let i=0;i<iterations;i++){
+      let equity = initial;
+      let peak = initial;
+      let maxDD = 0;
+      let maxStreak = 0;
+      let streak = 0;
+      let hitTarget = initial >= p.targetCapital;
+      let hitRuin = initial <= ruinLevel;
+      const path = new Float64Array(days + 1);
+      path[0] = equity;
+
+      for(let d=1; d<=days; d++){
+        if(equity <= 0){
+          equity = 0;
+          path[d] = 0;
+          continue;
+        }
+        const dayStart = equity;
+        let dailyPnl = 0;
+        const shock = rng.u() < p.shockProbability / 100;
+        if(shock && p.shockImpactR > 0){
+          const shockLoss = equity * (p.riskPerTradePct / 100) * p.shockImpactR;
+          equity = Math.max(0, equity - shockLoss);
+          dailyPnl -= shockLoss;
+          grossLossR += p.shockImpactR;
+        }
+
+        const trades = Math.max(0, poisson(p.tradesPerDay, rng));
+        for(let t=0; t<trades; t++){
+          if(equity <= 0) break;
+          if((-dailyPnl / Math.max(dayStart,1)) * 100 >= p.maxDailyLossPct) break;
+
+          const u = rng.u() * 100;
+          let r = 0;
+          if(u < p.breakEvenRate){
+            r = 0;
+            streak = 0;
+          } else if(u < p.breakEvenRate + p.winRate){
+            const noise = 1 + rng.normal() * 0.18 * p.volatilityFactor;
+            r = Math.max(0.05, p.avgWinR * noise);
+            streak = 0;
+            grossProfitR += r;
+          } else {
+            const noise = 1 + Math.abs(rng.normal()) * 0.16 * p.volatilityFactor;
+            r = -Math.max(0.05, p.avgLossR * noise);
+            streak += 1;
+            maxStreak = Math.max(maxStreak, streak);
+            grossLossR += Math.abs(r);
+          }
+
+          const riskAmount = equity * (p.riskPerTradePct / 100);
+          const executionCost = equity * ((p.costPerTradePct + p.slippagePct) / 100);
+          const pnl = riskAmount * r - executionCost;
+          equity = Math.max(0, equity + pnl);
+          dailyPnl += pnl;
+          totalTrades += 1;
+
+          if(equity >= p.targetCapital) hitTarget = true;
+          if(equity <= ruinLevel) hitRuin = true;
+          peak = Math.max(peak, equity);
+          maxDD = Math.max(maxDD, peak > 0 ? (peak - equity) / peak * 100 : 0);
+        }
+
+        if(equity >= p.targetCapital) hitTarget = true;
+        if(equity <= ruinLevel) hitRuin = true;
+        peak = Math.max(peak, equity);
+        maxDD = Math.max(maxDD, peak > 0 ? (peak - equity) / peak * 100 : 0);
+        path[d] = equity;
+      }
+
+      finals.push(equity);
+      dds.push(maxDD);
+      streaks.push(maxStreak);
+      paths.push(path);
+      if(hitTarget) targetHits += 1;
+      if(hitRuin) ruinCount += 1;
+      if(equity > initial) profitCount += 1;
+    }
+
+    finals.sort((a,b)=>a-b);
+    dds.sort((a,b)=>a-b);
+    streaks.sort((a,b)=>a-b);
+
+    const p5 = percentile(finals,.05), p25 = percentile(finals,.25), p50 = percentile(finals,.50), p75 = percentile(finals,.75), p95 = percentile(finals,.95);
+    const mean = finals.reduce((a,b)=>a+b,0) / finals.length;
+    const avgDD = dds.reduce((a,b)=>a+b,0) / dds.length;
+    const worstDD = dds[dds.length-1] || 0;
+    const avgStreak = streaks.reduce((a,b)=>a+b,0) / streaks.length;
+    const maxStreak = streaks[streaks.length-1] || 0;
+    const er = expectedR(p);
+    const targetProb = targetHits / iterations * 100;
+    const profitProb = profitCount / iterations * 100;
+    const ruinProb = ruinCount / iterations * 100;
+    const pf = grossLossR > 0 ? grossProfitR / grossLossR : 0;
+    const health = clamp(
+      50 + er * 22 + (profitProb - 50) * .24 + targetProb * .10 - ruinProb * .45 - Math.max(0, avgDD - 18) * .55,
+      0, 100
+    );
+
+    const result = {p, seed:rng.seed, paths, finals, dds, streaks, p5,p25,p50,p75,p95,mean,avgDD,worstDD,avgStreak,maxStreak,er,targetProb,profitProb,ruinProb,pf,health,totalTrades};
+    state.last = result;
+    return result;
+  }
+
+  function sampledFan(result){
+    const {paths,p} = result;
+    const days = Math.round(p.days);
+    const step = Math.max(1, Math.ceil(days / 70));
+    const labels = [];
+    const series = {p5:[],p25:[],p50:[],p75:[],p95:[]};
+    for(let d=0; d<=days; d+=step){
+      labels.push(String(d));
+      const values = paths.map(path => path[d]).sort((a,b)=>a-b);
+      series.p5.push(percentile(values,.05));
+      series.p25.push(percentile(values,.25));
+      series.p50.push(percentile(values,.50));
+      series.p75.push(percentile(values,.75));
+      series.p95.push(percentile(values,.95));
+    }
+    if(labels[labels.length-1] !== String(days)){
+      labels.push(String(days));
+      const values = paths.map(path => path[days]).sort((a,b)=>a-b);
+      series.p5.push(percentile(values,.05));
+      series.p25.push(percentile(values,.25));
+      series.p50.push(percentile(values,.50));
+      series.p75.push(percentile(values,.75));
+      series.p95.push(percentile(values,.95));
+    }
+    return {labels,series};
+  }
+
+  function histogram(values, bins=24){
+    const min = values[0], max = values[values.length-1];
+    if(max <= min) return {labels:[fmtMoney(min)],counts:[values.length]};
+    const width = (max - min) / bins;
+    const counts = Array.from({length:bins},()=>0);
+    values.forEach(v => {
+      const idx = Math.min(bins-1, Math.floor((v - min) / width));
+      counts[idx]++;
+    });
+    const labels = counts.map((_,i) => fmtMoney(min + width * (i + .5)));
+    return {labels,counts};
+  }
+
+  function sensitivity(result){
+    const p = result.p;
+    const er = Math.abs(expectedR(p));
+    const lossProb = Math.max(0, 1 - p.winRate/100 - p.breakEvenRate/100);
+    const costPressure = p.riskPerTradePct > 0 ? (p.costPerTradePct + p.slippagePct) / p.riskPerTradePct : 0;
+    const raw = [
+      ["Risk %", Math.abs(er) * p.riskPerTradePct * 16 + result.ruinProb * .28 + result.avgDD * .20],
+      ["Win Rate", (p.avgWinR + p.avgLossR) * 7.5],
+      ["Ortalama Kazanç R", (p.winRate/100) * 30],
+      ["Ortalama Kayıp R", lossProb * 32],
+      ["Maliyet", costPressure * 45 + p.tradesPerDay * .45],
+      ["Slippage", (p.slippagePct / Math.max(.01,p.riskPerTradePct)) * 55 + p.tradesPerDay * .35],
+      ["Volatilite", p.volatilityFactor * 8 + result.worstDD * .08],
+      ["Şok", p.shockProbability * p.shockImpactR * .55]
+    ].sort((a,b)=>b[1]-a[1]);
+    const max = raw[0][1] || 1;
+    return raw.map(([name,val]) => [name, Math.round(val / max * 100)]);
+  }
+
+  function chart(id, config){
+    if(state.charts[id]) state.charts[id].destroy();
+    const canvas = $(id);
+    if(!canvas || typeof Chart === "undefined"){
+      return;
+    }
+    state.charts[id] = new Chart(canvas, config);
+  }
+
+  function renderCharts(result){
+    if(typeof Chart === "undefined") return;
+    Chart.defaults.font.family = "Inter";
+    Chart.defaults.color = "#6f675d";
+    const fan = sampledFan(result);
+    const moneyTick = value => {
+      const v = Number(value);
+      if(Math.abs(v) >= 1000000) return "₺" + (v/1000000).toFixed(1) + "M";
+      if(Math.abs(v) >= 1000) return "₺" + (v/1000).toFixed(0) + "K";
+      return "₺" + v.toFixed(0);
+    };
+
+    chart("fanChart", {
+      type:"line",
+      data:{
+        labels:fan.labels,
+        datasets:[
+          {label:"P95",data:fan.series.p95,borderColor:"#647049",backgroundColor:"rgba(100,112,73,.08)",borderWidth:2,pointRadius:0,tension:.28},
+          {label:"P75",data:fan.series.p75,borderColor:"#a88442",backgroundColor:"rgba(168,132,66,.08)",borderWidth:2,pointRadius:0,tension:.28},
+          {label:"P50",data:fan.series.p50,borderColor:"#171411",backgroundColor:"rgba(23,20,17,.04)",borderWidth:3,pointRadius:0,tension:.28},
+          {label:"P25",data:fan.series.p25,borderColor:"#c65b36",backgroundColor:"rgba(198,91,54,.08)",borderWidth:2,pointRadius:0,tension:.28},
+          {label:"P5",data:fan.series.p5,borderColor:"#7f2737",backgroundColor:"rgba(127,39,55,.08)",borderWidth:2,pointRadius:0,tension:.28}
+        ]
+      },
+      options:{responsive:true,maintainAspectRatio:false,interaction:{mode:"index",intersect:false},plugins:{legend:{position:"bottom"}},scales:{x:{grid:{display:false},title:{display:true,text:"Gün"}},y:{ticks:{callback:moneyTick},grid:{color:"rgba(226,216,201,.55)"}}}}
+    });
+
+    const hist = histogram(result.finals, 26);
+    chart("distChart", {
+      type:"bar",
+      data:{labels:hist.labels,datasets:[{label:"Senaryo sayısı",data:hist.counts,backgroundColor:"rgba(198,91,54,.42)",borderColor:"#c65b36",borderWidth:1}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{maxRotation:70,minRotation:70,autoSkip:true,maxTicksLimit:9},grid:{display:false}},y:{grid:{color:"rgba(226,216,201,.55)"}}}}
+    });
+
+    chart("outcomeChart", {
+      type:"bar",
+      data:{labels:["P5","P25","P50","P75","P95"],datasets:[{label:"Final Sermaye",data:[result.p5,result.p25,result.p50,result.p75,result.p95],backgroundColor:["rgba(127,39,55,.38)","rgba(198,91,54,.34)","rgba(23,20,17,.28)","rgba(168,132,66,.38)","rgba(100,112,73,.38)"],borderColor:["#7f2737","#c65b36","#171411","#a88442","#647049"],borderWidth:1}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{ticks:{callback:moneyTick},grid:{color:"rgba(226,216,201,.55)"}}}}
+    });
+
+    const sens = sensitivity(result);
+    chart("sensitivityChart", {
+      type:"bar",
+      data:{labels:sens.map(x=>x[0]),datasets:[{label:"Etki skoru",data:sens.map(x=>x[1]),backgroundColor:"rgba(100,112,73,.34)",borderColor:"#647049",borderWidth:1}]},
+      options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{max:100,grid:{color:"rgba(226,216,201,.55)"}},y:{grid:{display:false}}}}
+    });
+  }
+
+  function renderMetrics(result){
+    $("hudMedian").textContent = fmtMoney(result.p50);
+    $("hudMedianSub").textContent = "Başlangıç: " + fmtMoney(result.p.initialCapital);
+    $("hudTarget").textContent = fmtPct(result.targetProb,1);
+    $("hudProfit").textContent = fmtPct(result.profitProb,1);
+    $("hudRuin").textContent = fmtPct(result.ruinProb,1);
+    $("hudER").textContent = fmtNum(result.er,2) + "R";
+    $("hudHealth").textContent = Math.round(result.health) + "/100";
+
+    $("p5Final").textContent = fmtMoney(result.p5);
+    $("p25Final").textContent = fmtMoney(result.p25);
+    $("p50Final").textContent = fmtMoney(result.p50);
+    $("p75Final").textContent = fmtMoney(result.p75);
+    $("p95Final").textContent = fmtMoney(result.p95);
+    $("avgDD").textContent = fmtPct(result.avgDD,1);
+    $("worstDD").textContent = fmtPct(result.worstDD,1);
+    $("maxStreak").textContent = Math.round(result.maxStreak) + " trade";
+    $("runMeta").textContent = `${Math.round(result.p.iterations).toLocaleString("tr-TR")} yol · ${Math.round(result.totalTrades).toLocaleString("tr-TR")} trade`;
+
+    const rows = [
+      ["P5", result.p5],
+      ["P25", result.p25],
+      ["P50", result.p50],
+      ["P75", result.p75],
+      ["P95", result.p95]
+    ].map(([name,val]) => {
+      const pnl = val - result.p.initialCapital;
+      const ret = (val / result.p.initialCapital - 1) * 100;
+      return `<tr><td>${name}</td><td>${fmtMoney(result.p.initialCapital)}</td><td>${fmtMoney(val)}</td><td>${fmtMoney(pnl)}</td><td>${fmtPct(ret,1)}</td></tr>`;
+    }).join("");
+    $("percentileRows").innerHTML = rows;
+  }
+
+  function interpretation(result){
+    const p = result.p;
+    const sens = sensitivity(result);
+    const mainRisk = sens[0] ? sens[0][0] : "Risk %";
+    const items = [];
+
+    if(result.er <= 0){
+      items.push("Bu parametre setinde stratejinin trade başına edge’i negatif. Win rate, ortalama kazanç R veya maliyet yapısı düzelmeden dağılım sermaye büyümesini desteklemiyor.");
+    } else {
+      items.push(`Bu model sonucuna göre trade başına expected R pozitiftir: ${fmtNum(result.er,2)}R. Stratejinin teorik edge’i var.`);
+    }
+
+    if(p.riskPerTradePct >= 2 || result.avgDD >= 30 || result.ruinProb >= 15){
+      items.push("Bu parametrelerle strateji agresif. Ana büyüme motoru daha yüksek risk, fakat kötü senaryoda sermaye erimesi belirgin hızlanıyor.");
+    } else {
+      items.push("Bu parametrelerle risk seviyesi kontrollü görünüyor. Büyüme daha yavaş olabilir, ancak kötü senaryo hasarı daha sınırlı kalıyor.");
+    }
+
+    items.push(`Ana risk sürücüsü: ${mainRisk}. Duyarlılık grafiği bu parametrenin sonucu en çok taşıdığını gösteriyor.`);
+
+    if(result.p5 < p.initialCapital * .70){
+      items.push(`P5 senaryoda sermaye ciddi eriyor: ${fmtMoney(p.initialCapital)} → ${fmtMoney(result.p5)}. Bu, kötü bantta stratejinin savunmasız kaldığını gösterir.`);
+    } else {
+      items.push(`P5 senaryoda sermaye kontrol altında: ${fmtMoney(p.initialCapital)} → ${fmtMoney(result.p5)}. Kötü bant yıkıcı seviyeye inmiyor.`);
+    }
+
+    if(result.p75 > p.initialCapital * 1.5){
+      items.push(`P75 senaryoda sermaye güçlü büyüyor: ${fmtMoney(p.initialCapital)} → ${fmtMoney(result.p75)}. İyi bantta strateji anlamlı asimetri üretiyor.`);
+    } else {
+      items.push(`P75 senaryoda büyüme sınırlı: ${fmtMoney(p.initialCapital)} → ${fmtMoney(result.p75)}. Edge pozitif olsa bile büyüme hızı yüksek değil.`);
+    }
+
+    if(result.targetProb >= 60){
+      items.push(`Hedefe ulaşma ihtimali güçlü: ${fmtPct(result.targetProb,1)}. Bu hedef bu parametre setiyle gerçekçi bantta duruyor.`);
+    } else if(result.targetProb >= 30){
+      items.push(`Hedefe ulaşma ihtimali orta seviyede: ${fmtPct(result.targetProb,1)}. Hedef mümkün, fakat sonuç dağılımı hâlâ geniş.`);
+    } else {
+      items.push(`Hedefe ulaşma ihtimali zayıf: ${fmtPct(result.targetProb,1)}. Bu hedef için ya süre, ya edge, ya da risk yapısı yeniden tasarlanmalı.`);
+    }
+
+    $("interpretationList").innerHTML = items.map(x => `<li>${x}</li>`).join("");
+  }
+
+  function runAndRender(){
+    document.querySelectorAll(".run-sim").forEach(btn => btn.disabled = true);
+    try{
+      const result = runSimulation();
+      if(result){
+        renderMetrics(result);
+        renderCharts(result);
+        interpretation(result);
+      }
+    } catch(err){
+      const box = $("errorBox");
+      box.textContent = "Simülasyon çalışırken hata oluştu: " + (err && err.message ? err.message : String(err));
+      box.style.display = "block";
+      console.error(err);
+    } finally {
+      document.querySelectorAll(".run-sim").forEach(btn => btn.disabled = false);
+    }
+  }
+
+  function init(){
+    renderControls();
+    setupControlEvents();
+    setupModes();
+    setupRCalc();
+    document.querySelectorAll(".run-sim").forEach(btn => btn.addEventListener("click", runAndRender));
+    runAndRender();
+  }
+
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+})();
+</script>
+</body>
+</html>
