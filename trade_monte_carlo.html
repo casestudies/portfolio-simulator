@@ -101,6 +101,23 @@ a{color:inherit}
 }
 .btn:hover{transform:translateY(-1px);border-color:var(--terra);box-shadow:0 10px 24px rgba(198,91,54,.10)}
 .btn:disabled{opacity:.55;cursor:progress;transform:none}
+.run-sim.is-running{
+  cursor:progress;
+  box-shadow:0 12px 26px rgba(198,91,54,.14) !important;
+}
+.run-sim.is-running::after{
+  content:"";
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:currentColor;
+  opacity:.74;
+  animation:simPulse .82s ease-in-out infinite alternate;
+}
+@keyframes simPulse{
+  from{transform:scale(.72);opacity:.38}
+  to{transform:scale(1.05);opacity:.92}
+}
 .btn.primary{background:linear-gradient(135deg,var(--terra),#9f3f24);border-color:var(--terra);color:#fffaf0}
 .btn.olive{color:var(--olive);border-color:rgba(100,112,73,.42)}
 .btn.ruby{color:var(--ruby);border-color:rgba(127,39,55,.34)}
@@ -851,6 +868,53 @@ table{width:100%;border-collapse:collapse}
   .metric-value{font-size:21px !important}
 }
 
+.sim-progress{
+  display:none;
+  padding:12px 14px;
+  border:1px solid rgba(205,191,174,.72);
+  background:rgba(255,253,248,.86);
+  box-shadow:var(--shadow-soft);
+  border-radius:18px;
+}
+.sim-progress.active{display:block}
+.sim-progress.strong{
+  border-color:rgba(198,91,54,.34);
+  background:linear-gradient(180deg,rgba(255,253,248,.94),rgba(251,247,239,.94));
+}
+.sim-progress.strong .sim-progress-top{
+  color:var(--terra);
+}
+.sim-progress-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  color:var(--stone);
+  font-size:10px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  font-weight:900;
+  margin-bottom:9px;
+}
+.sim-progress-track{
+  height:8px;
+  overflow:hidden;
+  border:1px solid rgba(205,191,174,.72);
+  background:#eadfce;
+  border-radius:999px;
+}
+.sim-progress-bar{
+  width:0%;
+  height:100%;
+  background:linear-gradient(90deg,var(--terra),var(--gold));
+  border-radius:999px;
+  transition:width .18s ease;
+}
+@media (max-width:620px){
+  .sim-progress{padding:10px 12px;border-radius:14px}
+  .sim-progress-top{font-size:9px}
+}
+
 </style>
 </head>
 <body>
@@ -904,6 +968,14 @@ table{width:100%;border-collapse:collapse}
       <div class="metric-value mono" id="hudHealth">—</div>
       <div class="metric-sub">0–100 model skoru</div>
     </div>
+  </section>
+
+  <section class="sim-progress" id="simProgress" aria-label="Simülasyon ilerleme durumu" aria-live="polite">
+    <div class="sim-progress-top">
+      <span id="simProgressText">Hesaplanıyor</span>
+      <span class="mono" id="simProgressPct">0%</span>
+    </div>
+    <div class="sim-progress-track"><div class="sim-progress-bar" id="simProgressBar"></div></div>
   </section>
 
   <nav class="mode-tabs" aria-label="Parametre modları">
@@ -1146,7 +1218,23 @@ table{width:100%;border-collapse:collapse}
     {group:"advanced",key:"maxDailyLossPct",label:"Günlük Zarar Limiti",code:"maxDailyLossPct",min:0.5,max:20,step:0.25,value:5,suffix:"%",tone:"olive",help:"Gün içi zarar bu eşiğe ulaşınca o gün yeni trade açılmaz. Kötü serileri keser ama toparlanma hızını da sınırlayabilir."}
   ];
 
-  const state = {charts:{}, last:null};
+  const EXECUTION_LIMITS = {
+    mainThreadMaxSteps: 500000,
+    workerProgressSteps: 2000000,
+    workerStrongProgressSteps: 5000000,
+    delayedProgressMs: 220
+  };
+
+  const state = {
+    charts:{},
+    last:null,
+    worker:null,
+    workerUrl:null,
+    progressTimer:null,
+    progressVisible:false,
+    lastProgressPct:0,
+    lastProgressLabel:"Hesaplanıyor"
+  };
 
   function $(id){ return document.getElementById(id); }
   function clamp(v,min,max){ return Math.min(max, Math.max(min, v)); }
@@ -1615,8 +1703,8 @@ table{width:100%;border-collapse:collapse}
     if(typeof Chart === "undefined") return;
     Chart.defaults.font.family = "Inter";
     Chart.defaults.color = "#6f675d";
-    const fan = sampledFan(result);
-    const uw = sampledUnderwater(result);
+    const fan = result.fan || sampledFan(result);
+    const uw = result.uw || sampledUnderwater(result);
     const moneyTick = value => {
       const v = Number(value);
       if(Math.abs(v) >= 1000000) return "₺" + (v/1000000).toFixed(1) + "M";
@@ -1759,23 +1847,538 @@ table{width:100%;border-collapse:collapse}
     $("interpretationList").innerHTML = items.map(x => `<li>${x}</li>`).join("");
   }
 
+  function setSimulationBusy(active, pct, label, options){
+    const progress = $("simProgress");
+    const progressBar = $("simProgressBar");
+    const progressPct = $("simProgressPct");
+    const progressText = $("simProgressText");
+    const percent = clamp(isFinite(pct) ? pct : 0, 0, 100);
+    const opts = options || {};
+    const showProgress = !!opts.showProgress;
+
+    state.lastProgressPct = percent;
+    state.lastProgressLabel = label || "Hesaplanıyor";
+
+    document.querySelectorAll(".run-sim").forEach(btn => {
+      if(active){
+        if(!btn.dataset.originalHtml) btn.dataset.originalHtml = btn.innerHTML;
+        btn.disabled = true;
+        btn.classList.add("is-running");
+        btn.setAttribute("aria-busy", "true");
+        btn.innerHTML = opts.buttonLabel || "Hesaplanıyor...";
+      } else {
+        btn.disabled = false;
+        btn.classList.remove("is-running");
+        btn.setAttribute("aria-busy", "false");
+        if(btn.dataset.originalHtml){
+          btn.innerHTML = btn.dataset.originalHtml;
+          delete btn.dataset.originalHtml;
+        }
+      }
+    });
+
+    if(progress){
+      progress.classList.toggle("active", !!active && showProgress);
+      progress.classList.toggle("strong", !!active && !!opts.strong);
+      progress.setAttribute("aria-hidden", active && showProgress ? "false" : "true");
+    }
+    if(progressBar) progressBar.style.width = percent.toFixed(1) + "%";
+    if(progressPct) progressPct.textContent = Math.round(percent) + "%";
+    if(progressText) progressText.textContent = label || "Hesaplanıyor";
+    if(active && $("runMeta")){
+      if(showProgress){
+        $("runMeta").textContent = (opts.strong ? "Yoğun hesap" : "Hesaplanıyor") + " · " + Math.round(percent) + "%";
+      } else {
+        $("runMeta").textContent = opts.metaLabel || "Hesaplanıyor · arka plan";
+      }
+    }
+    if(!active && $("runMeta")) $("runMeta").textContent = "Hazır";
+  }
+
+  function resetProgressTimer(){
+    if(state.progressTimer){
+      clearTimeout(state.progressTimer);
+      state.progressTimer = null;
+    }
+    state.progressVisible = false;
+    state.lastProgressPct = 0;
+    state.lastProgressLabel = "Hesaplanıyor";
+  }
+
+  function estimateSimulationSteps(p){
+    return Math.max(0, Math.round((Number(p.iterations) || 0) * (Number(p.days) || 0) * (Number(p.tradesPerDay) || 0)));
+  }
+
+  function executionProfile(p){
+    const steps = estimateSimulationSteps(p);
+    const workerAvailable = typeof Worker !== "undefined" && typeof Blob !== "undefined" && typeof URL !== "undefined";
+    const useWorker = workerAvailable && steps >= EXECUTION_LIMITS.mainThreadMaxSteps;
+    const strong = steps >= EXECUTION_LIMITS.workerStrongProgressSteps;
+    const wantsProgress = useWorker && steps >= EXECUTION_LIMITS.workerProgressSteps;
+    return {
+      steps,
+      useWorker,
+      reportProgress:wantsProgress,
+      strong,
+      progressDelay:strong ? 0 : EXECUTION_LIMITS.delayedProgressMs,
+      buttonLabel: strong ? "Yoğun hesaplanıyor..." : "Hesaplanıyor...",
+      metaLabel: useWorker ? "Hesaplanıyor · arka plan" : "Hesaplanıyor · hızlı mod",
+      progressLabel: strong ? "Yoğun simülasyon hesaplanıyor" : "Simülasyon hesaplanıyor"
+    };
+  }
+
+  function showProgressForProfile(profile){
+    state.progressVisible = true;
+    setSimulationBusy(true, state.lastProgressPct, state.lastProgressLabel || profile.progressLabel, {
+      showProgress:true,
+      strong:profile.strong,
+      buttonLabel:profile.buttonLabel,
+      metaLabel:profile.metaLabel
+    });
+  }
+
+  function scheduleProgressReveal(profile){
+    resetProgressTimer();
+    if(!profile.reportProgress) return;
+    if(profile.progressDelay <= 0){
+      showProgressForProfile(profile);
+      return;
+    }
+    state.progressTimer = window.setTimeout(() => {
+      showProgressForProfile(profile);
+    }, profile.progressDelay);
+  }
+
+  function finishSimulationBusy(){
+    resetProgressTimer();
+    setSimulationBusy(false, 0, "Hazır");
+  }
+
+  function cleanupSimulationWorker(terminate){
+    resetProgressTimer();
+    if(state.worker){
+      if(terminate) state.worker.terminate();
+      state.worker = null;
+    }
+    if(state.workerUrl){
+      URL.revokeObjectURL(state.workerUrl);
+      state.workerUrl = null;
+    }
+  }
+
+  function createSimulationWorker(){
+    const workerCode = `
+      "use strict";
+
+      function clamp(v,min,max){ return Math.min(max, Math.max(min, v)); }
+
+      function mulberry32(seed){
+        let t = seed >>> 0;
+        return function(){
+          t += 0x6D2B79F5;
+          let r = Math.imul(t ^ (t >>> 15), 1 | t);
+          r ^= r + Math.imul(r ^ (r >>> 7), 61 | r);
+          return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+        };
+      }
+
+      function createRng(){
+        const seed = Math.floor(Date.now() % 2147483647);
+        const rand = mulberry32(seed);
+        let spare = null;
+        return {
+          seed,
+          u(){ return rand(); },
+          normal(){
+            if(spare !== null){ const s = spare; spare = null; return s; }
+            let u = 0, v = 0;
+            while(u === 0) u = rand();
+            while(v === 0) v = rand();
+            const mag = Math.sqrt(-2 * Math.log(u));
+            const z0 = mag * Math.cos(2 * Math.PI * v);
+            spare = mag * Math.sin(2 * Math.PI * v);
+            return z0;
+          }
+        };
+      }
+
+      function poisson(lambda, rng){
+        if(lambda <= 0) return 0;
+        if(lambda > 30){
+          return Math.max(0, Math.round(lambda + Math.sqrt(lambda) * rng.normal()));
+        }
+        const L = Math.exp(-lambda);
+        let k = 0, p = 1;
+        do { k++; p *= rng.u(); } while(p > L);
+        return k - 1;
+      }
+
+      function percentile(sorted, pct){
+        if(!sorted.length) return NaN;
+        const idx = (sorted.length - 1) * pct;
+        const lo = Math.floor(idx), hi = Math.ceil(idx);
+        if(lo === hi) return sorted[lo];
+        return sorted[lo] + (sorted[hi] - sorted[lo]) * (idx - lo);
+      }
+
+      function expectedR(p){
+        const winP = p.winRate / 100;
+        const beP = p.breakEvenRate / 100;
+        const lossP = Math.max(0, 1 - winP - beP);
+        return winP * p.avgWinR - lossP * p.avgLossR - p.tradeCostR;
+      }
+
+      function riskAmount(equity, p){
+        const base = p.riskMode === "fixed" ? p.initialCapital : equity;
+        return Math.max(0, Math.min(equity, base * (p.riskPerTradePct / 100)));
+      }
+
+      function buildSampleDays(days){
+        const step = Math.max(1, Math.ceil(days / 70));
+        const list = [];
+        for(let d=0; d<=days; d+=step) list.push(d);
+        if(list[list.length - 1] !== days) list.push(days);
+        return list;
+      }
+
+      function mean(values){
+        if(!values.length) return 0;
+        let sum = 0;
+        for(let i=0; i<values.length; i++) sum += values[i];
+        return sum / values.length;
+      }
+
+      function buildPercentileSeries(matrix, sampleDays, iterations, isDrawdown){
+        const series = isDrawdown
+          ? {median:[], bad:[]}
+          : {p5:[], p25:[], p50:[], p75:[], p95:[]};
+        const labels = sampleDays.map(String);
+
+        for(let s=0; s<sampleDays.length; s++){
+          const values = new Float64Array(iterations);
+          const offset = s * iterations;
+          for(let i=0; i<iterations; i++) values[i] = matrix[offset + i];
+          values.sort();
+
+          if(isDrawdown){
+            series.median.push(-percentile(values, .50));
+            series.bad.push(-percentile(values, .95));
+          } else {
+            series.p5.push(percentile(values, .05));
+            series.p25.push(percentile(values, .25));
+            series.p50.push(percentile(values, .50));
+            series.p75.push(percentile(values, .75));
+            series.p95.push(percentile(values, .95));
+          }
+        }
+
+        return {labels, series};
+      }
+
+      function runSimulationInWorker(p, reportProgress){
+        const rng = createRng();
+        const days = Math.round(p.days);
+        const iterations = Math.round(p.iterations);
+        const initial = p.initialCapital;
+        const ruinLevel = initial * (p.ruinThresholdPct / 100);
+        const finals = new Float64Array(iterations);
+        const dds = new Float64Array(iterations);
+        const tuws = new Float64Array(iterations);
+        const streaks = new Float64Array(iterations);
+        const sampleDays = buildSampleDays(days);
+        const sampleCount = sampleDays.length;
+        const fanMatrix = new Float64Array(sampleCount * iterations);
+        const ddMatrix = new Float32Array(sampleCount * iterations);
+        const progressEvery = Math.max(1, Math.floor(iterations / 100));
+
+        let targetHits = 0, profitCount = 0, ruinCount = 0;
+        let totalTrades = 0, grossProfitR = 0, grossLossR = 0;
+
+        for(let i=0; i<iterations; i++){
+          let equity = initial;
+          let peak = initial;
+          let maxDD = 0;
+          let maxStreak = 0;
+          let streak = 0;
+          let currentTUW = 0;
+          let maxTUW = 0;
+          let hitTarget = initial >= p.targetCapital;
+          let hitRuin = initial <= ruinLevel;
+          let sampleCursor = 1;
+
+          fanMatrix[i] = equity;
+          ddMatrix[i] = 0;
+
+          for(let d=1; d<=days; d++){
+            let dd = 0;
+
+            if(equity <= 0){
+              equity = 0;
+              currentTUW += 1;
+              maxTUW = Math.max(maxTUW, currentTUW);
+              dd = 100;
+              hitRuin = true;
+
+              if(sampleCursor < sampleCount && d === sampleDays[sampleCursor]){
+                const offset = sampleCursor * iterations + i;
+                fanMatrix[offset] = 0;
+                ddMatrix[offset] = 100;
+                sampleCursor += 1;
+              }
+              continue;
+            }
+
+            const dayStart = equity;
+            let dailyPnl = 0;
+            const shock = rng.u() < p.shockProbability / 100;
+            if(shock && p.shockImpactR > 0){
+              const risk = riskAmount(equity, p);
+              const shockLoss = risk * p.shockImpactR;
+              equity = Math.max(0, equity - shockLoss);
+              dailyPnl -= shockLoss;
+              grossLossR += p.shockImpactR;
+            }
+
+            const trades = Math.max(0, poisson(p.tradesPerDay, rng));
+            for(let t=0; t<trades; t++){
+              if(equity <= 0) break;
+              if((-dailyPnl / Math.max(dayStart,1)) * 100 >= p.maxDailyLossPct) break;
+
+              const u = rng.u() * 100;
+              let r = 0;
+              if(u < p.breakEvenRate){
+                r = 0;
+                streak = 0;
+              } else if(u < p.breakEvenRate + p.winRate){
+                const noise = 1 + rng.normal() * 0.18 * p.volatilityFactor;
+                r = Math.max(0, p.avgWinR * noise);
+                streak = 0;
+                grossProfitR += r;
+              } else {
+                const lossMultiplier = Math.max(0.01, Math.exp(rng.normal() * 0.25 * p.volatilityFactor));
+                r = -p.avgLossR * lossMultiplier;
+                streak += 1;
+                maxStreak = Math.max(maxStreak, streak);
+                grossLossR += Math.abs(r);
+              }
+
+              const risk = riskAmount(equity, p);
+              const netR = r - p.tradeCostR;
+              grossLossR += p.tradeCostR;
+              const pnl = risk * netR;
+              equity = Math.max(0, equity + pnl);
+              dailyPnl += pnl;
+              totalTrades += 1;
+
+              if(equity >= p.targetCapital) hitTarget = true;
+              if(equity <= ruinLevel) hitRuin = true;
+            }
+
+            if(equity >= peak){
+              peak = equity;
+              currentTUW = 0;
+            } else {
+              currentTUW += 1;
+              maxTUW = Math.max(maxTUW, currentTUW);
+            }
+
+            dd = peak > 0 ? (peak - equity) / peak * 100 : 0;
+            maxDD = Math.max(maxDD, dd);
+            if(equity >= p.targetCapital) hitTarget = true;
+            if(equity <= ruinLevel) hitRuin = true;
+
+            if(sampleCursor < sampleCount && d === sampleDays[sampleCursor]){
+              const offset = sampleCursor * iterations + i;
+              fanMatrix[offset] = equity;
+              ddMatrix[offset] = dd;
+              sampleCursor += 1;
+            }
+          }
+
+          finals[i] = equity;
+          dds[i] = maxDD;
+          tuws[i] = maxTUW;
+          streaks[i] = maxStreak;
+          if(hitTarget) targetHits += 1;
+          if(hitRuin) ruinCount += 1;
+          if(equity > initial) profitCount += 1;
+
+          if(reportProgress && i % progressEvery === 0){
+            self.postMessage({type:"progress", pct:(i / iterations) * 88, current:i, total:iterations});
+          }
+        }
+
+        if(reportProgress) self.postMessage({type:"progress", pct:90, current:iterations, total:iterations});
+
+        finals.sort();
+        dds.sort();
+        tuws.sort();
+        streaks.sort();
+
+        const fan = buildPercentileSeries(fanMatrix, sampleDays, iterations, false);
+        const uw = buildPercentileSeries(ddMatrix, sampleDays, iterations, true);
+
+        const p5 = percentile(finals,.05), p25 = percentile(finals,.25), p50 = percentile(finals,.50), p75 = percentile(finals,.75), p95 = percentile(finals,.95);
+        const avgDD = mean(dds);
+        const worstDD = dds[dds.length-1] || 0;
+        const avgTUW = mean(tuws);
+        const maxTUW = tuws[tuws.length-1] || 0;
+        const avgStreak = mean(streaks);
+        const maxStreak = streaks[streaks.length-1] || 0;
+        const er = expectedR(p);
+        const targetProb = targetHits / iterations * 100;
+        const profitProb = profitCount / iterations * 100;
+        const ruinProb = ruinCount / iterations * 100;
+        const pf = grossLossR > 0 ? grossProfitR / grossLossR : 0;
+        const health = clamp(
+          50 + er * 22 + (profitProb - 50) * .24 + targetProb * .10 - ruinProb * .45 - Math.max(0, avgDD - 18) * .50 - Math.max(0, avgTUW - 45) * .10,
+          0, 100
+        );
+
+        return {
+          p,
+          seed:rng.seed,
+          fan,
+          uw,
+          finals,
+          dds,
+          tuws,
+          streaks,
+          p5,p25,p50,p75,p95,
+          mean:mean(finals),
+          avgDD,worstDD,avgTUW,maxTUW,avgStreak,maxStreak,
+          er,targetProb,profitProb,ruinProb,pf,health,totalTrades
+        };
+      }
+
+      self.onmessage = function(event){
+        try{
+          const p = event.data.p;
+          const reportProgress = !!event.data.reportProgress;
+          const result = runSimulationInWorker(p, reportProgress);
+          if(reportProgress) self.postMessage({type:"progress", pct:100, current:Math.round(p.iterations), total:Math.round(p.iterations)});
+          self.postMessage(
+            {type:"result", result},
+            [result.finals.buffer, result.dds.buffer, result.tuws.buffer, result.streaks.buffer]
+          );
+        } catch(err){
+          self.postMessage({type:"error", message:err && err.message ? err.message : String(err)});
+        }
+      };
+    `;
+
+    const blob = new Blob([workerCode], {type:"application/javascript"});
+    const url = URL.createObjectURL(blob);
+    state.workerUrl = url;
+    state.worker = new Worker(url);
+    return state.worker;
+  }
+
   function runAndRender(){
-    document.querySelectorAll(".run-sim").forEach(btn => btn.disabled = true);
+    const errorBox = $("errorBox");
+    errorBox.style.display = "none";
+
+    const p = getParams();
+    if(p.targetCapital <= 0 || p.initialCapital <= 0){
+      errorBox.textContent = "Başlangıç ve hedef sermaye pozitif olmalı.";
+      errorBox.style.display = "block";
+      return;
+    }
+
+    cleanupSimulationWorker(true);
+    const profile = executionProfile(p);
+
+    setSimulationBusy(true, 0, profile.progressLabel, {
+      showProgress:false,
+      strong:profile.strong,
+      buttonLabel:profile.buttonLabel,
+      metaLabel:profile.metaLabel
+    });
+
+    if(!profile.useWorker){
+      window.requestAnimationFrame(() => {
+        window.setTimeout(() => {
+          try{
+            const result = runSimulation();
+            if(result){
+              state.last = result;
+              finishSimulationBusy();
+              renderMetrics(result);
+              renderCharts(result);
+              interpretation(result);
+            } else {
+              finishSimulationBusy();
+            }
+          } catch(err){
+            finishSimulationBusy();
+            errorBox.textContent = "Simülasyon çalışırken hata oluştu: " + (err && err.message ? err.message : String(err));
+            errorBox.style.display = "block";
+            console.error(err);
+          }
+        }, 0);
+      });
+      return;
+    }
+
+    let worker;
     try{
-      const result = runSimulation();
-      if(result){
+      worker = createSimulationWorker();
+    } catch(err){
+      finishSimulationBusy();
+      errorBox.textContent = "Worker başlatılamadı: " + (err && err.message ? err.message : String(err));
+      errorBox.style.display = "block";
+      console.error(err);
+      return;
+    }
+
+    scheduleProgressReveal(profile);
+
+    worker.onmessage = function(event){
+      if(worker !== state.worker) return;
+      const msg = event.data || {};
+
+      if(msg.type === "progress"){
+        const label = profile.strong ? "Yoğun simülasyon hesaplanıyor" : "Simülasyon hesaplanıyor";
+        state.lastProgressPct = msg.pct;
+        state.lastProgressLabel = label;
+        setSimulationBusy(true, msg.pct, label, {
+          showProgress:state.progressVisible,
+          strong:profile.strong,
+          buttonLabel:profile.buttonLabel,
+          metaLabel:profile.metaLabel
+        });
+        return;
+      }
+
+      if(msg.type === "error"){
+        cleanupSimulationWorker(true);
+        finishSimulationBusy();
+        errorBox.textContent = "Simülasyon çalışırken hata oluştu: " + msg.message;
+        errorBox.style.display = "block";
+        return;
+      }
+
+      if(msg.type === "result"){
+        const result = msg.result;
+        state.last = result;
+        cleanupSimulationWorker(true);
+        finishSimulationBusy();
         renderMetrics(result);
         renderCharts(result);
         interpretation(result);
       }
-    } catch(err){
-      const box = $("errorBox");
-      box.textContent = "Simülasyon çalışırken hata oluştu: " + (err && err.message ? err.message : String(err));
-      box.style.display = "block";
+    };
+
+    worker.onerror = function(err){
+      if(worker !== state.worker) return;
+      cleanupSimulationWorker(true);
+      finishSimulationBusy();
+      errorBox.textContent = "Simülasyon worker hatası: " + (err && err.message ? err.message : String(err));
+      errorBox.style.display = "block";
       console.error(err);
-    } finally {
-      document.querySelectorAll(".run-sim").forEach(btn => btn.disabled = false);
-    }
+    };
+
+    worker.postMessage({p, reportProgress:profile.reportProgress});
   }
 
   function init(){
