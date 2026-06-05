@@ -915,6 +915,464 @@ table{width:100%;border-collapse:collapse}
   .sim-progress-top{font-size:9px}
 }
 
+
+/* v12: scenario presets, clearer risk translation, sensitivity explanation, print-grade PDF export */
+.preset-panel{
+  margin:0 0 16px;
+  padding:14px;
+  border:1px solid rgba(226,216,201,.95);
+  background:linear-gradient(180deg,#fffefa,#fbf6ee);
+  border-radius:18px;
+  box-shadow:0 8px 20px rgba(56,42,25,.035);
+}
+.preset-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+  padding-bottom:12px;
+  margin-bottom:12px;
+  border-bottom:1px solid rgba(226,216,201,.78);
+}
+.preset-title{
+  color:var(--ink);
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+}
+.preset-head p{
+  color:var(--stone);
+  font-size:11px;
+  line-height:1.45;
+  margin-top:5px;
+}
+.preset-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+}
+.preset-card{
+  position:relative;
+  overflow:hidden;
+  min-height:128px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  align-items:flex-start;
+  text-align:left;
+  border:1px solid rgba(226,216,201,.95);
+  background:#fffdf8;
+  border-radius:14px;
+  padding:13px;
+  color:var(--ink);
+  cursor:pointer;
+  transition:border-color .18s ease,box-shadow .18s ease,transform .18s ease,background .18s ease;
+}
+.preset-card::after{
+  content:"";
+  position:absolute;
+  inset:auto -28px -36px auto;
+  width:92px;
+  height:92px;
+  border-radius:50%;
+  background:rgba(198,91,54,.055);
+  pointer-events:none;
+}
+.preset-card:hover{
+  transform:translateY(-1px);
+  border-color:rgba(198,91,54,.38);
+  box-shadow:0 10px 24px rgba(56,42,25,.055);
+}
+.preset-card.active{
+  border-color:rgba(198,91,54,.56);
+  background:linear-gradient(180deg,#fffdf8,#fbf1e9);
+  box-shadow:inset 0 0 0 1px rgba(198,91,54,.10),0 10px 22px rgba(198,91,54,.06);
+}
+.preset-name{
+  position:relative;
+  z-index:1;
+  font-size:10px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  font-weight:900;
+}
+.preset-desc{
+  position:relative;
+  z-index:1;
+  color:var(--stone);
+  font-size:11px;
+  line-height:1.42;
+}
+.preset-meta{
+  position:relative;
+  z-index:1;
+  margin-top:auto;
+  color:var(--muted);
+  font-size:9px;
+  line-height:1.35;
+  font-weight:800;
+}
+.sensitivity-note{
+  margin-top:12px;
+  padding:12px 13px;
+  border:1px solid rgba(100,112,73,.18);
+  background:rgba(100,112,73,.055);
+  border-radius:14px;
+  color:var(--stone);
+  font-size:11px;
+  line-height:1.55;
+}
+.sensitivity-note strong{color:var(--ink)}
+.sensitivity-note .sens-list{
+  display:grid;
+  gap:6px;
+  margin-top:8px;
+}
+.sensitivity-note .sens-item{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  border-top:1px solid rgba(226,216,201,.70);
+  padding-top:6px;
+}
+.sensitivity-note .sens-item span:first-child{
+  color:var(--ink);
+  font-weight:800;
+}
+@media (max-width:1240px){
+  .preset-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:700px){
+  .preset-head{display:grid}
+  .preset-grid{grid-template-columns:1fr}
+}
+
+
+/* v13: collapsible presets, printable parameter ledger, interactive sensitivity reading */
+.preset-drawer{
+  padding:0;
+}
+.preset-summary{
+  list-style:none;
+  cursor:pointer;
+  padding:14px;
+  margin:0;
+  user-select:none;
+}
+.preset-summary::-webkit-details-marker{display:none}
+.preset-summary::after{
+  content:"Aç";
+  align-self:center;
+  border:1px solid rgba(205,191,174,.78);
+  background:#fffdf8;
+  color:var(--terra);
+  border-radius:999px;
+  padding:6px 10px;
+  font-size:9px;
+  letter-spacing:.10em;
+  text-transform:uppercase;
+  font-weight:900;
+  white-space:nowrap;
+}
+.preset-drawer[open] .preset-summary{
+  border-bottom:1px solid rgba(226,216,201,.78);
+  margin-bottom:0;
+}
+.preset-drawer[open] .preset-summary::after{content:"Kapat"}
+.preset-body{
+  padding:12px 14px 14px;
+}
+.print-params{
+  display:none;
+}
+.print-param-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:9px;
+}
+.print-param{
+  border:1px solid rgba(226,216,201,.88);
+  background:#fffdf8;
+  border-radius:12px;
+  padding:10px 11px;
+}
+.print-param-label{
+  color:var(--stone);
+  font-size:8px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  font-weight:900;
+  line-height:1.18;
+}
+.print-param-value{
+  margin-top:5px;
+  color:var(--ink);
+  font-size:12px;
+  font-weight:850;
+}
+.print-param-note{
+  margin-top:3px;
+  color:var(--muted);
+  font-size:9px;
+  line-height:1.25;
+}
+.sensitivity-note{
+  cursor:default;
+}
+.sensitivity-note .sens-selected{
+  border:1px solid rgba(198,91,54,.20);
+  background:rgba(198,91,54,.055);
+  border-radius:12px;
+  padding:10px 11px;
+  color:var(--stone);
+}
+.sensitivity-note .sens-selected strong{
+  display:block;
+  margin-bottom:4px;
+  color:var(--ink);
+  font-size:10px;
+  letter-spacing:.10em;
+  text-transform:uppercase;
+}
+.sensitivity-note .sens-selected .mono{
+  color:var(--terra);
+}
+.sensitivity-note .sens-action{
+  margin-top:7px;
+  color:var(--olive);
+  font-weight:800;
+}
+.sens-item{
+  cursor:pointer;
+}
+.sens-item.active{
+  color:var(--terra);
+}
+@media (max-width:760px){
+  .preset-summary{
+    display:grid;
+  }
+  .preset-summary::after{
+    justify-self:start;
+  }
+  .print-param-grid{grid-template-columns:1fr 1fr}
+}
+
+@page{
+  size:A4 portrait;
+  margin:12mm 10mm;
+}
+@media print{
+  html,body{
+    width:auto !important;
+    min-width:0 !important;
+    overflow:visible !important;
+    background:#fff !important;
+    padding:0 !important;
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+  }
+  .app{
+    max-width:none !important;
+    width:100% !important;
+    gap:9mm !important;
+    display:block !important;
+  }
+  .hero{
+    display:block !important;
+    padding:0 0 7mm !important;
+    margin:0 0 7mm !important;
+    border:0 !important;
+    border-bottom:1px solid #ddd !important;
+    box-shadow:none !important;
+    background:#fff !important;
+    border-radius:0 !important;
+    break-inside:avoid-page !important;
+    page-break-inside:avoid !important;
+  }
+  .hero h1{
+    font-size:30pt !important;
+    line-height:.96 !important;
+  }
+  .hero-copy{
+    max-width:none !important;
+    font-size:9pt !important;
+  }
+  .hero-actions,
+  .mode-tabs,
+  .footer-actions,
+  .btn,
+  .sim-progress,
+  .preset-panel,
+  #basic,
+  #advanced,
+  #concepts,
+  .error-box{
+    display:none !important;
+  }
+  .print-params{
+    display:block !important;
+    margin:0 0 7mm !important;
+    padding:0 0 6mm !important;
+    border-bottom:1px solid #ddd !important;
+    background:#fff !important;
+    break-inside:avoid-page !important;
+    page-break-inside:avoid !important;
+  }
+  .print-params-head{
+    display:flex !important;
+    align-items:flex-start !important;
+    justify-content:space-between !important;
+    gap:6mm !important;
+    padding:0 0 3mm !important;
+    margin:0 0 4mm !important;
+    border-bottom:1px solid #ddd !important;
+  }
+  .print-params .panel-title{
+    font-size:9pt !important;
+    letter-spacing:.10em !important;
+  }
+  .print-params .panel-copy{
+    font-size:8pt !important;
+    margin-top:1.5mm !important;
+    color:#555 !important;
+  }
+  .print-param-grid{
+    display:grid !important;
+    grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+    gap:2.5mm !important;
+  }
+  .print-param{
+    border:1px solid #ddd !important;
+    background:#fff !important;
+    border-radius:0 !important;
+    padding:2.2mm !important;
+    break-inside:avoid-page !important;
+    page-break-inside:avoid !important;
+  }
+  .print-param-label{
+    font-size:6.6pt !important;
+    letter-spacing:.08em !important;
+    color:#555 !important;
+  }
+  .print-param-value{
+    font-size:8.5pt !important;
+    margin-top:1mm !important;
+    color:#000 !important;
+  }
+  .print-param-note{
+    font-size:6.6pt !important;
+    margin-top:.6mm !important;
+    color:#666 !important;
+  }
+  .result-strip{
+    position:static !important;
+    display:grid !important;
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+    gap:4mm !important;
+    padding:0 !important;
+    margin:0 0 7mm !important;
+    overflow:visible !important;
+    background:#fff !important;
+    border:0 !important;
+    box-shadow:none !important;
+    border-radius:0 !important;
+    break-inside:avoid-page !important;
+    page-break-inside:avoid !important;
+  }
+  .metric,
+  .stat-card,
+  .callout{
+    min-height:auto !important;
+    padding:4mm !important;
+    background:#fff !important;
+    box-shadow:none !important;
+    border:1px solid #ddd !important;
+    border-radius:0 !important;
+    break-inside:avoid-page !important;
+    page-break-inside:avoid !important;
+  }
+  .metric-value,
+  .stat-value{
+    font-size:17pt !important;
+  }
+  .panel,
+  .chart-shell,
+  .table-wrap,
+  .interpretation{
+    width:100% !important;
+    margin:0 0 8mm !important;
+    padding:0 !important;
+    background:#fff !important;
+    border:0 !important;
+    box-shadow:none !important;
+    border-radius:0 !important;
+    overflow:visible !important;
+    break-inside:avoid-page !important;
+    page-break-inside:avoid !important;
+  }
+  .panel-head,
+  .chart-head{
+    display:block !important;
+    padding:0 0 3mm !important;
+    margin:0 0 4mm !important;
+    border-bottom:1px solid #ddd !important;
+  }
+  .results-grid{
+    display:grid !important;
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+    gap:4mm !important;
+    break-inside:auto !important;
+  }
+  .chart-grid,
+  .chart-grid.equal,
+  .interpretation{
+    display:block !important;
+  }
+  .chart-shell{
+    padding:0 !important;
+    page-break-inside:avoid !important;
+    break-inside:avoid-page !important;
+  }
+  .canvas-wrap,
+  .canvas-wrap.small{
+    height:78mm !important;
+    max-height:78mm !important;
+    page-break-inside:avoid !important;
+    break-inside:avoid-page !important;
+  }
+  .sensitivity-note{
+    border:1px solid #ddd !important;
+    background:#fff !important;
+    border-radius:0 !important;
+    padding:3mm !important;
+    break-inside:avoid-page !important;
+  }
+  .sensitivity-note .sens-selected{
+    border:1px solid #ddd !important;
+    background:#fff !important;
+    border-radius:0 !important;
+  }
+  .fin-table{
+    min-width:0 !important;
+    width:100% !important;
+    font-size:8pt !important;
+  }
+  .fin-table th,
+  .fin-table td{
+    padding:2.4mm !important;
+    white-space:normal !important;
+  }
+  tr,td,th{
+    break-inside:avoid-page !important;
+    page-break-inside:avoid !important;
+  }
+  canvas{
+    max-width:100% !important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -978,6 +1436,17 @@ table{width:100%;border-collapse:collapse}
     <div class="sim-progress-track"><div class="sim-progress-bar" id="simProgressBar"></div></div>
   </section>
 
+  <section class="print-params" id="printParams" aria-label="PDF rapor parametre seti">
+    <div class="print-params-head">
+      <div>
+        <div class="panel-title">Rapor Parametre Seti</div>
+        <p class="panel-copy">PDF çıktısında kullanılan güncel model parametreleri. Bu tablo ekrandaki seçili değerlerden otomatik üretilir.</p>
+      </div>
+      <span class="badge" id="printPresetBadge">Preset: özel</span>
+    </div>
+    <div class="print-param-grid" id="printParamGrid"></div>
+  </section>
+
   <nav class="mode-tabs" aria-label="Parametre modları">
     <button class="mode-btn active" type="button" data-mode="basic">Temel Mod · Strateji Çekirdeği</button>
     <button class="mode-btn" type="button" data-mode="advanced">Gelişmiş Risk Ayarları · Ek Katman</button>
@@ -1006,6 +1475,19 @@ table{width:100%;border-collapse:collapse}
           </select>
         </div>
       </div>
+
+      <details class="preset-panel preset-drawer" aria-label="Senaryo presetleri">
+        <summary class="preset-head preset-summary">
+          <div>
+            <div class="preset-title">Senaryo Preset’leri</div>
+            <p>Tek tıkla temel ve gelişmiş parametre setini uygular. Açmak için tıkla; dropdown değil, tüm presetler panel içinde görünür.</p>
+          </div>
+          <span class="badge" id="activePresetBadge">Preset: özel</span>
+        </summary>
+        <div class="preset-body">
+          <div class="preset-grid" id="scenarioPresets"></div>
+        </div>
+      </details>
 
       <div class="control-grid" id="basicControls"></div>
     </div>
@@ -1153,11 +1635,12 @@ table{width:100%;border-collapse:collapse}
       </div>
       <div class="canvas-wrap small"><canvas id="outcomeChart"></canvas></div>
     </div>
-    <div class="chart-shell">
+    <div class="chart-shell sensitivity-shell">
       <div class="chart-head">
-        <div><div class="chart-title">Parametre Duyarlılığı</div><div class="chart-copy">Bu modelde sonucu en çok hangi parametrenin taşıdığını gösterir.</div></div>
+        <div><div class="chart-title">Parametre Duyarlılığı · Etki Haritası</div><div class="chart-copy">Barlara tıklayarak her parametrenin sonucu hangi kanaldan etkilediğini oku. Etiketler doğrudan ayarladığın parametreleri adresler.</div></div>
       </div>
       <div class="canvas-wrap small"><canvas id="sensitivityChart"></canvas></div>
+      <div class="sensitivity-note" id="sensitivityNarrative">Simülasyonu çalıştırınca en etkili parametreler burada açıklanır.</div>
     </div>
   </section>
 
@@ -1170,7 +1653,7 @@ table{width:100%;border-collapse:collapse}
     </div>
     <div class="callout">
       <h3>Parametre Mantığı</h3>
-      <p><strong>Temel Mod</strong> stratejinin edge, büyüme hızı ve hedefe ulaşma ihtimalini belirler. <strong>Gelişmiş Risk Ayarları</strong> ise kötü günlerin etkisini ve dağılım genişliğini kontrol eder. Maliyet R cinsinden ölçüldüğü için stop mesafesini bilmeden equity üzerinden hatalı komisyon kesilmez.</p>
+      <p><strong>Temel Mod</strong> stratejinin edge, büyüme hızı ve hedefe ulaşma ihtimalini belirler. <strong>Trade Başına Risk</strong>, 1R kaybın sermayenin yüzde kaçı olduğunu söyler; başlangıç sermayesindeki nominal karşılığı kontrol kartında canlı gösterilir. Risk artışı bir noktaya kadar büyümeyi hızlandırabilir, fakat kritik eşiğin üzerinde drawdown, ruin olasılığı ve bileşik kayıp geometrisi hızla kötüleşebilir. <strong>Gelişmiş Risk Ayarları</strong> kötü günlerin etkisini ve dağılım genişliğini kontrol eder. Maliyet R cinsinden ölçüldüğü için stop mesafesini bilmeden equity üzerinden hatalı komisyon kesilmez.</p>
     </div>
   </section>
 
@@ -1200,23 +1683,90 @@ table{width:100%;border-collapse:collapse}
   "use strict";
 
   const controls = [
-    {group:"basic",key:"days",label:"Gün Sayısı",code:"days",min:30,max:365,step:1,value:180,suffix:"gün",tone:"terra",help:"Simülasyonun kaç işlem günü süreceğini belirler. 180 gün ve günlük 3 trade, yaklaşık 540 trade yolu üretir."},
+    {group:"basic",key:"days",label:"Gün Sayısı",code:"days",min:30,max:365,step:1,value:126,suffix:"gün",tone:"terra",help:"Simülasyonun kaç işlem günü süreceğini belirler. Varsayılan 126 gün yaklaşık 6 aylık işlem takvimidir; günlük trade sayısıyla birlikte toplam trade adımını oluşturur."},
     {group:"basic",key:"initialCapital",label:"Başlangıç Sermayesi",code:"initialCapital",min:1000,max:5000000,step:1000,value:100000,prefix:"₺",tone:"olive",help:"Tüm yollar bu sermayeyle başlar. Sabit risk modunda nominal risk bu tutara göre korunur."},
-    {group:"basic",key:"iterations",label:"Simülasyon Sayısı",code:"iterations",min:500,max:10000,step:500,value:3000,suffix:"yol",tone:"terra",help:"Üretilecek bağımsız equity curve sayısıdır. Sayı arttıkça percentile sonuçları daha stabil olur; hesap süresi de artar."},
+    {group:"basic",key:"iterations",label:"Simülasyon Sayısı",code:"iterations",min:500,max:10000,step:500,value:5000,suffix:"yol",tone:"terra",help:"Üretilecek bağımsız equity curve sayısıdır. Varsayılan 5.000 yol, percentile kararlılığı ile hesap hızı arasında dengeli bir kurumsal test seviyesidir."},
     {group:"basic",key:"tradesPerDay",label:"Günlük Trade",code:"tradesPerDay",min:0.25,max:150,step:0.25,value:3,suffix:"adet",tone:"olive",help:"Her gün ortalama kaç işlem açıldığını belirler. Üst limit 150; yüksek frekanslı testlerde trade başı maliyetin toplam etkisi hızla büyür."},
-    {group:"basic",key:"winRate",label:"Kazanma Oranı",code:"winRate",min:5,max:90,step:0.5,value:48,suffix:"%",tone:"terra",help:"Trade’in kârlı kapanma olasılığıdır. Tek başına başarı değildir; ortalama kazanç R ve kayıp R ile birlikte değerlendirilir."},
+    {group:"basic",key:"winRate",label:"Kazanma Oranı",code:"winRate",min:5,max:90,step:0.5,value:55,suffix:"%",tone:"terra",help:"Trade’in kârlı kapanma olasılığıdır. Tek başına başarı değildir; ortalama kazanç R, kayıp R ve maliyet R ile birlikte edge’i belirler."},
     {group:"basic",key:"avgWinR",label:"Ortalama Kazanç R",code:"avgWinR",min:0.2,max:20,step:0.05,value:1.8,suffix:"R",tone:"olive",help:"Kazanan trade’in ortalama ödülüdür. 2R, riske edilen birimin iki katı kâr anlamına gelir."},
     {group:"basic",key:"avgLossR",label:"Ortalama Kayıp R",code:"avgLossR",min:0.2,max:20,step:0.05,value:1,suffix:"R",tone:"ruby",help:"Kaybeden trade’in ortalama zararıdır. 1R tipik stop-loss kaybıdır; 1.3R ve üstü stop disiplini veya slippage kaynaklı kayıp genişlemesini gösterir. Ekstrem stres testi için limit 20R’ye kadar açıktır."},
-    {group:"basic",key:"riskPerTradePct",label:"Trade Başına Risk",code:"riskPerTradePct",min:0.1,max:100,step:0.1,value:1,suffix:"%",tone:"ruby",help:"Bu oran pozisyon büyüklüğü değil, stop olursa kaybedilecek 1R tutarının sermayeye oranıdır. 100k hesapta %4 risk, stop olursa 4k kayıp demektir. %100 mümkün ama tek -1R kayıpta hesabı sıfırladığı için ekstrem stres testidir."},
+    {group:"basic",key:"riskPerTradePct",label:"Trade Başına Risk",code:"riskPerTradePct",min:0.1,max:100,step:0.1,value:1.3,suffix:"%",tone:"ruby",help:"Bu oran pozisyon büyüklüğü değil, stop olursa kaybedilecek 1R tutarının sermayeye oranıdır. Başlangıç sermayesine göre nominal karşılığı kart üzerinde canlı gösterilir."},
     {group:"basic",key:"tradeCostR",label:"Trade Başı Toplam Maliyet",code:"tradeCostR",min:0,max:5,step:0.01,value:0.05,suffix:"R",tone:"terra",help:"Komisyon, spread ve slippage toplamıdır. 0.05R, riske edilen tutarın %5’i kadar maliyet demektir."},
     {group:"basic",key:"targetCapital",label:"Hedef Sermaye",code:"targetCapital",min:1000,max:10000000,step:1000,value:200000,prefix:"₺",tone:"olive",help:"Simülasyon yollarında bu seviyeye en az bir kez temas edilirse hedefe ulaşmış kabul edilir."},
     {group:"basic",key:"ruinThresholdPct",label:"Kritik Sermaye Eşiği",code:"ruinThresholdPct",min:5,max:90,step:1,value:50,suffix:"%",tone:"ruby",help:"Başlangıç sermayesinin bu yüzdesinin altı kritik bölgedir. 50%, sermayenin yarıya düşmesini kritik olay sayar."},
     {group:"advanced",key:"breakEvenRate",label:"Break-even Oranı",code:"breakEvenRate",min:0,max:40,step:1,value:5,suffix:"%",tone:"olive",help:"Ne kâr ne zarar kapanan trade oranıdır. Trade maliyeti yine düşer; bu yüzden break-even trade tamamen etkisiz değildir."},
-    {group:"advanced",key:"volatilityFactor",label:"Volatilite Çarpanı",code:"volatilityFactor",min:0,max:5,step:0.05,value:1,suffix:"x",tone:"terra",help:"Kazanç ve kayıp R sonuçlarının ne kadar dağıldığını belirler. Volatilite artarsa P5 ve P95 arasındaki fark büyür."},
+    {group:"advanced",key:"volatilityFactor",label:"R Dağılım Volatilitesi",code:"volatilityFactor",min:0,max:5,step:0.05,value:1,suffix:"x",tone:"terra",help:"Günlük trade sayısı değildir. Kazanç ve kayıp R sonuçlarının ortalamadan ne kadar saptığını belirleyen dağılım çarpanıdır; artarsa P5–P95 bandı genişler."},
     {group:"advanced",key:"shockProbability",label:"Şok Olasılığı",code:"shockProbability",min:0,max:20,step:0.5,value:3,suffix:"%",tone:"ruby",help:"Her işlem gününde olağan dışı kötü piyasa günü yaşanma olasılığıdır. Şoklar özellikle P5 ve drawdown metriklerini bozar."},
     {group:"advanced",key:"shockImpactR",label:"Şok Etkisi",code:"shockImpactR",min:0,max:20,step:0.25,value:2,suffix:"R",tone:"ruby",help:"Şok gününde sermayeye eklenen negatif R etkisidir. 2R şok, trade başına riskin iki katı günlük darbe demektir."},
     {group:"advanced",key:"maxDailyLossPct",label:"Günlük Zarar Limiti",code:"maxDailyLossPct",min:0.5,max:20,step:0.25,value:5,suffix:"%",tone:"olive",help:"Gün içi zarar bu eşiğe ulaşınca o gün yeni trade açılmaz. Kötü serileri keser ama toparlanma hızını da sınırlayabilir."}
   ];
+
+  const scenarioPresets = [
+    {
+      key:"base",
+      name:"Base Case",
+      desc:"Normal piyasa, varsayılan edge. 6 aylık işlem takvimi, 5.000 yol ve kontrollü 1.3% risk.",
+      meta:"126g · 5.000 yol · WR 55% · Risk 1.3%",
+      values:{days:126,iterations:5000,tradesPerDay:3,winRate:55,avgWinR:1.8,avgLossR:1,riskPerTradePct:1.3,tradeCostR:0.05,targetCapital:200000,ruinThresholdPct:50,breakEvenRate:5,volatilityFactor:1,shockProbability:3,shockImpactR:2,maxDailyLossPct:5,riskMode:"compounding"}
+    },
+    {
+      key:"conservative",
+      name:"Conservative",
+      desc:"Düşük risk, daha sınırlı büyüme. Sermaye koruması ve düşük günlük zarar freni önde.",
+      meta:"Risk 0.6% · DD savunması · Hedef 140K",
+      values:{days:126,iterations:5000,tradesPerDay:2,winRate:53,avgWinR:1.45,avgLossR:0.9,riskPerTradePct:0.6,tradeCostR:0.04,targetCapital:140000,ruinThresholdPct:60,breakEvenRate:8,volatilityFactor:0.75,shockProbability:2,shockImpactR:1.5,maxDailyLossPct:3,riskMode:"compounding"}
+    },
+    {
+      key:"aggressive",
+      name:"Aggressive",
+      desc:"Yüksek risk, yüksek büyüme. İyi yollarda hızlanır; kötü yollarda drawdown sertleşir.",
+      meta:"Risk 2.5% · Hedef 250K · Vol 1.2x",
+      values:{days:126,iterations:5000,tradesPerDay:4,winRate:55,avgWinR:2.1,avgLossR:1,riskPerTradePct:2.5,tradeCostR:0.06,targetCapital:250000,ruinThresholdPct:45,breakEvenRate:4,volatilityFactor:1.2,shockProbability:3,shockImpactR:2,maxDailyLossPct:7.5,riskMode:"compounding"}
+    },
+    {
+      key:"high-vol",
+      name:"High Volatility",
+      desc:"Geniş sonuç dağılımı. Edge benzer kalır ama R sonuçlarının saçılımı ve şok etkisi yükselir.",
+      meta:"volatilityFactor 2.2x · Şok 4% / 2.5R",
+      values:{days:126,iterations:5000,tradesPerDay:3,winRate:55,avgWinR:2,avgLossR:1.2,riskPerTradePct:1.3,tradeCostR:0.06,targetCapital:200000,ruinThresholdPct:50,breakEvenRate:5,volatilityFactor:2.2,shockProbability:4,shockImpactR:2.5,maxDailyLossPct:5,riskMode:"compounding"}
+    },
+    {
+      key:"crisis",
+      name:"Kriz Senaryosu",
+      desc:"Şok olasılığı ve etkisi artar. Amaç stratejinin piyasa kırılması altında dayanıklılığını görmek.",
+      meta:"Şok 10% · Etki 4.5R · Risk 0.9%",
+      values:{days:126,iterations:5000,tradesPerDay:2.5,winRate:50,avgWinR:1.5,avgLossR:1.2,riskPerTradePct:0.9,tradeCostR:0.07,targetCapital:150000,ruinThresholdPct:55,breakEvenRate:8,volatilityFactor:1.6,shockProbability:10,shockImpactR:4.5,maxDailyLossPct:4,riskMode:"compounding"}
+    },
+    {
+      key:"execution-stress",
+      name:"Uygulama Stresi",
+      desc:"Spread, slippage ve komisyon yükü yüksek. Edge’in işlem maliyetine ne kadar duyarlı olduğunu test eder.",
+      meta:"tradeCostR 0.22R · WR 52% · BE 7%",
+      values:{days:126,iterations:5000,tradesPerDay:3,winRate:52,avgWinR:1.7,avgLossR:1.15,riskPerTradePct:1.1,tradeCostR:0.22,targetCapital:175000,ruinThresholdPct:55,breakEvenRate:7,volatilityFactor:1.2,shockProbability:4,shockImpactR:2,maxDailyLossPct:5,riskMode:"compounding"}
+    },
+    {
+      key:"discipline-break",
+      name:"Disiplin Çöküşü",
+      desc:"Stop violation ve revenge trade davranışını modellemek için kayıp R, frekans ve günlük zarar toleransı yükseltilir.",
+      meta:"avgLossR 1.6R · 6 trade/gün · Risk 2.2%",
+      values:{days:126,iterations:5000,tradesPerDay:6,winRate:50,avgWinR:1.6,avgLossR:1.6,riskPerTradePct:2.2,tradeCostR:0.08,targetCapital:200000,ruinThresholdPct:50,breakEvenRate:4,volatilityFactor:1.8,shockProbability:5,shockImpactR:2.5,maxDailyLossPct:12,riskMode:"compounding"}
+    },
+    {
+      key:"trend",
+      name:"Trend Piyasa",
+      desc:"Win rate ve kazanç R iyileşir. Trend takip eden sistemlerin pozitif rejimde nasıl hızlandığını gösterir.",
+      meta:"WR 60% · avgWinR 2.2R · Hedef 250K",
+      values:{days:126,iterations:5000,tradesPerDay:3,winRate:60,avgWinR:2.2,avgLossR:0.9,riskPerTradePct:1.4,tradeCostR:0.05,targetCapital:250000,ruinThresholdPct:50,breakEvenRate:4,volatilityFactor:1.05,shockProbability:2,shockImpactR:1.5,maxDailyLossPct:5,riskMode:"compounding"}
+    },
+    {
+      key:"sideways",
+      name:"Sideways Piyasa",
+      desc:"Düşük win quality ve daha fazla break-even. Yatay piyasada sürtünme maliyeti ve düşük ödül kalitesi öne çıkar.",
+      meta:"BE 25% · avgWinR 1.15R · Risk 0.8%",
+      values:{days:126,iterations:5000,tradesPerDay:2.5,winRate:44,avgWinR:1.15,avgLossR:0.95,riskPerTradePct:0.8,tradeCostR:0.07,targetCapital:130000,ruinThresholdPct:60,breakEvenRate:25,volatilityFactor:0.7,shockProbability:2,shockImpactR:1.2,maxDailyLossPct:4,riskMode:"compounding"}
+    }
+  ];
+
 
   const EXECUTION_LIMITS = {
     mainThreadMaxSteps: 500000,
@@ -1233,7 +1783,8 @@ table{width:100%;border-collapse:collapse}
     progressTimer:null,
     progressVisible:false,
     lastProgressPct:0,
-    lastProgressLabel:"Hesaplanıyor"
+    lastProgressLabel:"Hesaplanıyor",
+    activePresetName:"özel"
   };
 
   function $(id){ return document.getElementById(id); }
@@ -1328,17 +1879,70 @@ table{width:100%;border-collapse:collapse}
     updateFill(key);
     updateApplied(key, applied, raw);
     if(key === "initialCapital" || key === "riskPerTradePct") updateRiskMath();
+    updatePrintParams();
   }
 
   function updateRiskMath(){
     const box = $("riskMathLive");
-    if(!box) return;
     const capInput = $("initialCapitalNumber");
     const riskInput = $("riskPerTradePctNumber");
     const capital = parseFloat(capInput?.dataset?.applied ?? capInput?.value) || 100000;
     const riskPct = parseFloat(riskInput?.dataset?.applied ?? riskInput?.value) || 1;
     const riskAmt = capital * (riskPct / 100);
-    box.textContent = `${fmtMoney(capital)} sermayede modelin kullandığı ${fmtPct(riskPct,1)} risk = ${fmtMoney(riskAmt)} 1R. Örnek: 80k pozisyon + %5 stop = 4k risk = hesabın %4’ü.`;
+    const mode = $("riskMode")?.value || "compounding";
+    const modeText = mode === "fixed"
+      ? "Sabit riskte nominal 1R başlangıç sermayesine göre korunur; hesap çok düşerse risk mevcut equity ile sınırlanır."
+      : "Bileşik riskte 1R her trade öncesi güncel equity’ye göre yeniden hesaplanır; büyüme de düşüş de bu yüzden hızlanabilir.";
+    const liveText = `${fmtMoney(capital)} başlangıç sermayesinde ${fmtPct(riskPct,1)} risk = ${fmtMoney(riskAmt)} nominal 1R. ${modeText}`;
+
+    if(box) box.textContent = liveText;
+
+    const applied = $("riskPerTradePctApplied");
+    if(applied){
+      applied.innerHTML = `${fmtPct(riskPct,1)} · 1R ≈ ${fmtMoney(riskAmt)} <span style="color:var(--muted);font-weight:700">(${mode === "fixed" ? "sabit nominal" : "güncel equity’ye göre"})</span>`;
+    }
+  }
+
+
+  function updatePrintParams(){
+    const grid = $("printParamGrid");
+    if(!grid) return;
+    let p;
+    try{
+      p = getParams();
+    } catch(err){
+      return;
+    }
+    const byKey = key => getControl(key);
+    const rows = [
+      ["Preset", state.activePresetName || "özel", "Seçili senaryo seti"],
+      ["Risk Modeli", p.riskMode === "fixed" ? "Sabit risk" : "Bileşik risk", p.riskMode],
+      ["Gün Sayısı", formatControlValue(byKey("days"), p.days), "İşlem günü"],
+      ["Simülasyon Sayısı", formatControlValue(byKey("iterations"), p.iterations), "Monte Carlo yolu"],
+      ["Günlük Trade", formatControlValue(byKey("tradesPerDay"), p.tradesPerDay), "Ortalama işlem frekansı"],
+      ["Kazanma Oranı", formatControlValue(byKey("winRate"), p.winRate), "winRate"],
+      ["Ortalama Kazanç R", formatControlValue(byKey("avgWinR"), p.avgWinR), "avgWinR"],
+      ["Ortalama Kayıp R", formatControlValue(byKey("avgLossR"), p.avgLossR), "avgLossR"],
+      ["Trade Başına Risk", formatControlValue(byKey("riskPerTradePct"), p.riskPerTradePct), "1R ≈ " + fmtMoney(p.initialCapital * p.riskPerTradePct / 100)],
+      ["Trade Maliyeti R", formatControlValue(byKey("tradeCostR"), p.tradeCostR), "Komisyon + spread + slippage"],
+      ["Başlangıç Sermayesi", formatControlValue(byKey("initialCapital"), p.initialCapital), "initialCapital"],
+      ["Hedef Sermaye", formatControlValue(byKey("targetCapital"), p.targetCapital), "targetCapital"],
+      ["Kritik Sermaye Eşiği", formatControlValue(byKey("ruinThresholdPct"), p.ruinThresholdPct), "Başlangıcın yüzdesi"],
+      ["Break-even Oranı", formatControlValue(byKey("breakEvenRate"), p.breakEvenRate), "Maliyet yine düşer"],
+      ["R Dağılım Volatilitesi", formatControlValue(byKey("volatilityFactor"), p.volatilityFactor), "Günlük trade sayısı değildir"],
+      ["Şok Olasılığı", formatControlValue(byKey("shockProbability"), p.shockProbability), "Günlük kötü rejim ihtimali"],
+      ["Şok Etkisi", formatControlValue(byKey("shockImpactR"), p.shockImpactR), "Şok günündeki R etkisi"],
+      ["Günlük Zarar Limiti", formatControlValue(byKey("maxDailyLossPct"), p.maxDailyLossPct), "Gün içi fren"]
+    ];
+    grid.innerHTML = rows.map(([label,value,note]) => `
+      <div class="print-param">
+        <div class="print-param-label">${label}</div>
+        <div class="print-param-value mono">${value}</div>
+        <div class="print-param-note">${note || ""}</div>
+      </div>
+    `).join("");
+    const badge = $("printPresetBadge");
+    if(badge) badge.textContent = "Preset: " + (state.activePresetName || "özel");
   }
 
   function setupControlEvents(){
@@ -1374,6 +1978,65 @@ table{width:100%;border-collapse:collapse}
       });
     });
   }
+
+  function renderScenarioPresets(){
+    const grid = $("scenarioPresets");
+    if(!grid) return;
+    grid.innerHTML = scenarioPresets.map(preset => `
+      <button class="preset-card" type="button" data-preset="${preset.key}" aria-label="${preset.name} presetini uygula">
+        <span class="preset-name">${preset.name}</span>
+        <span class="preset-desc">${preset.desc}</span>
+        <span class="preset-meta">${preset.meta}</span>
+      </button>
+    `).join("");
+  }
+
+  function applyScenarioPreset(key){
+    const preset = scenarioPresets.find(x => x.key === key);
+    if(!preset) return;
+    Object.entries(preset.values).forEach(([param,value]) => {
+      if(param === "riskMode"){
+        const rm = $("riskMode");
+        if(rm) rm.value = value;
+      } else {
+        setParam(param, value, "preset");
+      }
+    });
+    updateRiskMath();
+    document.querySelectorAll(".preset-card").forEach(card => {
+      card.classList.toggle("active", card.dataset.preset === key);
+    });
+    state.activePresetName = preset.name;
+    const badge = $("activePresetBadge");
+    if(badge) badge.textContent = "Preset: " + preset.name;
+    const runMeta = $("runMeta");
+    if(runMeta) runMeta.textContent = preset.name + " uygulandı · Çalıştır";
+    updatePrintParams();
+  }
+
+  function setupScenarioPresets(){
+    renderScenarioPresets();
+    document.querySelectorAll(".preset-card").forEach(card => {
+      card.addEventListener("click", () => applyScenarioPreset(card.dataset.preset));
+    });
+    document.querySelectorAll(".range,.num-input,#riskMode").forEach(el => {
+      el.addEventListener("input", () => {
+        document.querySelectorAll(".preset-card").forEach(card => card.classList.remove("active"));
+        state.activePresetName = "özel";
+        const badge = $("activePresetBadge");
+        if(badge) badge.textContent = "Preset: özel";
+        updatePrintParams();
+      });
+      el.addEventListener("change", () => {
+        document.querySelectorAll(".preset-card").forEach(card => card.classList.remove("active"));
+        state.activePresetName = "özel";
+        const badge = $("activePresetBadge");
+        if(badge) badge.textContent = "Preset: özel";
+        updatePrintParams();
+      });
+    });
+  }
+
 
   function calcR(){
     const dir = $("rDirection").value;
@@ -1676,18 +2339,95 @@ table{width:100%;border-collapse:collapse}
     const p = result.p;
     const er = Math.abs(expectedR(p));
     const lossProb = Math.max(0, 1 - p.winRate/100 - p.breakEvenRate/100);
+    const distributionWidth = Math.max(0, (result.p95 - result.p5) / Math.max(result.p50, 1));
+    const nominalRisk = p.initialCapital * p.riskPerTradePct / 100;
     const raw = [
-      ["Risk %", Math.abs(er) * p.riskPerTradePct * 16 + result.ruinProb * .28 + result.avgDD * .20],
-      ["Win Rate", (p.avgWinR + p.avgLossR) * 7.5],
-      ["Ortalama Kazanç R", (p.winRate/100) * 30],
-      ["Ortalama Kayıp R", lossProb * 32],
-      ["Maliyet R", p.tradeCostR * 85 + p.tradesPerDay * .35],
-      ["Volatilite", p.volatilityFactor * 8 + result.worstDD * .08],
-      ["Şok", p.shockProbability * p.shockImpactR * .55],
-      ["Günlük Zarar Limiti", Math.max(0, 8 - p.maxDailyLossPct) * 2.2]
-    ].sort((a,b)=>b[1]-a[1]);
-    const max = raw[0][1] || 1;
-    return raw.map(([name,val]) => [name, Math.round(val / max * 100)]);
+      {
+        key:"riskPerTradePct",
+        label:"Trade Başına Risk",
+        score:Math.abs(er) * p.riskPerTradePct * 16 + result.ruinProb * .30 + result.avgDD * .24,
+        value:fmtPct(p.riskPerTradePct,1) + " · 1R ≈ " + fmtMoney(nominalRisk),
+        reading:"Bu, stop olursa kaybedilecek 1R tutarının sermayeye oranıdır. Pozisyon büyüklüğü değildir.",
+        action:"Risk artışı iyi yollarda büyümeyi hızlandırır; ancak kayıp serisi bileşik sermayeyi küçülttüğü için belli eşikten sonra medyan bile bozulabilir."
+      },
+      {
+        key:"winRate",
+        label:"Kazanma Oranı",
+        score:(p.avgWinR + p.avgLossR + p.tradeCostR) * 8.5,
+        value:fmtPct(p.winRate,1),
+        reading:"Trade’in kârlı kapanma olasılığıdır; tek başına yeterli değildir, avgWinR ve avgLossR ile birlikte expected R üretir.",
+        action:"Win rate yükselirse aynı R profiliyle hedefe ulaşma ve kârda bitme olasılığı artar."
+      },
+      {
+        key:"avgWinR",
+        label:"Ortalama Kazanç R",
+        score:(p.winRate/100) * 42 + Math.max(0, result.targetProb-35) * .10,
+        value:fmtNum(p.avgWinR,2) + "R",
+        reading:"Kazanan trade başına ortalama ödüldür.",
+        action:"Trend piyasalarda veya iyi kâr alma disiplininde hedefe ulaşmayı en hızlı taşıyan kaldıraçlardan biridir."
+      },
+      {
+        key:"avgLossR",
+        label:"Ortalama Kayıp R",
+        score:lossProb * 44 + result.avgDD * .10,
+        value:fmtNum(p.avgLossR,2) + "R",
+        reading:"Kaybeden trade başına ortalama hasardır.",
+        action:"Stop violation, geç çıkış ve kötü execution bu değeri yükseltir; drawdown ve ruin olasılığı üzerinde sert etkisi olabilir."
+      },
+      {
+        key:"tradeCostR",
+        label:"Trade Maliyeti R",
+        score:p.tradeCostR * 95 + p.tradesPerDay * .55 + Math.max(0, p.breakEvenRate) * .10,
+        value:fmtNum(p.tradeCostR,2) + "R",
+        reading:"Komisyon, spread ve slippage toplamının trade başına R karşılığıdır.",
+        action:"Trade frekansı arttıkça aynı maliyet R sonucu daha çok aşındırır; özellikle uygulama stresi senaryosunda ana sürücüdür."
+      },
+      {
+        key:"volatilityFactor",
+        label:"R Dağılım Volatilitesi",
+        score:p.volatilityFactor * 10 + distributionWidth * 16 + result.worstDD * .08,
+        value:fmtNum(p.volatilityFactor,2) + "x",
+        reading:"Günlük trade sayısı değildir. Kazanç/kayıp R sonuçlarının ortalamadan sapma çarpanıdır.",
+        action:"Volatilite artınca P5–P95 bandı genişler: iyi yollar daha iyi, kötü yollar daha kötü olabilir."
+      },
+      {
+        key:"shockRegime",
+        label:"Şok Rejimi",
+        score:p.shockProbability * p.shockImpactR * .60 + result.worstDD * .05,
+        value:fmtPct(p.shockProbability,1) + " × " + fmtNum(p.shockImpactR,2) + "R",
+        reading:"Olağan dışı kötü gün olasılığı ve o günün R etkisinin birleşik stresidir.",
+        action:"Kriz senaryosunda P5, worst drawdown ve kritik sermaye temasını en çok bozan katmandır."
+      },
+      {
+        key:"tradesPerDay",
+        label:"Günlük Trade Frekansı",
+        score:p.tradesPerDay * (Math.abs(er) + p.tradeCostR) * 2.2,
+        value:fmtNum(p.tradesPerDay,2) + " trade/gün",
+        reading:"Her gün ortalama kaç işlem açıldığını belirler.",
+        action:"Edge pozitifse fırsat sayısını artırır; maliyet veya avgLossR yüksekse aynı hızla sürtünmeyi ve hata birikimini de büyütür."
+      },
+      {
+        key:"breakEvenRate",
+        label:"Break-even Oranı",
+        score:p.breakEvenRate * Math.max(.25, Math.abs(p.avgWinR - p.avgLossR)) * .55,
+        value:fmtPct(p.breakEvenRate,1),
+        reading:"Ne kâr ne zarar kapanan trade oranıdır; maliyet yine düştüğü için tamamen nötr değildir.",
+        action:"Break-even oranı yüksekse daha az net winner üretirsin; maliyet R varsa bu grup hafif negatif sürtünme yaratır."
+      },
+      {
+        key:"maxDailyLossPct",
+        label:"Günlük Zarar Limiti",
+        score:Math.max(0, 8 - p.maxDailyLossPct) * 2.4 + Math.max(0, p.maxDailyLossPct - 8) * .75,
+        value:fmtPct(p.maxDailyLossPct,1),
+        reading:"Gün içi zarar bu eşiğe ulaşınca o gün yeni trade açılmaz.",
+        action:"Çok düşük fren toparlanmayı kesebilir; çok yüksek fren disiplin çöküşünde hasarı büyütür."
+      }
+    ].sort((a,b)=>b.score-a.score);
+    const max = raw[0]?.score || 1;
+    return raw.map(item => ({
+      ...item,
+      score:Math.round(item.score / max * 100)
+    }));
   }
 
   function chart(id, config){
@@ -1699,7 +2439,34 @@ table{width:100%;border-collapse:collapse}
     state.charts[id] = new Chart(canvas, config);
   }
 
-  function renderCharts(result){
+  
+  function renderSensitivityNarrative(result, sens, selectedIndex=0){
+    const box = $("sensitivityNarrative");
+    if(!box) return;
+    const safeIndex = Math.max(0, Math.min(selectedIndex || 0, sens.length - 1));
+    const selected = sens[safeIndex];
+    const top = sens.slice(0,3);
+    const items = top.map((x,idx) => `<div class="sens-item ${idx === safeIndex ? "active" : ""}" data-sens-index="${idx}"><span>${idx+1}. ${x.label}</span><strong class="mono">${x.score}/100</strong></div>`).join("");
+    if(!selected){
+      box.innerHTML = "Simülasyonu çalıştırınca en etkili parametreler burada açıklanır.";
+      return;
+    }
+    box.innerHTML = `
+      <div class="sens-selected">
+        <strong>Seçili parametre: <span class="mono">${selected.label}</span></strong>
+        <div><span class="mono">${selected.value}</span> · ${selected.reading}</div>
+        <div class="sens-action">${selected.action}</div>
+      </div>
+      <div class="sens-list">${items}</div>
+      <div style="margin-top:8px">Barlara tıklayarak açıklamayı değiştir. Skor, mevcut parametre setinde final dağılım, drawdown ve risk metriklerini en çok taşıyan ayarları sıralayan karar destek göstergesidir; kesin nedensellik iddiası değildir.</div>
+    `;
+    box.querySelectorAll(".sens-item").forEach(item => {
+      item.addEventListener("click", () => renderSensitivityNarrative(result, sens, Number(item.dataset.sensIndex || 0)));
+    });
+  }
+
+
+function renderCharts(result){
     if(typeof Chart === "undefined") return;
     Chart.defaults.font.family = "Inter";
     Chart.defaults.color = "#6f675d";
@@ -1757,9 +2524,27 @@ table{width:100%;border-collapse:collapse}
     const sens = sensitivity(result);
     chart("sensitivityChart", {
       type:"bar",
-      data:{labels:sens.map(x=>x[0]),datasets:[{label:"Etki skoru",data:sens.map(x=>x[1]),backgroundColor:"rgba(100,112,73,.34)",borderColor:"#647049",borderWidth:1}]},
-      options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{max:100,grid:{color:"rgba(226,216,201,.55)"}},y:{grid:{display:false}}}}
+      data:{labels:sens.map(x=>x.label),datasets:[{label:"Etki skoru",data:sens.map(x=>x.score),backgroundColor:"rgba(100,112,73,.34)",borderColor:"#647049",borderWidth:1}]},
+      options:{
+        indexAxis:"y",
+        responsive:true,
+        maintainAspectRatio:false,
+        onClick:(evt,elements)=>{
+          if(elements && elements.length){
+            renderSensitivityNarrative(result, sens, elements[0].index);
+          }
+        },
+        plugins:{legend:{display:false},tooltip:{callbacks:{
+          afterLabel:(ctx)=>sens[ctx.dataIndex]?.reading || "",
+          footer:(items)=>{
+            const idx = items && items[0] ? items[0].dataIndex : 0;
+            return sens[idx]?.action || "";
+          }
+        }}},
+        scales:{x:{max:100,grid:{color:"rgba(226,216,201,.55)"}},y:{grid:{display:false},ticks:{font:{size:10}}}}
+      }
     });
+    renderSensitivityNarrative(result, sens, 0);
   }
 
   function renderMetrics(result){
@@ -1802,7 +2587,7 @@ table{width:100%;border-collapse:collapse}
   function interpretation(result){
     const p = result.p;
     const sens = sensitivity(result);
-    const mainRisk = sens[0] ? sens[0][0] : "Risk %";
+    const mainRisk = sens[0] ? sens[0].label : "Risk %";
     const modeText = p.riskMode === "fixed" ? "sabit nominal risk" : "bileşik risk";
     const items = [];
 
@@ -2385,10 +3170,12 @@ table{width:100%;border-collapse:collapse}
     renderControls();
     setupControlEvents();
     setupModes();
+    setupScenarioPresets();
     setupRCalc();
     updateRiskMath();
+    updatePrintParams();
     document.querySelectorAll(".run-sim").forEach(btn => btn.addEventListener("click", runAndRender));
-    $("riskMode").addEventListener("change", () => { updateRiskMath(); runAndRender(); });
+    $("riskMode").addEventListener("change", () => { updateRiskMath(); updatePrintParams(); runAndRender(); });
     runAndRender();
   }
 
