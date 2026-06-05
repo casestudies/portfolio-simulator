@@ -358,6 +358,65 @@ a{color:inherit}
   font-weight:800;
 }
 
+.segmented-selector{
+  position:relative;
+  z-index:1;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:6px;
+  padding:5px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:#f4ecdf;
+}
+.segmented-option{
+  min-height:38px;
+  border:0;
+  border-radius:999px;
+  background:transparent;
+  color:var(--stone);
+  cursor:pointer;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  padding:8px 10px;
+  font-size:9.5px;
+  font-weight:900;
+  letter-spacing:.10em;
+  text-transform:uppercase;
+  transition:background .18s ease,color .18s ease,box-shadow .18s ease;
+}
+.segmented-option:hover{color:var(--ink);background:rgba(255,253,248,.58)}
+.segmented-option.active{
+  background:#fffdf8;
+  color:var(--ink);
+  box-shadow:0 5px 14px rgba(56,42,25,.075);
+}
+.trade-frequency-block{
+  position:relative;
+  z-index:1;
+  display:grid;
+  gap:7px;
+  padding:9px;
+  border:1px solid rgba(226,216,201,.76);
+  border-radius:14px;
+  background:rgba(255,253,248,.66);
+}
+.trade-frequency-hint{
+  color:var(--stone);
+  font-size:10.5px;
+  line-height:1.35;
+}
+.risk-mode-compact .segmented-selector{
+  min-width:220px;
+}
+@media (max-width:620px){
+  .segmented-selector{border-radius:16px}
+  .segmented-option{min-height:44px;border-radius:12px;font-size:10px}
+  .risk-mode-compact .segmented-selector{min-width:0;width:100%}
+}
+
 .rcalc-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:16px}
 .form-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
 .form-card{display:flex;flex-direction:column;gap:7px}
@@ -1469,10 +1528,11 @@ table{width:100%;border-collapse:collapse}
             <div class="compact-label">Risk Modeli <span class="mono">riskMode</span></div>
             <p><strong>Bileşik</strong>: risk mevcut sermayeye göre değişir. <strong>Sabit</strong>: risk başlangıç sermayesine göre aynı nominal tutarda kalır.</p>
           </div>
-          <select id="riskMode" aria-label="Risk modeli">
-            <option value="compounding">Bileşik risk</option>
-            <option value="fixed">Sabit risk</option>
-          </select>
+          <input type="hidden" id="riskMode" value="compounding">
+          <div class="segmented-selector" role="group" aria-label="Risk modeli">
+            <button class="segmented-option active" type="button" data-risk-mode="compounding" aria-pressed="true">Bileşik</button>
+            <button class="segmented-option" type="button" data-risk-mode="fixed" aria-pressed="false">Sabit</button>
+          </div>
         </div>
       </div>
 
@@ -1686,7 +1746,7 @@ table{width:100%;border-collapse:collapse}
     {group:"basic",key:"days",label:"Gün Sayısı",code:"days",min:30,max:365,step:1,value:126,suffix:"gün",tone:"terra",help:"Simülasyonun kaç işlem günü süreceğini belirler. Varsayılan 126 gün yaklaşık 6 aylık işlem takvimidir; günlük trade sayısıyla birlikte toplam trade adımını oluşturur."},
     {group:"basic",key:"initialCapital",label:"Başlangıç Sermayesi",code:"initialCapital",min:1000,max:5000000,step:1000,value:100000,prefix:"₺",tone:"olive",help:"Tüm yollar bu sermayeyle başlar. Sabit risk modunda nominal risk bu tutara göre korunur."},
     {group:"basic",key:"iterations",label:"Simülasyon Sayısı",code:"iterations",min:500,max:10000,step:500,value:5000,suffix:"yol",tone:"terra",help:"Üretilecek bağımsız equity curve sayısıdır. Varsayılan 5.000 yol, percentile kararlılığı ile hesap hızı arasında dengeli bir kurumsal test seviyesidir."},
-    {group:"basic",key:"tradesPerDay",label:"Günlük Trade",code:"tradesPerDay",min:0.25,max:150,step:0.25,value:3,suffix:"adet",tone:"olive",help:"Her gün ortalama kaç işlem açıldığını belirler. Üst limit 150; yüksek frekanslı testlerde trade başı maliyetin toplam etkisi hızla büyür."},
+    {group:"basic",key:"tradesPerDay",label:"Trade Frekansı",code:"tradesPerDay",min:0.1,max:150,step:0.1,value:3,suffix:"trade/gün",tone:"olive",periodToggle:true,help:"Günlük veya haftalık ortalama işlem frekansını belirler. Swing trade için 0,1 trade/gün ya da 0,5 trade/hafta gibi düşük değerler desteklenir; 0,5 trade/hafta yaklaşık ayda iki trade demektir."},
     {group:"basic",key:"winRate",label:"Kazanma Oranı",code:"winRate",min:5,max:90,step:0.5,value:55,suffix:"%",tone:"terra",help:"Trade’in kârlı kapanma olasılığıdır. Tek başına başarı değildir; ortalama kazanç R, kayıp R ve maliyet R ile birlikte edge’i belirler."},
     {group:"basic",key:"avgWinR",label:"Ortalama Kazanç R",code:"avgWinR",min:0.2,max:20,step:0.05,value:1.8,suffix:"R",tone:"olive",help:"Kazanan trade’in ortalama ödülüdür. 2R, riske edilen birimin iki katı kâr anlamına gelir."},
     {group:"basic",key:"avgLossR",label:"Ortalama Kayıp R",code:"avgLossR",min:0.2,max:20,step:0.05,value:1,suffix:"R",tone:"ruby",help:"Kaybeden trade’in ortalama zararıdır. 1R tipik stop-loss kaybıdır; 1.3R ve üstü stop disiplini veya slippage kaynaklı kayıp genişlemesini gösterir. Ekstrem stres testi için limit 20R’ye kadar açıktır."},
@@ -1784,7 +1844,8 @@ table{width:100%;border-collapse:collapse}
     progressVisible:false,
     lastProgressPct:0,
     lastProgressLabel:"Hesaplanıyor",
-    activePresetName:"özel"
+    activePresetName:"özel",
+    tradeFrequency:"daily"
   };
 
   function $(id){ return document.getElementById(id); }
@@ -1796,9 +1857,65 @@ table{width:100%;border-collapse:collapse}
   function fmtPct(v,d=1){ return isFinite(v) ? new Intl.NumberFormat("tr-TR",{maximumFractionDigits:d,minimumFractionDigits:d}).format(v) + "%" : "—"; }
   function fmtNum(v,d=2){ return isFinite(v) ? new Intl.NumberFormat("tr-TR",{maximumFractionDigits:d,minimumFractionDigits:d}).format(v) : "—"; }
 
+  function tradeFrequencySpec(){
+    const weekly = state.tradeFrequency === "weekly";
+    return weekly
+      ? {period:"weekly",min:0.5,max:750,step:0.1,suffix:"trade/hafta",multiplier:5,label:"Haftalık"}
+      : {period:"daily",min:0.1,max:150,step:0.1,suffix:"trade/gün",multiplier:1,label:"Günlük"};
+  }
+
+  function displaySpec(c){
+    if(c && c.key === "tradesPerDay"){
+      const spec = tradeFrequencySpec();
+      return {...c,min:spec.min,max:spec.max,step:spec.step,suffix:spec.suffix};
+    }
+    return c;
+  }
+
+  function stepDecimals(step){
+    const s = String(step);
+    return s.includes(".") ? s.split(".")[1].length : 0;
+  }
+
+  function internalToDisplayValue(c, internalValue){
+    if(c && c.key === "tradesPerDay"){
+      const spec = tradeFrequencySpec();
+      return internalValue * spec.multiplier;
+    }
+    return internalValue;
+  }
+
+  function displayToInternalValue(c, displayValue){
+    if(c && c.key === "tradesPerDay"){
+      const spec = tradeFrequencySpec();
+      return displayValue / spec.multiplier;
+    }
+    return displayValue;
+  }
+
+  function formatTradeFrequencyFromDaily(daily){
+    const spec = tradeFrequencySpec();
+    const periodValue = daily * spec.multiplier;
+    const periodText = fmtNum(periodValue, periodValue < 1 ? 2 : 1) + " " + spec.suffix;
+    const dailyText = fmtNum(daily, daily < 1 ? 2 : 1) + " trade/gün";
+    return spec.period === "weekly" ? `${periodText} → ${dailyText}` : dailyText;
+  }
+
   function controlMarkup(c){
-    const minLabel = c.prefix ? c.prefix + fmtNum(c.min,0) : fmtNum(c.min, c.step < 1 ? 2 : 0) + (c.suffix ? " " + c.suffix : "");
-    const maxLabel = c.prefix ? c.prefix + fmtNum(c.max,0) : fmtNum(c.max, c.step < 1 ? 2 : 0) + (c.suffix ? " " + c.suffix : "");
+    const spec = displaySpec(c);
+    const initialValue = internalToDisplayValue(c, c.value);
+    const decimals = stepDecimals(spec.step);
+    const displayValue = decimals ? initialValue.toFixed(decimals) : String(Math.round(initialValue));
+    const minLabel = spec.prefix ? spec.prefix + fmtNum(spec.min,0) : fmtNum(spec.min, spec.step < 1 ? 2 : 0) + (spec.suffix ? " " + spec.suffix : "");
+    const maxLabel = spec.prefix ? spec.prefix + fmtNum(spec.max,0) : fmtNum(spec.max, spec.step < 1 ? 2 : 0) + (spec.suffix ? " " + spec.suffix : "");
+    const periodToggle = c.periodToggle ? `
+      <div class="trade-frequency-block" aria-label="Trade frekansı dönemi">
+        <div class="segmented-selector" role="group" aria-label="Trade sayısı dönemi">
+          <button class="segmented-option active" type="button" data-trade-frequency="daily" aria-pressed="true">Günlük</button>
+          <button class="segmented-option" type="button" data-trade-frequency="weekly" aria-pressed="false">Haftalık</button>
+        </div>
+        <div class="trade-frequency-hint" id="tradeFrequencyHint">Günlük ortalama doğrudan modele uygulanır.</div>
+      </div>` : "";
     return `<article class="control-card ${c.tone}" data-control="${c.key}">
       <div class="control-top">
         <div>
@@ -1807,16 +1924,17 @@ table{width:100%;border-collapse:collapse}
         </div>
       </div>
       <p class="control-help">${c.help}</p>
+      ${periodToggle}
       <div class="control-row">
-        <input class="range ${c.tone}" id="${c.key}Range" data-key="${c.key}" type="range" min="${c.min}" max="${c.max}" step="${c.step}" value="${c.value}">
+        <input class="range ${c.tone}" id="${c.key}Range" data-key="${c.key}" type="range" min="${spec.min}" max="${spec.max}" step="${spec.step}" value="${displayValue}">
         <label class="number-wrap" aria-label="${c.label}">
-          ${c.prefix ? `<span class="number-prefix">${c.prefix}</span>` : ""}
-          <input class="num-input" id="${c.key}Number" data-key="${c.key}" type="number" min="${c.min}" max="${c.max}" step="${c.step}" value="${c.value}" inputmode="decimal">
-          ${c.suffix ? `<span class="number-suffix">${c.suffix}</span>` : ""}
+          ${spec.prefix ? `<span class="number-prefix">${spec.prefix}</span>` : ""}
+          <input class="num-input" id="${c.key}Number" data-key="${c.key}" type="number" min="${spec.min}" max="${spec.max}" step="${spec.step}" value="${displayValue}" inputmode="decimal">
+          ${spec.suffix ? `<span class="number-suffix" id="${c.key}Suffix">${spec.suffix}</span>` : ""}
         </label>
       </div>
       <div class="applied-line">Modelde kullanılan: <strong class="mono" id="${c.key}Applied">—</strong></div>
-      <div class="range-labels"><span>${minLabel}</span><span>${maxLabel}</span></div>
+      <div class="range-labels" id="${c.key}RangeLabels"><span>${minLabel}</span><span>${maxLabel}</span></div>
     </article>`;
   }
 
@@ -1830,9 +1948,11 @@ table{width:100%;border-collapse:collapse}
 
   function formatControlValue(c, v){
     if(!isFinite(v)) return "—";
-    const decimals = String(c.step).includes(".") ? String(c.step).split(".")[1].length : 0;
-    const core = c.prefix ? (c.prefix + fmtNum(v, decimals)) : fmtNum(v, decimals);
-    return core + (c.suffix ? " " + c.suffix : "");
+    if(c && c.key === "tradesPerDay") return formatTradeFrequencyFromDaily(v);
+    const spec = displaySpec(c);
+    const decimals = stepDecimals(spec.step);
+    const core = spec.prefix ? (spec.prefix + fmtNum(v, decimals)) : fmtNum(v, decimals);
+    return core + (spec.suffix ? " " + spec.suffix : "");
   }
 
   function updateApplied(key, appliedValue, rawValue){
@@ -1841,6 +1961,19 @@ table{width:100%;border-collapse:collapse}
     const n = $(key + "Number");
     if(!c || !el) return;
     if(n && isFinite(appliedValue)) n.dataset.applied = String(appliedValue);
+    if(key === "tradesPerDay"){
+      const spec = tradeFrequencySpec();
+      const displayValue = isFinite(appliedValue) ? appliedValue * spec.multiplier : NaN;
+      const cleanApplied = formatTradeFrequencyFromDaily(appliedValue);
+      if(isFinite(rawValue) && Math.abs(rawValue - displayValue) > 1e-9){
+        el.textContent = `${cleanApplied} · limit ${fmtNum(spec.min,spec.step < 1 ? 2 : 0)}–${fmtNum(spec.max,spec.step < 1 ? 2 : 0)} ${spec.suffix}`;
+        el.closest(".applied-line")?.classList.add("warn");
+      } else {
+        el.textContent = cleanApplied;
+        el.closest(".applied-line")?.classList.remove("warn");
+      }
+      return;
+    }
     const cleanApplied = formatControlValue(c, appliedValue);
     if(isFinite(rawValue) && Math.abs(rawValue - appliedValue) > 1e-9){
       el.textContent = `${cleanApplied} · limit ${formatControlValue(c,c.min)}–${formatControlValue(c,c.max)}`;
@@ -1853,29 +1986,88 @@ table{width:100%;border-collapse:collapse}
 
   function updateFill(key){
     const c = getControl(key);
+    const spec = displaySpec(c);
     const r = $(key + "Range");
     if(!c || !r) return;
     const v = parseFloat(r.value);
-    const pct = ((v - c.min) / (c.max - c.min)) * 100;
+    const pct = ((v - spec.min) / (spec.max - spec.min)) * 100;
     r.style.setProperty("--fill", clamp(pct,0,100).toFixed(2) + "%");
+  }
+
+  function updateTradeFrequencyUI(){
+    const c = getControl("tradesPerDay");
+    const r = $("tradesPerDayRange");
+    const n = $("tradesPerDayNumber");
+    if(!c || !r || !n) return;
+    const spec = displaySpec(c);
+    const currentDaily = parseFloat(n.dataset.applied ?? c.value);
+    const displayValue = internalToDisplayValue(c, isFinite(currentDaily) ? currentDaily : c.value);
+    const decimals = stepDecimals(spec.step);
+    const str = decimals ? displayValue.toFixed(decimals) : String(Math.round(displayValue));
+
+    [r,n].forEach(el => {
+      el.min = String(spec.min);
+      el.max = String(spec.max);
+      el.step = String(spec.step);
+      el.value = str;
+    });
+    const suffix = $("tradesPerDaySuffix");
+    if(suffix) suffix.textContent = spec.suffix;
+    const labels = $("tradesPerDayRangeLabels");
+    if(labels){
+      labels.innerHTML = `<span>${fmtNum(spec.min,spec.step < 1 ? 2 : 0)} ${spec.suffix}</span><span>${fmtNum(spec.max,spec.step < 1 ? 2 : 0)} ${spec.suffix}</span>`;
+    }
+    const hint = $("tradeFrequencyHint");
+    if(hint){
+      hint.textContent = state.tradeFrequency === "weekly"
+        ? "Haftalık değer 5 işlem gününe bölünerek günlük ortalama modele aktarılır."
+        : "Günlük ortalama doğrudan modele uygulanır.";
+    }
+    updateFill("tradesPerDay");
+    updateApplied("tradesPerDay", displayToInternalValue(c, displayValue), displayValue);
+  }
+
+  function setTradeFrequency(freq){
+    state.tradeFrequency = freq === "weekly" ? "weekly" : "daily";
+    document.querySelectorAll("[data-trade-frequency]").forEach(btn => {
+      const active = btn.dataset.tradeFrequency === state.tradeFrequency;
+      btn.classList.toggle("active", active);
+      btn.setAttribute("aria-pressed", active ? "true" : "false");
+    });
+    updateTradeFrequencyUI();
+    updatePrintParams();
+  }
+
+  function setRiskMode(mode, dispatch=false){
+    const safe = mode === "fixed" ? "fixed" : "compounding";
+    const input = $("riskMode");
+    if(input) input.value = safe;
+    document.querySelectorAll("[data-risk-mode]").forEach(btn => {
+      const active = btn.dataset.riskMode === safe;
+      btn.classList.toggle("active", active);
+      btn.setAttribute("aria-pressed", active ? "true" : "false");
+    });
+    if(dispatch && input) input.dispatchEvent(new Event("change", {bubbles:true}));
   }
 
   function setParam(key, value, source){
     const c = getControl(key);
     if(!c) return;
+    const spec = displaySpec(c);
     const raw = parseFloat(value);
     if(!isFinite(raw)){
       updateApplied(key, NaN, NaN);
       return;
     }
-    const applied = clamp(raw, c.min, c.max);
-    const decimals = String(c.step).includes(".") ? String(c.step).split(".")[1].length : 0;
-    const str = decimals ? applied.toFixed(decimals) : String(Math.round(applied));
+    const appliedDisplay = clamp(raw, spec.min, spec.max);
+    const applied = displayToInternalValue(c, appliedDisplay);
+    const decimals = stepDecimals(spec.step);
+    const str = decimals ? appliedDisplay.toFixed(decimals) : String(Math.round(appliedDisplay));
     const r = $(key + "Range");
     const n = $(key + "Number");
     if(r) r.value = str;
     if(n && source !== "typing") n.value = str;
-    if(n) n.dataset.applied = str;
+    if(n) n.dataset.applied = String(applied);
     updateFill(key);
     updateApplied(key, applied, raw);
     if(key === "initialCapital" || key === "riskPerTradePct") updateRiskMath();
@@ -1919,7 +2111,7 @@ table{width:100%;border-collapse:collapse}
       ["Risk Modeli", p.riskMode === "fixed" ? "Sabit risk" : "Bileşik risk", p.riskMode],
       ["Gün Sayısı", formatControlValue(byKey("days"), p.days), "İşlem günü"],
       ["Simülasyon Sayısı", formatControlValue(byKey("iterations"), p.iterations), "Monte Carlo yolu"],
-      ["Günlük Trade", formatControlValue(byKey("tradesPerDay"), p.tradesPerDay), "Ortalama işlem frekansı"],
+      ["Trade Frekansı", formatControlValue(byKey("tradesPerDay"), p.tradesPerDay), "Seçim: " + (p.tradeFrequency === "weekly" ? "haftalık giriş" : "günlük giriş")],
       ["Kazanma Oranı", formatControlValue(byKey("winRate"), p.winRate), "winRate"],
       ["Ortalama Kazanç R", formatControlValue(byKey("avgWinR"), p.avgWinR), "avgWinR"],
       ["Ortalama Kayıp R", formatControlValue(byKey("avgLossR"), p.avgLossR), "avgLossR"],
@@ -1963,9 +2155,38 @@ table{width:100%;border-collapse:collapse}
       const parsed = parseFloat(n?.dataset?.applied ?? n?.value);
       p[c.key] = clamp(isFinite(parsed) ? parsed : c.value, c.min, c.max);
     });
-    p.riskMode = $("riskMode").value;
+    p.riskMode = $("riskMode")?.value || "compounding";
+    p.tradeFrequency = state.tradeFrequency || "daily";
+    p.tradesPerPeriod = p.tradeFrequency === "weekly" ? p.tradesPerDay * 5 : p.tradesPerDay;
     if(p.breakEvenRate + p.winRate > 98) p.breakEvenRate = Math.max(0, 98 - p.winRate);
     return p;
+  }
+
+  function markCustomPreset(){
+    document.querySelectorAll(".preset-card").forEach(card => card.classList.remove("active"));
+    state.activePresetName = "özel";
+    const badge = $("activePresetBadge");
+    if(badge) badge.textContent = "Preset: özel";
+    updatePrintParams();
+  }
+
+  function setupRiskModeEvents(){
+    document.querySelectorAll("[data-risk-mode]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        setRiskMode(btn.dataset.riskMode, true);
+      });
+    });
+    setRiskMode($("riskMode")?.value || "compounding", false);
+  }
+
+  function setupTradeFrequencyEvents(){
+    document.querySelectorAll("[data-trade-frequency]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        setTradeFrequency(btn.dataset.tradeFrequency);
+        markCustomPreset();
+      });
+    });
+    setTradeFrequency(state.tradeFrequency || "daily");
   }
 
   function setupModes(){
@@ -1994,11 +2215,11 @@ table{width:100%;border-collapse:collapse}
   function applyScenarioPreset(key){
     const preset = scenarioPresets.find(x => x.key === key);
     if(!preset) return;
+    setTradeFrequency(preset.values.tradeFrequency || "daily");
     Object.entries(preset.values).forEach(([param,value]) => {
       if(param === "riskMode"){
-        const rm = $("riskMode");
-        if(rm) rm.value = value;
-      } else {
+        setRiskMode(value, false);
+      } else if(param !== "tradeFrequency") {
         setParam(param, value, "preset");
       }
     });
@@ -2020,20 +2241,8 @@ table{width:100%;border-collapse:collapse}
       card.addEventListener("click", () => applyScenarioPreset(card.dataset.preset));
     });
     document.querySelectorAll(".range,.num-input,#riskMode").forEach(el => {
-      el.addEventListener("input", () => {
-        document.querySelectorAll(".preset-card").forEach(card => card.classList.remove("active"));
-        state.activePresetName = "özel";
-        const badge = $("activePresetBadge");
-        if(badge) badge.textContent = "Preset: özel";
-        updatePrintParams();
-      });
-      el.addEventListener("change", () => {
-        document.querySelectorAll(".preset-card").forEach(card => card.classList.remove("active"));
-        state.activePresetName = "özel";
-        const badge = $("activePresetBadge");
-        if(badge) badge.textContent = "Preset: özel";
-        updatePrintParams();
-      });
+      el.addEventListener("input", markCustomPreset);
+      el.addEventListener("change", markCustomPreset);
     });
   }
 
@@ -2400,10 +2609,10 @@ table{width:100%;border-collapse:collapse}
       },
       {
         key:"tradesPerDay",
-        label:"Günlük Trade Frekansı",
+        label:"Trade Frekansı",
         score:p.tradesPerDay * (Math.abs(er) + p.tradeCostR) * 2.2,
-        value:fmtNum(p.tradesPerDay,2) + " trade/gün",
-        reading:"Her gün ortalama kaç işlem açıldığını belirler.",
+        value:formatControlValue(getControl("tradesPerDay"), p.tradesPerDay),
+        reading:"Günlük veya haftalık seçime göre girilen ortalama işlem frekansıdır; model içinde günlük ortalamaya çevrilir.",
         action:"Edge pozitifse fırsat sayısını artırır; maliyet veya avgLossR yüksekse aynı hızla sürtünmeyi ve hata birikimini de büyütür."
       },
       {
@@ -3169,6 +3378,8 @@ function renderCharts(result){
   function init(){
     renderControls();
     setupControlEvents();
+    setupRiskModeEvents();
+    setupTradeFrequencyEvents();
     setupModes();
     setupScenarioPresets();
     setupRCalc();
