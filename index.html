@@ -3485,6 +3485,90 @@ html{ scroll-padding-top:120px !important; }
 #tab-mc .panel-head .btn{
   flex-shrink:0 !important;
 }
+
+/* Safe linked slider text boxes — additive only; sidebar inputs and metric dock remain untouched */
+.linked-slider-enhanced .slider-top{
+  align-items:flex-start;
+}
+.linked-slider-value-group{
+  display:inline-flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-left:auto;
+}
+.linked-slider-value-group > strong{
+  white-space:nowrap;
+}
+.linked-slider-number-wrap{
+  display:inline-flex;
+  align-items:center;
+  min-width:112px;
+  max-width:154px;
+  min-height:34px;
+  border:1px solid rgba(216,205,189,.88);
+  background:#fffdf8;
+  border-radius:9px !important;
+  overflow:hidden;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.72);
+}
+.linked-slider-number-wrap .linked-prefix,
+.linked-slider-number-wrap .linked-suffix{
+  color:var(--muted);
+  font-size:10px;
+  font-weight:800;
+  padding:0 7px;
+  white-space:nowrap;
+}
+.linked-slider-number{
+  width:100%;
+  min-width:0;
+  border:0 !important;
+  outline:0;
+  background:transparent;
+  color:var(--ink);
+  padding:8px 4px;
+  text-align:right;
+  font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+  font-size:11px;
+  font-weight:800;
+  font-variant-numeric:tabular-nums;
+  box-shadow:none !important;
+}
+.linked-slider-number:focus{
+  box-shadow:inset 0 -2px 0 rgba(198,91,54,.42) !important;
+}
+.linked-model-line{
+  position:relative;
+  z-index:1;
+  margin-top:8px;
+  padding:7px 9px;
+  border:1px solid rgba(100,112,73,.16);
+  background:rgba(100,112,73,.052);
+  color:var(--olive);
+  border-radius:9px !important;
+  font-size:10px;
+  line-height:1.28;
+  font-weight:750;
+}
+.linked-model-line .mono{
+  color:var(--ink);
+  font-weight:850;
+}
+@media (max-width:640px){
+  .linked-slider-value-group{
+    width:100%;
+    justify-content:space-between;
+    margin-left:0;
+    margin-top:6px;
+  }
+  .linked-slider-number-wrap{
+    min-width:128px;
+    max-width:100%;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -3529,8 +3613,8 @@ html{ scroll-padding-top:120px !important; }
     </div>
 
     <div class="input-card">
-      <div class="input-head"><span>Enflasyon Beklentisi</span><span class="num text-olive" id="lbl-inf">%40.0</span></div>
-      <div class="input-row"><span class="prefix">%</span><input id="inp-inf" class="field num" type="number" value="40" step="0.5" oninput="calculateAll()"></div>
+      <div class="input-head"><span>Enflasyon Beklentisi</span><span class="num text-olive" id="lbl-inf">%4.0</span></div>
+      <div class="input-row"><span class="prefix">%</span><input id="inp-inf" class="field num" type="number" value="4" step="0.5" oninput="calculateAll()"></div>
       <div class="hint">Reel satın alma gücü, nominal bakiye bu oranla iskonto edilerek hesaplanır.</div>
     </div>
 
@@ -5618,6 +5702,224 @@ function syncMetricDock(res){
       requestAnimationFrame(() => syncMetricDock(window._lastCalcResult));
     }
   }, {passive:true});
+})();
+
+
+/* Safe linked slider text boxes — additive only; no sidebar/HUD/dock mutation */
+(function(){
+  const META = {
+    'slip-years': {
+      suffix:'Yıl', decimals:0,
+      model:v => `${Math.round(v)} yıl projeksiyon süresi`
+    },
+    'slip-rate': {
+      suffix:'%', decimals:1,
+      model:v => `%${fmt(v,1)} yıllık beklenen getiri`
+    },
+    'target-year': {
+      suffix:'Yıl', decimals:0,
+      model:v => `${Math.round(v)} yılda hedef kontrolü`
+    },
+    'target-bal-slider': {
+      prefix:'$', decimals:0,
+      model:v => `${money(v)} hedef bakiye`
+    },
+    'mc-vol': {
+      suffix:'%', decimals:0,
+      model:v => `%${fmt(v,0)} yıllık volatilite`
+    },
+    'mc-iter': {
+      decimals:0,
+      model:v => `${Math.round(v).toLocaleString('en-US')} Monte Carlo denemesi`
+    },
+    'mc-crash': {
+      suffix:'%', decimals:0,
+      model:v => `%${fmt(v,0)} yıllık kriz şoku olasılığı`
+    },
+    'mc-skew': {
+      decimals:1,
+      model:v => `${fmt(v,1)} dağılım çarpıklığı`
+    },
+    'mc-target': {
+      suffix:'%', decimals:0,
+      model:v => `%${fmt(v,0)} hedef başarı olasılığı`
+    }
+  };
+
+  function fmt(v,d){
+    const n = Number(v);
+    return Number.isFinite(n) ? n.toFixed(d) : '—';
+  }
+  function money(v){
+    const n = Number(v);
+    if(!Number.isFinite(n)) return '$—';
+    return '$' + Math.round(n).toLocaleString('en-US');
+  }
+  function clampToRange(v, range){
+    let n = Number(v);
+    if(!Number.isFinite(n)) return null;
+    const min = Number(range.min);
+    const max = Number(range.max);
+    if(Number.isFinite(min)) n = Math.max(min,n);
+    if(Number.isFinite(max)) n = Math.min(max,n);
+    const step = Number(range.step);
+    if(Number.isFinite(step) && step > 0){
+      const base = Number.isFinite(min) ? min : 0;
+      n = base + Math.round((n-base)/step)*step;
+      const decimals = (String(range.step).split('.')[1] || '').length;
+      n = Number(n.toFixed(Math.min(decimals,8)));
+    }
+    return n;
+  }
+  function metaFor(range){
+    if(range.id && META[range.id]) return META[range.id];
+    const yearCard = range.closest('.year-card');
+    if(yearCard){
+      const year = yearCard.querySelector('.year-card-head span')?.textContent?.trim() || 'Manuel yıl';
+      return {
+        suffix:'%', decimals:1,
+        model:v => `${year} için %${fmt(v,1)} özel getiri`
+      };
+    }
+    return null;
+  }
+  function displayInputValue(range, meta){
+    const raw = Number(range.value);
+    if(!Number.isFinite(raw)) return '';
+    return meta.decimals === 0 ? String(Math.round(raw)) : raw.toFixed(meta.decimals ?? 1);
+  }
+  function renderModelText(range, meta){
+    const line = range.closest('.slider-card,.year-card')?.querySelector(`[data-linked-model-for="${range.dataset.linkedKey}"]`);
+    if(!line) return;
+    const n = Number(range.value);
+    const modelText = meta.model ? meta.model(n) : displayInputValue(range, meta);
+    line.innerHTML = `Modelde kullanılan değer: <span class="mono">${modelText}</span>`;
+  }
+  function syncBoxFromRange(range){
+    const meta = metaFor(range);
+    if(!meta) return;
+    const input = range.closest('.slider-card,.year-card')?.querySelector(`[data-linked-input-for="${range.dataset.linkedKey}"]`);
+    if(input && document.activeElement !== input) input.value = displayInputValue(range, meta);
+    renderModelText(range, meta);
+  }
+  function triggerRange(range){
+    range.dispatchEvent(new Event('input', {bubbles:true}));
+  }
+  function enhanceRange(range, idx){
+    if(!range || range.dataset.linkedEnhanced === '1') return;
+    if(!range.closest('.main')) return;               // Never touch the left sidebar.
+    const meta = metaFor(range);
+    if(!meta) return;
+
+    const card = range.closest('.slider-card,.year-card');
+    const top = card?.querySelector('.slider-top');
+    const strong = top?.querySelector('strong');
+    if(!card || !top || !strong) return;
+
+    const key = range.id || `custom-year-rate-${idx}`;
+    range.dataset.linkedKey = key;
+    range.dataset.linkedEnhanced = '1';
+    card.classList.add('linked-slider-enhanced');
+
+    let group = top.querySelector('.linked-slider-value-group');
+    if(!group){
+      group = document.createElement('span');
+      group.className = 'linked-slider-value-group';
+      strong.parentNode.insertBefore(group, strong);
+      group.appendChild(strong);
+    }
+
+    const wrap = document.createElement('span');
+    wrap.className = 'linked-slider-number-wrap';
+    wrap.setAttribute('aria-label','Slider değerini sayı ile gir');
+    if(meta.prefix){
+      const prefix = document.createElement('span');
+      prefix.className = 'linked-prefix';
+      prefix.textContent = meta.prefix;
+      wrap.appendChild(prefix);
+    }
+    const input = document.createElement('input');
+    input.className = 'linked-slider-number';
+    input.type = 'number';
+    input.inputMode = 'decimal';
+    input.min = range.min || '';
+    input.max = range.max || '';
+    input.step = range.step || 'any';
+    input.value = displayInputValue(range, meta);
+    input.dataset.linkedInputFor = key;
+    input.setAttribute('aria-label', `${top.querySelector('span')?.textContent || 'Parametre'} sayı girişi`);
+    wrap.appendChild(input);
+    if(meta.suffix){
+      const suffix = document.createElement('span');
+      suffix.className = 'linked-suffix';
+      suffix.textContent = meta.suffix;
+      wrap.appendChild(suffix);
+    }
+    group.appendChild(wrap);
+
+    const line = document.createElement('div');
+    line.className = 'linked-model-line';
+    line.dataset.linkedModelFor = key;
+    const labels = card.querySelector('.range-labels');
+    if(labels) labels.insertAdjacentElement('afterend', line);
+    else range.insertAdjacentElement('afterend', line);
+
+    input.addEventListener('input', () => {
+      const next = clampToRange(input.value, range);
+      if(next === null) return;
+      range.value = next;
+      triggerRange(range);
+    });
+    input.addEventListener('change', () => {
+      const next = clampToRange(input.value, range);
+      if(next === null){
+        input.value = displayInputValue(range, meta);
+        return;
+      }
+      range.value = next;
+      input.value = displayInputValue(range, meta);
+      triggerRange(range);
+    });
+    range.addEventListener('input', () => syncBoxFromRange(range));
+    syncBoxFromRange(range);
+  }
+  function enhanceAll(){
+    document.querySelectorAll('.main input[type="range"].range').forEach(enhanceRange);
+    document.querySelectorAll('.main input[type="range"].range').forEach(syncBoxFromRange);
+  }
+  function after(fn){
+    return function(){
+      const out = fn.apply(this, arguments);
+      setTimeout(enhanceAll,0);
+      return out;
+    };
+  }
+
+  const hooks = ['calculateAll','solveRequiredReturn','onMCSliderChange','buildYearRows','quickSet','switchTab','updateYearValue','syncCustomYears'];
+  hooks.forEach(name => {
+    try{
+      if(typeof window[name] === 'function' && !window[name].__linkedSliderHooked){
+        const wrapped = after(window[name]);
+        wrapped.__linkedSliderHooked = true;
+        window[name] = wrapped;
+      }else if(typeof eval(name) === 'function'){
+        const original = eval(name);
+        if(!original.__linkedSliderHooked){
+          const wrapped = after(original);
+          wrapped.__linkedSliderHooked = true;
+          eval(`${name} = wrapped`);
+        }
+      }
+    }catch(e){}
+  });
+
+  window.PortfolioLinkedSliderInputs = { enhanceAll, syncAll:enhanceAll };
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', enhanceAll);
+  }else{
+    enhanceAll();
+  }
+  setTimeout(enhanceAll,0);
 })();
 
 </script>
