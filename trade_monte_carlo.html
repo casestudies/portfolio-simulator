@@ -358,6 +358,7 @@ a{color:inherit}
   font-weight:800;
 }
 
+
 .segmented-selector{
   position:relative;
   z-index:1;
@@ -408,13 +409,19 @@ a{color:inherit}
   font-size:10.5px;
   line-height:1.35;
 }
-.risk-mode-compact .segmented-selector{
-  min-width:220px;
+.risk-mode-compact .segmented-selector{min-width:220px}
+.direction-selector{
+  min-height:42px;
+  border-radius:12px;
+}
+.direction-selector .segmented-option{
+  min-height:32px;
 }
 @media (max-width:620px){
   .segmented-selector{border-radius:16px}
   .segmented-option{min-height:44px;border-radius:12px;font-size:10px}
   .risk-mode-compact .segmented-selector{min-width:0;width:100%}
+  .direction-selector{border-radius:14px}
 }
 
 .rcalc-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:16px}
@@ -487,6 +494,84 @@ table{width:100%;border-collapse:collapse}
 .badge.terra{color:var(--terra);border-color:rgba(198,91,54,.30);background:rgba(198,91,54,.05)}
 .footer-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:4px 0 22px}
 .error-box{display:none;border:1px solid rgba(127,39,55,.25);color:var(--ruby);background:rgba(127,39,55,.055);border-radius:16px;padding:12px 14px;font-size:12px;line-height:1.5}
+
+
+.scenario-compare-shell,
+.mc-sensitivity-shell{
+  display:block;
+}
+.chart-utility{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+.analysis-status{
+  display:inline-flex;
+  align-items:center;
+  min-height:32px;
+  padding:6px 10px;
+  border:1px solid rgba(205,191,174,.72);
+  background:#fffdf8;
+  border-radius:999px;
+  color:var(--stone);
+  font-size:9px;
+  letter-spacing:.09em;
+  text-transform:uppercase;
+  font-weight:900;
+}
+.comparison-grid,
+.mc-sensitivity-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+  gap:9px;
+  margin-top:12px;
+}
+.compare-card,
+.mc-sensitivity-card{
+  border:1px solid rgba(226,216,201,.88);
+  background:#fffdf8;
+  border-radius:14px;
+  padding:11px 12px;
+}
+.compare-card strong,
+.mc-sensitivity-card strong{
+  display:block;
+  color:var(--ink);
+  font-size:10px;
+  letter-spacing:.10em;
+  text-transform:uppercase;
+  font-weight:900;
+  line-height:1.2;
+}
+.compare-card .mono,
+.mc-sensitivity-card .mono{
+  display:block;
+  margin-top:6px;
+  color:var(--terra);
+  font-size:13px;
+  font-weight:900;
+}
+.compare-card span,
+.mc-sensitivity-card span{
+  display:block;
+  margin-top:4px;
+  color:var(--stone);
+  font-size:10px;
+  line-height:1.35;
+}
+.sensitivity-shell .chart-head,
+.mc-sensitivity-shell .chart-head,
+.scenario-compare-shell .chart-head{
+  align-items:center;
+}
+@media (max-width:700px){
+  .chart-utility{justify-content:flex-start}
+  .analysis-status{width:100%;justify-content:center}
+  .comparison-grid,
+  .mc-sensitivity-grid{grid-template-columns:1fr}
+}
 
 @media (max-width:1240px){
   .control-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
@@ -1432,6 +1517,333 @@ table{width:100%;border-collapse:collapse}
   }
 }
 
+
+/* v15: Optimization tab — isolated opt-* system */
+.mode-tabs{grid-template-columns:repeat(4,minmax(0,1fr)) !important}
+.opt-panel{display:block}
+.opt-block-title{
+  color:var(--ink);
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+  line-height:1.2;
+}
+.opt-block-title .mono{
+  color:var(--terra);
+  font-size:9px;
+  margin-left:6px;
+  letter-spacing:.04em;
+}
+.opt-muted{
+  color:var(--stone);
+  font-size:11px;
+  line-height:1.45;
+  margin-top:7px;
+}
+.opt-goal-block,
+.opt-card,
+.opt-output-card,
+.opt-best-card,
+.opt-narrative,
+.opt-current-compare{
+  border:1px solid rgba(226,216,201,.95);
+  background:linear-gradient(180deg,#fffefa,#fbf6ee);
+  border-radius:18px;
+  box-shadow:0 8px 20px rgba(56,42,25,.035);
+}
+.opt-goal-block{padding:14px;margin-bottom:14px}
+.opt-layout{
+  display:grid;
+  grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr);
+  gap:14px;
+}
+.opt-card{padding:15px}
+.opt-segmented{
+  display:grid;
+  gap:6px;
+  padding:5px;
+  border:1px solid var(--line);
+  background:#f4ecdf;
+  border-radius:999px;
+  margin-top:10px;
+}
+.opt-goals{grid-template-columns:repeat(7,minmax(0,1fr));border-radius:16px}
+.opt-third-options{grid-template-columns:repeat(3,minmax(0,1fr))}
+.opt-option,
+.opt-toggle{
+  min-height:38px;
+  border:0;
+  border-radius:999px;
+  background:transparent;
+  color:var(--stone);
+  cursor:pointer;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  padding:8px 10px;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.09em;
+  text-transform:uppercase;
+  transition:background .18s ease,color .18s ease,box-shadow .18s ease,border-color .18s ease;
+}
+.opt-option:hover,
+.opt-toggle:hover{background:rgba(255,253,248,.68);color:var(--ink)}
+.opt-option.active,
+.opt-toggle.active{
+  background:#fffdf8;
+  color:var(--ink);
+  box-shadow:0 5px 14px rgba(56,42,25,.075);
+}
+.opt-goal-copy{
+  margin-top:9px;
+  padding:9px 11px;
+  color:var(--olive);
+  background:rgba(100,112,73,.055);
+  border:1px solid rgba(100,112,73,.16);
+  border-radius:12px;
+  font-size:11px;
+  line-height:1.45;
+}
+.opt-param-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:9px;
+  margin-top:12px;
+}
+.opt-field-card{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  min-width:0;
+}
+.opt-field-title{
+  color:var(--stone);
+  font-size:8.5px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  font-weight:900;
+}
+.opt-input{
+  width:100%;
+  min-height:40px;
+  border:1px solid var(--line);
+  background:#fffdf8;
+  color:var(--ink);
+  border-radius:12px;
+  padding:9px 10px;
+  outline:0;
+  font-weight:800;
+}
+.opt-input:disabled{
+  color:var(--muted);
+  background:rgba(244,236,223,.55);
+  cursor:not-allowed;
+}
+.opt-input:focus{box-shadow:0 0 0 3px rgba(198,91,54,.08)}
+.opt-third{margin-top:14px}
+.opt-third-grid[aria-hidden="true"]{display:none}
+.opt-constraint{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 150px;
+  gap:9px;
+  align-items:end;
+  margin-top:10px;
+}
+.opt-toggle{
+  border:1px solid var(--line);
+  background:#fffdf8;
+  border-radius:12px;
+  width:100%;
+}
+.opt-toggle.active{
+  border-color:rgba(198,91,54,.38);
+  color:var(--terra);
+}
+.opt-combo-summary{
+  margin-top:14px;
+  padding:10px 12px;
+  border:1px solid rgba(168,132,66,.22);
+  background:rgba(168,132,66,.065);
+  color:#765b24;
+  border-radius:14px;
+  font-size:11px;
+  line-height:1.45;
+  font-weight:800;
+}
+.opt-combo-summary.warn{
+  border-color:rgba(127,39,55,.24);
+  background:rgba(127,39,55,.055);
+  color:var(--ruby);
+}
+.opt-actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:12px;
+}
+.opt-progress{display:none;margin-top:12px}
+.opt-progress.active{display:block}
+.opt-results{
+  display:none;
+  margin-top:16px;
+  animation:optFadeIn .22s ease both;
+}
+.opt-results.active{display:block}
+@keyframes optFadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.opt-best-card{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:14px;
+  align-items:center;
+  padding:17px;
+  border-left:4px solid var(--olive);
+}
+.opt-best-label{
+  color:var(--stone);
+  font-size:9px;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+  font-weight:900;
+}
+.opt-best-main{
+  margin-top:8px;
+  color:var(--ink);
+  font-size:22px;
+  font-weight:900;
+}
+.opt-best-sub{
+  margin-top:7px;
+  color:var(--stone);
+  font-size:12px;
+  line-height:1.45;
+}
+.opt-output-grid{
+  display:grid;
+  grid-template-columns:minmax(320px,.82fr) minmax(0,1.18fr);
+  gap:14px;
+  margin-top:14px;
+}
+.opt-output-card{padding:15px}
+.opt-heatmap{
+  margin-top:13px;
+  overflow:auto;
+  border:1px solid var(--line);
+  background:#fffdf8;
+  border-radius:14px;
+  padding:10px;
+}
+.opt-heatmap-grid{
+  display:grid;
+  min-width:520px;
+  gap:3px;
+}
+.opt-heatmap-cell,
+.opt-heatmap-axis{
+  min-height:30px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:5px;
+  border:1px solid rgba(226,216,201,.7);
+  border-radius:8px;
+  color:var(--ink);
+  font-size:9px;
+  font-weight:900;
+  text-align:center;
+}
+.opt-heatmap-axis{
+  background:#f5ede2;
+  color:var(--stone);
+  letter-spacing:.05em;
+  text-transform:uppercase;
+}
+.opt-heatmap-cell{
+  cursor:pointer;
+  color:#fffdf8;
+  text-shadow:0 1px 2px rgba(0,0,0,.20);
+}
+.opt-heatmap-cell:hover{
+  outline:2px solid rgba(23,20,17,.26);
+  outline-offset:1px;
+}
+.opt-table-wrap{margin-top:12px;box-shadow:none}
+.opt-table{min-width:720px}
+.opt-table tr{cursor:pointer}
+.opt-table tr.active td{
+  background:rgba(198,91,54,.075);
+  color:var(--terra);
+  font-weight:900;
+}
+.opt-narrative,
+.opt-current-compare{
+  margin-top:14px;
+  padding:14px;
+  color:var(--stone);
+  font-size:12px;
+  line-height:1.55;
+}
+.opt-narrative strong,
+.opt-current-compare strong{color:var(--ink)}
+.opt-current-compare{
+  border-left:4px solid var(--gold);
+}
+@media (max-width:1240px){
+  .opt-layout,
+  .opt-output-grid{grid-template-columns:1fr}
+  .opt-goals{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+@media (max-width:860px){
+  .mode-tabs{grid-template-columns:1fr !important}
+  .opt-goals,
+  .opt-third-options{grid-template-columns:1fr}
+  .opt-param-grid{grid-template-columns:1fr}
+  .opt-constraint{grid-template-columns:1fr}
+  .opt-best-card{grid-template-columns:1fr}
+}
+@media print{
+  #optimization{display:none!important}
+}
+
+
+/* vOpt layout refinement: primary chart reading order */
+.priority-chart-shell{
+  width:100%;
+}
+.priority-chart-shell .canvas-wrap.priority{
+  height:440px;
+}
+.priority-chart-shell .canvas-wrap.priority-sensitivity{
+  height:360px;
+}
+.scenario-scale-note{
+  margin-top:10px;
+  padding:10px 12px;
+  border:1px solid rgba(168,132,66,.20);
+  background:rgba(168,132,66,.055);
+  color:var(--stone);
+  border-radius:14px;
+  font-size:11px;
+  line-height:1.45;
+}
+.delta-note{
+  margin-top:10px;
+  padding:10px 12px;
+  border:1px solid rgba(100,112,73,.18);
+  background:rgba(100,112,73,.055);
+  color:var(--stone);
+  border-radius:14px;
+  font-size:11px;
+  line-height:1.5;
+}
+.delta-note strong{color:var(--ink)}
+@media (max-width:620px){
+  .priority-chart-shell .canvas-wrap.priority{height:320px}
+  .priority-chart-shell .canvas-wrap.priority-sensitivity{height:300px}
+}
+
 </style>
 </head>
 <body>
@@ -1509,6 +1921,7 @@ table{width:100%;border-collapse:collapse}
   <nav class="mode-tabs" aria-label="Parametre modları">
     <button class="mode-btn active" type="button" data-mode="basic">Temel Mod · Strateji Çekirdeği</button>
     <button class="mode-btn" type="button" data-mode="advanced">Gelişmiş Risk Ayarları · Ek Katman</button>
+    <button class="mode-btn" type="button" data-mode="optimization">Optimizasyon · Parametre Taraması</button>
     <button class="mode-btn" type="button" data-mode="concepts">Kavramlar · Model Rehberi</button>
   </nav>
 
@@ -1563,7 +1976,13 @@ table{width:100%;border-collapse:collapse}
       <div class="rcalc-grid">
         <div>
           <div class="form-grid">
-            <label class="form-card"><span class="form-label">Yön</span><select class="field" id="rDirection"><option value="long">Long</option><option value="short">Short</option></select></label>
+            <label class="form-card"><span class="form-label">Yön</span>
+              <input type="hidden" id="rDirection" value="long">
+              <div class="segmented-selector direction-selector" role="group" aria-label="R hesaplayıcı yön">
+                <button class="segmented-option active" type="button" data-r-direction="long" aria-pressed="true">Long</button>
+                <button class="segmented-option" type="button" data-r-direction="short" aria-pressed="false">Short</button>
+              </div>
+            </label>
             <label class="form-card"><span class="form-label">Entry Price</span><input class="field mono" id="rEntry" type="number" value="100" step="0.01"></label>
             <label class="form-card"><span class="form-label">Stop-Loss Price</span><input class="field mono" id="rStop" type="number" value="95" step="0.01"></label>
             <label class="form-card"><span class="form-label">Take-Profit Price</span><input class="field mono" id="rTarget" type="number" value="110" step="0.01"></label>
@@ -1591,6 +2010,164 @@ table{width:100%;border-collapse:collapse}
       <div class="control-grid" id="advancedControls"></div>
     </div>
   </section>
+
+
+  <section id="optimization" class="mode-panel">
+    <div class="panel opt-panel">
+      <div class="panel-head">
+        <div>
+          <div class="panel-title"><svg viewBox="0 0 24 24"><path d="M4 19V5"/><path d="M4 19h16"/><path d="M8 16l3-3 3 2 5-7"/><path d="M15 7h4v4"/></svg>Optimizasyon</div>
+          <p class="panel-copy">Seçili hedefe göre açıklanabilir grid arama yapar. Hızlı analiz analitik tahmin üretir; MC doğrulama yalnızca Top 5 kombinasyonu aynı seed ile hafif simülasyonda teyit eder.</p>
+        </div>
+        <button class="btn primary" type="button" id="optRunFast">Hızlı Analiz</button>
+      </div>
+
+      <div class="opt-goal-block">
+        <div class="opt-block-title">Optimizasyon Hedefi <span class="mono" id="optGoalCode">dengeli</span></div>
+        <div class="opt-segmented opt-goals" role="group" aria-label="Optimizasyon hedefi">
+          <button class="opt-option active" type="button" data-opt-goal="balanced" aria-pressed="true">Dengeli</button>
+          <button class="opt-option" type="button" data-opt-goal="target" aria-pressed="false">Hedefe Ulaşma</button>
+          <button class="opt-option" type="button" data-opt-goal="ruin" aria-pressed="false">Ruin Min.</button>
+          <button class="opt-option" type="button" data-opt-goal="drawdown" aria-pressed="false">DD Min.</button>
+          <button class="opt-option" type="button" data-opt-goal="riskAdjusted" aria-pressed="false">Risk Adj.</button>
+          <button class="opt-option" type="button" data-opt-goal="p5p75" aria-pressed="false">P5 Koru · P75</button>
+          <button class="opt-option" type="button" data-opt-goal="median" aria-pressed="false">P50 Max.</button>
+        </div>
+        <div class="opt-goal-copy" id="optGoalHelp">Dengeli hedef; profit factor, drawdown ve kritik sermaye riskini birlikte dengeler.</div>
+      </div>
+
+      <div class="opt-layout">
+        <div class="opt-card">
+          <div class="opt-block-title">Taranacak Parametreler</div>
+          <p class="opt-muted">Ana yüzey sabit: <strong>Trade Başına Risk × Ortalama Kazanç R</strong>. Üçüncü parametre opsiyonel olarak eklenebilir.</p>
+
+          <div class="opt-param-grid">
+            <label class="opt-field-card">
+              <span class="opt-field-title">Risk/Trade Min</span>
+              <input class="opt-input mono" id="optRiskMin" type="number" value="0.4" min="0.1" max="100" step="0.1">
+            </label>
+            <label class="opt-field-card">
+              <span class="opt-field-title">Risk/Trade Max</span>
+              <input class="opt-input mono" id="optRiskMax" type="number" value="2.4" min="0.1" max="100" step="0.1">
+            </label>
+            <label class="opt-field-card">
+              <span class="opt-field-title">Risk Adımı</span>
+              <input class="opt-input mono" id="optRiskSteps" type="number" value="9" min="5" max="15" step="1">
+            </label>
+
+            <label class="opt-field-card">
+              <span class="opt-field-title">AvgWinR Min</span>
+              <input class="opt-input mono" id="optWinRMin" type="number" value="1.2" min="0.2" max="20" step="0.05">
+            </label>
+            <label class="opt-field-card">
+              <span class="opt-field-title">AvgWinR Max</span>
+              <input class="opt-input mono" id="optWinRMax" type="number" value="2.6" min="0.2" max="20" step="0.05">
+            </label>
+            <label class="opt-field-card">
+              <span class="opt-field-title">AvgWinR Adımı</span>
+              <input class="opt-input mono" id="optWinRSteps" type="number" value="8" min="5" max="15" step="1">
+            </label>
+          </div>
+
+          <div class="opt-third">
+            <div class="opt-field-title">Opsiyonel 3. Parametre</div>
+            <div class="opt-segmented opt-third-options" role="group" aria-label="Üçüncü parametre">
+              <button class="opt-option active" type="button" data-opt-third="none" aria-pressed="true">Kapalı</button>
+              <button class="opt-option" type="button" data-opt-third="tradeCostR" aria-pressed="false">Maliyet R</button>
+              <button class="opt-option" type="button" data-opt-third="tradesPerDay" aria-pressed="false">Trade Frekansı</button>
+            </div>
+            <div class="opt-param-grid opt-third-grid" id="optThirdInputs" aria-hidden="true">
+              <label class="opt-field-card">
+                <span class="opt-field-title" id="optThirdMinLabel">3. Parametre Min</span>
+                <input class="opt-input mono" id="optThirdMin" type="number" value="0.02" step="0.01">
+              </label>
+              <label class="opt-field-card">
+                <span class="opt-field-title" id="optThirdMaxLabel">3. Parametre Max</span>
+                <input class="opt-input mono" id="optThirdMax" type="number" value="0.12" step="0.01">
+              </label>
+              <label class="opt-field-card">
+                <span class="opt-field-title">Adım Sayısı</span>
+                <input class="opt-input mono" id="optThirdSteps" type="number" value="5" min="3" max="10" step="1">
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="opt-card">
+          <div class="opt-block-title">Kısıtlar</div>
+          <p class="opt-muted">Açılan kısıtları karşılamayan kombinasyonlar elenir. Kapalıysa skor hesabına doğrudan dahil edilmez.</p>
+
+          <div class="opt-constraint" data-opt-constraint-row="minP5">
+            <button class="opt-toggle" type="button" data-opt-constraint="minP5" aria-pressed="false">P5 Minimum Kapalı</button>
+            <label class="opt-field-card">
+              <span class="opt-field-title">P5 minimum</span>
+              <input class="opt-input mono" id="optMinP5" type="number" value="60000" min="0" step="1000" disabled>
+            </label>
+          </div>
+
+          <div class="opt-constraint" data-opt-constraint-row="maxRuin">
+            <button class="opt-toggle" type="button" data-opt-constraint="maxRuin" aria-pressed="false">Ruin Maks. Kapalı</button>
+            <label class="opt-field-card">
+              <span class="opt-field-title">Ruin maksimum</span>
+              <input class="opt-input mono" id="optMaxRuin" type="number" value="5" min="0" max="100" step="0.1" disabled>
+            </label>
+          </div>
+
+          <div class="opt-constraint" data-opt-constraint-row="maxDD">
+            <button class="opt-toggle" type="button" data-opt-constraint="maxDD" aria-pressed="false">Max DD Kapalı</button>
+            <label class="opt-field-card">
+              <span class="opt-field-title">Ort. DD maksimum</span>
+              <input class="opt-input mono" id="optMaxDD" type="number" value="20" min="0" max="100" step="0.5" disabled>
+            </label>
+          </div>
+
+          <div class="opt-combo-summary" id="optComboSummary">72 kombinasyon · hızlı analiz hazır</div>
+          <div class="opt-actions">
+            <button class="btn primary" type="button" id="optRunFastSecondary">Hızlı Analiz</button>
+            <button class="btn olive" type="button" id="optRunMC" disabled>MC ile Doğrula</button>
+          </div>
+          <div class="opt-progress" id="optProgress" aria-hidden="true">
+            <div class="sim-progress-top"><span id="optProgressText">Optimizasyon hesaplanıyor</span><span class="mono" id="optProgressPct">0%</span></div>
+            <div class="sim-progress-track"><div class="sim-progress-bar" id="optProgressBar"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="opt-results" id="optResults" aria-hidden="true">
+        <div class="opt-best-card">
+          <div>
+            <div class="opt-best-label">Bu taramada öne çıkan kombinasyon</div>
+            <div class="opt-best-main mono" id="optBestMain">—</div>
+            <div class="opt-best-sub" id="optBestSub">Hızlı analiz sonrası özet burada görünür.</div>
+          </div>
+          <button class="btn olive" type="button" id="optApplySelected">Parametreleri Uygula</button>
+        </div>
+
+        <div class="opt-output-grid">
+          <div class="opt-output-card opt-heatmap-card">
+            <div class="chart-title">Optimizasyon Isı Haritası</div>
+            <div class="chart-copy">X ekseni risk yüzdesi, Y ekseni ortalama kazanç R. Hücre rengi seçili hedef skoruna göre değişir.</div>
+            <div class="opt-heatmap" id="optHeatmap"></div>
+          </div>
+
+          <div class="opt-output-card">
+            <div class="chart-title">Top 5 Kombinasyon</div>
+            <div class="chart-copy">Satıra tıklayınca özet kartı güncellenir. MC doğrulama çalışırsa değerler gerçek lite simülasyonla yenilenir.</div>
+            <div class="table-wrap opt-table-wrap">
+              <table class="fin-table opt-table">
+                <thead><tr><th>Sıra</th><th>Risk%</th><th>AvgWinR</th><th>P50</th><th>P5</th><th>Ruin</th><th>ExpR</th><th>Skor</th></tr></thead>
+                <tbody id="optResultsBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="opt-narrative" id="optNarrative">Analiz çalıştırılınca kombinasyon yorumu burada görünür.</div>
+        <div class="opt-current-compare" id="optCurrentCompare">Mevcut parametre karşılaştırması analizden sonra görünür.</div>
+      </div>
+    </div>
+  </section>
+
 
   <section id="concepts" class="mode-panel">
     <div class="panel">
@@ -1630,6 +2207,13 @@ table{width:100%;border-collapse:collapse}
           <p>Bu metrik percentile değildir. Tüm simülasyon yolları içinde final sermayesi başlangıç sermayesinden yüksek biten yolların oranıdır.</p>
           <div class="concept-example mono">2.160 / 3.000 yol kârda biterse → Kârda Bitme %72.</div>
         </article>
+
+        <article class="concept-card olive">
+          <div class="concept-kicker mono">ΔRuin</div>
+          <h3>Kritik risk değişimi</h3>
+          <p>Gerçek MC Sensitivity içinde ΔRuin, parametre değişince kritik sermaye riskinin baz modele göre kaç yüzde puan değiştiğini gösterir.</p>
+          <div class="concept-example mono">Baz ruin %4.0 · Şok sonrası %5.7 → ΔRuin +1.7 pp.</div>
+        </article>
       </div>
     </div>
   </section>
@@ -1658,18 +2242,56 @@ table{width:100%;border-collapse:collapse}
     </div>
   </section>
 
-  <section class="chart-grid">
-    <div class="chart-shell">
-      <div class="chart-head">
-        <div><div class="chart-title">Equity Curve Fan Chart</div><div class="chart-copy">P5, P25, P50, P75 ve P95 çizgileri stratejinin zaman içindeki dağılımını gösterir.</div></div>
-      </div>
-      <div class="canvas-wrap"><canvas id="fanChart"></canvas></div>
+  
+
+  <section class="chart-shell priority-chart-shell" aria-label="Equity curve fan chart">
+    <div class="chart-head">
+      <div><div class="chart-title">Equity Curve Fan Chart</div><div class="chart-copy">P5, P25, P50, P75 ve P95 çizgileri stratejinin zaman içindeki dağılımını geniş yüzeyde gösterir; bu grafik ana öncelikli okuma alanıdır.</div></div>
     </div>
+    <div class="canvas-wrap priority"><canvas id="fanChart"></canvas></div>
+  </section>
+
+  <section class="chart-shell priority-chart-shell sensitivity-shell" aria-label="Parametre duyarlılığı">
+    <div class="chart-head">
+      <div>
+        <div class="chart-title">Parametre Duyarlılığı · Analitik Etki Haritası</div>
+        <div class="chart-copy">Bu hızlı skor MC sonucunu yeniden üretmez; mevcut sonuçlardan parametre etkisini analitik olarak sıralar. Gerçek ΔP50 için aşağıdaki MC sensitivity panelini çalıştır.</div>
+      </div>
+    </div>
+    <div class="canvas-wrap priority-sensitivity"><canvas id="sensitivityChart"></canvas></div>
+    <div class="sensitivity-note" id="sensitivityNarrative">Simülasyonu çalıştırınca en etkili parametreler burada açıklanır.</div>
+  </section>
+
+  <section class="chart-grid equal">
     <div class="chart-shell">
       <div class="chart-head">
         <div><div class="chart-title">Final Equity Distribution</div><div class="chart-copy">Final sermaye sonuçlarının hangi bölgelerde yoğunlaştığını gösterir.</div></div>
       </div>
       <div class="canvas-wrap"><canvas id="distChart"></canvas></div>
+    </div>
+    <div class="chart-shell">
+      <div class="chart-head">
+        <div><div class="chart-title">Percentile Outcome</div><div class="chart-copy">Başlangıç sermayesinin farklı olasılık dilimlerinde nereye taşındığı.</div></div>
+      </div>
+      <div class="canvas-wrap small"><canvas id="outcomeChart"></canvas></div>
+    </div>
+  </section>
+
+  <section class="chart-shell scenario-compare-shell" aria-label="Senaryo karşılaştırması">
+    <div class="chart-head">
+      <div>
+        <div class="chart-title">Senaryo Karşılaştırması · Preset Overlay</div>
+        <div class="chart-copy">Aktif set ile ana presetlerin P5, P50 ve P95 final sermaye bantlarını aynı seed ve hafifletilmiş MC koşusuyla yan yana gösterir. Agresif preset diğerlerini ezmesin diye grafik log ölçeklidir; aşağıdaki kartlarda nominal değerler aynen korunur.</div>
+      </div>
+      <div class="chart-utility">
+        <span class="analysis-status" id="scenarioCompareStatus">Simülasyon sonrası otomatik güncellenir</span>
+        <button class="btn olive" type="button" id="refreshScenarioCompare">Karşılaştırmayı Yenile</button>
+      </div>
+    </div>
+    <div class="canvas-wrap small"><canvas id="scenarioCompareChart"></canvas></div>
+    <div class="scenario-scale-note"><strong>Ölçek notu:</strong> Bu grafikte sol eksen logaritmik çalışır. Bu, çok agresif presetlerin P95/P50 değerleri diğer senaryoları görsel olarak sıfıra sıkıştırmasın diye yapılır; tooltip ve kartlardaki ₺ değerler gerçek nominal sonuçlardır.</div>
+    <div class="comparison-grid" id="scenarioCompareGrid">
+      <div class="compare-card"><strong>Hazır</strong><span>Simülasyon çalışınca preset karşılaştırması burada oluşur.</span></div>
     </div>
   </section>
 
@@ -1691,16 +2313,33 @@ table{width:100%;border-collapse:collapse}
   <section class="chart-grid equal">
     <div class="chart-shell">
       <div class="chart-head">
-        <div><div class="chart-title">Percentile Outcome</div><div class="chart-copy">Başlangıç sermayesinin farklı olasılık dilimlerinde nereye taşındığı.</div></div>
+        <div><div class="chart-title">Kayıp Serisi Dağılımı</div><div class="chart-copy">Her simülasyon yolunda görülen en uzun ardışık kayıp serisinin dağılımı. Psikolojik dayanıklılık ve risk azaltma eşiği için kritik bir okuma sağlar.</div></div>
       </div>
-      <div class="canvas-wrap small"><canvas id="outcomeChart"></canvas></div>
+      <div class="canvas-wrap small"><canvas id="losingStreakChart"></canvas></div>
     </div>
-    <div class="chart-shell sensitivity-shell">
+    <div class="chart-shell">
       <div class="chart-head">
-        <div><div class="chart-title">Parametre Duyarlılığı · Etki Haritası</div><div class="chart-copy">Barlara tıklayarak her parametrenin sonucu hangi kanaldan etkilediğini oku. Etiketler doğrudan ayarladığın parametreleri adresler.</div></div>
+        <div><div class="chart-title">Recovery / Sualtı Süresi Dağılımı</div><div class="chart-copy">Her yolun yeni zirve görmeden geçirdiği en uzun gün sayısı. Stratejinin sermayeyi ne kadar süre psikolojik baskı altında tuttuğunu gösterir.</div></div>
       </div>
-      <div class="canvas-wrap small"><canvas id="sensitivityChart"></canvas></div>
-      <div class="sensitivity-note" id="sensitivityNarrative">Simülasyonu çalıştırınca en etkili parametreler burada açıklanır.</div>
+      <div class="canvas-wrap small"><canvas id="recoveryChart"></canvas></div>
+    </div>
+  </section>
+
+  <section class="chart-shell mc-sensitivity-shell" aria-label="Gerçek Monte Carlo sensitivity">
+    <div class="chart-head">
+      <div>
+        <div class="chart-title">Gerçek MC Sensitivity · ΔP50 / ΔP5 / ΔRuin</div>
+        <div class="chart-copy">Her parametre için aynı seed ile aşağı/yukarı şok koşuları çalıştırır; P50, P5 ve kritik sermaye riskindeki gerçek MC farkını ölçer. <strong>ΔRuin</strong>, kritik sermaye riskinin baz modele göre yüzde puan değişimidir; +2 pp risk artışı, −2 pp risk azalması demektir.</div>
+      </div>
+      <div class="chart-utility">
+        <span class="analysis-status" id="mcSensitivityStatus">Simülasyon sonrası hazır</span>
+        <button class="btn olive" type="button" id="runRealSensitivity">Gerçek Sensitivity Çalıştır</button>
+      </div>
+    </div>
+    <div class="canvas-wrap small"><canvas id="mcSensitivityChart"></canvas></div>
+    <div class="delta-note"><strong>ΔRuin tanımı:</strong> “Ruin” kritik sermaye eşiğine temas olasılığıdır. “ΔRuin” ise parametre şokundan sonra bu olasılığın baz modele göre değişimidir ve yüzde puanla okunur. Örneğin +1.8 pp, kritik sermaye riskinin 1.8 yüzde puan arttığını gösterir.</div>
+    <div class="mc-sensitivity-grid" id="mcSensitivityGrid">
+      <div class="mc-sensitivity-card"><strong>Hazır</strong><span>Butona basınca gerçek MC sensitivity sonuçları burada oluşur.</span></div>
     </div>
   </section>
 
@@ -1835,6 +2474,8 @@ table{width:100%;border-collapse:collapse}
     delayedProgressMs: 220
   };
 
+  const FIXED_OPT_SEED = 161803;
+
   const state = {
     charts:{},
     last:null,
@@ -1845,7 +2486,15 @@ table{width:100%;border-collapse:collapse}
     lastProgressPct:0,
     lastProgressLabel:"Hesaplanıyor",
     activePresetName:"özel",
-    tradeFrequency:"daily"
+    tradeFrequency:"daily",
+    scenarioCompareBusy:false,
+    mcSensitivityBusy:false,
+    optResults:null,
+    optSelectedIndex:0,
+    optGoal:"balanced",
+    optThird:"none",
+    optConstraints:{minP5:false,maxRuin:false,maxDD:false},
+    optBusy:false
   };
 
   function $(id){ return document.getElementById(id); }
@@ -1900,6 +2549,7 @@ table{width:100%;border-collapse:collapse}
     const dailyText = fmtNum(daily, daily < 1 ? 2 : 1) + " trade/gün";
     return spec.period === "weekly" ? `${periodText} → ${dailyText}` : dailyText;
   }
+
 
   function controlMarkup(c){
     const spec = displaySpec(c);
@@ -1986,68 +2636,11 @@ table{width:100%;border-collapse:collapse}
 
   function updateFill(key){
     const c = getControl(key);
-    const spec = displaySpec(c);
     const r = $(key + "Range");
     if(!c || !r) return;
     const v = parseFloat(r.value);
-    const pct = ((v - spec.min) / (spec.max - spec.min)) * 100;
+    const pct = ((v - c.min) / (c.max - c.min)) * 100;
     r.style.setProperty("--fill", clamp(pct,0,100).toFixed(2) + "%");
-  }
-
-  function updateTradeFrequencyUI(){
-    const c = getControl("tradesPerDay");
-    const r = $("tradesPerDayRange");
-    const n = $("tradesPerDayNumber");
-    if(!c || !r || !n) return;
-    const spec = displaySpec(c);
-    const currentDaily = parseFloat(n.dataset.applied ?? c.value);
-    const displayValue = internalToDisplayValue(c, isFinite(currentDaily) ? currentDaily : c.value);
-    const decimals = stepDecimals(spec.step);
-    const str = decimals ? displayValue.toFixed(decimals) : String(Math.round(displayValue));
-
-    [r,n].forEach(el => {
-      el.min = String(spec.min);
-      el.max = String(spec.max);
-      el.step = String(spec.step);
-      el.value = str;
-    });
-    const suffix = $("tradesPerDaySuffix");
-    if(suffix) suffix.textContent = spec.suffix;
-    const labels = $("tradesPerDayRangeLabels");
-    if(labels){
-      labels.innerHTML = `<span>${fmtNum(spec.min,spec.step < 1 ? 2 : 0)} ${spec.suffix}</span><span>${fmtNum(spec.max,spec.step < 1 ? 2 : 0)} ${spec.suffix}</span>`;
-    }
-    const hint = $("tradeFrequencyHint");
-    if(hint){
-      hint.textContent = state.tradeFrequency === "weekly"
-        ? "Haftalık değer 5 işlem gününe bölünerek günlük ortalama modele aktarılır."
-        : "Günlük ortalama doğrudan modele uygulanır.";
-    }
-    updateFill("tradesPerDay");
-    updateApplied("tradesPerDay", displayToInternalValue(c, displayValue), displayValue);
-  }
-
-  function setTradeFrequency(freq){
-    state.tradeFrequency = freq === "weekly" ? "weekly" : "daily";
-    document.querySelectorAll("[data-trade-frequency]").forEach(btn => {
-      const active = btn.dataset.tradeFrequency === state.tradeFrequency;
-      btn.classList.toggle("active", active);
-      btn.setAttribute("aria-pressed", active ? "true" : "false");
-    });
-    updateTradeFrequencyUI();
-    updatePrintParams();
-  }
-
-  function setRiskMode(mode, dispatch=false){
-    const safe = mode === "fixed" ? "fixed" : "compounding";
-    const input = $("riskMode");
-    if(input) input.value = safe;
-    document.querySelectorAll("[data-risk-mode]").forEach(btn => {
-      const active = btn.dataset.riskMode === safe;
-      btn.classList.toggle("active", active);
-      btn.setAttribute("aria-pressed", active ? "true" : "false");
-    });
-    if(dispatch && input) input.dispatchEvent(new Event("change", {bubbles:true}));
   }
 
   function setParam(key, value, source){
@@ -2111,7 +2704,7 @@ table{width:100%;border-collapse:collapse}
       ["Risk Modeli", p.riskMode === "fixed" ? "Sabit risk" : "Bileşik risk", p.riskMode],
       ["Gün Sayısı", formatControlValue(byKey("days"), p.days), "İşlem günü"],
       ["Simülasyon Sayısı", formatControlValue(byKey("iterations"), p.iterations), "Monte Carlo yolu"],
-      ["Trade Frekansı", formatControlValue(byKey("tradesPerDay"), p.tradesPerDay), "Seçim: " + (p.tradeFrequency === "weekly" ? "haftalık giriş" : "günlük giriş")],
+      ["Günlük Trade", formatControlValue(byKey("tradesPerDay"), p.tradesPerDay), "Ortalama işlem frekansı"],
       ["Kazanma Oranı", formatControlValue(byKey("winRate"), p.winRate), "winRate"],
       ["Ortalama Kazanç R", formatControlValue(byKey("avgWinR"), p.avgWinR), "avgWinR"],
       ["Ortalama Kayıp R", formatControlValue(byKey("avgLossR"), p.avgLossR), "avgLossR"],
@@ -2148,6 +2741,24 @@ table{width:100%;border-collapse:collapse}
     });
   }
 
+  function normalizeParams(input){
+    const source = input || {};
+    const p = {};
+    controls.forEach(c => {
+      const raw = source[c.key] !== undefined ? Number(source[c.key]) : Number(c.value);
+      p[c.key] = clamp(isFinite(raw) ? raw : c.value, c.min, c.max);
+    });
+    p.riskMode = source.riskMode === "fixed" ? "fixed" : "compounding";
+    p.tradeFrequency = source.tradeFrequency === "weekly" ? "weekly" : "daily";
+    p.tradesPerPeriod = p.tradeFrequency === "weekly" ? p.tradesPerDay * 5 : p.tradesPerDay;
+    if(p.breakEvenRate + p.winRate > 98) p.breakEvenRate = Math.max(0, 98 - p.winRate);
+    return p;
+  }
+
+  function mergeParams(base, overrides){
+    return normalizeParams(Object.assign({}, base || {}, overrides || {}));
+  }
+
   function getParams(){
     const p = {};
     controls.forEach(c => {
@@ -2160,6 +2771,75 @@ table{width:100%;border-collapse:collapse}
     p.tradesPerPeriod = p.tradeFrequency === "weekly" ? p.tradesPerDay * 5 : p.tradesPerDay;
     if(p.breakEvenRate + p.winRate > 98) p.breakEvenRate = Math.max(0, 98 - p.winRate);
     return p;
+  }
+
+  
+  function updateTradeFrequencyUI(){
+    const c = getControl("tradesPerDay");
+    const r = $("tradesPerDayRange");
+    const n = $("tradesPerDayNumber");
+    if(!c || !r || !n) return;
+    const spec = displaySpec(c);
+    const currentDaily = parseFloat(n.dataset.applied ?? c.value);
+    const displayValue = internalToDisplayValue(c, isFinite(currentDaily) ? currentDaily : c.value);
+    const decimals = stepDecimals(spec.step);
+    const str = decimals ? displayValue.toFixed(decimals) : String(Math.round(displayValue));
+
+    [r,n].forEach(el => {
+      el.min = String(spec.min);
+      el.max = String(spec.max);
+      el.step = String(spec.step);
+      el.value = str;
+    });
+    const suffix = $("tradesPerDaySuffix");
+    if(suffix) suffix.textContent = spec.suffix;
+    const labels = $("tradesPerDayRangeLabels");
+    if(labels){
+      labels.innerHTML = `<span>${fmtNum(spec.min,spec.step < 1 ? 2 : 0)} ${spec.suffix}</span><span>${fmtNum(spec.max,spec.step < 1 ? 2 : 0)} ${spec.suffix}</span>`;
+    }
+    const hint = $("tradeFrequencyHint");
+    if(hint){
+      hint.textContent = state.tradeFrequency === "weekly"
+        ? "Haftalık değer 5 işlem gününe bölünerek günlük ortalama modele aktarılır."
+        : "Günlük ortalama doğrudan modele uygulanır.";
+    }
+    updateFill("tradesPerDay");
+    updateApplied("tradesPerDay", displayToInternalValue(c, displayValue), displayValue);
+  }
+
+  function setTradeFrequency(freq){
+    state.tradeFrequency = freq === "weekly" ? "weekly" : "daily";
+    document.querySelectorAll("[data-trade-frequency]").forEach(btn => {
+      const active = btn.dataset.tradeFrequency === state.tradeFrequency;
+      btn.classList.toggle("active", active);
+      btn.setAttribute("aria-pressed", active ? "true" : "false");
+    });
+    updateTradeFrequencyUI();
+    updatePrintParams();
+  }
+
+  function setRiskMode(mode, dispatch=false){
+    const safe = mode === "fixed" ? "fixed" : "compounding";
+    const input = $("riskMode");
+    if(input) input.value = safe;
+    document.querySelectorAll("[data-risk-mode]").forEach(btn => {
+      const active = btn.dataset.riskMode === safe;
+      btn.classList.toggle("active", active);
+      btn.setAttribute("aria-pressed", active ? "true" : "false");
+    });
+    if(dispatch && input) input.dispatchEvent(new Event("change", {bubbles:true}));
+  }
+
+  function setRDirection(direction){
+    const safe = direction === "short" ? "short" : "long";
+    const input = $("rDirection");
+    if(input) input.value = safe;
+    document.querySelectorAll("[data-r-direction]").forEach(btn => {
+      const active = btn.dataset.rDirection === safe;
+      btn.classList.toggle("active", active);
+      btn.setAttribute("aria-pressed", active ? "true" : "false");
+    });
+    calcR();
   }
 
   function markCustomPreset(){
@@ -2189,7 +2869,14 @@ table{width:100%;border-collapse:collapse}
     setTradeFrequency(state.tradeFrequency || "daily");
   }
 
-  function setupModes(){
+  function setupDirectionEvents(){
+    document.querySelectorAll("[data-r-direction]").forEach(btn => {
+      btn.addEventListener("click", () => setRDirection(btn.dataset.rDirection));
+    });
+    setRDirection($("rDirection")?.value || "long");
+  }
+
+function setupModes(){
     document.querySelectorAll(".mode-btn").forEach(btn => {
       btn.addEventListener("click", () => {
         document.querySelectorAll(".mode-btn").forEach(b => b.classList.remove("active"));
@@ -2283,8 +2970,8 @@ table{width:100%;border-collapse:collapse}
     };
   }
 
-  function createRng(){
-    const seed = Math.floor(Date.now() % 2147483647);
+  function createRng(seedOverride){
+    const seed = Number.isFinite(seedOverride) ? Math.floor(Math.abs(seedOverride)) : Math.floor(Date.now() % 2147483647);
     const rand = mulberry32(seed);
     let spare = null;
     return {
@@ -2332,6 +3019,136 @@ table{width:100%;border-collapse:collapse}
   function riskAmount(equity, p){
     const base = p.riskMode === "fixed" ? p.initialCapital : equity;
     return Math.max(0, Math.min(equity, base * (p.riskPerTradePct / 100)));
+  }
+
+  function runLiteSimulation(paramSource, options){
+    const opts = options || {};
+    const p = normalizeParams(paramSource);
+    if(opts.iterations) p.iterations = clamp(Math.round(opts.iterations), 500, Math.max(500, getControl("iterations").max));
+    const rng = createRng(opts.seed || 99173);
+    const days = Math.round(p.days);
+    const iterations = Math.round(p.iterations);
+    const initial = p.initialCapital;
+    const ruinLevel = initial * (p.ruinThresholdPct / 100);
+    const finals = [];
+    const dds = [];
+    const tuws = [];
+    const streaks = [];
+    let targetHits = 0, profitCount = 0, ruinCount = 0;
+    let totalTrades = 0, grossProfitR = 0, grossLossR = 0;
+
+    for(let i=0;i<iterations;i++){
+      let equity = initial;
+      let peak = initial;
+      let maxDD = 0;
+      let maxStreak = 0;
+      let streak = 0;
+      let currentTUW = 0;
+      let maxTUW = 0;
+      let hitTarget = initial >= p.targetCapital;
+      let hitRuin = initial <= ruinLevel;
+
+      for(let d=1; d<=days; d++){
+        if(equity <= 0){
+          equity = 0;
+          currentTUW += 1;
+          maxTUW = Math.max(maxTUW, currentTUW);
+          hitRuin = true;
+          continue;
+        }
+
+        const dayStart = equity;
+        let dailyPnl = 0;
+        const shock = rng.u() < p.shockProbability / 100;
+        if(shock && p.shockImpactR > 0){
+          const risk = riskAmount(equity, p);
+          const shockLoss = risk * p.shockImpactR;
+          equity = Math.max(0, equity - shockLoss);
+          dailyPnl -= shockLoss;
+          grossLossR += p.shockImpactR;
+        }
+
+        const trades = Math.max(0, poisson(p.tradesPerDay, rng));
+        for(let t=0; t<trades; t++){
+          if(equity <= 0) break;
+          if((-dailyPnl / Math.max(dayStart,1)) * 100 >= p.maxDailyLossPct) break;
+
+          const u = rng.u() * 100;
+          let r = 0;
+          if(u < p.breakEvenRate){
+            r = 0;
+            streak = 0;
+          } else if(u < p.breakEvenRate + p.winRate){
+            const noise = 1 + rng.normal() * 0.18 * p.volatilityFactor;
+            r = Math.max(0, p.avgWinR * noise);
+            streak = 0;
+            grossProfitR += r;
+          } else {
+            const lossMultiplier = Math.max(0.01, Math.exp(rng.normal() * 0.25 * p.volatilityFactor));
+            r = -p.avgLossR * lossMultiplier;
+            streak += 1;
+            maxStreak = Math.max(maxStreak, streak);
+            grossLossR += Math.abs(r);
+          }
+
+          const risk = riskAmount(equity, p);
+          const netR = r - p.tradeCostR;
+          grossLossR += p.tradeCostR;
+          const pnl = risk * netR;
+          equity = Math.max(0, equity + pnl);
+          dailyPnl += pnl;
+          totalTrades += 1;
+
+          if(equity >= p.targetCapital) hitTarget = true;
+          if(equity <= ruinLevel) hitRuin = true;
+        }
+
+        if(equity >= peak){
+          peak = equity;
+          currentTUW = 0;
+        } else {
+          currentTUW += 1;
+          maxTUW = Math.max(maxTUW, currentTUW);
+        }
+        const dd = peak > 0 ? (peak - equity) / peak * 100 : 0;
+        maxDD = Math.max(maxDD, dd);
+        if(equity >= p.targetCapital) hitTarget = true;
+        if(equity <= ruinLevel) hitRuin = true;
+      }
+
+      finals.push(equity);
+      dds.push(maxDD);
+      tuws.push(maxTUW);
+      streaks.push(maxStreak);
+      if(hitTarget) targetHits += 1;
+      if(hitRuin) ruinCount += 1;
+      if(equity > initial) profitCount += 1;
+    }
+
+    finals.sort((a,b)=>a-b);
+    dds.sort((a,b)=>a-b);
+    tuws.sort((a,b)=>a-b);
+    streaks.sort((a,b)=>a-b);
+
+    const p5 = percentile(finals,.05), p25 = percentile(finals,.25), p50 = percentile(finals,.50), p75 = percentile(finals,.75), p95 = percentile(finals,.95);
+    const mean = finals.reduce((a,b)=>a+b,0) / finals.length;
+    const avgDD = dds.reduce((a,b)=>a+b,0) / dds.length;
+    const worstDD = dds[dds.length-1] || 0;
+    const avgTUW = tuws.reduce((a,b)=>a+b,0) / tuws.length;
+    const maxTUW = tuws[tuws.length-1] || 0;
+    const avgStreak = streaks.reduce((a,b)=>a+b,0) / streaks.length;
+    const maxStreak = streaks[streaks.length-1] || 0;
+    const er = expectedR(p);
+    const targetProb = targetHits / iterations * 100;
+    const profitProb = profitCount / iterations * 100;
+    const ruinProb = ruinCount / iterations * 100;
+    const pf = grossLossR > 0 ? grossProfitR / grossLossR : 0;
+    const health = clamp(
+      50 + er * 22 + (profitProb - 50) * .24 + targetProb * .10 - ruinProb * .45 - Math.max(0, avgDD - 18) * .50 - Math.max(0, avgTUW - 45) * .10,
+      0, 100
+    );
+
+    return {p, seed:rng.seed, finals, dds, tuws, streaks, p5,p25,p50,p75,p95,mean,avgDD,worstDD,avgTUW,maxTUW,avgStreak,maxStreak,er,targetProb,profitProb,ruinProb,pf,health,totalTrades};
   }
 
   function runSimulation(){
@@ -2532,16 +3349,52 @@ table{width:100%;border-collapse:collapse}
   }
 
   function histogram(values, bins=24, money=true){
-    const min = values[0], max = values[values.length-1];
-    if(max <= min) return {labels:[money ? fmtMoney(min) : fmtPct(min,0)],counts:[values.length]};
+    const arr = Array.from(values || []).filter(v => isFinite(v)).sort((a,b)=>a-b);
+    if(!arr.length) return {labels:["—"],counts:[0]};
+    const min = arr[0], max = arr[arr.length-1];
+    if(max <= min) return {labels:[money ? fmtMoney(min) : fmtPct(min,0)],counts:[arr.length]};
     const width = (max - min) / bins;
     const counts = Array.from({length:bins},()=>0);
-    values.forEach(v => {
+    arr.forEach(v => {
       const idx = Math.min(bins-1, Math.floor((v - min) / width));
       counts[idx]++;
     });
     const labels = counts.map((_,i) => money ? fmtMoney(min + width * (i + .5)) : fmtPct(min + width * (i + .5),0));
     return {labels,counts};
+  }
+
+  function histogramPlain(values, bins=18, formatter){
+    const arr = Array.from(values || []).filter(v => isFinite(v)).sort((a,b)=>a-b);
+    if(!arr.length) return {labels:["—"],counts:[0]};
+    const min = arr[0], max = arr[arr.length-1];
+    const fmt = formatter || (v => fmtNum(v,0));
+    if(max <= min) return {labels:[fmt(min)],counts:[arr.length]};
+    const width = (max - min) / bins;
+    const counts = Array.from({length:bins},()=>0);
+    arr.forEach(v => {
+      const idx = Math.min(bins-1, Math.floor((v - min) / width));
+      counts[idx]++;
+    });
+    const labels = counts.map((_,i) => fmt(min + width * (i + .5)));
+    return {labels,counts};
+  }
+
+  function wrapTooltipText(text, maxLen=46){
+    const raw = String(text || "").replace(/\s+/g, " ").trim();
+    if(!raw) return [];
+    const words = raw.split(" ");
+    const lines = [];
+    let line = "";
+    words.forEach(word => {
+      if((line + " " + word).trim().length > maxLen){
+        if(line) lines.push(line);
+        line = word;
+      } else {
+        line = (line + " " + word).trim();
+      }
+    });
+    if(line) lines.push(line);
+    return lines;
   }
 
   function sensitivity(result){
@@ -2609,10 +3462,10 @@ table{width:100%;border-collapse:collapse}
       },
       {
         key:"tradesPerDay",
-        label:"Trade Frekansı",
+        label:"Günlük Trade Frekansı",
         score:p.tradesPerDay * (Math.abs(er) + p.tradeCostR) * 2.2,
-        value:formatControlValue(getControl("tradesPerDay"), p.tradesPerDay),
-        reading:"Günlük veya haftalık seçime göre girilen ortalama işlem frekansıdır; model içinde günlük ortalamaya çevrilir.",
+        value:fmtNum(p.tradesPerDay,2) + " trade/gün",
+        reading:"Her gün ortalama kaç işlem açıldığını belirler.",
         action:"Edge pozitifse fırsat sayısını artırır; maliyet veya avgLossR yüksekse aynı hızla sürtünmeyi ve hata birikimini de büyütür."
       },
       {
@@ -2724,6 +3577,20 @@ function renderCharts(result){
       options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{maxRotation:55,minRotation:55,autoSkip:true,maxTicksLimit:9},grid:{display:false}},y:{grid:{color:"rgba(226,216,201,.55)"}}}}
     });
 
+    const streakHist = histogramPlain(result.streaks, 16, v => Math.round(v) + " trade");
+    chart("losingStreakChart", {
+      type:"bar",
+      data:{labels:streakHist.labels,datasets:[{label:"Senaryo sayısı",data:streakHist.counts,backgroundColor:"rgba(127,39,55,.30)",borderColor:"#7f2737",borderWidth:1}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:(ctx)=>`${ctx.parsed.y || 0} simülasyon yolu`}}},scales:{x:{ticks:{maxRotation:55,minRotation:55,autoSkip:true,maxTicksLimit:9},grid:{display:false}},y:{grid:{color:"rgba(226,216,201,.55)"}}}}
+    });
+
+    const recoveryHist = histogramPlain(result.tuws, 18, v => Math.round(v) + " gün");
+    chart("recoveryChart", {
+      type:"bar",
+      data:{labels:recoveryHist.labels,datasets:[{label:"Senaryo sayısı",data:recoveryHist.counts,backgroundColor:"rgba(100,112,73,.30)",borderColor:"#647049",borderWidth:1}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:(ctx)=>`${ctx.parsed.y || 0} simülasyon yolu`}}},scales:{x:{ticks:{maxRotation:55,minRotation:55,autoSkip:true,maxTicksLimit:9},grid:{display:false}},y:{grid:{color:"rgba(226,216,201,.55)"}}}}
+    });
+
     chart("outcomeChart", {
       type:"bar",
       data:{labels:["P5","P25","P50","P75","P95"],datasets:[{label:"Final Sermaye",data:[result.p5,result.p25,result.p50,result.p75,result.p95],backgroundColor:["rgba(127,39,55,.38)","rgba(198,91,54,.34)","rgba(23,20,17,.28)","rgba(168,132,66,.38)","rgba(100,112,73,.38)"],borderColor:["#7f2737","#c65b36","#171411","#a88442","#647049"],borderWidth:1}]},
@@ -2743,17 +3610,737 @@ function renderCharts(result){
             renderSensitivityNarrative(result, sens, elements[0].index);
           }
         },
-        plugins:{legend:{display:false},tooltip:{callbacks:{
-          afterLabel:(ctx)=>sens[ctx.dataIndex]?.reading || "",
-          footer:(items)=>{
-            const idx = items && items[0] ? items[0].dataIndex : 0;
-            return sens[idx]?.action || "";
+        plugins:{legend:{display:false},tooltip:{
+          displayColors:false,
+          padding:12,
+          bodySpacing:4,
+          footerSpacing:6,
+          callbacks:{
+            label:(ctx)=>`Analitik etki skoru: ${ctx.parsed.x}/100`,
+            afterLabel:(ctx)=>wrapTooltipText(sens[ctx.dataIndex]?.reading || "", 44),
+            footer:(items)=>{
+              const idx = items && items[0] ? items[0].dataIndex : 0;
+              return wrapTooltipText(sens[idx]?.action || "", 44);
+            }
           }
-        }}},
+        }},
         scales:{x:{max:100,grid:{color:"rgba(226,216,201,.55)"}},y:{grid:{display:false},ticks:{font:{size:10}}}}
       }
     });
     renderSensitivityNarrative(result, sens, 0);
+  }
+
+  function scenarioComparisonSet(currentResult){
+    const current = currentResult?.p || getParams();
+    const preferred = ["base","conservative","aggressive","crisis","trend"];
+    const selectedPresets = preferred.map(key => scenarioPresets.find(x => x.key === key)).filter(Boolean);
+    return [
+      {key:"current", name:"Aktif Set", params:current},
+      ...selectedPresets.map(preset => ({key:preset.key, name:preset.name, params:mergeParams({}, preset.values)}))
+    ];
+  }
+
+  function renderScenarioComparison(result){
+    const status = $("scenarioCompareStatus");
+    const grid = $("scenarioCompareGrid");
+    if(!result || state.scenarioCompareBusy) return;
+    state.scenarioCompareBusy = true;
+    if(status) status.textContent = "Hafif MC karşılaştırması çalışıyor";
+    window.setTimeout(() => {
+      try{
+        const baseIterations = Math.round(result.p.iterations || 1000);
+        const compareIterations = clamp(Math.round(baseIterations * 0.24), 500, 1200);
+        const seed = 314159;
+        const rows = scenarioComparisonSet(result).map(item => {
+          const sim = item.key === "current"
+            ? runLiteSimulation(result.p, {iterations:compareIterations, seed})
+            : runLiteSimulation(item.params, {iterations:compareIterations, seed});
+          return {key:item.key, name:item.name, sim};
+        });
+
+        const logSafe = value => Math.max(Number(value) || 0, 1);
+        chart("scenarioCompareChart", {
+          type:"bar",
+          data:{
+            labels:rows.map(x=>x.name),
+            datasets:[
+              {label:"P5",field:"p5",data:rows.map(x=>logSafe(x.sim.p5)),backgroundColor:"rgba(127,39,55,.32)",borderColor:"#7f2737",borderWidth:1},
+              {label:"P50",field:"p50",data:rows.map(x=>logSafe(x.sim.p50)),backgroundColor:"rgba(198,91,54,.34)",borderColor:"#c65b36",borderWidth:1},
+              {label:"P95",field:"p95",data:rows.map(x=>logSafe(x.sim.p95)),backgroundColor:"rgba(100,112,73,.34)",borderColor:"#647049",borderWidth:1}
+            ]
+          },
+          options:{
+            responsive:true,
+            maintainAspectRatio:false,
+            interaction:{mode:"index",intersect:false},
+            plugins:{legend:{position:"bottom"},tooltip:{callbacks:{label:(ctx)=>{
+              const field = ctx.dataset.field || "p50";
+              const original = rows[ctx.dataIndex]?.sim?.[field] ?? ctx.parsed.y;
+              return `${ctx.dataset.label}: ${fmtMoney(original)}`;
+            }}}},
+            scales:{x:{grid:{display:false},ticks:{maxRotation:35,minRotation:0}},y:{type:"logarithmic",ticks:{callback:value=>{
+              const v = Number(value);
+              if(v < 1000) return "₺" + v.toFixed(0);
+              if(v >= 1000000) return "₺" + (v/1000000).toFixed(1) + "M";
+              return "₺" + (v/1000).toFixed(0) + "K";
+            }},grid:{color:"rgba(226,216,201,.55)"}}}
+          }
+        });
+
+        if(grid){
+          grid.innerHTML = rows.map(x => `
+            <div class="compare-card">
+              <strong>${x.name}</strong>
+              <span class="mono">P50 ${fmtMoney(x.sim.p50)}</span>
+              <span>P5 ${fmtMoney(x.sim.p5)} · P95 ${fmtMoney(x.sim.p95)}</span>
+              <span>Hedef ${fmtPct(x.sim.targetProb,1)} · Kritik ${fmtPct(x.sim.ruinProb,1)}</span>
+            </div>
+          `).join("");
+        }
+        if(status) status.textContent = `${compareIterations.toLocaleString("tr-TR")} yol · aynı seed`;
+      } catch(err){
+        if(status) status.textContent = "Karşılaştırma hatası";
+        console.error(err);
+      } finally {
+        state.scenarioCompareBusy = false;
+      }
+    }, 20);
+  }
+
+  function sensitivityPerturbations(base){
+    const p = base || getParams();
+    const pct = v => Math.max(Math.abs(v) * .15, .01);
+    return [
+      {key:"riskPerTradePct", label:"Trade Başına Risk", down:{riskPerTradePct:p.riskPerTradePct - Math.max(p.riskPerTradePct * .20,.2)}, up:{riskPerTradePct:p.riskPerTradePct + Math.max(p.riskPerTradePct * .20,.2)}},
+      {key:"winRate", label:"Kazanma Oranı", down:{winRate:p.winRate - 5}, up:{winRate:p.winRate + 5}},
+      {key:"avgWinR", label:"Ortalama Kazanç R", down:{avgWinR:p.avgWinR - pct(p.avgWinR)}, up:{avgWinR:p.avgWinR + pct(p.avgWinR)}},
+      {key:"avgLossR", label:"Ortalama Kayıp R", down:{avgLossR:p.avgLossR - pct(p.avgLossR)}, up:{avgLossR:p.avgLossR + pct(p.avgLossR)}},
+      {key:"tradeCostR", label:"Trade Maliyeti R", down:{tradeCostR:p.tradeCostR - Math.max(p.tradeCostR * .30,.03)}, up:{tradeCostR:p.tradeCostR + Math.max(p.tradeCostR * .30,.03)}},
+      {key:"tradesPerDay", label:"Trade Frekansı", down:{tradesPerDay:p.tradesPerDay - Math.max(p.tradesPerDay * .20,.1)}, up:{tradesPerDay:p.tradesPerDay + Math.max(p.tradesPerDay * .20,.1)}},
+      {key:"volatilityFactor", label:"R Volatilitesi", down:{volatilityFactor:p.volatilityFactor - Math.max(p.volatilityFactor * .25,.15)}, up:{volatilityFactor:p.volatilityFactor + Math.max(p.volatilityFactor * .25,.15)}},
+      {key:"shockProbability", label:"Şok Olasılığı", down:{shockProbability:p.shockProbability - 2}, up:{shockProbability:p.shockProbability + 2}}
+    ];
+  }
+
+  function runRealSensitivity(){
+    const status = $("mcSensitivityStatus");
+    const grid = $("mcSensitivityGrid");
+    if(!state.last || state.mcSensitivityBusy){
+      if(status) status.textContent = state.mcSensitivityBusy ? "Hesaplama sürüyor" : "Önce simülasyonu çalıştır";
+      return;
+    }
+    state.mcSensitivityBusy = true;
+    if(status) status.textContent = "Gerçek MC sensitivity çalışıyor";
+    const btn = $("runRealSensitivity");
+    if(btn) btn.disabled = true;
+
+    window.setTimeout(() => {
+      try{
+        const baseParams = normalizeParams(state.last.p);
+        const sensitivityIterations = clamp(Math.round((baseParams.iterations || 5000) * .18), 500, 1100);
+        const seed = 271828;
+        const base = runLiteSimulation(baseParams, {iterations:sensitivityIterations, seed});
+        const rows = sensitivityPerturbations(baseParams).map(item => {
+          const down = runLiteSimulation(mergeParams(baseParams, item.down), {iterations:sensitivityIterations, seed});
+          const up = runLiteSimulation(mergeParams(baseParams, item.up), {iterations:sensitivityIterations, seed});
+          const deltaP50Down = down.p50 - base.p50;
+          const deltaP50Up = up.p50 - base.p50;
+          const impactP50 = Math.max(Math.abs(deltaP50Down), Math.abs(deltaP50Up));
+          const impactP5 = Math.max(Math.abs(down.p5 - base.p5), Math.abs(up.p5 - base.p5));
+          const impactRuin = Math.max(Math.abs(down.ruinProb - base.ruinProb), Math.abs(up.ruinProb - base.ruinProb));
+          const direction = Math.abs(deltaP50Up) >= Math.abs(deltaP50Down) ? deltaP50Up : deltaP50Down;
+          return {key:item.key,label:item.label,impactP50,impactP5,impactRuin,direction,down,up};
+        }).sort((a,b)=>b.impactP50-a.impactP50);
+
+        chart("mcSensitivityChart", {
+          type:"bar",
+          data:{labels:rows.map(x=>x.label),datasets:[{label:"Maks. |ΔP50|",data:rows.map(x=>x.impactP50),backgroundColor:"rgba(198,91,54,.34)",borderColor:"#c65b36",borderWidth:1}]},
+          options:{
+            indexAxis:"y",
+            responsive:true,
+            maintainAspectRatio:false,
+            plugins:{legend:{display:false},tooltip:{
+              displayColors:false,
+              padding:12,
+              callbacks:{
+                label:(ctx)=>`Maks. |ΔP50|: ${fmtMoney(ctx.parsed.x)}`,
+                afterLabel:(ctx)=>{
+                  const r = rows[ctx.dataIndex];
+                  return [`Maks. |ΔP5|: ${fmtMoney(r.impactP5)}`, `Maks. |ΔRuin|: ${fmtPct(r.impactRuin,1)}`];
+                }
+              }
+            }},
+            scales:{x:{ticks:{callback:value=>{
+              const v = Number(value);
+              if(Math.abs(v) >= 1000000) return "₺" + (v/1000000).toFixed(1) + "M";
+              if(Math.abs(v) >= 1000) return "₺" + (v/1000).toFixed(0) + "K";
+              return "₺" + v.toFixed(0);
+            }},grid:{color:"rgba(226,216,201,.55)"}},y:{grid:{display:false},ticks:{font:{size:10}}}}
+          }
+        });
+
+        if(grid){
+          grid.innerHTML = rows.slice(0,6).map(x => `
+            <div class="mc-sensitivity-card">
+              <strong>${x.label}</strong>
+              <span class="mono">ΔP50 ${fmtMoney(x.direction)}</span>
+              <span>Maks. |ΔP5| ${fmtMoney(x.impactP5)} · |ΔRuin| ${fmtPct(x.impactRuin,1)}</span>
+            </div>
+          `).join("");
+        }
+        if(status) status.textContent = `${sensitivityIterations.toLocaleString("tr-TR")} yol · aynı seed · ${rows.length} parametre`;
+      } catch(err){
+        if(status) status.textContent = "Sensitivity hatası";
+        console.error(err);
+      } finally {
+        state.mcSensitivityBusy = false;
+        if(btn) btn.disabled = false;
+      }
+    }, 30);
+  }
+
+
+
+  function optGoalMeta(goal){
+    const map = {
+      balanced:{code:"dengeli", help:"Dengeli hedef; profit factor, drawdown ve kritik sermaye riskini birlikte dengeler."},
+      target:{code:"hedefe_ulaşma", help:"Hedefe ulaşma olasılığını maksimize eder. Kısıt kapalıysa kötü senaryo riski ikinci planda kalabilir."},
+      ruin:{code:"ruin_minimize", help:"Kritik sermaye eşiğine temas olasılığını minimize eder. Büyüme yerine sermaye savunması öne çıkar."},
+      drawdown:{code:"drawdown_minimize", help:"Ortalama maksimum drawdown değerini minimize eder. Daha sakin ama daha yavaş kombinasyonlar öne çıkabilir."},
+      riskAdjusted:{code:"risk_adjusted", help:"Expected R / drawdown dengesiyle risk başına verimi maksimize eder."},
+      p5p75:{code:"p5_koruyarak_p75", help:"P5 kötü senaryo eşiğini koruyarak P75 güçlü senaryo sonucunu büyütür."},
+      median:{code:"medyan_maksimize", help:"P50 medyan final sermayeyi maksimize eder. Kısıt yoksa kuyruk riski ihmal edilebilir."}
+    };
+    return map[goal] || map.balanced;
+  }
+
+  function optNumber(id, fallback){
+    const el = $(id);
+    const v = parseFloat(el?.value);
+    return isFinite(v) ? v : fallback;
+  }
+
+  function optInt(id, fallback, min, max){
+    return Math.round(clamp(optNumber(id, fallback), min, max));
+  }
+
+  function optRange(min, max, steps, decimals){
+    const safeSteps = Math.max(1, Math.round(steps || 1));
+    const a = Number(min), b = Number(max);
+    const lo = Math.min(a,b), hi = Math.max(a,b);
+    if(safeSteps <= 1 || Math.abs(hi - lo) < 1e-12) return [Number(lo.toFixed(decimals || 3))];
+    const out = [];
+    for(let i=0;i<safeSteps;i++){
+      const v = lo + (hi - lo) * (i / (safeSteps - 1));
+      out.push(Number(v.toFixed(decimals || 3)));
+    }
+    return out;
+  }
+
+  function optReadConfig(){
+    const riskSteps = optInt("optRiskSteps", 9, 5, 15);
+    const winRSteps = optInt("optWinRSteps", 8, 5, 15);
+    const thirdSteps = optInt("optThirdSteps", 5, 3, 10);
+    const riskValues = optRange(optNumber("optRiskMin", .4), optNumber("optRiskMax", 2.4), riskSteps, 2);
+    const winRValues = optRange(optNumber("optWinRMin", 1.2), optNumber("optWinRMax", 2.6), winRSteps, 2);
+
+    let thirdKey = state.optThird || "none";
+    let thirdValues = [null];
+    if(thirdKey !== "none"){
+      const defaults = thirdKey === "tradeCostR"
+        ? {min:.02,max:.12,decimals:3}
+        : {min:.1,max:3,decimals:2};
+      thirdValues = optRange(
+        optNumber("optThirdMin", defaults.min),
+        optNumber("optThirdMax", defaults.max),
+        thirdSteps,
+        defaults.decimals
+      );
+    }
+
+    const constraints = {
+      minP5: state.optConstraints.minP5 ? optNumber("optMinP5", 0) : null,
+      maxRuin: state.optConstraints.maxRuin ? optNumber("optMaxRuin", 100) : null,
+      maxDD: state.optConstraints.maxDD ? optNumber("optMaxDD", 100) : null
+    };
+
+    return {
+      goal:state.optGoal || "balanced",
+      thirdKey,
+      riskValues,
+      winRValues,
+      thirdValues,
+      constraints,
+      total:riskValues.length * winRValues.length * thirdValues.length
+    };
+  }
+
+  function optEstimateMetrics(params){
+    const p = normalizeParams(params);
+    const er = expectedR(p);
+    const expectedTrades = Math.max(0, p.days * p.tradesPerDay);
+    const risk = p.riskPerTradePct / 100;
+    const vol = Math.max(.15, p.volatilityFactor || 1);
+    const drift = er * expectedTrades * risk;
+    const sigma = Math.sqrt(Math.max(1, expectedTrades)) * risk * (0.9 + vol * 0.55 + (p.shockProbability/100) * Math.max(0,p.shockImpactR));
+    const medianMultiplier = Math.exp(drift - 0.5 * sigma * sigma * .18);
+    const p50 = p.initialCapital * medianMultiplier;
+    const p5 = Math.max(0, p.initialCapital * Math.exp(drift - 1.65 * sigma));
+    const p75 = Math.max(0, p.initialCapital * Math.exp(drift + 0.67 * sigma));
+    const ddFromRisk = p.riskPerTradePct * Math.sqrt(Math.max(1, expectedTrades)) * (0.75 + vol * .45);
+    const ddFromShock = p.shockProbability * p.shockImpactR * .25;
+    const avgDD = clamp(ddFromRisk + ddFromShock - Math.max(0, er) * 6, 0, 99);
+    const ruinLevel = p.initialCapital * (p.ruinThresholdPct / 100);
+    const p5Gap = (ruinLevel - p5) / Math.max(p.initialCapital,1);
+    const ruinProb = clamp((1 / (1 + Math.exp(-p5Gap * 10))) * 100 + Math.max(0, avgDD - 35) * .45 - Math.max(0, er) * 3, 0, 100);
+    const targetGap = (p50 - p.targetCapital) / Math.max(p.targetCapital,1);
+    const targetProb = clamp((1 / (1 + Math.exp(-targetGap * 6))) * 100 + Math.max(0, p75 - p.targetCapital) / Math.max(p.targetCapital,1) * 18, 0, 100);
+    const profitFactor = Math.max(0, (p.winRate/100 * p.avgWinR) / Math.max(.001, (1 - p.winRate/100 - p.breakEvenRate/100) * p.avgLossR + p.tradeCostR));
+    return {p, p5, p50, p75, avgDD, ruinProb, targetProb, er, pf:profitFactor, fast:true};
+  }
+
+  function optScore(metrics, goal, constraints){
+    if(constraints.minP5 !== null && metrics.p5 < constraints.minP5) return {eligible:false, reason:"P5 kısıtı"};
+    if(constraints.maxRuin !== null && metrics.ruinProb > constraints.maxRuin) return {eligible:false, reason:"Ruin kısıtı"};
+    if(constraints.maxDD !== null && metrics.avgDD > constraints.maxDD) return {eligible:false, reason:"DD kısıtı"};
+
+    let score;
+    switch(goal){
+      case "target":
+        score = metrics.targetProb;
+        break;
+      case "ruin":
+        score = -metrics.ruinProb;
+        break;
+      case "drawdown":
+        score = -metrics.avgDD;
+        break;
+      case "riskAdjusted":
+        score = metrics.er / Math.max(metrics.avgDD / 100, .01);
+        break;
+      case "p5p75": {
+        const minP5 = constraints.minP5 !== null ? constraints.minP5 : metrics.p.initialCapital * .60;
+        const penalty = metrics.p5 < minP5 ? (minP5 - metrics.p5) * 3 : 0;
+        score = metrics.p75 - penalty;
+        break;
+      }
+      case "median":
+        score = metrics.p50;
+        break;
+      case "balanced":
+      default:
+        score = (metrics.pf - 1) / Math.max(metrics.avgDD / 100, .01) - metrics.ruinProb * .05 + metrics.targetProb * .015;
+        break;
+    }
+    return {eligible:true, score};
+  }
+
+  function optGenerateRows(useMC, limitRows){
+    const base = getParams();
+    const cfg = optReadConfig();
+    const rows = [];
+    const eliminated = {total:0, minP5:0, maxRuin:0, maxDD:0};
+    let idx = 0;
+
+    cfg.riskValues.forEach(riskPct => {
+      cfg.winRValues.forEach(winR => {
+        cfg.thirdValues.forEach(thirdValue => {
+          const overrides = {riskPerTradePct:riskPct, avgWinR:winR};
+          if(cfg.thirdKey !== "none" && thirdValue !== null) overrides[cfg.thirdKey] = thirdValue;
+          const p = mergeParams(base, overrides);
+          const metrics = useMC ? runLiteSimulation(p, {iterations:limitRows || 800, seed:FIXED_OPT_SEED}) : optEstimateMetrics(p);
+          const scoring = optScore(metrics, cfg.goal, cfg.constraints);
+          const item = {
+            id:idx++,
+            p,
+            metrics,
+            score:scoring.score,
+            eligible:scoring.eligible,
+            reason:scoring.reason || "",
+            x:riskPct,
+            y:winR,
+            z:thirdValue,
+            thirdKey:cfg.thirdKey,
+            verified:!!useMC
+          };
+          if(!scoring.eligible){
+            eliminated.total += 1;
+            if(eliminated[scoring.reason?.includes("P5") ? "minP5" : scoring.reason?.includes("Ruin") ? "maxRuin" : "maxDD"] !== undefined){
+              eliminated[scoring.reason.includes("P5") ? "minP5" : scoring.reason.includes("Ruin") ? "maxRuin" : "maxDD"] += 1;
+            }
+          }
+          rows.push(item);
+        });
+      });
+    });
+
+    rows.sort((a,b) => {
+      if(a.eligible !== b.eligible) return a.eligible ? -1 : 1;
+      return (b.score ?? -Infinity) - (a.score ?? -Infinity);
+    });
+    return {rows,cfg,eliminated};
+  }
+
+  function optScoreDisplay(row){
+    if(!row || !isFinite(row.score)) return "—";
+    const goal = state.optGoal || "balanced";
+    if(goal === "median" || goal === "p5p75") return fmtMoney(row.score);
+    if(Math.abs(row.score) >= 100) return fmtNum(row.score,0);
+    return fmtNum(row.score,2);
+  }
+
+  function optSetProgress(active, pct, label){
+    const wrap = $("optProgress");
+    const bar = $("optProgressBar");
+    const txt = $("optProgressText");
+    const pctEl = $("optProgressPct");
+    if(wrap){
+      wrap.classList.toggle("active", !!active);
+      wrap.setAttribute("aria-hidden", active ? "false" : "true");
+    }
+    if(bar) bar.style.width = clamp(pct || 0, 0, 100).toFixed(1) + "%";
+    if(txt) txt.textContent = label || "Optimizasyon hesaplanıyor";
+    if(pctEl) pctEl.textContent = Math.round(clamp(pct || 0, 0, 100)) + "%";
+  }
+
+  function optRunFast(){
+    try{
+      const cfg = optReadConfig();
+      if(cfg.total > 750){
+        const summary = $("optComboSummary");
+        if(summary){
+          summary.textContent = `${cfg.total.toLocaleString("tr-TR")} kombinasyon fazla yüksek. Adım sayısını azalt ya da 3. parametreyi kapat.`;
+          summary.classList.add("warn");
+        }
+        return;
+      }
+      const pack = optGenerateRows(false);
+      state.optResults = pack;
+      state.optSelectedIndex = 0;
+      optRenderResults(pack);
+      const btn = $("optRunMC");
+      if(btn) btn.disabled = !pack.rows.some(x => x.eligible);
+    } catch(err){
+      console.error(err);
+      const summary = $("optComboSummary");
+      if(summary){
+        summary.textContent = "Optimizasyon hatası: " + (err && err.message ? err.message : String(err));
+        summary.classList.add("warn");
+      }
+    }
+  }
+
+  function optRunMCValidate(){
+    if(!state.optResults || state.optBusy) return;
+    const top = state.optResults.rows.filter(x=>x.eligible).slice(0,5);
+    if(!top.length) return;
+    state.optBusy = true;
+    const btn = $("optRunMC");
+    if(btn) btn.disabled = true;
+    optSetProgress(true, 8, "Top 5 MC doğrulanıyor");
+
+    window.setTimeout(() => {
+      try{
+        const baseIterations = Math.round(getParams().iterations || 5000);
+        const iterations = clamp(Math.round(baseIterations * .18), 500, 1200);
+        const verified = top.map((row, i) => {
+          optSetProgress(true, 14 + (i / Math.max(top.length,1))*76, `${i+1}/${top.length} kombinasyon doğrulanıyor`);
+          const sim = runLiteSimulation(row.p, {iterations, seed:FIXED_OPT_SEED});
+          const scoring = optScore(sim, state.optResults.cfg.goal, state.optResults.cfg.constraints);
+          return {...row, metrics:sim, score:scoring.score, eligible:scoring.eligible, verified:true};
+        }).sort((a,b)=>(b.score ?? -Infinity)-(a.score ?? -Infinity));
+        const rest = state.optResults.rows.filter(x=>!top.some(t=>t.id===x.id));
+        state.optResults = {...state.optResults, rows:[...verified, ...rest], mcIterations:iterations};
+        state.optSelectedIndex = 0;
+        optRenderResults(state.optResults);
+        optSetProgress(true, 100, "MC doğrulama tamamlandı");
+        window.setTimeout(()=>optSetProgress(false, 0, ""), 550);
+      } catch(err){
+        console.error(err);
+        optSetProgress(true, 100, "MC doğrulama hatası");
+      } finally {
+        state.optBusy = false;
+        if(btn) btn.disabled = false;
+      }
+    }, 30);
+  }
+
+  function optRowLabel(row){
+    const third = row.thirdKey && row.thirdKey !== "none" && row.z !== null
+      ? ` · ${row.thirdKey === "tradeCostR" ? "Maliyet " + fmtNum(row.z,2) + "R" : "Frekans " + fmtNum(row.z, row.z < 1 ? 2 : 1) + "/gün"}`
+      : "";
+    return `Risk ${fmtPct(row.p.riskPerTradePct,1)} · AvgWinR ${fmtNum(row.p.avgWinR,2)}R${third}`;
+  }
+
+  function optRenderResults(pack){
+    const rows = pack.rows || [];
+    const eligible = rows.filter(x=>x.eligible);
+    const selected = eligible[state.optSelectedIndex] || eligible[0];
+    const results = $("optResults");
+    if(results){
+      results.classList.add("active");
+      results.setAttribute("aria-hidden", "false");
+    }
+
+    optRenderSummary(selected, pack);
+    optRenderTable(eligible.slice(0,5));
+    optRenderHeatmap(pack, selected);
+    optRenderNarrative(selected, pack);
+    optRenderCurrentCompare(pack);
+
+    const summary = $("optComboSummary");
+    if(summary){
+      summary.classList.remove("warn");
+      const mc = pack.mcIterations ? ` · Top 5 MC doğrulandı (${pack.mcIterations.toLocaleString("tr-TR")} yol)` : "";
+      const elim = pack.eliminated?.total ? ` · ${pack.eliminated.total} kombinasyon kısıt nedeniyle elendi` : "";
+      summary.textContent = `${pack.cfg.total.toLocaleString("tr-TR")} kombinasyon tarandı${elim}${mc}`;
+    }
+  }
+
+  function optRenderSummary(row, pack){
+    const main = $("optBestMain");
+    const sub = $("optBestSub");
+    if(!row){
+      if(main) main.textContent = "Uygun kombinasyon yok";
+      if(sub) sub.textContent = "Kısıtları gevşet veya aralıkları genişlet.";
+      return;
+    }
+    if(main) main.textContent = `${fmtPct(row.p.riskPerTradePct,1)} risk · ${fmtNum(row.p.avgWinR,2)}R avgWin`;
+    if(sub) sub.innerHTML = `Skor <strong class="mono">${optScoreDisplay(row)}</strong> · P50 <strong class="mono">${fmtMoney(row.metrics.p50)}</strong> · P5 <strong class="mono">${fmtMoney(row.metrics.p5)}</strong> · Ruin <strong class="mono">${fmtPct(row.metrics.ruinProb,1)}</strong> · ExpR <strong class="mono">${fmtNum(row.metrics.er,2)}R</strong>${row.verified ? " · MC doğrulandı" : " · hızlı tahmin"}`;
+  }
+
+  function optRenderTable(topRows){
+    const body = $("optResultsBody");
+    if(!body) return;
+    if(!topRows.length){
+      body.innerHTML = `<tr><td colspan="8">Kısıtları karşılayan kombinasyon bulunamadı.</td></tr>`;
+      return;
+    }
+    body.innerHTML = topRows.map((row,idx) => `
+      <tr class="${idx === state.optSelectedIndex ? "active" : ""}" data-opt-row="${idx}">
+        <td class="mono">${idx+1}</td>
+        <td class="mono">${fmtPct(row.p.riskPerTradePct,1)}</td>
+        <td class="mono">${fmtNum(row.p.avgWinR,2)}R</td>
+        <td class="mono">${fmtMoney(row.metrics.p50)}</td>
+        <td class="mono">${fmtMoney(row.metrics.p5)}</td>
+        <td class="mono">${fmtPct(row.metrics.ruinProb,1)}</td>
+        <td class="mono">${fmtNum(row.metrics.er,2)}R</td>
+        <td class="mono">${optScoreDisplay(row)}</td>
+      </tr>
+    `).join("");
+    body.querySelectorAll("[data-opt-row]").forEach(tr => {
+      tr.addEventListener("click", () => {
+        state.optSelectedIndex = Number(tr.dataset.optRow || 0);
+        optRenderResults(state.optResults);
+      });
+    });
+  }
+
+  function optHeatColor(value, min, max){
+    const pct = max > min ? clamp((value - min) / (max - min), 0, 1) : .5;
+    if(pct < .5){
+      const t = pct / .5;
+      return `rgba(${Math.round(127 + (168-127)*t)},${Math.round(39 + (132-39)*t)},${Math.round(55 + (66-55)*t)},.82)`;
+    }
+    const t = (pct-.5)/.5;
+    return `rgba(${Math.round(168 + (100-168)*t)},${Math.round(132 + (112-132)*t)},${Math.round(66 + (73-66)*t)},.86)`;
+  }
+
+  function optRenderHeatmap(pack, selected){
+    const el = $("optHeatmap");
+    if(!el) return;
+    const cfg = pack.cfg;
+    const eligible = pack.rows.filter(x=>x.eligible);
+    if(!eligible.length){
+      el.innerHTML = `<div class="opt-muted">Kısıtları karşılayan hücre yok.</div>`;
+      return;
+    }
+
+    const xs = cfg.riskValues;
+    const ys = [...cfg.winRValues].reverse();
+    const scores = eligible.map(x=>x.score).filter(isFinite);
+    const minScore = Math.min(...scores), maxScore = Math.max(...scores);
+    const cellMap = new Map();
+    eligible.forEach(row => {
+      const key = `${row.x}|${row.y}`;
+      const prev = cellMap.get(key);
+      if(!prev || row.score > prev.score) cellMap.set(key, row);
+    });
+
+    let html = `<div class="opt-heatmap-grid" style="grid-template-columns:76px repeat(${xs.length}, minmax(46px,1fr));">`;
+    html += `<div class="opt-heatmap-axis">AvgWinR ↓ / Risk →</div>`;
+    xs.forEach(x => html += `<div class="opt-heatmap-axis">${fmtPct(x,1)}</div>`);
+    ys.forEach(y => {
+      html += `<div class="opt-heatmap-axis">${fmtNum(y,2)}R</div>`;
+      xs.forEach(x => {
+        const row = cellMap.get(`${x}|${y}`);
+        if(!row){
+          html += `<div class="opt-heatmap-cell" style="background:#d8cdbd;color:var(--stone);text-shadow:none" title="Elenen kombinasyon">—</div>`;
+        } else {
+          const active = selected && Math.abs(selected.x-x)<1e-9 && Math.abs(selected.y-y)<1e-9;
+          html += `<div class="opt-heatmap-cell" data-opt-heat="${row.id}" style="background:${optHeatColor(row.score,minScore,maxScore)};${active ? "outline:2px solid #171411;outline-offset:1px;" : ""}" title="${optRowLabel(row)} · Skor ${optScoreDisplay(row)} · P50 ${fmtMoney(row.metrics.p50)}">${optScoreDisplay(row)}</div>`;
+        }
+      });
+    });
+    html += `</div>`;
+    el.innerHTML = html;
+    el.querySelectorAll("[data-opt-heat]").forEach(cell => {
+      cell.addEventListener("click", () => {
+        const id = Number(cell.dataset.optHeat);
+        const top = (state.optResults?.rows || []).filter(x=>x.eligible).slice(0,5);
+        const idx = top.findIndex(x=>x.id===id);
+        if(idx >= 0){
+          state.optSelectedIndex = idx;
+          optRenderResults(state.optResults);
+        }
+      });
+    });
+  }
+
+  function optRenderNarrative(row, pack){
+    const el = $("optNarrative");
+    if(!el) return;
+    if(!row){
+      el.textContent = "Bu aralık ve kısıt setinde uygun kombinasyon bulunamadı.";
+      return;
+    }
+    const current = getParams();
+    const currentMetrics = optEstimateMetrics(current);
+    const p50Delta = currentMetrics.p50 > 0 ? (row.metrics.p50 / currentMetrics.p50 - 1) * 100 : 0;
+    const riskText = row.p.riskPerTradePct > current.riskPerTradePct ? "risk yüzdesi yükseliyor" : row.p.riskPerTradePct < current.riskPerTradePct ? "risk yüzdesi düşüyor" : "risk yüzdesi mevcut ayara yakın";
+    const winText = row.p.avgWinR > current.avgWinR ? "avgWinR artışı seçici trade kalitesine ihtiyaç duyuyor" : row.p.avgWinR < current.avgWinR ? "avgWinR hedefi mevcut ayardan daha muhafazakâr" : "avgWinR mevcut ayarla aynı bölgede";
+    const constraints = [];
+    if(pack.cfg.constraints.minP5 !== null) constraints.push(`P5 ≥ ${fmtMoney(pack.cfg.constraints.minP5)}`);
+    if(pack.cfg.constraints.maxRuin !== null) constraints.push(`Ruin ≤ ${fmtPct(pack.cfg.constraints.maxRuin,1)}`);
+    if(pack.cfg.constraints.maxDD !== null) constraints.push(`Ort. DD ≤ ${fmtPct(pack.cfg.constraints.maxDD,1)}`);
+    const verified = row.verified ? "Bu kombinasyon Top 5 içinde gerçek lite MC ile doğrulandı." : "Bu sonuç hızlı analitik tahmindir; Top 5'i teyit etmek için MC ile Doğrula butonunu kullan.";
+    el.innerHTML = `<strong>${optRowLabel(row)}</strong> bu taramada seçili hedefe göre öne çıktı. Mevcut ayara göre P50 etkisi yaklaşık <strong class="mono">${fmtPct(p50Delta,1)}</strong>. ${riskText}; ${winText}. ${constraints.length ? "Aktif kısıtlar: " + constraints.join(" · ") + "." : "Aktif kısıt yok; kuyruk riskini ayrıca P5 ve Ruin değerleriyle oku."} ${verified}`;
+  }
+
+  function optRenderCurrentCompare(pack){
+    const el = $("optCurrentCompare");
+    if(!el) return;
+    const current = getParams();
+    const cfg = pack.cfg;
+    const currentMetrics = optEstimateMetrics(current);
+    const scoring = optScore(currentMetrics, cfg.goal, cfg.constraints);
+    const eligible = pack.rows.filter(x=>x.eligible);
+    const rank = scoring.eligible ? 1 + eligible.filter(x => (x.score ?? -Infinity) > (scoring.score ?? -Infinity)).length : null;
+    el.innerHTML = scoring.eligible
+      ? `Mevcut ayarınız <strong class="mono">Risk ${fmtPct(current.riskPerTradePct,1)} · AvgWinR ${fmtNum(current.avgWinR,2)}R</strong> bu taramada yaklaşık <strong>#${rank}</strong> olurdu. Skor: <strong class="mono">${optScoreDisplay({score:scoring.score})}</strong>.`
+      : `Mevcut ayarınız aktif kısıtları karşılamıyor; bu yüzden tarama listesinde sıralanmaz.`;
+  }
+
+  function optApplySelected(){
+    const row = state.optResults?.rows?.filter(x=>x.eligible)?.[state.optSelectedIndex || 0];
+    if(!row) return;
+    setParam("riskPerTradePct", row.p.riskPerTradePct, "optimization");
+    setParam("avgWinR", row.p.avgWinR, "optimization");
+    if(row.thirdKey && row.thirdKey !== "none" && row.z !== null) setParam(row.thirdKey, row.p[row.thirdKey], "optimization");
+    markCustomPreset();
+    document.querySelector('[data-mode="basic"]')?.click();
+    const runMeta = $("runMeta");
+    if(runMeta) runMeta.textContent = "Optimizasyon kombinasyonu uygulandı · Çalıştır";
+  }
+
+  function optUpdateGoalUI(){
+    const meta = optGoalMeta(state.optGoal);
+    const code = $("optGoalCode");
+    const help = $("optGoalHelp");
+    if(code) code.textContent = meta.code;
+    if(help) help.textContent = meta.help;
+    document.querySelectorAll("[data-opt-goal]").forEach(btn => {
+      const active = btn.dataset.optGoal === state.optGoal;
+      btn.classList.toggle("active", active);
+      btn.setAttribute("aria-pressed", active ? "true" : "false");
+    });
+  }
+
+  function optUpdateThirdUI(){
+    const third = state.optThird || "none";
+    document.querySelectorAll("[data-opt-third]").forEach(btn => {
+      const active = btn.dataset.optThird === third;
+      btn.classList.toggle("active", active);
+      btn.setAttribute("aria-pressed", active ? "true" : "false");
+    });
+    const grid = $("optThirdInputs");
+    if(grid) grid.setAttribute("aria-hidden", third === "none" ? "true" : "false");
+    const minInput = $("optThirdMin"), maxInput = $("optThirdMax");
+    const minLabel = $("optThirdMinLabel"), maxLabel = $("optThirdMaxLabel");
+    if(third === "tradeCostR"){
+      if(minLabel) minLabel.textContent = "Maliyet R Min";
+      if(maxLabel) maxLabel.textContent = "Maliyet R Max";
+      if(minInput && (Number(minInput.value) > 1 || Number(maxInput?.value) > 1)){ minInput.value = "0.02"; }
+      if(maxInput && Number(maxInput.value) > 1){ maxInput.value = "0.12"; }
+      if(minInput){ minInput.step = "0.01"; minInput.min = "0"; minInput.max = "5"; }
+      if(maxInput){ maxInput.step = "0.01"; maxInput.min = "0"; maxInput.max = "5"; }
+    } else if(third === "tradesPerDay"){
+      if(minLabel) minLabel.textContent = "Frekans Min / Gün";
+      if(maxLabel) maxLabel.textContent = "Frekans Max / Gün";
+      if(minInput){ minInput.step = "0.1"; minInput.min = "0.1"; minInput.max = "150"; minInput.value = "0.1"; }
+      if(maxInput){ maxInput.step = "0.1"; maxInput.min = "0.1"; maxInput.max = "150"; maxInput.value = "3"; }
+    }
+    optUpdateComboSummary();
+  }
+
+  function optSetConstraint(key){
+    const active = !state.optConstraints[key];
+    state.optConstraints[key] = active;
+    const btn = document.querySelector(`[data-opt-constraint="${key}"]`);
+    const row = document.querySelector(`[data-opt-constraint-row="${key}"]`);
+    const input = key === "minP5" ? $("optMinP5") : key === "maxRuin" ? $("optMaxRuin") : $("optMaxDD");
+    const labels = {minP5:["P5 Minimum Kapalı","P5 Minimum Açık"],maxRuin:["Ruin Maks. Kapalı","Ruin Maks. Açık"],maxDD:["Max DD Kapalı","Max DD Açık"]};
+    if(btn){
+      btn.classList.toggle("active", active);
+      btn.setAttribute("aria-pressed", active ? "true" : "false");
+      btn.textContent = labels[key][active ? 1 : 0];
+    }
+    if(row) row.classList.toggle("active", active);
+    if(input) input.disabled = !active;
+    optUpdateComboSummary();
+  }
+
+  function optUpdateComboSummary(){
+    const summary = $("optComboSummary");
+    if(!summary) return;
+    const cfg = optReadConfig();
+    summary.classList.toggle("warn", cfg.total > 750);
+    const third = cfg.thirdKey === "none" ? "" : ` · 3. parametre aktif (${cfg.thirdValues.length} adım)`;
+    summary.textContent = `${cfg.riskValues.length} × ${cfg.winRValues.length}${cfg.thirdKey === "none" ? "" : " × " + cfg.thirdValues.length} = ${cfg.total.toLocaleString("tr-TR")} kombinasyon${third}${cfg.total > 750 ? " · adım sayısını azalt" : " · hızlı analiz hazır"}`;
+  }
+
+  function setupOptimization(){
+    optUpdateGoalUI();
+    optUpdateThirdUI();
+    document.querySelectorAll("[data-opt-goal]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        state.optGoal = btn.dataset.optGoal || "balanced";
+        optUpdateGoalUI();
+        optUpdateComboSummary();
+      });
+    });
+    document.querySelectorAll("[data-opt-third]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        state.optThird = btn.dataset.optThird || "none";
+        optUpdateThirdUI();
+      });
+    });
+    document.querySelectorAll("[data-opt-constraint]").forEach(btn => {
+      btn.addEventListener("click", () => optSetConstraint(btn.dataset.optConstraint));
+    });
+    ["optRiskMin","optRiskMax","optRiskSteps","optWinRMin","optWinRMax","optWinRSteps","optThirdMin","optThirdMax","optThirdSteps","optMinP5","optMaxRuin","optMaxDD"].forEach(id => {
+      const el = $(id);
+      if(el) ["input","change"].forEach(evt => el.addEventListener(evt, optUpdateComboSummary));
+    });
+    ["optRunFast","optRunFastSecondary"].forEach(id => {
+      const btn = $(id);
+      if(btn) btn.addEventListener("click", optRunFast);
+    });
+    const mc = $("optRunMC");
+    if(mc) mc.addEventListener("click", optRunMCValidate);
+    const apply = $("optApplySelected");
+    if(apply) apply.addEventListener("click", optApplySelected);
+    optUpdateComboSummary();
   }
 
   function renderMetrics(result){
@@ -3300,6 +4887,8 @@ function renderCharts(result){
               renderMetrics(result);
               renderCharts(result);
               interpretation(result);
+              renderScenarioComparison(result);
+              renderScenarioComparison(result);
             } else {
               finishSimulationBusy();
             }
@@ -3380,13 +4969,19 @@ function renderCharts(result){
     setupControlEvents();
     setupRiskModeEvents();
     setupTradeFrequencyEvents();
+    setupDirectionEvents();
     setupModes();
     setupScenarioPresets();
     setupRCalc();
+    setupOptimization();
     updateRiskMath();
     updatePrintParams();
     document.querySelectorAll(".run-sim").forEach(btn => btn.addEventListener("click", runAndRender));
-    $("riskMode").addEventListener("change", () => { updateRiskMath(); updatePrintParams(); runAndRender(); });
+    if($("riskMode")) $("riskMode").addEventListener("change", () => { updateRiskMath(); updatePrintParams(); runAndRender(); });
+    const refreshScenario = $("refreshScenarioCompare");
+    if(refreshScenario) refreshScenario.addEventListener("click", () => renderScenarioComparison(state.last));
+    const realSensitivity = $("runRealSensitivity");
+    if(realSensitivity) realSensitivity.addEventListener("click", runRealSensitivity);
     runAndRender();
   }
 
