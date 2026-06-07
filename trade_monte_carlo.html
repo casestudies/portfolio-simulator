@@ -1844,6 +1844,515 @@ table{width:100%;border-collapse:collapse}
   .priority-chart-shell .canvas-wrap.priority-sensitivity{height:300px}
 }
 
+
+/* v16: optimization advisory layer + mobile HUD scroll affordance */
+.opt-heatmap-note{
+  margin-top:10px;
+  padding:9px 11px;
+  border:1px solid rgba(100,112,73,.16);
+  background:rgba(100,112,73,.052);
+  color:var(--olive);
+  border-radius:12px;
+  font-size:10.5px;
+  line-height:1.38;
+  font-weight:750;
+}
+.opt-heatmap-cell{
+  flex-direction:column;
+  gap:2px;
+  line-height:1.05;
+}
+.opt-cell-score{
+  display:block;
+  font-size:9px;
+}
+.opt-cell-extra{
+  display:block;
+  max-width:100%;
+  color:rgba(255,253,248,.92);
+  font-size:7.4px;
+  font-weight:850;
+  letter-spacing:.02em;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.opt-narrative{
+  display:grid;
+  gap:8px;
+}
+.opt-narrative-section{
+  padding:10px 11px;
+  border:1px solid rgba(226,216,201,.76);
+  background:rgba(255,253,248,.62);
+  border-radius:12px;
+}
+.opt-narrative-section strong{
+  color:var(--ink);
+}
+.opt-narrative-kicker{
+  display:block;
+  margin-bottom:4px;
+  color:var(--terra);
+  font-size:9px;
+  letter-spacing:.11em;
+  text-transform:uppercase;
+  font-weight:900;
+}
+.opt-narrative-section.risk{
+  border-color:rgba(127,39,55,.16);
+  background:rgba(127,39,55,.038);
+}
+.opt-narrative-section.action{
+  border-color:rgba(100,112,73,.16);
+  background:rgba(100,112,73,.045);
+}
+@media (max-width:1360px){
+  .result-strip{
+    padding-right:24px !important;
+    -webkit-mask-image:linear-gradient(to right,#000 0%,#000 85%,rgba(0,0,0,0) 100%);
+    mask-image:linear-gradient(to right,#000 0%,#000 85%,rgba(0,0,0,0) 100%);
+  }
+  .result-strip .metric:last-child{
+    margin-right:18px !important;
+  }
+}
+@media (max-width:620px){
+  .opt-cell-extra{font-size:8px}
+  .result-strip{
+    padding-right:26px !important;
+  }
+}
+
+
+/* v16: richer dynamic model commentary */
+.model-commentary{
+  overflow:hidden;
+}
+.model-commentary .model-insights{
+  list-style:none;
+  padding-left:0 !important;
+  display:grid;
+  gap:10px;
+  margin:0;
+}
+.model-summary-li{
+  border:1px solid rgba(226,216,201,.95);
+  background:
+    radial-gradient(circle at 0% 0%,rgba(198,91,54,.075),transparent 38%),
+    linear-gradient(180deg,#fffefa,#fbf6ee);
+  border-radius:18px;
+  padding:14px;
+}
+.model-summary-title{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  color:var(--ink);
+  font-size:10px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  font-weight:900;
+}
+.model-summary-title span:last-child{
+  color:var(--terra);
+  font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+  font-size:10px;
+  letter-spacing:0;
+}
+.model-summary-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:8px;
+  margin-top:11px;
+}
+.model-summary-metric{
+  min-width:0;
+  border:1px solid rgba(226,216,201,.78);
+  background:#fffdf8;
+  border-radius:14px;
+  padding:10px;
+}
+.model-summary-metric span{
+  display:block;
+  color:var(--muted);
+  font-size:8px;
+  letter-spacing:.11em;
+  text-transform:uppercase;
+  font-weight:900;
+  line-height:1.15;
+}
+.model-summary-metric strong{
+  display:block;
+  margin-top:5px;
+  color:var(--ink);
+  font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+  font-size:12px;
+  line-height:1.1;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.model-insight{
+  position:relative;
+  overflow:hidden;
+  border:1px solid rgba(226,216,201,.95);
+  background:linear-gradient(180deg,#fffefa,#fbf6ee);
+  border-radius:18px;
+  padding:13px 14px 13px 16px;
+}
+.model-insight::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  bottom:0;
+  width:4px;
+  background:var(--gold);
+}
+.model-insight::after{
+  content:"";
+  position:absolute;
+  inset:auto -36px -44px auto;
+  width:108px;
+  height:108px;
+  border-radius:50%;
+  background:rgba(168,132,66,.055);
+  pointer-events:none;
+}
+.model-insight.olive::before{background:var(--olive)}
+.model-insight.olive::after{background:rgba(100,112,73,.07)}
+.model-insight.terra::before{background:var(--terra)}
+.model-insight.terra::after{background:rgba(198,91,54,.07)}
+.model-insight.ruby::before{background:var(--ruby)}
+.model-insight.ruby::after{background:rgba(127,39,55,.065)}
+.model-insight.gold::before{background:var(--gold)}
+.model-insight-head{
+  position:relative;
+  z-index:1;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+.model-kicker{
+  color:var(--muted);
+  font-size:8px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  font-weight:900;
+}
+.model-chip{
+  border:1px solid rgba(205,191,174,.72);
+  background:#fffdf8;
+  color:var(--stone);
+  border-radius:999px;
+  padding:4px 8px;
+  font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+  font-size:9.5px;
+  font-weight:800;
+  white-space:nowrap;
+}
+.model-insight.olive .model-chip{color:var(--olive);border-color:rgba(100,112,73,.28);background:rgba(100,112,73,.055)}
+.model-insight.terra .model-chip{color:var(--terra);border-color:rgba(198,91,54,.30);background:rgba(198,91,54,.055)}
+.model-insight.ruby .model-chip{color:var(--ruby);border-color:rgba(127,39,55,.28);background:rgba(127,39,55,.055)}
+.model-title{
+  position:relative;
+  z-index:1;
+  margin-top:8px;
+  font-family:"Cormorant Garamond",Georgia,serif;
+  font-size:23px;
+  line-height:1;
+  letter-spacing:-.018em;
+  font-weight:650;
+  color:var(--ink);
+}
+.model-copy{
+  position:relative;
+  z-index:1;
+  margin-top:8px;
+  color:var(--stone);
+  font-size:12.5px;
+  line-height:1.58;
+}
+.model-copy .em{
+  color:var(--ink);
+  font-weight:850;
+}
+.model-copy .good{color:var(--olive);font-weight:900}
+.model-copy .warn{color:var(--gold);font-weight:900}
+.model-copy .bad{color:var(--ruby);font-weight:900}
+.model-metrics{
+  position:relative;
+  z-index:1;
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
+  margin-top:10px;
+}
+.model-metric-pill{
+  display:inline-flex;
+  align-items:baseline;
+  gap:6px;
+  border:1px solid rgba(226,216,201,.82);
+  background:#fffdf8;
+  border-radius:999px;
+  padding:5px 8px;
+  font-size:9.5px;
+  color:var(--stone);
+}
+.model-metric-pill strong{
+  color:var(--ink);
+  font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+  font-weight:850;
+}
+@media (max-width:760px){
+  .model-summary-grid{grid-template-columns:1fr 1fr}
+  .model-insight-head{align-items:flex-start}
+  .model-title{font-size:21px}
+}
+@media print{
+  .model-summary-li,.model-insight,.model-summary-metric,.model-chip,.model-metric-pill{
+    background:#fff !important;
+    border-color:#ddd !important;
+    box-shadow:none !important;
+  }
+  .model-insight::after{display:none !important}
+}
+
+
+/* v17: compact single-block model commentary */
+.model-commentary{
+  overflow:hidden;
+}
+.model-commentary .model-insights{
+  list-style:none !important;
+  padding-left:0 !important;
+  margin:0 !important;
+  display:block !important;
+}
+.model-compact-li{
+  position:relative;
+  overflow:hidden;
+  border:1px solid rgba(226,216,201,.92);
+  background:
+    radial-gradient(circle at 0% 0%,rgba(198,91,54,.055),transparent 36%),
+    linear-gradient(180deg,#fffefa,#fbf6ee);
+  border-radius:16px;
+  padding:14px;
+}
+.model-compact-li::after{
+  content:"";
+  position:absolute;
+  inset:auto -48px -62px auto;
+  width:150px;
+  height:150px;
+  border-radius:50%;
+  background:rgba(100,112,73,.045);
+  pointer-events:none;
+}
+.model-compact-head{
+  position:relative;
+  z-index:1;
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+  padding-bottom:10px;
+  margin-bottom:10px;
+  border-bottom:1px solid rgba(226,216,201,.72);
+}
+.model-compact-title{
+  color:var(--ink);
+  font-size:10px;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+  font-weight:900;
+}
+.model-compact-sub{
+  color:var(--stone);
+  font-size:11px;
+  line-height:1.42;
+  margin-top:4px;
+}
+.model-status-badge{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:28px;
+  border:1px solid rgba(205,191,174,.72);
+  background:#fffdf8;
+  border-radius:999px;
+  padding:6px 10px;
+  color:var(--terra);
+  font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+  font-size:9.5px;
+  font-weight:850;
+  white-space:nowrap;
+}
+.model-status-badge.olive{color:var(--olive);border-color:rgba(100,112,73,.28);background:rgba(100,112,73,.055)}
+.model-status-badge.gold{color:var(--gold);border-color:rgba(168,132,66,.28);background:rgba(168,132,66,.055)}
+.model-status-badge.ruby{color:var(--ruby);border-color:rgba(127,39,55,.28);background:rgba(127,39,55,.055)}
+.model-compact-metrics{
+  position:relative;
+  z-index:1;
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:7px;
+  margin-bottom:11px;
+}
+.model-compact-metric{
+  min-width:0;
+  border:1px solid rgba(226,216,201,.76);
+  background:#fffdf8;
+  border-radius:12px;
+  padding:8px 9px;
+}
+.model-compact-metric span{
+  display:block;
+  color:var(--muted);
+  font-size:7.8px;
+  letter-spacing:.10em;
+  text-transform:uppercase;
+  font-weight:900;
+  line-height:1.12;
+}
+.model-compact-metric strong{
+  display:block;
+  margin-top:5px;
+  color:var(--ink);
+  font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+  font-size:11.5px;
+  line-height:1.08;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.model-compact-lines{
+  position:relative;
+  z-index:1;
+  display:grid;
+  gap:7px;
+}
+.model-compact-line{
+  display:grid;
+  grid-template-columns:minmax(118px,.28fr) minmax(0,1fr);
+  gap:10px;
+  align-items:flex-start;
+  padding:8px 0;
+  border-top:1px solid rgba(226,216,201,.58);
+}
+.model-compact-line:first-child{border-top:0;padding-top:2px}
+.model-compact-label{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  min-width:0;
+}
+.model-dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--gold);
+  flex:none;
+  box-shadow:0 0 0 3px rgba(168,132,66,.09);
+}
+.model-compact-line.olive .model-dot{background:var(--olive);box-shadow:0 0 0 3px rgba(100,112,73,.09)}
+.model-compact-line.terra .model-dot{background:var(--terra);box-shadow:0 0 0 3px rgba(198,91,54,.09)}
+.model-compact-line.ruby .model-dot{background:var(--ruby);box-shadow:0 0 0 3px rgba(127,39,55,.09)}
+.model-compact-line.gold .model-dot{background:var(--gold);box-shadow:0 0 0 3px rgba(168,132,66,.09)}
+.model-kicker{
+  color:var(--muted);
+  font-size:8px;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+  font-weight:900;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.model-compact-body{
+  min-width:0;
+  color:var(--stone);
+  font-size:12.2px;
+  line-height:1.5;
+}
+.model-inline-title{
+  color:var(--ink);
+  font-family:"Cormorant Garamond",Georgia,serif;
+  font-size:18px;
+  line-height:1;
+  font-weight:650;
+  letter-spacing:-.012em;
+  margin-right:6px;
+}
+.model-chip{
+  display:inline-flex;
+  vertical-align:baseline;
+  align-items:center;
+  border:1px solid rgba(205,191,174,.72);
+  background:#fffdf8;
+  color:var(--stone);
+  border-radius:999px;
+  padding:2px 7px;
+  margin:0 3px;
+  font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+  font-size:9.2px;
+  font-weight:850;
+  white-space:nowrap;
+}
+.model-compact-line.olive .model-chip{color:var(--olive);border-color:rgba(100,112,73,.28);background:rgba(100,112,73,.055)}
+.model-compact-line.terra .model-chip{color:var(--terra);border-color:rgba(198,91,54,.30);background:rgba(198,91,54,.055)}
+.model-compact-line.ruby .model-chip{color:var(--ruby);border-color:rgba(127,39,55,.28);background:rgba(127,39,55,.055)}
+.model-compact-line.gold .model-chip{color:var(--gold);border-color:rgba(168,132,66,.28);background:rgba(168,132,66,.055)}
+.model-copy .em,.model-compact-body .em{
+  color:var(--ink);
+  font-weight:850;
+}
+.model-copy .good,.model-compact-body .good{color:var(--olive);font-weight:900}
+.model-copy .warn,.model-compact-body .warn{color:var(--gold);font-weight:900}
+.model-copy .bad,.model-compact-body .bad{color:var(--ruby);font-weight:900}
+.model-metrics{
+  display:inline-flex;
+  gap:5px;
+  flex-wrap:wrap;
+  margin-left:4px;
+}
+.model-metric-pill{
+  display:inline-flex;
+  align-items:baseline;
+  gap:5px;
+  border:1px solid rgba(226,216,201,.72);
+  background:#fffdf8;
+  border-radius:999px;
+  padding:2px 6px;
+  font-size:9px;
+  color:var(--stone);
+  line-height:1.35;
+  white-space:nowrap;
+}
+.model-metric-pill strong{
+  color:var(--ink);
+  font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+  font-weight:850;
+}
+@media (max-width:760px){
+  .model-compact-head{display:grid}
+  .model-status-badge{justify-self:start}
+  .model-compact-metrics{grid-template-columns:1fr 1fr}
+  .model-compact-line{grid-template-columns:1fr;gap:5px}
+  .model-kicker{white-space:normal}
+}
+@media print{
+  .model-compact-li,.model-compact-metric,.model-chip,.model-metric-pill{
+    background:#fff !important;
+    border-color:#ddd !important;
+    box-shadow:none !important;
+  }
+  .model-compact-li::after{display:none !important}
+}
+
 </style>
 </head>
 <body>
@@ -2147,6 +2656,7 @@ table{width:100%;border-collapse:collapse}
           <div class="opt-output-card opt-heatmap-card">
             <div class="chart-title">Optimizasyon Isı Haritası</div>
             <div class="chart-copy">X ekseni risk yüzdesi, Y ekseni ortalama kazanç R. Hücre rengi seçili hedef skoruna göre değişir.</div>
+            <div class="opt-heatmap-note" id="optHeatmapNote">Üçüncü parametre kapalıyken her hücre Risk × AvgWinR skorunu gösterir.</div>
             <div class="opt-heatmap" id="optHeatmap"></div>
           </div>
 
@@ -2344,9 +2854,9 @@ table{width:100%;border-collapse:collapse}
   </section>
 
   <section class="interpretation">
-    <div class="callout">
+    <div class="callout model-commentary">
       <h3>Model Yorumu</h3>
-      <ul id="interpretationList">
+      <ul id="interpretationList" class="model-insights">
         <li>Simülasyonu çalıştırınca bu alanda net strateji yorumu oluşur.</li>
       </ul>
     </div>
@@ -4148,12 +4658,23 @@ function renderCharts(result){
 
   function optRenderHeatmap(pack, selected){
     const el = $("optHeatmap");
+    const note = $("optHeatmapNote");
     if(!el) return;
     const cfg = pack.cfg;
     const eligible = pack.rows.filter(x=>x.eligible);
     if(!eligible.length){
       el.innerHTML = `<div class="opt-muted">Kısıtları karşılayan hücre yok.</div>`;
+      if(note) note.textContent = "Kısıt seti çok dar olduğu için uygun hücre bulunamadı. P5/Ruin/DD limitlerini gevşetmeyi dene.";
       return;
+    }
+
+    if(note){
+      if(cfg.thirdKey && cfg.thirdKey !== "none"){
+        const label = cfg.thirdKey === "tradeCostR" ? "Maliyet R" : "Trade frekansı";
+        note.innerHTML = `<strong>${label} aktif:</strong> Isı haritası hâlâ Risk × AvgWinR düzlemini gösterir; her hücrede bu iki değer için en yüksek skoru veren ${label.toLowerCase()} seçimi küçük etiket olarak yazılır.`;
+      } else {
+        note.innerHTML = `<strong>2D tarama:</strong> Her hücre doğrudan Risk × AvgWinR kombinasyonunun skorunu gösterir. Üçüncü parametre kapalı.`;
+      }
     }
 
     const xs = cfg.riskValues;
@@ -4167,7 +4688,14 @@ function renderCharts(result){
       if(!prev || row.score > prev.score) cellMap.set(key, row);
     });
 
-    let html = `<div class="opt-heatmap-grid" style="grid-template-columns:76px repeat(${xs.length}, minmax(46px,1fr));">`;
+    const thirdLabel = row => {
+      if(!row || !row.thirdKey || row.thirdKey === "none" || row.z === null) return "";
+      return row.thirdKey === "tradeCostR"
+        ? `Maliyet ${fmtNum(row.z,2)}R`
+        : `Frekans ${fmtNum(row.z, row.z < 1 ? 2 : 1)}/gün`;
+    };
+
+    let html = `<div class="opt-heatmap-grid" style="grid-template-columns:76px repeat(${xs.length}, minmax(54px,1fr));">`;
     html += `<div class="opt-heatmap-axis">AvgWinR ↓ / Risk →</div>`;
     xs.forEach(x => html += `<div class="opt-heatmap-axis">${fmtPct(x,1)}</div>`);
     ys.forEach(y => {
@@ -4178,7 +4706,9 @@ function renderCharts(result){
           html += `<div class="opt-heatmap-cell" style="background:#d8cdbd;color:var(--stone);text-shadow:none" title="Elenen kombinasyon">—</div>`;
         } else {
           const active = selected && Math.abs(selected.x-x)<1e-9 && Math.abs(selected.y-y)<1e-9;
-          html += `<div class="opt-heatmap-cell" data-opt-heat="${row.id}" style="background:${optHeatColor(row.score,minScore,maxScore)};${active ? "outline:2px solid #171411;outline-offset:1px;" : ""}" title="${optRowLabel(row)} · Skor ${optScoreDisplay(row)} · P50 ${fmtMoney(row.metrics.p50)}">${optScoreDisplay(row)}</div>`;
+          const extra = thirdLabel(row);
+          const title = `${optRowLabel(row)} · Skor ${optScoreDisplay(row)} · P50 ${fmtMoney(row.metrics.p50)}${extra ? " · Hücrede seçilen " + extra : ""}`;
+          html += `<div class="opt-heatmap-cell" data-opt-heat="${row.id}" style="background:${optHeatColor(row.score,minScore,maxScore)};${active ? "outline:2px solid #171411;outline-offset:1px;" : ""}" title="${title}"><span class="opt-cell-score">${optScoreDisplay(row)}</span>${extra ? `<span class="opt-cell-extra">${extra}</span>` : ""}</div>`;
         }
       });
     });
@@ -4207,14 +4737,58 @@ function renderCharts(result){
     const current = getParams();
     const currentMetrics = optEstimateMetrics(current);
     const p50Delta = currentMetrics.p50 > 0 ? (row.metrics.p50 / currentMetrics.p50 - 1) * 100 : 0;
-    const riskText = row.p.riskPerTradePct > current.riskPerTradePct ? "risk yüzdesi yükseliyor" : row.p.riskPerTradePct < current.riskPerTradePct ? "risk yüzdesi düşüyor" : "risk yüzdesi mevcut ayara yakın";
-    const winText = row.p.avgWinR > current.avgWinR ? "avgWinR artışı seçici trade kalitesine ihtiyaç duyuyor" : row.p.avgWinR < current.avgWinR ? "avgWinR hedefi mevcut ayardan daha muhafazakâr" : "avgWinR mevcut ayarla aynı bölgede";
-    const constraints = [];
-    if(pack.cfg.constraints.minP5 !== null) constraints.push(`P5 ≥ ${fmtMoney(pack.cfg.constraints.minP5)}`);
-    if(pack.cfg.constraints.maxRuin !== null) constraints.push(`Ruin ≤ ${fmtPct(pack.cfg.constraints.maxRuin,1)}`);
-    if(pack.cfg.constraints.maxDD !== null) constraints.push(`Ort. DD ≤ ${fmtPct(pack.cfg.constraints.maxDD,1)}`);
-    const verified = row.verified ? "Bu kombinasyon Top 5 içinde gerçek lite MC ile doğrulandı." : "Bu sonuç hızlı analitik tahmindir; Top 5'i teyit etmek için MC ile Doğrula butonunu kullan.";
-    el.innerHTML = `<strong>${optRowLabel(row)}</strong> bu taramada seçili hedefe göre öne çıktı. Mevcut ayara göre P50 etkisi yaklaşık <strong class="mono">${fmtPct(p50Delta,1)}</strong>. ${riskText}; ${winText}. ${constraints.length ? "Aktif kısıtlar: " + constraints.join(" · ") + "." : "Aktif kısıt yok; kuyruk riskini ayrıca P5 ve Ruin değerleriyle oku."} ${verified}`;
+    const p5Delta = row.metrics.p5 - currentMetrics.p5;
+    const ruinDelta = row.metrics.ruinProb - currentMetrics.ruinProb;
+    const ddDelta = row.metrics.avgDD - currentMetrics.avgDD;
+    const riskMove = row.p.riskPerTradePct - current.riskPerTradePct;
+    const winMove = row.p.avgWinR - current.avgWinR;
+    const eligibleRows = pack.rows.filter(x=>x.eligible);
+    const eliminated = pack.eliminated || {total:0};
+    const verified = row.verified
+      ? `Bu satır <strong>gerçek lite MC doğrulamasından</strong> geçti; P5/P50/Ruin okumaları hızlı tahmine göre daha güvenilir.`
+      : `Bu okuma <strong>hızlı analitik taramadır</strong>; nihai karar öncesi Top 5'i MC ile Doğrula butonuyla teyit et.`;
+
+    const constraintText = [];
+    if(pack.cfg.constraints.minP5 !== null) constraintText.push(`P5 ≥ ${fmtMoney(pack.cfg.constraints.minP5)}`);
+    if(pack.cfg.constraints.maxRuin !== null) constraintText.push(`Ruin ≤ ${fmtPct(pack.cfg.constraints.maxRuin,1)}`);
+    if(pack.cfg.constraints.maxDD !== null) constraintText.push(`Ort. DD ≤ ${fmtPct(pack.cfg.constraints.maxDD,1)}`);
+
+    let thirdText = "Üçüncü parametre kapalı; öneri yalnızca Risk/Trade ve AvgWinR ekseninde okunmalı.";
+    if(row.thirdKey && row.thirdKey !== "none" && row.z !== null){
+      thirdText = row.thirdKey === "tradeCostR"
+        ? `Bu hücrede öne çıkan üçüncü tercih <strong>Maliyet ${fmtNum(row.z,2)}R</strong>. Maliyet yükseldikçe aynı AvgWinR hedefinin daha seçici trade kalitesiyle desteklenmesi gerekir.`
+        : `Bu hücrede öne çıkan üçüncü tercih <strong>Frekans ${fmtNum(row.z, row.z < 1 ? 2 : 1)} trade/gün</strong>. Frekans artışı P50'yi büyütebilir fakat drawdown ve ruin kuyruklarını da hızlandırabilir.`;
+    }
+
+    const riskSentence = riskMove > .05
+      ? `Risk mevcut ayara göre <strong>${fmtPct(riskMove,1)} puan daha yüksek</strong>; bu P50 potansiyelini artırırken P5 ve Ruin tarafında disiplin ister.`
+      : riskMove < -.05
+        ? `Risk mevcut ayara göre <strong>${fmtPct(Math.abs(riskMove),1)} puan daha düşük</strong>; bu daha savunmacı bir sermaye yolu önerir.`
+        : `Risk mevcut ayarla aynı bölgede; önerinin ana farkı daha çok R profili ve kısıt dengesinden geliyor.`;
+
+    const winSentence = winMove > .05
+      ? `AvgWinR hedefi mevcut ayardan <strong>${fmtNum(winMove,2)}R yüksek</strong>; bu mekanik olarak daha iyi hedef/stop oranı veya daha seçici trade filtresi gerektirir.`
+      : winMove < -.05
+        ? `AvgWinR hedefi mevcut ayardan <strong>${fmtNum(Math.abs(winMove),2)}R düşük</strong>; model daha sık ama daha mütevazı kâr profiline tolerans gösteriyor.`
+        : `AvgWinR mevcut ayara çok yakın; sonuç daha çok risk yüzdesi ve kısıt seçiminden etkileniyor.`;
+
+    const constraintSentence = constraintText.length
+      ? `Aktif kısıtlar: <strong>${constraintText.join(" · ")}</strong>. ${eliminated.total ? `<strong>${eliminated.total}</strong> kombinasyon elendi; bu, önerinin sadece yüksek getiri değil, tanımlı risk sınırları içinde seçildiğini gösterir.` : "Hiçbir kombinasyon elenmedi; kısıtlar bu aralıkta gevşek kalıyor."}`
+      : `Aktif kısıt yok. Bu durumda skor daha agresif kombinasyonları yukarı taşıyabilir; özellikle <strong>P5 ${fmtMoney(row.metrics.p5)}</strong> ve <strong>Ruin ${fmtPct(row.metrics.ruinProb,1)}</strong> değerleri kararın güvenlik filtresi olarak ayrıca okunmalı.`;
+
+    el.innerHTML = `
+      <div class="opt-narrative-section">
+        <span class="opt-narrative-kicker">Ana okuma</span>
+        <strong>${optRowLabel(row)}</strong> bu taramada seçili hedefe göre öne çıktı. Mevcut ayara göre P50 etkisi yaklaşık <strong class="mono">${fmtPct(p50Delta,1)}</strong>; P5 farkı <strong class="mono">${p5Delta >= 0 ? "+" : ""}${fmtMoney(p5Delta)}</strong>, Ruin farkı <strong class="mono">${ruinDelta >= 0 ? "+" : ""}${fmtNum(ruinDelta,1)} yüzde puan</strong>, ortalama DD farkı <strong class="mono">${ddDelta >= 0 ? "+" : ""}${fmtPct(ddDelta,1)}</strong>.
+      </div>
+      <div class="opt-narrative-section risk">
+        <span class="opt-narrative-kicker">Risk/R profili</span>
+        ${riskSentence} ${winSentence} ${thirdText}
+      </div>
+      <div class="opt-narrative-section action">
+        <span class="opt-narrative-kicker">Karar notu</span>
+        ${constraintSentence} ${verified} ${eligibleRows.length ? `Top 5 içinde yakın skorlar varsa tek satıra değil, P5/Ruin dengesine göre seçim yap.` : ""}
+      </div>`;
   }
 
   function optRenderCurrentCompare(pack){
@@ -4385,47 +4959,201 @@ function renderCharts(result){
     const sens = sensitivity(result);
     const mainRisk = sens[0] ? sens[0].label : "Risk %";
     const modeText = p.riskMode === "fixed" ? "sabit nominal risk" : "bileşik risk";
-    const items = [];
+    const p5Ratio = p.initialCapital > 0 ? result.p5 / p.initialCapital : 0;
+    const p50Ratio = p.initialCapital > 0 ? result.p50 / p.initialCapital : 0;
+    const riskPct = Number(p.riskPerTradePct) || 0;
+    const avgDD = Number(result.avgDD) || 0;
+    const ruin = Number(result.ruinProb) || 0;
+    const maxTUW = Number(result.maxTUW) || 0;
+    const underwaterShare = p.days > 0 ? maxTUW / p.days : 0;
+
+    function toneByScore(kind){
+      if(kind === "edge") return result.er <= 0 ? "ruby" : (result.er >= .35 ? "olive" : "gold");
+      if(kind === "risk") return (riskPct >= 25 || avgDD >= 45 || ruin >= 25) ? "ruby" : ((riskPct >= 5 || avgDD >= 30 || ruin >= 15) ? "terra" : "olive");
+      if(kind === "p5") return p5Ratio < .7 ? "ruby" : (p5Ratio < 1 ? "gold" : "olive");
+      if(kind === "tuw") return underwaterShare > .45 ? "terra" : (underwaterShare > .25 ? "gold" : "olive");
+      if(kind === "target") return result.targetProb >= 60 ? "olive" : (result.targetProb >= 30 ? "gold" : "ruby");
+      return "gold";
+    }
+
+    function insight(tone, kicker, chip, title, body, metrics){
+      const metricHtml = (metrics || []).map(m => `<span class="model-metric-pill">${m.label}: <strong>${m.value}</strong></span>`).join("");
+      return `
+        <div class="model-compact-line ${tone}">
+          <div class="model-compact-label">
+            <span class="model-dot"></span>
+            <span class="model-kicker">${kicker}</span>
+          </div>
+          <div class="model-compact-body">
+            <span class="model-inline-title">${title}</span>
+            <span class="model-chip">${chip}</span>
+            ${body}
+            ${metricHtml ? `<span class="model-metrics">${metricHtml}</span>` : ""}
+          </div>
+        </div>`;
+    }
+
+    const summaryTone = result.er > 0 && result.targetProb >= 60 && p5Ratio >= .7 ? "Strateji pozitif" : (result.er <= 0 || p5Ratio < .7 ? "Dikkat" : "İzleme");
+    const summaryClass = summaryTone === "Strateji pozitif" ? "olive" : (summaryTone === "Dikkat" ? "ruby" : "gold");
+    const summary = `
+      <div class="model-compact-head">
+        <div>
+          <div class="model-compact-title">Yönetici Özeti</div>
+          <div class="model-compact-sub">Aşağıdaki okuma; edge, risk modeli, alt kuyruk ve psikolojik dayanıklılığı tek kompakt karar notunda birleştirir.</div>
+        </div>
+        <span class="model-status-badge ${summaryClass}">${summaryTone}</span>
+      </div>
+      <div class="model-compact-metrics">
+        <div class="model-compact-metric"><span>Expected R</span><strong>${fmtNum(result.er,2)}R</strong></div>
+        <div class="model-compact-metric"><span>P5 Final</span><strong>${fmtMoney(result.p5)}</strong></div>
+        <div class="model-compact-metric"><span>Hedefe Ulaşma</span><strong>${fmtPct(result.targetProb,1)}</strong></div>
+        <div class="model-compact-metric"><span>Max Sualtı</span><strong>${Math.round(maxTUW)} gün</strong></div>
+      </div>
+      <div class="model-compact-lines">`;
+    const items = [summary];
 
     if(result.er <= 0){
-      items.push("Bu parametre setinde stratejinin trade başına edge’i negatif. Win rate, ortalama kazanç R veya maliyet R düzelmeden dağılım sermaye büyümesini desteklemiyor.");
+      items.push(insight(
+        "ruby",
+        "EDGE",
+        `${fmtNum(result.er,2)}R`,
+        "Trade başına edge negatif",
+        `Bu parametre setinde stratejinin trade başına edge’i <span class="bad">negatif</span>. Win rate, ortalama kazanç R veya maliyet R düzelmeden dağılım sermaye büyümesini desteklemiyor.`,
+        [{label:"Win rate",value:fmtPct(p.winRate,1)},{label:"AvgWinR",value:`${fmtNum(p.avgWinR,2)}R`},{label:"Maliyet",value:`${fmtNum(p.tradeCostR,2)}R`}]
+      ));
     } else {
-      items.push(`Bu model sonucuna göre trade başına expected R pozitiftir: ${fmtNum(result.er,2)}R. Stratejinin teorik edge’i var.`);
+      items.push(insight(
+        toneByScore("edge"),
+        "EDGE",
+        `+${fmtNum(result.er,2)}R`,
+        "Pozitif teorik edge var",
+        `Bu model sonucuna göre trade başına expected R <span class="good">pozitif</span>: <span class="em">${fmtNum(result.er,2)}R</span>. Bu, stratejinin teorik avantaj ürettiğini gösterir; yine de bu avantajın sürdürülebilirliği maliyet, R dağılımı ve trade frekansıyla birlikte okunmalı.`,
+        [{label:"Expected R",value:`${fmtNum(result.er,2)}R`},{label:"Maliyet sonrası",value:"net"},{label:"P50 çarpan",value:`${fmtNum(p50Ratio,2)}×`}]
+      ));
     }
 
-    items.push(`Risk modeli: ${modeText}. ${p.riskMode === "fixed" ? "Büyüme daha lineer okunur; sermaye büyüdükçe risk oranı fiilen düşer." : "Sermaye büyüdükçe nominal risk de büyür; iyi senaryo hızlanır, kötü senaryo da sertleşir."}`);
+    items.push(insight(
+      p.riskMode === "fixed" ? "gold" : "terra",
+      "RİSK MODELİ",
+      modeText,
+      p.riskMode === "fixed" ? "Sabit nominal risk daha kontrollü büyür" : "Bileşik risk büyümeyi ve düşüşü hızlandırır",
+      p.riskMode === "fixed"
+        ? `Risk modeli <span class="em">sabit nominal risk</span>. Büyüme daha lineer okunur; sermaye büyüdükçe risk oranı fiilen düşer. Bu yapı kötü senaryo kontrolünü güçlendirir ama güçlü trendlerde bileşik modele göre daha yavaş kalabilir.`
+        : `Risk modeli <span class="em">bileşik risk</span>. Sermaye büyüdükçe nominal risk de büyür; iyi senaryo hızlanır, kötü senaryo da sertleşir. Bu yüzden P5 ve sualtı süresi, medyan sonuç kadar kritik okunmalı.`,
+      [{label:"Risk/Trade",value:fmtPct(riskPct,2)},{label:"Model",value:p.riskMode === "fixed" ? "Sabit" : "Bileşik"}]
+    ));
 
-    if(p.riskPerTradePct >= 25){
-      items.push("Bu parametrelerle strateji ekstrem riskli. Tek bir -1R kayıp bile sermayenin büyük bölümünü silebilir; bu ayar normal kullanım değil, stres testi gibi okunmalı.");
-    } else if(p.riskPerTradePct >= 5 || result.avgDD >= 30 || result.ruinProb >= 15){
-      items.push("Bu parametrelerle strateji agresif. Ana büyüme motoru daha yüksek risk, fakat kötü senaryoda sermaye erimesi belirgin hızlanıyor.");
+    if(riskPct >= 25){
+      items.push(insight(
+        "ruby",
+        "RİSK REJİMİ",
+        "Ekstrem",
+        "Bu ayar normal kullanım değil, stres testi gibi okunmalı",
+        `Trade başına risk <span class="bad">ekstrem yüksek</span>. Tek bir -1R kayıp bile sermayenin büyük bölümünü silebilir; bu set karar desteği için değil, stres testi için anlamlıdır.`,
+        [{label:"Risk/Trade",value:fmtPct(riskPct,2)},{label:"Avg DD",value:fmtPct(avgDD,1)},{label:"Ruin",value:fmtPct(ruin,1)}]
+      ));
+    } else if(riskPct >= 5 || avgDD >= 30 || ruin >= 15){
+      items.push(insight(
+        "terra",
+        "RİSK REJİMİ",
+        "Agresif",
+        "Büyüme motoru güçlü ama kötü bant hızla sertleşiyor",
+        `Bu parametrelerle strateji <span class="warn">agresif</span>. Ana büyüme motoru daha yüksek risk; fakat kötü senaryoda sermaye erimesi, drawdown ve kritik eşik riski belirgin hızlanıyor.`,
+        [{label:"Risk/Trade",value:fmtPct(riskPct,2)},{label:"Avg DD",value:fmtPct(avgDD,1)},{label:"Ruin",value:fmtPct(ruin,1)}]
+      ));
     } else {
-      items.push("Bu parametrelerle risk seviyesi kontrollü görünüyor. Büyüme daha yavaş olabilir, ancak kötü senaryo hasarı daha sınırlı kalıyor.");
+      items.push(insight(
+        "olive",
+        "RİSK REJİMİ",
+        "Kontrollü",
+        "Kötü senaryo hasarı sınırlı bantta",
+        `Bu parametrelerle risk seviyesi <span class="good">kontrollü</span> görünüyor. Büyüme daha yavaş olabilir; ancak kötü senaryo hasarı daha sınırlı kalıyor ve karar kalitesi psikolojik sürdürülebilirliğe daha fazla dayanıyor.`,
+        [{label:"Risk/Trade",value:fmtPct(riskPct,2)},{label:"Avg DD",value:fmtPct(avgDD,1)},{label:"Ruin",value:fmtPct(ruin,1)}]
+      ));
     }
 
-    items.push(`Ana risk sürücüsü: ${mainRisk}. Duyarlılık grafiği bu parametrenin sonucu en çok taşıdığını gösteriyor.`);
+    const driverTone = /Volatilite|Dağılım|Şok|Ruin|Drawdown/i.test(mainRisk) ? "terra" : (/Risk/i.test(mainRisk) ? "gold" : "olive");
+    items.push(insight(
+      driverTone,
+      "ANA SÜRÜCÜ",
+      mainRisk,
+      "Sonucu en çok taşıyan parametre",
+      `Ana risk sürücüsü: <span class="em">${mainRisk}</span>. Analitik etki haritası bu parametrenin sonucu en çok taşıdığını gösteriyor. Bu alanı iyileştirmek, aynı risk yüzdesiyle daha kaliteli dağılım üretme ihtimalini artırır.`,
+      [{label:"Sensitivity",value:"Analitik"},{label:"Okuma",value:"öncelik"}]
+    ));
 
-    if(result.p5 < p.initialCapital * .70){
-      items.push(`P5 senaryoda sermaye ciddi eriyor: ${fmtMoney(p.initialCapital)} → ${fmtMoney(result.p5)}. Bu, kötü bantta stratejinin savunmasız kaldığını gösterir.`);
+    if(p5Ratio < .7){
+      items.push(insight(
+        "ruby",
+        "P5 KÖTÜ BANT",
+        `${fmtNum(p5Ratio,2)}×`,
+        "P5 senaryoda sermaye ciddi eriyor",
+        `P5 senaryoda sermaye <span class="bad">ciddi eriyor</span>: <span class="em">${fmtMoney(p.initialCapital)} → ${fmtMoney(result.p5)}</span>. Bu, kötü bantta stratejinin savunmasız kaldığını ve risk/edge kombinasyonunun yeniden dengelenmesi gerektiğini gösterir.`,
+        [{label:"Başlangıç",value:fmtMoney(p.initialCapital)},{label:"P5",value:fmtMoney(result.p5)},{label:"Koruma",value:"zayıf"}]
+      ));
     } else {
-      items.push(`P5 senaryoda sermaye kontrol altında: ${fmtMoney(p.initialCapital)} → ${fmtMoney(result.p5)}. Kötü bant yıkıcı seviyeye inmiyor.`);
+      items.push(insight(
+        toneByScore("p5"),
+        "P5 KÖTÜ BANT",
+        `${fmtNum(p5Ratio,2)}×`,
+        "Kötü bant yıkıcı seviyeye inmiyor",
+        `P5 senaryoda sermaye kontrol altında: <span class="em">${fmtMoney(p.initialCapital)} → ${fmtMoney(result.p5)}</span>. Kötü bant yıkıcı seviyeye inmiyor; bu, stratejinin sadece medyan büyüme değil, alt kuyruk dayanıklılığı da ürettiğini gösterir.`,
+        [{label:"Başlangıç",value:fmtMoney(p.initialCapital)},{label:"P5",value:fmtMoney(result.p5)},{label:"P5 çarpan",value:`${fmtNum(p5Ratio,2)}×`}]
+      ));
     }
 
-    if(result.maxTUW > p.days * .45){
-      items.push(`En uzun sualtı süresi yüksek: ${Math.round(result.maxTUW)} gün. Bu stratejinin zayıf noktası sadece drawdown derinliği değil, yeni zirve görememe süresidir.`);
+    if(underwaterShare > .45){
+      items.push(insight(
+        "terra",
+        "PSİKOLOJİK DAYANIKLILIK",
+        `${Math.round(maxTUW)} gün`,
+        "Sualtı süresi stratejinin zayıf noktası",
+        `En uzun sualtı süresi <span class="warn">yüksek</span>: <span class="em">${Math.round(maxTUW)} gün</span>. Bu stratejinin zayıf noktası sadece drawdown derinliği değil, yeni zirve görememe süresidir; trader disiplini ve sermaye sabrı burada belirleyici olur.`,
+        [{label:"Max TUW",value:`${Math.round(maxTUW)} gün`},{label:"Test süresi",value:`${p.days} gün`},{label:"Pay",value:fmtPct(underwaterShare*100,1)}]
+      ));
     } else {
-      items.push(`Sualtı süresi yönetilebilir görünüyor: en uzun yol ${Math.round(result.maxTUW)} gün yeni zirve göremedi.`);
+      items.push(insight(
+        toneByScore("tuw"),
+        "PSİKOLOJİK DAYANIKLILIK",
+        `${Math.round(maxTUW)} gün`,
+        "Sualtı süresi yönetilebilir görünüyor",
+        `Sualtı süresi yönetilebilir görünüyor: en uzun yol <span class="em">${Math.round(maxTUW)} gün</span> yeni zirve göremedi. Bu, stratejinin sadece para kaybı değil, bekleme baskısı açısından da izlenebilir bantta olduğunu gösterir.`,
+        [{label:"Max TUW",value:`${Math.round(maxTUW)} gün`},{label:"Test süresi",value:`${p.days} gün`},{label:"Pay",value:fmtPct(underwaterShare*100,1)}]
+      ));
     }
 
     if(result.targetProb >= 60){
-      items.push(`Hedefe ulaşma ihtimali güçlü: ${fmtPct(result.targetProb,1)}. Bu hedef bu parametre setiyle gerçekçi bantta duruyor.`);
+      items.push(insight(
+        "olive",
+        "HEDEF OLASILIĞI",
+        fmtPct(result.targetProb,1),
+        "Hedef bu parametre setiyle güçlü bantta",
+        `Hedefe ulaşma ihtimali <span class="good">güçlü</span>: <span class="em">${fmtPct(result.targetProb,1)}</span>. Bu hedef bu parametre setiyle gerçekçi bantta duruyor; ana kontrol noktası artık hedef değil, alt kuyruk ve sualtı süresi kalitesi.`,
+        [{label:"Hedef",value:fmtMoney(p.targetCapital)},{label:"Olasılık",value:fmtPct(result.targetProb,1)}]
+      ));
     } else if(result.targetProb >= 30){
-      items.push(`Hedefe ulaşma ihtimali orta seviyede: ${fmtPct(result.targetProb,1)}. Hedef mümkün, fakat sonuç dağılımı hâlâ geniş.`);
+      items.push(insight(
+        "gold",
+        "HEDEF OLASILIĞI",
+        fmtPct(result.targetProb,1),
+        "Hedef mümkün ama dağılım hâlâ geniş",
+        `Hedefe ulaşma ihtimali <span class="warn">orta seviyede</span>: <span class="em">${fmtPct(result.targetProb,1)}</span>. Hedef mümkün; fakat sonuç dağılımı hâlâ geniş olduğu için P5, drawdown ve maliyet varsayımları birlikte kontrol edilmeli.`,
+        [{label:"Hedef",value:fmtMoney(p.targetCapital)},{label:"Olasılık",value:fmtPct(result.targetProb,1)}]
+      ));
     } else {
-      items.push(`Hedefe ulaşma ihtimali zayıf: ${fmtPct(result.targetProb,1)}. Bu hedef için ya süre, ya edge, ya da risk yapısı yeniden tasarlanmalı.`);
+      items.push(insight(
+        "ruby",
+        "HEDEF OLASILIĞI",
+        fmtPct(result.targetProb,1),
+        "Hedef mevcut yapıyla zayıf",
+        `Hedefe ulaşma ihtimali <span class="bad">zayıf</span>: <span class="em">${fmtPct(result.targetProb,1)}</span>. Bu hedef için ya süre, ya edge, ya da risk yapısı yeniden tasarlanmalı; aksi halde hedef modelin merkez senaryosu değil, kuyruk sonucu gibi kalır.`,
+        [{label:"Hedef",value:fmtMoney(p.targetCapital)},{label:"Olasılık",value:fmtPct(result.targetProb,1)}]
+      ));
     }
 
-    $("interpretationList").innerHTML = items.map(x => `<li>${x}</li>`).join("");
+    items.push("</div>");
+
+    $("interpretationList").innerHTML = `<li class="model-compact-li">${items.join("")}</li>`;
   }
 
   function setSimulationBusy(active, pct, label, options){
