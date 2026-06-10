@@ -5782,6 +5782,142 @@ body > a.btn[href*="trade_monte_carlo"]:hover{
 }
 </style>
 
+
+<style id="mobile-sticky-hud-final-fix">
+/* Final mobile HUD lock:
+   the executive metric cards remain sticky and horizontally scrollable on phone/tablet.
+   The compact dock is hidden on small screens to avoid overlapping the sticky HUD. */
+@media (max-width:1120px){
+  html,
+  body{
+    width:100% !important;
+    max-width:100% !important;
+    overflow-x:hidden !important;
+  }
+  .app-shell,
+  .main{
+    width:100% !important;
+    max-width:100% !important;
+    min-width:0 !important;
+    overflow:visible !important;
+    contain:none !important;
+    transform:none !important;
+  }
+  .executive-hud.gallery-ledger-hud,
+  .executive-hud.gallery-ledger-hud.hud-docked{
+    position:-webkit-sticky !important;
+    position:sticky !important;
+    top:0 !important;
+    z-index:650 !important;
+    display:flex !important;
+    flex-direction:row !important;
+    flex-wrap:nowrap !important;
+    align-items:stretch !important;
+    width:100% !important;
+    max-width:100% !important;
+    min-width:0 !important;
+    grid-template-columns:none !important;
+    grid-template-rows:none !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    -webkit-overflow-scrolling:touch !important;
+    overscroll-behavior-x:contain !important;
+    scroll-snap-type:x proximity !important;
+    gap:8px !important;
+    padding:8px 0 10px !important;
+    margin:0 !important;
+    background:rgba(247,243,235,.985) !important;
+    backdrop-filter:blur(16px) !important;
+    -webkit-backdrop-filter:blur(16px) !important;
+    border-top:1px solid rgba(230,222,210,.86) !important;
+    border-bottom:1px solid rgba(230,222,210,.86) !important;
+    box-shadow:0 8px 18px rgba(32,27,21,.045) !important;
+    touch-action:pan-x pan-y !important;
+  }
+  .executive-hud.gallery-ledger-hud::-webkit-scrollbar{
+    height:0 !important;
+  }
+  .executive-hud.gallery-ledger-hud .hud-card{
+    flex:0 0 154px !important;
+    min-width:154px !important;
+    max-width:154px !important;
+    min-height:96px !important;
+    grid-row:auto !important;
+    scroll-snap-align:start !important;
+  }
+  .executive-hud.gallery-ledger-hud .hud-card.hero{
+    flex-basis:282px !important;
+    min-width:282px !important;
+    max-width:282px !important;
+    min-height:122px !important;
+  }
+  .executive-hud.gallery-ledger-hud .hud-card.life{
+    flex-basis:220px !important;
+    min-width:220px !important;
+    max-width:220px !important;
+    min-height:122px !important;
+  }
+  .executive-hud.gallery-ledger-hud #cagr-card{
+    flex-basis:238px !important;
+    min-width:238px !important;
+    max-width:238px !important;
+    min-height:108px !important;
+  }
+  .executive-hud.gallery-ledger-hud #xirr-card{
+    flex-basis:190px !important;
+    min-width:190px !important;
+    max-width:190px !important;
+    min-height:108px !important;
+  }
+  .metric-dock{
+    display:none !important;
+  }
+  .tabs-wrap{
+    position:relative !important;
+    top:auto !important;
+    z-index:20 !important;
+  }
+}
+
+@media (max-width:640px){
+  .executive-hud.gallery-ledger-hud,
+  .executive-hud.gallery-ledger-hud.hud-docked{
+    gap:7px !important;
+    padding:7px 0 9px !important;
+  }
+  .executive-hud.gallery-ledger-hud .hud-card{
+    flex-basis:142px !important;
+    min-width:142px !important;
+    max-width:142px !important;
+    min-height:88px !important;
+  }
+  .executive-hud.gallery-ledger-hud .hud-card.hero{
+    flex-basis:262px !important;
+    min-width:262px !important;
+    max-width:262px !important;
+    min-height:112px !important;
+  }
+  .executive-hud.gallery-ledger-hud .hud-card.life{
+    flex-basis:206px !important;
+    min-width:206px !important;
+    max-width:206px !important;
+    min-height:112px !important;
+  }
+  .executive-hud.gallery-ledger-hud #cagr-card{
+    flex-basis:230px !important;
+    min-width:230px !important;
+    max-width:230px !important;
+    min-height:104px !important;
+  }
+  .executive-hud.gallery-ledger-hud #xirr-card{
+    flex-basis:178px !important;
+    min-width:178px !important;
+    max-width:178px !important;
+    min-height:104px !important;
+  }
+}
+</style>
+
 </head>
 <body>
 <a class="btn terra" href="trade_monte_carlo.html" aria-label="Trade Monte Carlo aracına git" style="position:fixed;right:24px;bottom:24px;z-index:9999;text-decoration:none;box-shadow:0 12px 28px rgba(0,0,0,.10);">TRADE MC</a>
@@ -6319,7 +6455,7 @@ body > a.btn[href*="trade_monte_carlo"]:hover{
           <div>
             <div class="mc-d-eyebrow">Stokastik Risk Laboratuvarı</div>
             <h2 class="mc-d-title serif">Monte Carlo Studio</h2>
-            <p class="mc-d-lead">Ana projeksiyonun beklenen getiri varsayımını olasılık dağılımına çevirir. Varsayılan konfigürasyonla hemen çalışır; detay varsayımlar yalnızca ihtiyaç olduğunda açılır.</p>
+            <p class="mc-d-lead">Ana projeksiyondaki getiri varsayımını çok sayıda olası gelecek patikasına çevirir. Temel ayarlarla hemen çalışır; detay varsayımlar yalnızca ihtiyaç olduğunda açılır.</p>
           </div>
           <div class="mc-d-command">
             <div class="mc-d-state">
@@ -6375,12 +6511,12 @@ body > a.btn[href*="trade_monte_carlo"]:hover{
 
         <details class="mc-config-details">
           <summary>
-            <span>Konfigürasyon / Detay Varsayımlar</span>
-            <strong id="mc-input-state">Varsayılan set</strong>
+            <span>Detay Varsayımlar</span>
+            <strong id="mc-input-state">Temel set</strong>
           </summary>
           <div class="mc-config-body">
             <div class="mc-assumption-ribbon" id="mc-assumption-chips">
-              <span>σ %20</span><span>Yol 1000</span><span>Kriz %5</span><span>Skew 0.0</span><span>Model Geometrik</span><span>Seed 2026</span><span>Eşik $100,000</span><span>Hedef %85</span>
+              <span>Oynaklık %20</span><span>Yol 1000</span><span>Kriz %5</span><span>Çarpıklık 0.0</span><span>Model Geometrik</span><span>Tekrar Kodu 2026</span><span>Eşik $100,000</span><span>Hedef %85</span>
             </div>
             <div class="mc-control-list">
               <div class="mc-control-row">
@@ -6433,36 +6569,36 @@ body > a.btn[href*="trade_monte_carlo"]:hover{
 
               <div class="mc-control-row">
                 <div class="mc-control-meta">
-                  <span>Return Modeli</span>
+                  <span>Getiri Modeli</span>
                   <strong class="num" id="lbl-mc-model">Geometrik</strong>
                 <button type="button" class="mc-row-run" onclick="runMonteCarlo()" title="Bu varsayım setiyle çalıştır" aria-label="Bu varsayım setiyle çalıştır">▶</button></div>
                 <div class="mc-control-inputs single">
                   <select id="mc-return-model" class="mc-wide-input" onchange="onMCSliderChange()">
-                    <option value="geometric" selected>Geometrik / lognormal drift</option>
-                    <option value="arithmetic">Aritmetik normal şok</option>
+                    <option value="geometric" selected>Geometrik bileşik getiri</option>
+                    <option value="arithmetic">Aritmetik yıllık getiri şoku</option>
                   </select>
                 </div>
-                <p>Geometrik modda volatilite drift düzeltmesiyle uygulanır; aritmetik mod eski normal getiri yaklaşımını korur.</p>
+                <p>Geometrik model bileşik servet büyümesini esas alır. Aritmetik model yıllık getiriye doğrudan oynaklık şoku ekler.</p>
               </div>
 
               <div class="mc-control-row">
                 <div class="mc-control-meta">
-                  <span>Risk Rejimi</span>
+                  <span>Yıllar Arası Risk</span>
                   <strong class="num" id="lbl-mc-regime">Bağımsız</strong>
                 <button type="button" class="mc-row-run" onclick="runMonteCarlo()" title="Bu varsayım setiyle çalıştır" aria-label="Bu varsayım setiyle çalıştır">▶</button></div>
                 <div class="mc-control-inputs single">
                   <select id="mc-regime-model" class="mc-wide-input" onchange="onMCSliderChange()">
-                    <option value="iid" selected>Bağımsız yıllar</option>
-                    <option value="ar1">Otokorelasyon / momentum</option>
-                    <option value="regime">Rejim geçişi: normal / kriz / toparlanma</option>
+                    <option value="iid" selected>Her yıl ayrı hesaplanır</option>
+                    <option value="ar1">Benzer yıllar peş peşe gelebilir</option>
+                    <option value="regime">Piyasa dönemleri: normal / kriz / toparlanma</option>
                   </select>
                 </div>
-                <p>Varsayılan mod mevcut davranışı korur. Rejim seçenekleri yıllar arası bağımlılık ve kriz kümelenmesini test eder.</p>
+                <p>Bu seçim, iyi ve kötü yılların birbirinden bağımsız mı yoksa dönemler halinde peş peşe mi gelebileceğini test eder.</p>
               </div>
 
               <div class="mc-control-row">
                 <div class="mc-control-meta">
-                  <span>Seed</span>
+                  <span>Tekrar Kodu</span>
                   <strong class="num" id="lbl-mc-seed">2026</strong>
                 <button type="button" class="mc-row-run" onclick="runMonteCarlo()" title="Bu varsayım setiyle çalıştır" aria-label="Bu varsayım setiyle çalıştır">▶</button></div>
                 <div class="mc-control-inputs single">
@@ -6473,17 +6609,17 @@ body > a.btn[href*="trade_monte_carlo"]:hover{
 
               <div class="mc-control-row">
                 <div class="mc-control-meta">
-                  <span>Sequence Şoku</span>
+                  <span>İlk 5 Yıl Stresi</span>
                   <strong class="num" id="lbl-seq-model">Hibrit</strong>
                 <button type="button" class="mc-row-run" onclick="runMonteCarlo()" title="Bu varsayım setiyle çalıştır" aria-label="Bu varsayım setiyle çalıştır">▶</button></div>
                 <div class="mc-control-inputs single">
                   <select id="seq-shock-model" class="mc-wide-input" onchange="calculateAll(); onMCSliderChange();">
-                    <option value="hybrid" selected>Hibrit: oransal + minimum kayıp</option>
-                    <option value="fixed">Sabit negatif yıl: ilk 5 yıl -20%</option>
-                    <option value="legacy">Eski yöntem: getiriden -20 puan</option>
+                    <option value="hybrid" selected>Dengeli stres: oransal + minimum kayıp</option>
+                    <option value="fixed">Her stres yılında -20%</option>
+                    <option value="legacy">Beklenen getiriden 20 puan düş</option>
                   </select>
                 </div>
-                <p>HUD’daki sequence risk testi için ilk yılların nasıl strese sokulacağını belirler.</p>
+                <p>İlk yıllarda kötü piyasa koşulları yaşanırsa portföyün ne kadar etkileneceğini hesaplar.</p>
               </div>
 
               <div class="mc-control-row">
@@ -7835,9 +7971,9 @@ function getSequenceShockModel(){
 }
 
 function sequenceShockLabel(model=getSequenceShockModel()){
-  if(model === 'fixed') return 'Sabit -20%';
-  if(model === 'legacy') return '-20 puan';
-  return 'Hibrit';
+  if(model === 'fixed') return 'Her yıl -20%';
+  if(model === 'legacy') return 'Getiriden -20 puan';
+  return 'Dengeli stres';
 }
 
 function stressReturnForSequence(r, model=getSequenceShockModel()){
@@ -8335,16 +8471,16 @@ function mcGetReturnModel(){
   return el && ['geometric','arithmetic'].includes(el.value) ? el.value : 'geometric';
 }
 function mcReturnModelLabel(model=mcGetReturnModel()){
-  return model === 'arithmetic' ? 'Aritmetik' : 'Geometrik';
+  return model === 'arithmetic' ? 'Aritmetik şok' : 'Geometrik bileşik';
 }
 function mcGetRegimeModel(){
   const el = $('mc-regime-model');
   return el && ['iid','ar1','regime'].includes(el.value) ? el.value : 'iid';
 }
 function mcRegimeModelLabel(model=mcGetRegimeModel()){
-  if(model === 'ar1') return 'Otokorelasyon';
-  if(model === 'regime') return 'Rejim geçişi';
-  return 'Bağımsız';
+  if(model === 'ar1') return 'Peş peşe yıllar';
+  if(model === 'regime') return 'Piyasa dönemleri';
+  return 'Bağımsız yıllar';
 }
 function mcNextRegimeState(prev, rng){
   const u = rng();
@@ -8527,14 +8663,14 @@ function onMCSliderChange(){
     const floor = Math.max(0, num('mc-floor', getInputs().initial));
     chips.innerHTML = [
       `Getiri ${returnInputBasis === 'monthly' ? formatPct(getDisplayedReturnRate()) + ' aylık' : formatPct(getEffectiveAnnualReturnRate()) + ' yıllık'}`,
-      `σ ${mcFormatSpecValue('vol', num('mc-vol',20))}`,
+      `Oynaklık ${mcFormatSpecValue('vol', num('mc-vol',20))}`,
       `Yol ${Math.round(num('mc-iter',1000)).toLocaleString('en-US')}`,
       `Kriz ${mcFormatSpecValue('crash', num('mc-crash',5))}`,
-      `Skew ${mcFormatSpecValue('skew', num('mc-skew',0))}`,
+      `Çarpıklık ${mcFormatSpecValue('skew', num('mc-skew',0))}`,
       `Model ${mcReturnModelLabel()}`,
       `Rejim ${mcRegimeModelLabel()}`,
-      `Seed ${mcGetSeed().toLocaleString('en-US')}`,
-      `Seq ${sequenceShockLabel()}`,
+      `Tekrar Kodu ${mcGetSeed().toLocaleString('en-US')}`,
+      `İlk 5 Yıl ${sequenceShockLabel()}`,
       `Eşik ${formatMoneyLong(floor)}`,
       `Hedef ${mcFormatSpecValue('target', num('mc-target',85))}`
     ].map(x=>`<span>${x}</span>`).join('');
