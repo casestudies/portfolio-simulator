@@ -5691,6 +5691,97 @@ body > a.btn[href*="trade_monte_carlo"]:hover{
 }
 
 </style>
+
+<style id="mobile-hud-scroll-regression-fix">
+/* Mobile HUD regression fix — keeps the metric vitrine horizontally scrollable.
+   The CAGR tooltip is rendered as a floating body element, so the HUD container itself
+   must not be forced to overflow:visible on mobile. */
+@media (max-width:1120px){
+  html, body{
+    max-width:100% !important;
+    overflow-x:hidden !important;
+  }
+  .app-shell,
+  .main{
+    width:100% !important;
+    max-width:100% !important;
+    min-width:0 !important;
+    overflow:visible !important;
+  }
+  .executive-hud.gallery-ledger-hud,
+  .executive-hud.gallery-ledger-hud.hud-docked{
+    display:flex !important;
+    flex-direction:row !important;
+    flex-wrap:nowrap !important;
+    width:100% !important;
+    max-width:100% !important;
+    min-width:0 !important;
+    grid-template-columns:none !important;
+    grid-template-rows:none !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    -webkit-overflow-scrolling:touch !important;
+    overscroll-behavior-x:contain !important;
+    scroll-snap-type:x proximity !important;
+    gap:8px !important;
+    padding:0 0 10px !important;
+    box-sizing:border-box !important;
+    touch-action:pan-x pan-y !important;
+  }
+  .executive-hud.gallery-ledger-hud .hud-card{
+    flex:0 0 154px !important;
+    min-width:154px !important;
+    max-width:none !important;
+    scroll-snap-align:start !important;
+  }
+  .executive-hud.gallery-ledger-hud .hud-card.hero,
+  .executive-hud.gallery-ledger-hud .hud-card.metric-card-signal{
+    flex-basis:282px !important;
+    min-width:282px !important;
+  }
+  .executive-hud.gallery-ledger-hud .hud-card.life{
+    flex-basis:220px !important;
+    min-width:220px !important;
+  }
+}
+
+@media (max-width:640px){
+  body{
+    overflow-x:hidden !important;
+  }
+  .executive-hud.gallery-ledger-hud,
+  .executive-hud.gallery-ledger-hud.hud-docked{
+    gap:7px !important;
+    padding:0 0 8px !important;
+  }
+  .executive-hud.gallery-ledger-hud .hud-card{
+    flex-basis:142px !important;
+    min-width:142px !important;
+    min-height:86px !important;
+  }
+  .executive-hud.gallery-ledger-hud .hud-card.hero,
+  .executive-hud.gallery-ledger-hud .hud-card.metric-card-signal{
+    flex-basis:264px !important;
+    min-width:264px !important;
+    min-height:108px !important;
+  }
+  .executive-hud.gallery-ledger-hud .hud-card.life{
+    flex-basis:206px !important;
+    min-width:206px !important;
+    min-height:108px !important;
+  }
+}
+
+/* Keep the custom tooltip above the scroll container without using native title. */
+.floating-metric-tip{
+  z-index:99999 !important;
+  position:fixed !important;
+}
+.metric-info[title]{
+  pointer-events:auto;
+}
+</style>
+
 </head>
 <body>
 <a class="btn terra" href="trade_monte_carlo.html" aria-label="Trade Monte Carlo aracına git" style="position:fixed;right:24px;bottom:24px;z-index:9999;text-decoration:none;box-shadow:0 12px 28px rgba(0,0,0,.10);">TRADE MC</a>
@@ -6356,6 +6447,21 @@ body > a.btn[href*="trade_monte_carlo"]:hover{
 
               <div class="mc-control-row">
                 <div class="mc-control-meta">
+                  <span>Risk Rejimi</span>
+                  <strong class="num" id="lbl-mc-regime">Bağımsız</strong>
+                <button type="button" class="mc-row-run" onclick="runMonteCarlo()" title="Bu varsayım setiyle çalıştır" aria-label="Bu varsayım setiyle çalıştır">▶</button></div>
+                <div class="mc-control-inputs single">
+                  <select id="mc-regime-model" class="mc-wide-input" onchange="onMCSliderChange()">
+                    <option value="iid" selected>Bağımsız yıllar</option>
+                    <option value="ar1">Otokorelasyon / momentum</option>
+                    <option value="regime">Rejim geçişi: normal / kriz / toparlanma</option>
+                  </select>
+                </div>
+                <p>Varsayılan mod mevcut davranışı korur. Rejim seçenekleri yıllar arası bağımlılık ve kriz kümelenmesini test eder.</p>
+              </div>
+
+              <div class="mc-control-row">
+                <div class="mc-control-meta">
                   <span>Seed</span>
                   <strong class="num" id="lbl-mc-seed">2026</strong>
                 <button type="button" class="mc-row-run" onclick="runMonteCarlo()" title="Bu varsayım setiyle çalıştır" aria-label="Bu varsayım setiyle çalıştır">▶</button></div>
@@ -6896,13 +7002,14 @@ function simulate(options={}){
       marketPeak = Math.max(marketPeak, marketIndex);
       marketMaxDD = Math.min(marketMaxDD, marketPeak > 0 ? (marketIndex - marketPeak) / marketPeak : 0);
 
-      const indexedMonthly = monthly * inflationFactorAt((globalMonth - 1) / monthsPerYear);
+      const cashflowIndexT = (globalMonth - 1) / monthsPerYear;
+      const indexedMonthly = monthly * inflationFactorAt(cashflowIndexT);
       const recurringApplied = applyCashFlow(indexedMonthly, t, y, m, 'recurring');
       recurring += recurringApplied.actual;
       shortfall += recurringApplied.shortfall;
 
       let eventApplied = {actual:0, shortfall:0};
-      const scheduledEvent = sumFlowsForMonth(y, m, flows) * inflationFactorAt(t);
+      const scheduledEvent = sumFlowsForMonth(y, m, flows) * inflationFactorAt(cashflowIndexT);
       if(scheduledEvent !== 0){
         eventApplied = applyCashFlow(scheduledEvent, t, y, m, 'event');
         eventNet += eventApplied.actual;
@@ -8149,7 +8256,7 @@ function mcCurrentRunSetText(){
   const volText = mcFormatSpecValue ? mcFormatSpecValue('vol', num('mc-vol',20)) : `%${fmt(num('mc-vol',20),0)}`;
   const iterText = Math.round(num('mc-iter',1000)).toLocaleString('en-US');
   const crashText = mcFormatSpecValue ? mcFormatSpecValue('crash', num('mc-crash',5)) : `%${fmt(num('mc-crash',5),0)}`;
-  return `getiri ${rateText} · süre ${inp.years} yıl · ${cashText} · σ ${volText} · ${iterText} yol · kriz ${crashText} · ${mcReturnModelLabel()} · seed ${mcGetSeed()}`;
+  return `getiri ${rateText} · süre ${inp.years} yıl · ${cashText} · σ ${volText} · ${iterText} yol · kriz ${crashText} · ${mcReturnModelLabel()} · ${mcRegimeModelLabel()} · seed ${mcGetSeed()}`;
 }
 
 function renderMCRunsetChips(payload){
@@ -8229,6 +8336,60 @@ function mcGetReturnModel(){
 }
 function mcReturnModelLabel(model=mcGetReturnModel()){
   return model === 'arithmetic' ? 'Aritmetik' : 'Geometrik';
+}
+function mcGetRegimeModel(){
+  const el = $('mc-regime-model');
+  return el && ['iid','ar1','regime'].includes(el.value) ? el.value : 'iid';
+}
+function mcRegimeModelLabel(model=mcGetRegimeModel()){
+  if(model === 'ar1') return 'Otokorelasyon';
+  if(model === 'regime') return 'Rejim geçişi';
+  return 'Bağımsız';
+}
+function mcNextRegimeState(prev, rng){
+  const u = rng();
+  if(prev === 'crisis'){
+    if(u < .45) return 'crisis';
+    if(u < .78) return 'recovery';
+    return 'normal';
+  }
+  if(prev === 'recovery'){
+    if(u < .24) return 'expansion';
+    if(u < .82) return 'normal';
+    return 'recovery';
+  }
+  if(prev === 'expansion'){
+    if(u < .12) return 'normal';
+    if(u < .20) return 'crisis';
+    return 'expansion';
+  }
+  if(u < .07) return 'crisis';
+  if(u < .22) return 'expansion';
+  return 'normal';
+}
+function mcRegimeAdjustedInput({model, expected, vol, rawZ, prevZ, state, rng}){
+  let nextState = state || 'normal';
+  let z = Number.isFinite(rawZ) ? rawZ : 0;
+  let expectedAdj = Number.isFinite(expected) ? expected : 0;
+  let volAdj = Number.isFinite(vol) ? vol : 0;
+  if(model === 'ar1'){
+    const rho = 0.35;
+    z = rho * (Number.isFinite(prevZ) ? prevZ : 0) + Math.sqrt(1 - rho * rho) * z;
+  }else if(model === 'regime'){
+    nextState = mcNextRegimeState(nextState, rng);
+    if(nextState === 'crisis'){
+      expectedAdj -= 0.12;
+      volAdj *= 1.75;
+      z = Math.min(z, -Math.abs(z) * 0.65);
+    }else if(nextState === 'recovery'){
+      expectedAdj += 0.065;
+      volAdj *= 1.15;
+    }else if(nextState === 'expansion'){
+      expectedAdj += 0.025;
+      volAdj *= 0.85;
+    }
+  }
+  return {z, expected:expectedAdj, vol:volAdj, state:nextState};
 }
 function mcGetSeed(){
   const raw = Math.floor(num('mc-seed',2026));
@@ -8358,6 +8519,7 @@ function onMCSliderChange(){
   });
   if($('lbl-mc-floor')) $('lbl-mc-floor').textContent = formatMoneyLong(num('mc-floor', getInputs().initial));
   if($('lbl-mc-model')) $('lbl-mc-model').textContent = mcReturnModelLabel();
+  if($('lbl-mc-regime')) $('lbl-mc-regime').textContent = mcRegimeModelLabel();
   if($('lbl-mc-seed')) $('lbl-mc-seed').textContent = mcGetSeed().toLocaleString('en-US');
   if($('lbl-seq-model')) $('lbl-seq-model').textContent = sequenceShockLabel();
   const chips = $('mc-assumption-chips');
@@ -8370,6 +8532,7 @@ function onMCSliderChange(){
       `Kriz ${mcFormatSpecValue('crash', num('mc-crash',5))}`,
       `Skew ${mcFormatSpecValue('skew', num('mc-skew',0))}`,
       `Model ${mcReturnModelLabel()}`,
+      `Rejim ${mcRegimeModelLabel()}`,
       `Seed ${mcGetSeed().toLocaleString('en-US')}`,
       `Seq ${sequenceShockLabel()}`,
       `Eşik ${formatMoneyLong(floor)}`,
@@ -8651,6 +8814,7 @@ function runMonteCarloCore(){
     const floor = Math.max(0,num('mc-floor',base.initial));
     const targetProb = clamp(Math.round(num('mc-target',85)),50,99);
     const returnModel = mcGetReturnModel();
+    const regimeModel = mcGetRegimeModel();
     const seed = mcGetSeed();
     const rng = makeSeededRng(seed);
     const expectedRates = getRateSchedule(years);
@@ -8663,11 +8827,25 @@ function runMonteCarloCore(){
     let failed = 0;
     let shortfallSum = 0;
 
+    const depletionYears = [];
     for(let i=0;i<iter;i++){
       const rates = [];
+      let prevZ = 0;
+      let regimeState = 'normal';
       for(let y=0;y<years;y++){
-        let z = mcTransformedShock(randN(rng), skew);
-        let r = mcGenerateAnnualReturn((expectedRates[y] ?? base.rate), vol, z, returnModel);
+        const adjusted = mcRegimeAdjustedInput({
+          model:regimeModel,
+          expected:(expectedRates[y] ?? base.rate),
+          vol,
+          rawZ:randN(rng),
+          prevZ,
+          state:regimeState,
+          rng
+        });
+        prevZ = adjusted.z;
+        regimeState = adjusted.state;
+        let z = mcTransformedShock(adjusted.z, skew);
+        let r = mcGenerateAnnualReturn(adjusted.expected, adjusted.vol, z, returnModel);
         if(rng() < crashP) r = mcApplyCrashShock(r, rng);
         r = clamp(r,-0.95,2.5);
         rates.push(r);
@@ -8679,7 +8857,10 @@ function runMonteCarloCore(){
       reals.push(Math.max(0, sim.realFinal));
       scatterPoints.push({dd:Math.abs(sim.marketMaxDD || 0), early:mcEarlyReturn(rates), down:mcDownsideDeviation(rates), final:finalValue});
       if(!sim.depletedYear && finalValue > 0) survivors++;
-      else failed++;
+      else{
+        failed++;
+        if(sim.depletedYear) depletionYears.push(sim.depletedYear);
+      }
       if(!sim.depletedYear && finalValue >= floor) floorPass++;
       shortfallSum += Math.max(0, sim.plannedShortfall || 0);
     }
@@ -8715,6 +8896,11 @@ function runMonteCarloCore(){
     const expectedShortfallVals = finals.filter(v=>v <= p10Final);
     const expectedShortfall = expectedShortfallVals.length ? expectedShortfallVals.reduce((a,b)=>a+b,0) / expectedShortfallVals.length : p10Final;
     const p10ZeroYear = (pctByYear.find(r => r.p10 <= 0) || {}).year || null;
+    const depletionMedian = depletionYears.length ? percentile(depletionYears.slice().sort((a,b)=>a-b), .50) : null;
+    const depletionP10 = depletionYears.length ? percentile(depletionYears.slice().sort((a,b)=>a-b), .10) : null;
+    const depletionNote = depletionYears.length
+      ? `Başarısız patikalarda medyan tükenme ${depletionMedian.toFixed(0)}. yıl; erken kuyruk ${depletionP10.toFixed(0)}. yıl.`
+      : 'Başarısız/tükenen patika yok.';
 
     if($('mc-p10')) $('mc-p10').textContent = formatMoneyLong(p10Final);
     if($('mc-p25')) $('mc-p25').textContent = formatMoneyLong(p25Final);
@@ -8754,7 +8940,8 @@ function runMonteCarloCore(){
         <article><span>Ana Karar</span><strong>${memoTone}</strong><p>${level} bandı: ${MC_LEVEL_META[level] ? MC_LEVEL_META[level].text : ''}</p></article>
         <article><span>Kuyruk Okuması</span><strong>P10 ${formatMoneyLong(p10Final)}</strong><p>${p10ZeroYear ? `Kötü kuyruk ${p10ZeroYear}. yılda sıfırı görüyor.` : `P50 ${formatMoneyLong(p50Final)} seviyesinde olsa bile ilk okunacak kötü kuyruk değeri budur.`}</p></article>
         <article><span>Eşik Disiplini</span><strong>${floorRate.toFixed(1)}% koruma</strong><p>Koruma eşiği ${formatMoneyLong(floor)} üzerinde kalma oranı hedef ${targetProb}% ile birlikte okunmalıdır.</p></article>
-        <article><span>Yönetici Aksiyonu</span><strong>${failRate.toFixed(1)}% başarısız patika</strong><p>Kötü kuyruk ortalama finali ${formatMoneyLong(expectedShortfall)}. Felaket senaryosunda portföyün ortalama nereye sıkıştığını gösterir.</p></article>`;
+        <article><span>Yönetici Aksiyonu</span><strong>${failRate.toFixed(1)}% başarısız patika</strong><p>Kötü kuyruk ortalama finali ${formatMoneyLong(expectedShortfall)}. Felaket senaryosunda portföyün ortalama nereye sıkıştığını gösterir.</p></article>
+        <article><span>Rejim / Tükenme</span><strong>${mcRegimeModelLabel(regimeModel)}</strong><p>${depletionNote}</p></article>`;
     }
     if($('mc-run-meta')){
       const elapsed = Math.max(1, Math.round(performance.now() - started));
@@ -8778,7 +8965,7 @@ function runMonteCarloCore(){
 
     mcApplyDecision(level, {p10Final,p50Final,floorRate,targetProb});
     mcHasRun = true;
-    mcLastPayload = {level, survivalRate, floorRate, failRate, p10Final, p50Final, p90Final, targetProb, floor, tailGap, shortfallAvg, returnModel, seed};
+    mcLastPayload = {level, survivalRate, floorRate, failRate, p10Final, p50Final, p90Final, targetProb, floor, tailGap, shortfallAvg, returnModel, regimeModel, seed};
     const stamp = new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
     mcSetState(level === 'Kritik' || level === 'Risk' ? 'risk' : 'ready', `Son çalıştırma ${stamp}`);
 
