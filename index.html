@@ -5179,6 +5179,517 @@ body > a.btn[href*="trade_monte_carlo"]:hover{
 #v-vol-note{line-height:1.25;}
 #v-capacity{white-space:nowrap;}
 
+
+
+/* Iteration P2 — compact executive numerics, MC tail explanation, manual-series status */
+.executive-hud.gallery-ledger-hud .hud-card.small .hud-value,
+.executive-hud.gallery-ledger-hud .hud-card.small .hud-row strong.num{
+  font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace !important;
+  font-variant-numeric:tabular-nums !important;
+  letter-spacing:-.015em !important;
+}
+.executive-hud.gallery-ledger-hud .hud-card.small .hud-value{
+  font-size:16.5px !important;
+  line-height:1.12 !important;
+}
+.executive-hud.gallery-ledger-hud #v-sequence{
+  font-family:"Cormorant Garamond",Georgia,serif !important;
+  font-size:20px !important;
+  letter-spacing:-.02em !important;
+}
+.executive-hud.gallery-ledger-hud #v-vol{
+  font-size:13px !important;
+  line-height:1.2 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+.mc-tail-explain{
+  margin:0 0 12px;
+  padding:9px 10px;
+  border:1px solid rgba(168,132,66,.18);
+  background:rgba(168,132,66,.055);
+  color:var(--stone);
+  font-size:11px;
+  line-height:1.45;
+}
+.mc-tail-explain strong{color:var(--ink);font-weight:850}
+.mc-report-actions span .info.mc-tail-info{
+  display:inline-grid;
+  vertical-align:middle;
+  margin-left:4px;
+  width:15px;
+  height:15px;
+  font-size:9px;
+  letter-spacing:0;
+  text-transform:none;
+}
+.custom-rate-mode-note{
+  margin:0 0 12px !important;
+  padding:8px 10px;
+  border-left:3px solid var(--olive);
+  background:rgba(100,112,73,.055);
+}
+.custom-rate-mode-note.is-flat{
+  border-left-color:var(--terra);
+  background:rgba(198,91,54,.045);
+}
+
+
+/* CAGR / cash-flow interpretation signal — literature-aligned metric UX */
+.metric-info{
+  display:inline-grid;
+  place-items:center;
+  width:15px;
+  height:15px;
+  margin-left:5px;
+  vertical-align:middle;
+  border:1px solid rgba(168,132,66,.38);
+  color:#8a6422;
+  background:rgba(168,132,66,.075);
+  border-radius:50% !important;
+  font-style:normal;
+  font-size:9px;
+  line-height:1;
+  font-weight:800;
+  position:relative;
+  cursor:help;
+}
+.metric-info[data-tip]::after{
+  content:attr(data-tip);
+  position:absolute;
+  z-index:240;
+  bottom:calc(100% + 9px);
+  left:50%;
+  transform:translateX(-50%) translateY(2px);
+  width:min(292px,calc(100vw - 36px));
+  padding:10px 12px;
+  background:#241f1a;
+  color:#fffaf0;
+  border:1px solid rgba(255,255,255,.08);
+  box-shadow:0 16px 36px rgba(0,0,0,.20);
+  border-radius:10px !important;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .16s ease, transform .16s ease;
+  font-family:Inter,system-ui,sans-serif;
+  font-size:10.5px;
+  font-weight:500;
+  line-height:1.44;
+  letter-spacing:0;
+  text-transform:none;
+  white-space:normal;
+}
+.metric-info:hover::after,
+.metric-info:focus::after{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+}
+.cagr-signal{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+  padding:2px 6px;
+  border:1px solid rgba(100,112,73,.22);
+  background:rgba(100,112,73,.055);
+  color:var(--olive);
+  font-size:7.8px;
+  line-height:1.15;
+  font-weight:800;
+  letter-spacing:.045em;
+  text-transform:uppercase;
+  white-space:nowrap;
+  border-radius:999px !important;
+}
+.cagr-signal::before{
+  content:"";
+  width:6px;
+  height:6px;
+  border-radius:50% !important;
+  background:currentColor;
+  opacity:.82;
+}
+.cagr-signal.amber{
+  color:#8a6422;
+  border-color:rgba(168,132,66,.40);
+  background:rgba(168,132,66,.10);
+  animation:cagrAmberBreath 1.85s ease-in-out infinite;
+}
+.cagr-signal.amber::before{
+  background:#a88442;
+  box-shadow:0 0 0 0 rgba(168,132,66,.42);
+  animation:cagrAmberPulse 1.85s ease-out infinite;
+}
+.cagr-signal.ok{
+  color:var(--olive);
+  border-color:rgba(100,112,73,.27);
+  background:rgba(100,112,73,.07);
+}
+.hud-card.cagr-attention{
+  border-color:rgba(168,132,66,.46) !important;
+  box-shadow:0 10px 22px rgba(168,132,66,.075) !important;
+}
+.hud-card.cagr-clean{
+  border-color:rgba(100,112,73,.24) !important;
+}
+@keyframes cagrAmberBreath{
+  0%,100%{filter:saturate(1); box-shadow:none;}
+  50%{filter:saturate(1.14); box-shadow:0 0 0 3px rgba(168,132,66,.055);}
+}
+@keyframes cagrAmberPulse{
+  0%{box-shadow:0 0 0 0 rgba(168,132,66,.42);}
+  70%{box-shadow:0 0 0 7px rgba(168,132,66,0);}
+  100%{box-shadow:0 0 0 0 rgba(168,132,66,0);}
+}
+@media (prefers-reduced-motion:reduce){
+  .cagr-signal.amber,
+  .cagr-signal.amber::before{
+    animation:none !important;
+  }
+}
+
+
+/* Visible CAGR/XIRR interpretation system — v2: badge + inline explanation */
+.executive-hud.gallery-ledger-hud .metric-card-signal{
+  overflow:visible !important;
+}
+.metric-card-signal .metric-label-line{
+  position:relative !important;
+  z-index:3 !important;
+  display:grid !important;
+  grid-template-columns:auto 16px minmax(0,auto) !important;
+  grid-template-rows:auto auto !important;
+  align-items:center !important;
+  justify-content:start !important;
+  gap:3px 5px !important;
+}
+.metric-card-signal .metric-label-main{
+  display:inline-block !important;
+  color:var(--stone) !important;
+  font-size:8.6px !important;
+  line-height:1 !important;
+  letter-spacing:.14em !important;
+  text-transform:uppercase !important;
+  font-weight:800 !important;
+}
+.metric-card-signal .metric-label-line small{
+  grid-column:1 / -1 !important;
+  display:block !important;
+  margin-top:1px !important;
+  color:var(--muted) !important;
+  font-size:8.6px !important;
+  line-height:1.18 !important;
+  letter-spacing:0 !important;
+  text-transform:none !important;
+  font-weight:400 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+.metric-info{
+  display:inline-grid !important;
+  place-items:center !important;
+  width:16px !important;
+  height:16px !important;
+  min-width:16px !important;
+  padding:0 !important;
+  margin:0 !important;
+  border:1px solid rgba(168,132,66,.48) !important;
+  color:#8a6422 !important;
+  background:rgba(168,132,66,.11) !important;
+  border-radius:50% !important;
+  font-style:normal !important;
+  font-size:9px !important;
+  line-height:1 !important;
+  font-weight:900 !important;
+  position:relative !important;
+  cursor:help !important;
+  z-index:8 !important;
+}
+.metric-info[data-tip]::after{
+  content:attr(data-tip) !important;
+  position:absolute !important;
+  z-index:9999 !important;
+  bottom:calc(100% + 9px) !important;
+  left:0 !important;
+  transform:translateY(2px) !important;
+  width:min(310px,calc(100vw - 36px)) !important;
+  padding:10px 12px !important;
+  background:#241f1a !important;
+  color:#fffaf0 !important;
+  border:1px solid rgba(255,255,255,.10) !important;
+  box-shadow:0 16px 36px rgba(0,0,0,.22) !important;
+  border-radius:10px !important;
+  opacity:0 !important;
+  pointer-events:none !important;
+  transition:opacity .16s ease, transform .16s ease !important;
+  font-family:Inter,system-ui,sans-serif !important;
+  font-size:10.5px !important;
+  font-weight:500 !important;
+  line-height:1.44 !important;
+  letter-spacing:0 !important;
+  text-transform:none !important;
+  white-space:normal !important;
+}
+.metric-info:hover::after,
+.metric-info:focus::after,
+.metric-info:focus-visible::after{
+  opacity:1 !important;
+  transform:translateY(0) !important;
+}
+.metric-signal{
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:4px !important;
+  min-width:0 !important;
+  padding:2px 6px !important;
+  border:1px solid rgba(100,112,73,.25) !important;
+  background:rgba(100,112,73,.07) !important;
+  color:var(--olive) !important;
+  font-size:7.5px !important;
+  line-height:1.12 !important;
+  font-weight:900 !important;
+  letter-spacing:.035em !important;
+  text-transform:uppercase !important;
+  white-space:nowrap !important;
+  border-radius:999px !important;
+}
+.metric-signal::before{
+  content:"" !important;
+  width:5px !important;
+  height:5px !important;
+  flex:0 0 5px !important;
+  border-radius:50% !important;
+  background:currentColor !important;
+  opacity:.85 !important;
+}
+.metric-signal.neutral{
+  color:var(--stone) !important;
+  border-color:rgba(113,106,96,.24) !important;
+  background:rgba(113,106,96,.055) !important;
+}
+.metric-signal.amber{
+  color:#8a6422 !important;
+  border-color:rgba(168,132,66,.48) !important;
+  background:rgba(168,132,66,.13) !important;
+  animation:cagrAmberBreath 1.9s ease-in-out infinite !important;
+}
+.metric-signal.amber::before{
+  background:#a88442 !important;
+  box-shadow:0 0 0 0 rgba(168,132,66,.42) !important;
+  animation:cagrAmberPulse 1.9s ease-out infinite !important;
+}
+.metric-interpretation-rows{
+  gap:3px !important;
+}
+.metric-signal-box{
+  position:relative !important;
+  z-index:2 !important;
+  display:grid !important;
+  grid-template-columns:auto minmax(0,1fr) !important;
+  align-items:center !important;
+  gap:5px !important;
+  width:100% !important;
+  margin-top:1px !important;
+  padding:4px 6px !important;
+  border:1px solid rgba(100,112,73,.22) !important;
+  background:rgba(100,112,73,.065) !important;
+  color:var(--olive) !important;
+  border-radius:7px !important;
+}
+.metric-signal-box strong{
+  color:inherit !important;
+  font-size:7.6px !important;
+  line-height:1.12 !important;
+  letter-spacing:.045em !important;
+  text-transform:uppercase !important;
+  font-weight:900 !important;
+  white-space:nowrap !important;
+}
+.metric-signal-box span{
+  display:block !important;
+  color:#5f5a53 !important;
+  font-size:7.7px !important;
+  line-height:1.18 !important;
+  letter-spacing:0 !important;
+  text-transform:none !important;
+  font-weight:500 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+.metric-signal-box.neutral{
+  color:var(--stone) !important;
+  border-color:rgba(113,106,96,.22) !important;
+  background:rgba(113,106,96,.045) !important;
+}
+.metric-signal-box.amber{
+  color:#8a6422 !important;
+  border-color:rgba(168,132,66,.45) !important;
+  background:linear-gradient(90deg,rgba(168,132,66,.16),rgba(168,132,66,.065)) !important;
+  animation:cagrAmberBreath 1.9s ease-in-out infinite !important;
+}
+.metric-signal-box.amber::before{
+  content:"" !important;
+  width:6px !important;
+  height:6px !important;
+  border-radius:50% !important;
+  background:#a88442 !important;
+  box-shadow:0 0 0 0 rgba(168,132,66,.42) !important;
+  animation:cagrAmberPulse 1.9s ease-out infinite !important;
+}
+.metric-signal-box.amber{
+  grid-template-columns:6px auto minmax(0,1fr) !important;
+}
+.metric-signal-box.amber strong{
+  grid-column:2 !important;
+}
+.metric-signal-box.amber span{
+  grid-column:3 !important;
+}
+#cagr-card.cagr-attention,
+#xirr-card.xirr-attention{
+  border-color:rgba(168,132,66,.55) !important;
+  box-shadow:0 10px 22px rgba(168,132,66,.09) !important;
+}
+#xirr-card.xirr-recommended{
+  border-color:rgba(100,112,73,.36) !important;
+}
+@media (max-width:1280px) and (min-width:1121px){
+  .metric-signal-box span{font-size:7.2px !important;}
+  .metric-signal{font-size:7.1px !important;padding:2px 5px !important;}
+}
+@media (max-width:640px){
+  .metric-card-signal .metric-label-line{
+    grid-template-columns:auto 18px minmax(0,auto) !important;
+  }
+  .metric-info{width:18px !important;height:18px !important;min-width:18px !important;}
+  .metric-signal-box span{white-space:normal !important;}
+}
+@media (prefers-reduced-motion:reduce){
+  .metric-signal.amber,
+  .metric-signal.amber::before,
+  .metric-signal-box.amber,
+  .metric-signal-box.amber::before{
+    animation:none !important;
+  }
+}
+
+
+/* Final simplified CAGR signal: only CAGR flashes when external cash flow exists */
+#cagr-card{
+  transition:border-color .18s ease, box-shadow .18s ease, background .18s ease;
+}
+#cagr-card.cagr-clean{
+  animation:none !important;
+}
+#cagr-card.cagr-attention{
+  border-color:rgba(168,132,66,.72) !important;
+  box-shadow:0 0 0 1px rgba(168,132,66,.22), 0 10px 24px rgba(168,132,66,.12) !important;
+  animation:cagrCardAmberFrame 1.85s ease-in-out infinite !important;
+}
+.cagr-cashflow-flag{
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:4px !important;
+  min-width:0 !important;
+  padding:2px 6px !important;
+  border:1px solid rgba(168,132,66,.46) !important;
+  background:rgba(168,132,66,.12) !important;
+  color:#8a6422 !important;
+  font-size:7.5px !important;
+  line-height:1.12 !important;
+  font-weight:900 !important;
+  letter-spacing:.04em !important;
+  text-transform:uppercase !important;
+  white-space:nowrap !important;
+  border-radius:999px !important;
+  opacity:0 !important;
+  visibility:hidden !important;
+  pointer-events:none !important;
+}
+.cagr-cashflow-flag::before{
+  content:"" !important;
+  width:5px !important;
+  height:5px !important;
+  border-radius:50% !important;
+  background:#a88442 !important;
+}
+.cagr-cashflow-flag.is-visible{
+  opacity:1 !important;
+  visibility:visible !important;
+  animation:cagrAmberBreath 1.85s ease-in-out infinite !important;
+}
+.cagr-cashflow-flag.is-visible::before{
+  animation:cagrAmberPulse 1.85s ease-out infinite !important;
+}
+#v-cagr-signal-top,
+#v-cagr-signal-box,
+#v-cagr-signal,
+#v-cagr-note,
+#v-xirr-signal,
+#v-xirr-signal-box,
+#v-xirr-signal-label,
+#v-xirr-note{
+  display:none !important;
+}
+@keyframes cagrCardAmberFrame{
+  0%,100%{
+    box-shadow:0 0 0 1px rgba(168,132,66,.18), 0 10px 24px rgba(168,132,66,.10);
+    background:#fffdf8;
+  }
+  50%{
+    box-shadow:0 0 0 3px rgba(168,132,66,.32), 0 12px 28px rgba(168,132,66,.17);
+    background:linear-gradient(180deg,#fffdf8 0%,rgba(168,132,66,.055) 100%);
+  }
+}
+.executive-hud.gallery-ledger-hud,
+.executive-hud.gallery-ledger-hud .hud-card,
+.metric-card-signal,
+.metric-card-signal .metric-label-line{
+  overflow:visible !important;
+}
+.metric-info{
+  z-index:1001 !important;
+}
+.metric-info[data-tip]::after{
+  visibility:hidden !important;
+}
+.metric-info:hover::after,
+.metric-info:focus::after,
+.metric-info:focus-visible::after{
+  visibility:visible !important;
+  opacity:1 !important;
+}
+.floating-metric-tip{
+  position:fixed;
+  z-index:2147483647;
+  max-width:min(330px,calc(100vw - 24px));
+  padding:10px 12px;
+  background:#241f1a;
+  color:#fffaf0;
+  border:1px solid rgba(255,255,255,.10);
+  box-shadow:0 16px 36px rgba(0,0,0,.24);
+  border-radius:10px !important;
+  font-family:Inter,system-ui,sans-serif;
+  font-size:11px;
+  font-weight:500;
+  line-height:1.44;
+  letter-spacing:0;
+  text-transform:none;
+  pointer-events:none;
+}
+@media (prefers-reduced-motion:reduce){
+  #cagr-card.cagr-attention,
+  .cagr-cashflow-flag.is-visible,
+  .cagr-cashflow-flag.is-visible::before{
+    animation:none !important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -5285,21 +5796,28 @@ body > a.btn[href*="trade_monte_carlo"]:hover{
         </div>
       </article>
 
-      <article class="hud-card small">
-        <div class="hud-label">CAGR <span>Bileşik yıllık büyüme</span></div>
+      <article class="hud-card small cagr-clean metric-card-signal" id="cagr-card">
+        <div class="hud-label metric-label-line">
+          <b class="metric-label-main">CAGR</b>
+          <button type="button" class="metric-info" aria-label="CAGR açıklaması" data-tip="CAGR = (Final Bakiye / Başlangıç Bakiye)^(1/Yıl) - 1. Ara katkı ve çekimler formüle girmez; fakat final bakiyeyi etkileyebilir. Nakit akışı varsa XIRR ve TWRR ile birlikte okunmalıdır.">i</button>
+          <strong id="v-cagr-cashflow-flag" class="cagr-cashflow-flag" aria-live="polite" aria-hidden="true">Nakit akışı</strong>
+          <small>Başlangıç → final bakiye</small>
+        </div>
         <div class="hud-value num" id="v-cagr">—</div>
-        <div class="hud-rows">
-          <div class="hud-row"><span>Brüt TWRR</span><strong class="num" id="v-twrr">—</strong></div>
-          <div class="hud-row"><span>Yıllık bileşik hız</span></div>
+        <div class="hud-rows metric-interpretation-rows">
+          <div class="hud-row"><span>TWRR / strateji</span><strong class="num" id="v-twrr">—</strong></div>
         </div>
       </article>
 
-      <article class="hud-card small">
-        <div class="hud-label">XIRR <span>Nakit akışı ağırlıklı</span></div>
+      <article class="hud-card small metric-card-signal" id="xirr-card">
+        <div class="hud-label metric-label-line">
+          <b class="metric-label-main">XIRR</b>
+          <button type="button" class="metric-info" aria-label="XIRR açıklaması" data-tip="XIRR tarihli nakit akışlarının para ağırlıklı yıllık getirisidir. Katkı ve çekimler varsa yatırımcı deneyimini CAGR'den daha doğru okutur.">i</button>
+          <small>Para ağırlıklı getiri</small>
+        </div>
         <div class="hud-value num" id="v-xirr">—</div>
-        <div class="hud-rows">
-          <div class="hud-row"><span>Yatırımcı getirisi</span></div>
-          <div class="hud-row"><span>Nakit zamanlaması dahil</span></div>
+        <div class="hud-rows metric-interpretation-rows">
+          <div class="hud-row"><span id="v-xirr-flow-note">Para akışları dahil</span></div>
         </div>
       </article>
 
@@ -5313,16 +5831,17 @@ body > a.btn[href*="trade_monte_carlo"]:hover{
       </article>
 
       <article class="hud-card small">
-        <div class="hud-label">Drawdown <span>Zirveden görülen kayıp</span></div>
+        <div class="hud-label">Piyasa Drawdown <span>Nakit akışı hariç getiri düşüşü</span></div>
         <div class="hud-value num text-ruby" id="v-maxdd">—</div>
         <div class="hud-rows">
+          <div class="hud-row"><span>Portföy DD</span><strong class="num text-ruby" id="v-portfolio-dd">—</strong></div>
           <div class="hud-row"><span>Seri oynaklığı</span><strong class="num" id="v-vol">—</strong></div>
           <div class="hud-row"><span id="v-vol-note">Düz projeksiyon / manuel yıl serisi</span></div>
         </div>
       </article>
 
       <article class="hud-card small">
-        <div class="hud-label">Sequence Risk <span>İlk 5 yıl şok testi</span></div>
+        <div class="hud-label">Sequence Risk <span>İlk 5 yıl stres testi</span></div>
         <div class="hud-value num" id="v-sequence">—</div>
         <div class="hud-rows">
           <div class="hud-row"><span>Final değer etkisi</span><strong class="num" id="v-sequence-loss">—</strong></div>
@@ -5335,7 +5854,7 @@ body > a.btn[href*="trade_monte_carlo"]:hover{
         <div class="hud-label">SWR <span>Güvenli çekim oranı</span></div>
         <div class="hud-value num" id="v-swr">—</div>
         <div class="hud-rows">
-          <div class="hud-row"><span>Başabaş getiri</span><strong class="num" id="v-breakeven">—</strong></div>
+          <div class="hud-row"><span>Faiz/çekim yılı</span><strong class="num" id="v-breakeven">—</strong></div>
           <div class="hud-row"><span>Forward kapasite</span><strong class="num" id="v-capacity">—</strong></div>
         </div>
       </article>
@@ -5357,7 +5876,7 @@ body > a.btn[href*="trade_monte_carlo"]:hover{
         <article class="dock-card"><span>CAGR</span><strong class="num" data-copy-from="v-cagr">—</strong></article>
         <article class="dock-card"><span>XIRR</span><strong class="num" data-copy-from="v-xirr">—</strong></article>
         <article class="dock-card"><span>MOIC</span><strong class="num" data-copy-from="v-moic">—</strong></article>
-        <article class="dock-card"><span>Drawdown</span><strong class="num text-ruby" data-copy-from="v-maxdd">—</strong></article>
+        <article class="dock-card"><span>Piyasa DD</span><strong class="num text-ruby" data-copy-from="v-maxdd">—</strong></article>
         <article class="dock-card"><span>SWR</span><strong class="num" data-copy-from="v-swr">—</strong></article>
         <article class="dock-card"><span>Seq. Risk</span><strong class="num" data-copy-from="v-sequence">—</strong></article>
       </div>
@@ -5408,7 +5927,7 @@ body > a.btn[href*="trade_monte_carlo"]:hover{
         <div class="control-grid">
           <div class="slider-card">
             <div class="slider-top"><span>Analiz Süresi</span><strong class="num" id="lbl-years">15 Yıl</strong></div>
-            <input type="range" id="slip-years" class="range" min="2" max="50" value="15" step="1" oninput="onProjectionSlider()">
+            <input type="range" id="slip-years" class="range" min="2" max="50" value="15" step="1" oninput="onProjectionSlider('years')">
             <div class="range-labels"><span>2 Yıl</span><span>50 Yıl</span></div>
           </div>
           <div class="slider-card return-basis-card">
@@ -5416,7 +5935,7 @@ body > a.btn[href*="trade_monte_carlo"]:hover{
               <span id="rate-card-title" class="slider-title-with-chip"><span>Beklenen Getiri</span><em id="rate-card-basis-chip" class="rate-card-basis-chip">Yıllık</em></span>
               <strong class="num text-olive" id="lbl-rate">%22.0</strong>
             </div>
-            <input type="range" id="slip-rate" class="range olive" min="-20" max="120" value="22" step="0.5" oninput="onProjectionSlider()">
+            <input type="range" id="slip-rate" class="range olive" min="-20" max="120" value="22" step="0.5" oninput="onProjectionSlider('rate')">
             <div class="range-labels" id="rate-range-labels"><span>-20%</span><span>120%</span></div>
           </div>
         </div>
@@ -5491,7 +6010,7 @@ body > a.btn[href*="trade_monte_carlo"]:hover{
             <em id="insight-real-note">Satın alma gücü takibi.</em>
           </article>
           <article class="narrative-card">
-            <span>SWR / Başabaş</span>
+            <span>SWR / Faiz-Çekim</span>
             <strong class="num" id="insight-swr">—</strong>
             <em id="insight-swr-note">Çekim disiplini ve gelir karşılama.</em>
           </article>
@@ -5523,7 +6042,7 @@ body > a.btn[href*="trade_monte_carlo"]:hover{
 
 <div class="table-wrap">
         <table class="fin-table">
-          <thead><tr><th>Yıl</th><th>Getiri</th><th>Faiz/Kazanç</th><th>Düzenli Akış</th><th>Özel Akış</th><th>Küm. Yatırım</th><th>Küm. Çekim</th><th>Nominal</th><th>Reel</th><th>Azami Düşüş</th><th>Gelir/Çıkış</th></tr></thead>
+          <thead><tr><th>Yıl</th><th>Getiri</th><th>Faiz/Kazanç</th><th>Düzenli Akış</th><th>Özel Akış</th><th>Küm. Yatırım</th><th>Küm. Çekim</th><th>Nominal</th><th>Reel</th><th>Piyasa DD</th><th>Gelir/Çıkış</th></tr></thead>
           <tbody id="main-tbody"></tbody>
         </table>
       </div>
@@ -5625,7 +6144,7 @@ body > a.btn[href*="trade_monte_carlo"]:hover{
 
       <div class="table-wrap">
         <table class="fin-table">
-          <thead><tr><th>Senaryo</th><th>Süre</th><th>Getiri</th><th>Aylık Akış</th><th>Enflasyon</th><th>Nominal</th><th>Reel</th><th>MOIC</th><th>Net CAGR</th><th>Azami Düşüş</th><th>Durum</th></tr></thead>
+          <thead><tr><th>Senaryo</th><th>Süre</th><th>Getiri</th><th>Aylık Akış</th><th>Enflasyon</th><th>Nominal</th><th>Reel</th><th>MOIC</th><th>XIRR</th><th>Azami Düşüş</th><th>Durum</th></tr></thead>
           <tbody id="scenario-tbody"></tbody>
         </table>
       </div>
@@ -5683,10 +6202,11 @@ body > a.btn[href*="trade_monte_carlo"]:hover{
         </div>
 
         <div class="panel" style="box-shadow:none;padding:16px;border-radius:20px;margin-bottom:14px">
-          <label style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+          <label style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
             <input id="use-custom-rates" type="checkbox" onchange="calculateAll()">
             <span style="font-weight:900;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--stone)">Manuel getiri serisini ana projeksiyonda kullan</span>
           </label>
+          <div class="hint custom-rate-mode-note" id="custom-rate-mode-note">Projeksiyon sekmesindeki beklenen getiri sliderı düz getiri varsayımını kullanır. Manuel seri aktifse yıllık satırlar önceliklidir.</div>
           <div class="form-grid">
             <label><span class="form-label">Toplu Format (Batch)</span><input id="bulk-input" class="field small" value="1-5:22; 6-10:18; 11-15:12"></label>
             <div style="display:flex;align-items:end;gap:8px;flex-wrap:wrap">
@@ -5769,7 +6289,7 @@ body > a.btn[href*="trade_monte_carlo"]:hover{
           </summary>
           <div class="mc-config-body">
             <div class="mc-assumption-ribbon" id="mc-assumption-chips">
-              <span>σ %20</span><span>Yol 1000</span><span>Kriz %5</span><span>Skew 0.0</span><span>Eşik $100,000</span><span>Hedef %85</span>
+              <span>σ %20</span><span>Yol 1000</span><span>Kriz %5</span><span>Skew 0.0</span><span>Model Geometrik</span><span>Seed 2026</span><span>Eşik $100,000</span><span>Hedef %85</span>
             </div>
             <div class="mc-control-list">
               <div class="mc-control-row">
@@ -5790,10 +6310,10 @@ body > a.btn[href*="trade_monte_carlo"]:hover{
                   <strong class="num" id="lbl-mc-iter">1000</strong>
                 <button type="button" class="mc-row-run" onclick="runMonteCarlo()" title="Bu varsayım setiyle çalıştır" aria-label="Bu varsayım setiyle çalıştır">▶</button></div>
                 <div class="mc-control-inputs">
-                  <input type="range" id="mc-iter" class="mc-range" min="200" max="3000" value="1000" step="100" oninput="onMCSliderChange()">
-                  <input id="mc-iter-num" class="mc-mini-input num" type="number" min="200" max="3000" step="100" value="1000" oninput="onMCNumberInput('iter')">
+                  <input type="range" id="mc-iter" class="mc-range" min="200" max="10000" value="1000" step="100" oninput="onMCSliderChange()">
+                  <input id="mc-iter-num" class="mc-mini-input num" type="number" min="200" max="10000" step="100" value="1000" oninput="onMCNumberInput('iter')">
                 </div>
-                <p>Yüzdeliklerin istikrarı için üretilen patika sayısı.</p>
+                <p>Yüzdeliklerin istikrarı için üretilen patika sayısı; rapor modu için 5.000+ yol önerilir.</p>
               </div>
 
               <div class="mc-control-row">
@@ -5818,6 +6338,46 @@ body > a.btn[href*="trade_monte_carlo"]:hover{
                   <input id="mc-skew-num" class="mc-mini-input num" type="number" min="-2" max="2" step="0.1" value="0" oninput="onMCNumberInput('skew')">
                 </div>
                 <p>Negatif değer kötü kuyrukları sertleştirir; pozitif değer yukarı kuyruğu genişletir.</p>
+              </div>
+
+              <div class="mc-control-row">
+                <div class="mc-control-meta">
+                  <span>Return Modeli</span>
+                  <strong class="num" id="lbl-mc-model">Geometrik</strong>
+                <button type="button" class="mc-row-run" onclick="runMonteCarlo()" title="Bu varsayım setiyle çalıştır" aria-label="Bu varsayım setiyle çalıştır">▶</button></div>
+                <div class="mc-control-inputs single">
+                  <select id="mc-return-model" class="mc-wide-input" onchange="onMCSliderChange()">
+                    <option value="geometric" selected>Geometrik / lognormal drift</option>
+                    <option value="arithmetic">Aritmetik normal şok</option>
+                  </select>
+                </div>
+                <p>Geometrik modda volatilite drift düzeltmesiyle uygulanır; aritmetik mod eski normal getiri yaklaşımını korur.</p>
+              </div>
+
+              <div class="mc-control-row">
+                <div class="mc-control-meta">
+                  <span>Seed</span>
+                  <strong class="num" id="lbl-mc-seed">2026</strong>
+                <button type="button" class="mc-row-run" onclick="runMonteCarlo()" title="Bu varsayım setiyle çalıştır" aria-label="Bu varsayım setiyle çalıştır">▶</button></div>
+                <div class="mc-control-inputs single">
+                  <input id="mc-seed" class="mc-wide-input num" type="number" value="2026" min="1" step="1" oninput="onMCSliderChange()">
+                </div>
+                <p>Aynı seed ve aynı varsayımlar aynı Monte Carlo sonucunu üretir; rapor tekrarlanabilirliği sağlar.</p>
+              </div>
+
+              <div class="mc-control-row">
+                <div class="mc-control-meta">
+                  <span>Sequence Şoku</span>
+                  <strong class="num" id="lbl-seq-model">Hibrit</strong>
+                <button type="button" class="mc-row-run" onclick="runMonteCarlo()" title="Bu varsayım setiyle çalıştır" aria-label="Bu varsayım setiyle çalıştır">▶</button></div>
+                <div class="mc-control-inputs single">
+                  <select id="seq-shock-model" class="mc-wide-input" onchange="calculateAll(); onMCSliderChange();">
+                    <option value="hybrid" selected>Hibrit: oransal + minimum kayıp</option>
+                    <option value="fixed">Sabit negatif yıl: ilk 5 yıl -20%</option>
+                    <option value="legacy">Eski yöntem: getiriden -20 puan</option>
+                  </select>
+                </div>
+                <p>HUD’daki sequence risk testi için ilk yılların nasıl strese sokulacağını belirler.</p>
               </div>
 
               <div class="mc-control-row">
@@ -5945,8 +6505,9 @@ body > a.btn[href*="trade_monte_carlo"]:hover{
               <div><span>Kuyruk Açığı</span><strong class="num" id="mc-tail-gap">—</strong></div>
               <div><span>Başarısız Patika</span><strong class="num" id="mc-failure-rate">—</strong></div>
               <div><span>Kısa Düşüş</span><strong class="num" id="mc-shortfall">—</strong></div>
-              <div><span>Beklenen Kayıp</span><strong class="num" id="mc-expected-shortfall">—</strong></div>
+              <div><span>Kötü Kuyruk Ort. Final <span class="info mc-tail-info" tabindex="0" data-tip="P10 eşiğinin altında kalan simülasyonların ortalama final bakiyesidir. Kayıp tutarı değil, kötü kuyrukta portföyün ortalama nereye sıkıştığını gösterir.">i</span></span><strong class="num" id="mc-expected-shortfall">—</strong></div>
             </div>
+            <p class="mc-tail-explain" id="mc-tail-explain"><strong>Kötü Kuyruk Ort. Final:</strong> P10’un altındaki patikaların ortalama final bakiyesi; “kayıp tutarı” değil, kötü senaryoda kalan servet seviyesidir.</p>
             <p class="mc-report-note" id="mc-report-action">P10, sürdürülebilir çekim planında ilk okunacak değerdir; medyan tek başına karar için yeterli değildir.</p>
           </section>
 
@@ -6023,19 +6584,19 @@ body > a.btn[href*="trade_monte_carlo"]:hover{
         <div id="tools-guide" style="display:none">
           <div class="guide-grid">
             <div class="guide-card">
-              <div class="guide-title">Net CAGR</div>
-              <div class="guide-text">Net yıllık bileşik büyüme oranıdır. Portföyün başlangıçtan finale giderken her yıl aynı oranda büyümüş gibi düşünülmesini sağlar.</div>
-              <div class="guide-example"><strong>Örnek gösterim:</strong> $100.000, dışarıdan ek para girmeden 10 yıl sonunda yaklaşık $259.000 olduysa Net CAGR yaklaşık %10’dur. Bu “portföy her yıl düz çizgiyle %10 kazandı” demek değildir; iniş çıkışların 10 yıllık bileşik ortalamasıdır.</div>
+              <div class="guide-title">CAGR — Bileşik Yıllık Büyüme</div>
+              <div class="guide-text">Başlangıç bakiyesi, final bakiye ve süreyle hesaplanan yaygın büyüme metriğidir: <span class="mono">CAGR = (Final / Başlangıç)^(1/Yıl) - 1</span>. Formül ara katkı ve çekimleri kullanmaz; fakat final bakiye bu nakit akışlarından etkilenmiş olabilir.</div>
+              <div class="guide-example"><strong>Temiz örnek:</strong> $100.000 portföy, ekleme/çekme olmadan 10 yıl sonunda $200.000 olduysa CAGR yaklaşık %7,18’dir. <br><strong>Nakit akışlı örnek:</strong> Aynı final değer son yılda yapılan $100.000 katkıdan geliyorsa CAGR yine %7,18 görünür; ama bu yatırım performansı değildir. Bu durumda yatırımcı deneyimi için XIRR, strateji performansı için TWRR okunmalıdır.</div>
             </div>
             <div class="guide-card olive">
-              <div class="guide-title">Brüt Strateji Getirisi (TWRR)</div>
-              <div class="guide-text">Nakit giriş ve çıkışlarının zamanlamasını dışarıda bırakarak portföy stratejisinin saf performansını gösterir.</div>
-              <div class="guide-example"><strong>Örnek gösterim:</strong> Yıl içinde $50.000 ek katkı yapılmışsa final bakiye yöneticinin başarısını abartabilir; TWRR bu katkıyı ayrıştırır.</div>
+              <div class="guide-title">TWRR / Strateji Getirisi</div>
+              <div class="guide-text">Dış nakit akışlarının etkisini arındırarak strateji performansını okumaya yarayan yaklaşımdır. Bu uygulamadaki gösterim, girilen yıllık getiri serisinin geometrik strateji getirisidir; manuel yıl serisi varsa yılların bileşik ortalamasını verir.</div>
+              <div class="guide-example"><strong>Örnek gösterim:</strong> Yıl içinde $50.000 ek katkı yapılmışsa final bakiye yöneticinin başarısını abartabilir. TWRR/strateji getirisi bu katkı etkisini performans okumasından ayırmaya yardımcı olur.</div>
             </div>
             <div class="guide-card gold">
-              <div class="guide-title">Para Ağırlıklı Getiri (XIRR)</div>
-              <div class="guide-text">Yatırımcının gerçek para giriş/çıkış zamanlarını dikkate alan iç verim oranıdır.</div>
-              <div class="guide-example"><strong>Örnek gösterim:</strong> Büyük katkı kötü piyasa öncesinde yapıldıysa XIRR düşebilir; çünkü yatırımcının fiili deneyimi strateji ortalamasından daha zayıftır.</div>
+              <div class="guide-title">XIRR — Para Ağırlıklı Getiri</div>
+              <div class="guide-text">Yatırımcının gerçek para giriş/çıkış tarihlerini dikkate alan iç verim oranıdır. Katkı ve çekim varsa CAGR’den daha uygun yatırımcı getirisi göstergesidir.</div>
+              <div class="guide-example"><strong>Örnek gösterim:</strong> Büyük katkı kötü piyasa öncesinde yapıldıysa XIRR düşebilir; çünkü yatırımcının fiili para ağırlıklı deneyimi strateji ortalamasından daha zayıftır. Ekleme/çekme yoksa XIRR genellikle CAGR ile uyumlu görünür.</div>
             </div>
             <div class="guide-card">
               <div class="guide-title">Yatırım Multipleı (MOIC)</div>
@@ -6053,8 +6614,8 @@ body > a.btn[href*="trade_monte_carlo"]:hover{
               <div class="guide-example"><strong>Örnek gösterim:</strong> “12. yılda tükendi” ifadesi, planlanan çekimlerin 12. yıl sonunda portföyü bitirdiği anlamına gelir; “Sürdürülebilir” ise seçili dönem içinde tükenme olmadığını belirtir.</div>
             </div>
             <div class="guide-card">
-              <div class="guide-title">Başabaş Yılı (Başabaş)</div>
-              <div class="guide-text">Yıllık pozitif getiri gelirinin yıllık nakit çıkışlarını karşılamaya başladığı ilk yılı gösterir.</div>
+              <div class="guide-title">Faiz / Çekim Karşılama Yılı</div>
+              <div class="guide-text">Yıllık pozitif getiri gelirinin yıllık nakit çıkışlarını karşılamaya başladığı ilk yılı gösterir. Başlangıç sermayesinin geri kazanılması anlamına gelmez.</div>
               <div class="guide-example"><strong>Örnek gösterim:</strong> Portföy $1.000.000, getiri %8 ve yıllık çıkış $60.000 ise getiri geliri $80.000 olduğu için başabaş sağlanır.</div>
             </div>
             <div class="guide-card olive">
@@ -6100,6 +6661,7 @@ let customYears = Array.from({length:15},(_,i)=>({id:Date.now()+i, year:i+1, rat
 let scenarios = [];
 let lastResult = null;
 const chartColors = ['#c65b36','#647049','#7f2737','#a88442','#4f6174','#d8b98c'];
+const SCENARIO_LIMIT = 5;
 
 const $ = id => document.getElementById(id);
 const css = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
@@ -6400,7 +6962,9 @@ function simulate(options={}){
       interestCapacity,
       coverage,
       peak,
-      shortfall
+      shortfall,
+      marketIndex,
+      marketDrawdown: marketMaxDD
     });
   }
 
@@ -6415,7 +6979,12 @@ function simulate(options={}){
   const moic = totalInvested > 0 ? (final + cumWithdrawals) / totalInvested : null;
   const tvpi = moic;
   const netGain = final + cumWithdrawals - totalInvested;
-  const netCagr = Number.isFinite(xirr) && xirr !== null ? xirr : (totalInvested>0 ? Math.pow(Math.max(final + cumWithdrawals,0.0001)/totalInvested,1/years)-1 : null);
+  const hasExternalCashflows = Math.abs(monthly) > 0.0000001 || flows.some(c => Math.abs(Number(c.amount) || 0) > 0.0000001);
+  const balanceCagr = initial > 0 ? Math.pow(Math.max(final, 0.0001) / initial, 1 / years) - 1 : null;
+  const realBalanceCagr = initial > 0 ? Math.pow(Math.max(realFinal, 0.0001) / initial, 1 / years) - 1 : null;
+  const hasValidXirr = Number.isFinite(xirr) && xirr !== null;
+  const netCagr = hasValidXirr ? xirr : (totalInvested>0 ? Math.pow(Math.max(final + cumWithdrawals,0.0001)/totalInvested,1/years)-1 : null);
+  const netCagrMode = hasValidXirr ? 'xirr' : 'fallback';
 
   const rf = 0.02;
   const avgReturn = twrr;
@@ -6443,7 +7012,7 @@ function simulate(options={}){
     rows, monthlyRows, years, monthsPerYear, engine:'monthly-v2',
     initial, monthly, inflation, indexCashflows, rateSchedule, final, realFinal,
     totalInvested, cumPositive, cumWithdrawals, cumInterest, totalRecurring,
-    eventNetTotal, plannedShortfall, moic, terminalMoic, tvpi, netGain, netCagr, twrr, xirr,
+    eventNetTotal, plannedShortfall, moic, terminalMoic, tvpi, netGain, balanceCagr, realBalanceCagr, hasExternalCashflows, netCagr, netCagrMode, twrr, xirr,
     maxDD, marketMaxDD, vol, realizedVol, downsideVol, riskMetricMode, avgReturn, sharpe, sortino,
     terminalInterest, avgWithdrawal, terminalYearWithdrawal, forwardWithdrawalNeed, terminalWithdrawalNeed,
     margin, coverageTerminal, requiredPrincipal, breakEvenYear, depletedYear,
@@ -6477,7 +7046,7 @@ function renderTable(res){
       <td class="num text-terra">${formatMoneyLong(r.cumWithdrawals)}</td>
       <td class="num">${formatMoneyLong(r.nominal)}</td>
       <td class="num text-olive">${formatMoneyLong(r.real)}</td>
-      <td class="num text-ruby">${formatPct(r.drawdown)}</td>
+      <td class="num text-ruby">${formatPct(r.marketDrawdown)}</td>
       <td class="num">${r.coverage===null?'Uygun değil':r.coverage.toFixed(2)+'×'}</td>
     </tr>
   `).join('');
@@ -6574,7 +7143,14 @@ function renderMainChart(res){
   charts.main = new Chart(ctx,cfg);
 }
 
-function onProjectionSlider(){
+function onProjectionSlider(source=null){
+  if(source === 'rate'){
+    // A direct change to the projection return slider means the user is returning
+    // to a flat expected-return assumption. Otherwise a previously enabled manual
+    // year series would keep overriding the slider and the headline balance would
+    // appear frozen.
+    disableCustomRateSeries();
+  }
   syncCustomYears(false);
   calculateAll();
 }
@@ -6589,6 +7165,7 @@ function quickSet(years, rate){
   $('slip-rate').max = range.max;
   $('slip-rate').step = range.step;
   $('slip-rate').value = rate;
+  disableCustomRateSeries();
   syncCustomYears(false);
   calculateAll();
 }
@@ -6789,9 +7366,25 @@ function deleteYearRow(id){
   buildYearRows();
   calculateAll();
 }
-function enableCustomRateSeries(){
+function updateCustomRateModeNote(){
+  const note = $('custom-rate-mode-note');
+  if(!note) return;
+  const active = !!$('use-custom-rates')?.checked;
+  note.classList.toggle('is-flat', !active);
+  note.innerHTML = active
+    ? '<strong>Manuel seri aktif:</strong> Ana projeksiyon yıllık satırları kullanıyor. Projeksiyon sekmesindeki getiri sliderını değiştirirseniz düz getiri varsayımına dönülür.'
+    : '<strong>Düz getiri aktif:</strong> Ana projeksiyon Projeksiyon sekmesindeki beklenen getiri sliderını kullanıyor. Manuel seri bu sekmede saklı kalır.';
+}
+function setCustomRateSeriesEnabled(enabled){
   const toggle = $('use-custom-rates');
-  if(toggle && !toggle.checked) toggle.checked = true;
+  if(toggle) toggle.checked = !!enabled;
+  updateCustomRateModeNote();
+}
+function disableCustomRateSeries(){
+  setCustomRateSeriesEnabled(false);
+}
+function enableCustomRateSeries(){
+  setCustomRateSeriesEnabled(true);
 }
 function updateYearValue(id, val){
   const row = customYears.find(y=>String(y.id)===String(id));
@@ -6846,10 +7439,20 @@ function applyPresetReturns(kind){
 }
 
 /* Monte Carlo */
-function randN(){
+function makeSeededRng(seed){
+  let t = (Math.floor(Number(seed)) || 2026) >>> 0;
+  return function(){
+    t += 0x6D2B79F5;
+    let x = t;
+    x = Math.imul(x ^ (x >>> 15), x | 1);
+    x ^= x + Math.imul(x ^ (x >>> 7), x | 61);
+    return ((x ^ (x >>> 14)) >>> 0) / 4294967296;
+  };
+}
+function randN(rng=Math.random){
   let u=0,v=0;
-  while(u===0) u=Math.random();
-  while(v===0) v=Math.random();
+  while(u===0) u=rng();
+  while(v===0) v=rng();
   return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);
 }
 /* Advanced tools */
@@ -6888,7 +7491,7 @@ function runStressTests(){
     const healthy = !sim.depletedYear && (sim.avgWithdrawal<=0 || sim.margin>=0);
     return `<div class="scenario-card">
       <div class="scenario-card-head"><div class="scenario-name">${t.name}</div>${healthy?'<span class="pill positive">Geçti</span>':'<span class="pill negative">Risk</span>'}</div>
-      <div class="guide-text">Final: <strong class="num">${formatMoneyLong(sim.final)}</strong><br>Reel: <strong class="num">${formatMoneyLong(sim.realFinal)}</strong><br>Azami Düşüş: <strong class="num text-ruby">${formatPct(sim.maxDD)}</strong>${sim.depletedYear?'<br>Tükenme: <strong>Yıl '+sim.depletedYear+'</strong>':''}</div>
+      <div class="guide-text">Final: <strong class="num">${formatMoneyLong(sim.final)}</strong><br>Reel: <strong class="num">${formatMoneyLong(sim.realFinal)}</strong><br>Piyasa DD: <strong class="num text-ruby">${formatPct(sim.marketMaxDD)}</strong>${sim.depletedYear?'<br>Tükenme: <strong>Yıl '+sim.depletedYear+'</strong>':''}</div>
     </div>`;
   }).join('');
   if($('stress-cards')) $('stress-cards').innerHTML = cards;
@@ -7119,11 +7722,31 @@ function getInputs(){
   };
 }
 
+function getSequenceShockModel(){
+  const el = $('seq-shock-model');
+  return el && ['hybrid','fixed','legacy'].includes(el.value) ? el.value : 'hybrid';
+}
+
+function sequenceShockLabel(model=getSequenceShockModel()){
+  if(model === 'fixed') return 'Sabit -20%';
+  if(model === 'legacy') return '-20 puan';
+  return 'Hibrit';
+}
+
+function stressReturnForSequence(r, model=getSequenceShockModel()){
+  const safeR = Number.isFinite(r) ? r : 0;
+  if(model === 'fixed') return -0.20;
+  if(model === 'legacy') return clamp(safeR - 0.20, -0.85, 2.5);
+  const proportionalHit = Math.max(Math.abs(safeR) * 0.80, 0.10);
+  return clamp(Math.min(safeR - proportionalHit, -0.10), -0.85, 2.5);
+}
+
 function computeSequenceRisk(res){
   const years = res.years;
   const baseRates = getRateSchedule(years);
   const stressWindow = Math.min(5, years);
-  const stressedRates = baseRates.map((r,i)=> i < stressWindow ? clamp(r - 0.20, -0.85, 2.5) : r);
+  const shockModel = getSequenceShockModel();
+  const stressedRates = baseRates.map((r,i)=> i < stressWindow ? stressReturnForSequence(r, shockModel) : r);
   const stressed = simulate({years, customRates:stressedRates});
   const finalLoss = res.final > 0 ? clamp((res.final - stressed.final) / res.final, -1, 1) : 1;
   let yearsLost = 0;
@@ -7133,7 +7756,7 @@ function computeSequenceRisk(res){
     yearsLost = Math.max(0, baseLife - stressLife);
   }
   const level = finalLoss >= 0.35 || yearsLost >= 5 ? 'Yüksek' : finalLoss >= 0.15 || yearsLost >= 2 ? 'Orta' : 'Düşük';
-  return {stressed, finalLoss, yearsLost, level};
+  return {stressed, finalLoss, yearsLost, level, shockModel};
 }
 
 function updateHUD(res){
@@ -7143,17 +7766,39 @@ function updateHUD(res){
   $('v-netgain').textContent = formatMoneyLong(res.netGain);
   $('v-moic').textContent = res.moic === null ? '—' : res.moic.toFixed(2)+'×';
   $('v-invested').textContent = formatMoney(res.totalInvested);
-  $('v-cagr').textContent = formatPct(res.netCagr);
+  $('v-cagr').textContent = formatPct(res.balanceCagr);
+  const hasFlows = !!res.hasExternalCashflows;
+  const cagrCard = $('cagr-card');
+  if(cagrCard){
+    cagrCard.classList.toggle('cagr-attention', hasFlows);
+    cagrCard.classList.toggle('cagr-clean', !hasFlows);
+    cagrCard.setAttribute('aria-label', hasFlows ? 'CAGR: nakit akışı nedeniyle dikkat sinyali aktif' : 'CAGR');
+  }
+  const cagrFlag = $('v-cagr-cashflow-flag');
+  if(cagrFlag){
+    cagrFlag.textContent = 'Nakit akışı';
+    cagrFlag.classList.toggle('is-visible', hasFlows);
+    cagrFlag.setAttribute('aria-hidden', hasFlows ? 'false' : 'true');
+  }
+
   if($('v-xirr')) $('v-xirr').textContent = formatPct(res.xirr);
+  const xirrCard = $('xirr-card');
+  if(xirrCard){
+    xirrCard.classList.remove('xirr-recommended','xirr-attention');
+  }
+  if($('v-xirr-flow-note')){
+    $('v-xirr-flow-note').textContent = hasFlows ? 'Nakit zamanlaması dahil' : 'Dış nakit yok; CAGR ile uyumlu';
+  }
   $('v-twrr').textContent = formatPct(res.twrr);
   if($('v-margin')) $('v-margin').textContent = res.terminalWithdrawalNeed > 0 ? formatMoney(res.margin) : 'Biriktirme';
-  $('v-maxdd').textContent = formatPct(res.maxDD);
+  $('v-maxdd').textContent = formatPct(res.marketMaxDD);
+  if($('v-portfolio-dd')) $('v-portfolio-dd').textContent = formatPct(res.maxDD);
   if($('v-vol')){
-    $('v-vol').textContent = res.riskMetricMode === 'flat' ? 'Düz seri' : formatPct(res.vol);
+    $('v-vol').textContent = res.riskMetricMode === 'flat' ? '0.0%' : formatPct(res.vol);
   }
   if($('v-vol-note')){
     $('v-vol-note').textContent = res.riskMetricMode === 'flat'
-      ? 'Tek getiri varsayımı; Sharpe/Sortino yok'
+      ? 'Düz seri; oynaklık yok'
       : 'Manuel yıl serisi / değişken getiri';
   }
   if($('v-capacity')){
@@ -7168,7 +7813,7 @@ function updateHUD(res){
     $('v-sequence').className = 'hud-value num ' + (seq.level === 'Yüksek' ? 'text-ruby' : seq.level === 'Orta' ? 'text-gold' : 'text-olive');
   }
   if($('v-sequence-loss')) $('v-sequence-loss').textContent = formatPct(seq.finalLoss);
-  if($('v-sequence-note')) $('v-sequence-note').textContent = seq.yearsLost > 0 ? seq.yearsLost + ' yıl kısalma' : 'Erken şok testi';
+  if($('v-sequence-note')) $('v-sequence-note').textContent = seq.yearsLost > 0 ? seq.yearsLost + ' yıl kısalma' : sequenceShockLabel(seq.shockModel);
 
   const healthy = res.terminalWithdrawalNeed <= 0 || res.margin >= 0;
   const lifeText = res.depletedYear ? res.depletedYear + '. yıl' : 'Sürdürülebilir';
@@ -7230,6 +7875,7 @@ function calculateAll(){
   $('lbl-capital').textContent = formatMoneyLong(inp.initial);
   updateCashPlanUI();
   updateReturnInputUI();
+  updateCustomRateModeNote();
   $('lbl-inf').textContent = formatPct(inp.inflation);
   $('lbl-years').textContent = inp.years + ' Yıl';
   $('lbl-rate').textContent = inp.returnInputBasis === 'monthly' ? formatPct(inp.rawReturnRate) : formatPct(inp.rate);
@@ -7263,7 +7909,9 @@ function saveSnapshot(){
     snapshot:true
   };
   savedSnapshots.push(sc);
+  if(scenarios.length >= SCENARIO_LIMIT) scenarios = scenarios.slice(0, SCENARIO_LIMIT - 1);
   scenarios.push(sc);
+  scenarios = scenarios.slice(0, SCENARIO_LIMIT);
   renderSnapshots();
   renderScenarioComparison();
 }
@@ -7310,18 +7958,20 @@ function renderSnapshots(){
 
 function resetScenarios(){
   const inp = getInputs();
-  scenarios = [
+  const defaults = [
     {id:1,name:'Koruyucu',rate:Math.min(8, inp.rate*100),years:inp.years,monthly:inp.monthly,inflation:inp.inflation*100},
     {id:2,name:'Ana Senaryo',rate:inp.rate*100,years:inp.years,monthly:inp.monthly,inflation:inp.inflation*100},
     {id:3,name:'Yüksek Enflasyon',rate:inp.rate*100,years:inp.years,monthly:inp.monthly,inflation:Math.max(inp.inflation*100+10, inp.inflation*100)},
     {id:4,name:'Yüksek Çekim',rate:inp.rate*100,years:inp.years,monthly:inp.monthly<0?inp.monthly*1.35:inp.monthly,inflation:inp.inflation*100},
     {id:5,name:'Erken Kriz',rate:inp.rate*100,years:inp.years,monthly:inp.monthly,inflation:inp.inflation*100,shock:true}
   ];
-  savedSnapshots.forEach(s=>scenarios.push(s));
+  const snapshots = savedSnapshots.slice(-SCENARIO_LIMIT);
+  const defaultSlots = Math.max(0, SCENARIO_LIMIT - snapshots.length);
+  scenarios = defaults.slice(0, defaultSlots).concat(snapshots).slice(0, SCENARIO_LIMIT);
   renderScenarioComparison();
 }
 function addScenario(){
-  if(scenarios.length >= 8) return;
+  if(scenarios.length >= SCENARIO_LIMIT) return;
   const name = $('sc-name').value.trim() || 'Alternatif';
   const rate = num('sc-rate',18);
   const years = clamp(intNum('sc-years',getInputs().years),1,50);
@@ -7405,7 +8055,7 @@ function renderScenarioComparison(rebuildList=true){
         <td class="num text-olive">${formatMoneyLong(r.realFinal)}</td>
         <td class="num">${r.moic ? r.moic.toFixed(2)+'×' : '—'}</td>
         <td class="num">${formatPct(r.netCagr)}</td>
-        <td class="num text-ruby">${formatPct(r.maxDD)}</td>
+        <td class="num text-ruby">${formatPct(r.marketMaxDD)}</td>
         <td>${r.depletedYear ? '<span class="pill negative">Tükenme</span>' : healthy ? '<span class="pill positive">Sağlam</span>' : '<span class="pill negative">Açık</span>'}</td>
       </tr>`;
     }).join('');
@@ -7499,7 +8149,7 @@ function mcCurrentRunSetText(){
   const volText = mcFormatSpecValue ? mcFormatSpecValue('vol', num('mc-vol',20)) : `%${fmt(num('mc-vol',20),0)}`;
   const iterText = Math.round(num('mc-iter',1000)).toLocaleString('en-US');
   const crashText = mcFormatSpecValue ? mcFormatSpecValue('crash', num('mc-crash',5)) : `%${fmt(num('mc-crash',5),0)}`;
-  return `getiri ${rateText} · süre ${inp.years} yıl · ${cashText} · σ ${volText} · ${iterText} yol · kriz ${crashText}`;
+  return `getiri ${rateText} · süre ${inp.years} yıl · ${cashText} · σ ${volText} · ${iterText} yol · kriz ${crashText} · ${mcReturnModelLabel()} · seed ${mcGetSeed()}`;
 }
 
 function renderMCRunsetChips(payload){
@@ -7511,7 +8161,9 @@ function renderMCRunsetChips(payload){
     ['Nakit', payload.cashText],
     ['Volatilite', payload.volText],
     ['Yol', payload.iterText],
-    ['Kriz', payload.crashText]
+    ['Kriz', payload.crashText],
+    ['Model', payload.modelText],
+    ['Seed', payload.seedText]
   ].map(([label,val])=>`<div class="run-chip"><b>${label}</b><span>${val}</span></div>`).join('');
 }
 
@@ -7524,10 +8176,12 @@ function updateMCRunContext(afterRun=false){
     ? `${formatPct(raw)} aylık · ${formatPct(annual)} yıllık efektif`
     : `${formatPct(annual)} yıllık efektif`;
   const cashText = inp.monthly === 0 ? 'Yok' : `${formatMoneyLong(inp.monthly)} / ay`;
-  const configText = `σ ${mcFormatSpecValue ? mcFormatSpecValue('vol', num('mc-vol',20)) : '%' + fmt(num('mc-vol',20),0)} · ${Math.round(num('mc-iter',1000)).toLocaleString('en-US')} yol`;
+  const configText = `σ ${mcFormatSpecValue ? mcFormatSpecValue('vol', num('mc-vol',20)) : '%' + fmt(num('mc-vol',20),0)} · ${Math.round(num('mc-iter',1000)).toLocaleString('en-US')} yol · ${mcReturnModelLabel()} · seed ${mcGetSeed()}`;
   const volText = mcFormatSpecValue ? mcFormatSpecValue('vol', num('mc-vol',20)) : `%${fmt(num('mc-vol',20),0)}`;
   const iterText = `${Math.round(num('mc-iter',1000)).toLocaleString('en-US')} yol`;
   const crashText = mcFormatSpecValue ? mcFormatSpecValue('crash', num('mc-crash',5)) : `%${fmt(num('mc-crash',5),0)}`;
+  const modelText = mcReturnModelLabel();
+  const seedText = mcGetSeed().toLocaleString('en-US');
   if($('mc-run-assumption-rate')) $('mc-run-assumption-rate').textContent = basisText;
   if($('mc-run-assumption-rate-note')) $('mc-run-assumption-rate-note').textContent = inp.returnInputBasis === 'monthly' ? 'Aylık girişten türetilir' : 'Projeksiyon girdisi';
   if($('mc-run-assumption-years')) $('mc-run-assumption-years').textContent = `${inp.years} yıl`;
@@ -7541,7 +8195,9 @@ function updateMCRunContext(afterRun=false){
     cashText,
     volText: `σ ${volText}`,
     iterText,
-    crashText: `kriz ${crashText}`
+    crashText: `kriz ${crashText}`,
+    modelText,
+    seedText
   };
   if(afterRun) mcLastRunContextText = mcCurrentRunSetText();
   renderMCRunsetChips(payload);
@@ -7561,16 +8217,47 @@ function setMCOutputPane(which){
   }, 60);
 }
 
-function mcDownsideDeviation(rates){
+function mcDownsideDeviation(rates, threshold=0.02){
   if(!rates || !rates.length) return 0;
-  const negatives = rates.map(r => Math.min(0, r || 0));
+  const negatives = rates.map(r => Math.min(0, (r || 0) - threshold));
   const variance = negatives.reduce((a,b)=>a + b*b,0) / Math.max(1, negatives.length);
   return Math.sqrt(Math.max(0, variance));
 }
+function mcGetReturnModel(){
+  const el = $('mc-return-model');
+  return el && ['geometric','arithmetic'].includes(el.value) ? el.value : 'geometric';
+}
+function mcReturnModelLabel(model=mcGetReturnModel()){
+  return model === 'arithmetic' ? 'Aritmetik' : 'Geometrik';
+}
+function mcGetSeed(){
+  const raw = Math.floor(num('mc-seed',2026));
+  return Number.isFinite(raw) && raw > 0 ? raw : 2026;
+}
+function mcTransformedShock(z, skew){
+  const a = clamp(Number(skew) || 0, -3, 3) * 0.18;
+  if(a === 0) return z;
+  const shifted = z + a * (z*z - 1);
+  const normalizedStd = Math.sqrt(1 + 2 * a * a);
+  return shifted / normalizedStd;
+}
+function mcGenerateAnnualReturn(expected, vol, z, model){
+  const safeExpected = clamp(Number.isFinite(expected) ? expected : 0, -0.95, 2.5);
+  const safeVol = clamp(Number.isFinite(vol) ? vol : 0, 0, 1.5);
+  if(model === 'arithmetic') return safeExpected + safeVol * z;
+  const gross = Math.max(0.000001, 1 + safeExpected);
+  const mu = Math.log(gross) - 0.5 * safeVol * safeVol;
+  return Math.exp(mu + safeVol * z) - 1;
+}
+function mcApplyCrashShock(r, rng=Math.random){
+  const crashMagnitude = 0.20 + rng() * 0.30;
+  return (1 + r) * (1 - crashMagnitude) - 1;
+}
+
 function mcSpec(){
   return {
     vol:{range:'mc-vol', box:'mc-vol-num', label:'lbl-mc-vol', decimals:0, suffix:'%', prefix:'', min:5, max:65, step:1},
-    iter:{range:'mc-iter', box:'mc-iter-num', label:'lbl-mc-iter', decimals:0, suffix:'', prefix:'', min:200, max:3000, step:100},
+    iter:{range:'mc-iter', box:'mc-iter-num', label:'lbl-mc-iter', decimals:0, suffix:'', prefix:'', min:200, max:10000, step:100},
     crash:{range:'mc-crash', box:'mc-crash-num', label:'lbl-mc-crash', decimals:0, suffix:'%', prefix:'', min:0, max:25, step:1},
     skew:{range:'mc-skew', box:'mc-skew-num', label:'lbl-mc-skew', decimals:1, suffix:'', prefix:'', min:-2, max:2, step:.1},
     target:{range:'mc-target', box:'mc-target-num', label:'lbl-mc-target', decimals:0, suffix:'%', prefix:'', min:50, max:99, step:1}
@@ -7670,6 +8357,9 @@ function onMCSliderChange(){
     updateRangeFill(range);
   });
   if($('lbl-mc-floor')) $('lbl-mc-floor').textContent = formatMoneyLong(num('mc-floor', getInputs().initial));
+  if($('lbl-mc-model')) $('lbl-mc-model').textContent = mcReturnModelLabel();
+  if($('lbl-mc-seed')) $('lbl-mc-seed').textContent = mcGetSeed().toLocaleString('en-US');
+  if($('lbl-seq-model')) $('lbl-seq-model').textContent = sequenceShockLabel();
   const chips = $('mc-assumption-chips');
   if(chips){
     const floor = Math.max(0, num('mc-floor', getInputs().initial));
@@ -7679,6 +8369,9 @@ function onMCSliderChange(){
       `Yol ${Math.round(num('mc-iter',1000)).toLocaleString('en-US')}`,
       `Kriz ${mcFormatSpecValue('crash', num('mc-crash',5))}`,
       `Skew ${mcFormatSpecValue('skew', num('mc-skew',0))}`,
+      `Model ${mcReturnModelLabel()}`,
+      `Seed ${mcGetSeed().toLocaleString('en-US')}`,
+      `Seq ${sequenceShockLabel()}`,
       `Eşik ${formatMoneyLong(floor)}`,
       `Hedef ${mcFormatSpecValue('target', num('mc-target',85))}`
     ].map(x=>`<span>${x}</span>`).join('');
@@ -7772,7 +8465,7 @@ function mcScatterMeta(mode){
       title:'Aşağı Yönlü Sapma × Final',
       xLabel:'Aşağı yönlü sapma',
       caption:['Sol: sınırlı acı','Yukarı: yüksek final','Sağ: can yakan dalgalanma'],
-      note:'Aşağı yönlü sapma yalnızca negatif getirilerden türetilir. Yatırımcıyı üzen dalgalanma ile final sonuç arasındaki ilişkiyi gösterir.',
+      note:'Aşağı yönlü sapma, Sortino ile uyumlu şekilde %2 risksiz getiri eşiğinin altındaki yıllardan türetilir.',
       x:p=>p.down,
       xTick:v=>(v*100).toFixed(0)+'%',
       tip:p=>`Aşağı yönlü sapma ${(p.down*100).toFixed(1)}% · Final ${formatMoneyLong(p.final)}`
@@ -7951,12 +8644,15 @@ function runMonteCarloCore(){
     onMCSliderChange();
     const base = getInputs();
     const years = base.years;
-    const iter = clamp(Math.round(num('mc-iter',1000)),200,3000);
+    const iter = clamp(Math.round(num('mc-iter',1000)),200,10000);
     const vol = clamp(num('mc-vol',20)/100,.01,1.5);
     const crashP = clamp(num('mc-crash',5)/100,0,.75);
     const skew = clamp(num('mc-skew',0),-3,3);
     const floor = Math.max(0,num('mc-floor',base.initial));
     const targetProb = clamp(Math.round(num('mc-target',85)),50,99);
+    const returnModel = mcGetReturnModel();
+    const seed = mcGetSeed();
+    const rng = makeSeededRng(seed);
     const expectedRates = getRateSchedule(years);
     const paths = [];
     const finals = [];
@@ -7970,10 +8666,9 @@ function runMonteCarloCore(){
     for(let i=0;i<iter;i++){
       const rates = [];
       for(let y=0;y<years;y++){
-        let z = randN();
-        if(skew !== 0) z = z + skew * (z*z - 1) * 0.18;
-        let r = (expectedRates[y] ?? base.rate) + vol*z;
-        if(Math.random() < crashP) r -= 0.20 + Math.random()*0.30;
+        let z = mcTransformedShock(randN(rng), skew);
+        let r = mcGenerateAnnualReturn((expectedRates[y] ?? base.rate), vol, z, returnModel);
+        if(rng() < crashP) r = mcApplyCrashShock(r, rng);
         r = clamp(r,-0.95,2.5);
         rates.push(r);
       }
@@ -7982,7 +8677,7 @@ function runMonteCarloCore(){
       paths.push(sim.rows.map(r=>Math.max(0,r.nominal)));
       finals.push(finalValue);
       reals.push(Math.max(0, sim.realFinal));
-      scatterPoints.push({dd:Math.abs(sim.maxDD || 0), early:mcEarlyReturn(rates), down:mcDownsideDeviation(rates), final:finalValue});
+      scatterPoints.push({dd:Math.abs(sim.marketMaxDD || 0), early:mcEarlyReturn(rates), down:mcDownsideDeviation(rates), final:finalValue});
       if(!sim.depletedYear && finalValue > 0) survivors++;
       else failed++;
       if(!sim.depletedYear && finalValue >= floor) floorPass++;
@@ -8059,7 +8754,7 @@ function runMonteCarloCore(){
         <article><span>Ana Karar</span><strong>${memoTone}</strong><p>${level} bandı: ${MC_LEVEL_META[level] ? MC_LEVEL_META[level].text : ''}</p></article>
         <article><span>Kuyruk Okuması</span><strong>P10 ${formatMoneyLong(p10Final)}</strong><p>${p10ZeroYear ? `Kötü kuyruk ${p10ZeroYear}. yılda sıfırı görüyor.` : `P50 ${formatMoneyLong(p50Final)} seviyesinde olsa bile ilk okunacak kötü kuyruk değeri budur.`}</p></article>
         <article><span>Eşik Disiplini</span><strong>${floorRate.toFixed(1)}% koruma</strong><p>Koruma eşiği ${formatMoneyLong(floor)} üzerinde kalma oranı hedef ${targetProb}% ile birlikte okunmalıdır.</p></article>
-        <article><span>Yönetici Aksiyonu</span><strong>${failRate.toFixed(1)}% başarısız patika</strong><p>Beklenen kayıp ${formatMoneyLong(expectedShortfall)}. Felaket senaryosunda portföyün ortalama nereye sıkıştığını gösterir.</p></article>`;
+        <article><span>Yönetici Aksiyonu</span><strong>${failRate.toFixed(1)}% başarısız patika</strong><p>Kötü kuyruk ortalama finali ${formatMoneyLong(expectedShortfall)}. Felaket senaryosunda portföyün ortalama nereye sıkıştığını gösterir.</p></article>`;
     }
     if($('mc-run-meta')){
       const elapsed = Math.max(1, Math.round(performance.now() - started));
@@ -8083,7 +8778,7 @@ function runMonteCarloCore(){
 
     mcApplyDecision(level, {p10Final,p50Final,floorRate,targetProb});
     mcHasRun = true;
-    mcLastPayload = {level, survivalRate, floorRate, failRate, p10Final, p50Final, p90Final, targetProb, floor, tailGap, shortfallAvg};
+    mcLastPayload = {level, survivalRate, floorRate, failRate, p10Final, p50Final, p90Final, targetProb, floor, tailGap, shortfallAvg, returnModel, seed};
     const stamp = new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
     mcSetState(level === 'Kritik' || level === 'Risk' ? 'risk' : 'ready', `Son çalıştırma ${stamp}`);
 
@@ -8092,11 +8787,11 @@ function runMonteCarloCore(){
       charts.mc = new Chart($('mcChart'),{
         type:'line',
         data:{labels:pctByYear.map(r=>'Yıl '+r.year),datasets:[
-          {label:'P10 kötü kuyruk',data:pctByYear.map(r=>r.p10),borderColor:css('--ruby'),backgroundColor:'rgba(127,39,55,.06)',borderWidth:2,tension:.28,pointRadius:0},
-          {label:'P25 alt çeyrek',data:pctByYear.map(r=>r.p25),borderColor:'rgba(198,91,54,.58)',borderWidth:1.6,tension:.28,pointRadius:0},
-          {label:'P50 medyan',data:pctByYear.map(r=>r.p50),borderColor:css('--terra'),borderWidth:3,tension:.28,pointRadius:0},
-          {label:'P75 üst çeyrek',data:pctByYear.map(r=>r.p75),borderColor:'rgba(168,132,66,.62)',borderWidth:1.6,tension:.28,pointRadius:0},
-          {label:'P90 iyi kuyruk',data:pctByYear.map(r=>r.p90),borderColor:css('--olive'),borderWidth:2,tension:.28,pointRadius:0}
+          {label:'P10 kötü kuyruk',data:pctByYear.map(r=>r.p10),borderColor:css('--ruby'),backgroundColor:'rgba(127,39,55,.06)',borderWidth:2,tension:.28,pointRadius:0,fill:false},
+          {label:'P25 alt çeyrek',data:pctByYear.map(r=>r.p25),borderColor:'rgba(198,91,54,.58)',backgroundColor:'rgba(127,39,55,.055)',borderWidth:1.6,tension:.28,pointRadius:0,fill:'-1'},
+          {label:'P50 medyan',data:pctByYear.map(r=>r.p50),borderColor:css('--terra'),backgroundColor:'rgba(198,91,54,.045)',borderWidth:3,tension:.28,pointRadius:0,fill:'-1'},
+          {label:'P75 üst çeyrek',data:pctByYear.map(r=>r.p75),borderColor:'rgba(168,132,66,.62)',backgroundColor:'rgba(168,132,66,.052)',borderWidth:1.6,tension:.28,pointRadius:0,fill:'-1'},
+          {label:'P90 iyi kuyruk',data:pctByYear.map(r=>r.p90),borderColor:css('--olive'),backgroundColor:'rgba(100,112,73,.060)',borderWidth:2,tension:.28,pointRadius:0,fill:'-1'}
         ]},
         options:chartBaseOptions('money')
       });
@@ -8728,7 +9423,7 @@ function syncMetricDock(res){
     setText('insight-swr', swrLike === null ? '—' : formatPct(swrLike));
     const breakEvenText = res.breakEvenYear ? `${res.breakEvenYear}. yıl` : (res.avgWithdrawal > 0 ? 'Yok' : 'Çıkış yok');
     setText('insight-swr-note',
-      `Başabaş ${breakEvenText} · forward kapasite ${res.terminalWithdrawalNeed > 0 && Number.isFinite(res.coverageTerminal) ? res.coverageTerminal.toFixed(2)+'×' : 'çıkış yok'}.`
+      `Faiz/çekim yılı ${breakEvenText} · forward kapasite ${res.terminalWithdrawalNeed > 0 && Number.isFinite(res.coverageTerminal) ? res.coverageTerminal.toFixed(2)+'×' : 'çıkış yok'}.`
     );
     cardState('insight-swr', res.avgWithdrawal <= 0 ? 'good' : (res.breakEvenYear ? 'good' : 'watch'));
 
@@ -8765,6 +9460,54 @@ function syncMetricDock(res){
     refresh:initC,
     updatePrecisionNarrative:window.updatePrecisionNarrative
   };
+})();
+</script>
+
+
+<script>
+(function(){
+  let tipEl = null;
+  function hideTip(){
+    if(tipEl){
+      tipEl.remove();
+      tipEl = null;
+    }
+  }
+  function showTip(target){
+    const text = target && target.getAttribute ? (target.getAttribute('data-tip') || target.getAttribute('title')) : '';
+    if(!text) return;
+    hideTip();
+    tipEl = document.createElement('div');
+    tipEl.className = 'floating-metric-tip';
+    tipEl.textContent = text;
+    document.body.appendChild(tipEl);
+    const rect = target.getBoundingClientRect();
+    const tipRect = tipEl.getBoundingClientRect();
+    let left = rect.left + rect.width / 2 - tipRect.width / 2;
+    left = Math.max(12, Math.min(left, window.innerWidth - tipRect.width - 12));
+    let top = rect.top - tipRect.height - 10;
+    if(top < 12) top = rect.bottom + 10;
+    tipEl.style.left = left + 'px';
+    tipEl.style.top = top + 'px';
+  }
+  document.addEventListener('mouseenter', function(e){
+    const target = e.target && e.target.closest ? e.target.closest('.metric-info[data-tip]') : null;
+    if(target) showTip(target);
+  }, true);
+  document.addEventListener('mouseleave', function(e){
+    const target = e.target && e.target.closest ? e.target.closest('.metric-info[data-tip]') : null;
+    if(target) hideTip();
+  }, true);
+  document.addEventListener('focusin', function(e){
+    const target = e.target && e.target.closest ? e.target.closest('.metric-info[data-tip]') : null;
+    if(target) showTip(target);
+  }, true);
+  document.addEventListener('focusout', function(e){
+    const target = e.target && e.target.closest ? e.target.closest('.metric-info[data-tip]') : null;
+    if(target) hideTip();
+  }, true);
+  document.addEventListener('scroll', hideTip, true);
+  window.addEventListener('resize', hideTip);
 })();
 </script>
 
