@@ -344,6 +344,34 @@ a{color:inherit}
 .choice-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;margin:13px 0}
 .choice-card{min-height:auto}
 .risk-example{position:relative;z-index:1;margin-top:10px;padding:10px 11px;border:1px solid rgba(127,39,55,.16);background:rgba(127,39,55,.045);border-radius:12px;color:var(--ruby);font-size:11px;line-height:1.45;font-weight:700}
+.r-validation{
+  display:none;
+  margin-top:10px;
+  padding:10px 11px;
+  border:1px solid rgba(127,39,55,.18);
+  background:rgba(127,39,55,.045);
+  color:var(--ruby);
+  border-radius:12px;
+  font-size:11px;
+  line-height:1.45;
+  font-weight:750;
+}
+.r-validation.valid{
+  border-color:rgba(100,112,73,.18);
+  background:rgba(100,112,73,.052);
+  color:var(--olive);
+}
+.edge-note{
+  margin-top:10px;
+  padding:10px 12px;
+  border:1px solid rgba(168,132,66,.20);
+  background:rgba(168,132,66,.055);
+  color:var(--stone);
+  border-radius:14px;
+  font-size:11px;
+  line-height:1.5;
+}
+.edge-note strong{color:var(--ink)}
 .choice-card select{
   position:relative;
   z-index:1;
@@ -1060,7 +1088,7 @@ table{width:100%;border-collapse:collapse}
 }
 
 
-/* v12: scenario presets, clearer risk translation, sensitivity explanation, print-grade PDF export */
+/* v12: scenario hazır sets, clearer risk translation, sensitivity explanation, print-grade PDF export */
 .preset-panel{
   margin:0 0 16px;
   padding:14px;
@@ -1193,7 +1221,7 @@ table{width:100%;border-collapse:collapse}
 }
 
 
-/* v13: collapsible presets, printable parameter ledger, interactive sensitivity reading */
+/* v13: collapsible hazır sets, printable parameter ledger, interactive sensitivity reading */
 .preset-drawer{
   padding:0;
 }
@@ -2353,6 +2381,476 @@ table{width:100%;border-collapse:collapse}
   .model-compact-li::after{display:none !important}
 }
 
+
+/* v17: premium scatterplot system */
+.scatter-shell-group{
+  display:grid;
+  gap:16px;
+}
+.scatter-pair,
+.scatter-risk-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+}
+.scatter-shell{
+  display:grid;
+  gap:12px;
+}
+.scatter-shell .canvas-wrap{
+  height:360px;
+}
+.scatter-shell .canvas-wrap.tall{
+  height:400px;
+}
+.scatter-meta{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+}
+.scatter-status{
+  display:inline-flex;
+  align-items:center;
+  min-height:32px;
+  padding:6px 10px;
+  border:1px solid rgba(205,191,174,.72);
+  background:#fffdf8;
+  border-radius:999px;
+  color:var(--stone);
+  font-size:9px;
+  letter-spacing:.09em;
+  text-transform:uppercase;
+  font-weight:900;
+}
+.scatter-status.good{
+  color:var(--olive);
+  border-color:rgba(100,112,73,.26);
+  background:rgba(100,112,73,.05);
+}
+.scatter-status.warn{
+  color:var(--terra);
+  border-color:rgba(198,91,54,.24);
+  background:rgba(198,91,54,.05);
+}
+.scatter-status.bad{
+  color:var(--ruby);
+  border-color:rgba(127,39,55,.24);
+  background:rgba(127,39,55,.05);
+}
+.scatter-guide{
+  display:grid;
+  gap:9px;
+  margin-top:2px;
+}
+.scatter-guide-title{
+  color:var(--ink);
+  font-size:10px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  font-weight:900;
+}
+.scatter-zone-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px;
+}
+.scatter-zone{
+  border:1px solid rgba(226,216,201,.92);
+  background:linear-gradient(180deg,#fffefa,#fbf6ee);
+  border-radius:14px;
+  padding:10px 11px;
+}
+.scatter-zone strong{
+  display:block;
+  color:var(--ink);
+  font-size:10px;
+  letter-spacing:.09em;
+  text-transform:uppercase;
+  font-weight:900;
+  line-height:1.2;
+}
+.scatter-zone span{
+  display:block;
+  margin-top:5px;
+  color:var(--stone);
+  font-size:11px;
+  line-height:1.45;
+}
+.scatter-zone.olive{
+  border-color:rgba(100,112,73,.20);
+  background:rgba(100,112,73,.045);
+}
+.scatter-zone.terra{
+  border-color:rgba(198,91,54,.18);
+  background:rgba(198,91,54,.04);
+}
+.scatter-zone.ruby{
+  border-color:rgba(127,39,55,.18);
+  background:rgba(127,39,55,.04);
+}
+.scatter-zone.gold{
+  border-color:rgba(168,132,66,.20);
+  background:rgba(168,132,66,.05);
+}
+.scatter-inline-note{
+  padding:11px 12px;
+  border:1px solid rgba(205,191,174,.8);
+  background:#fffdf8;
+  border-radius:13px;
+  color:var(--stone);
+  font-size:11px;
+  line-height:1.5;
+}
+.scatter-inline-note strong{color:var(--ink)}
+.scatter-key-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
+}
+.scatter-key{
+  border:1px solid rgba(226,216,201,.9);
+  background:#fffdf8;
+  border-radius:12px;
+  padding:9px 10px;
+}
+.scatter-key strong{
+  display:block;
+  font-size:9px;
+  letter-spacing:.10em;
+  text-transform:uppercase;
+  font-weight:900;
+  color:var(--ink);
+}
+.scatter-key span{
+  display:block;
+  margin-top:5px;
+  color:var(--stone);
+  font-size:10px;
+  line-height:1.35;
+}
+.scatter-points-legend{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:8px;
+}
+.scatter-point-badge{
+  display:flex;
+  align-items:flex-start;
+  gap:8px;
+  border:1px solid rgba(226,216,201,.9);
+  background:#fffdf8;
+  border-radius:12px;
+  padding:8px 9px;
+}
+.scatter-point-dot{
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  margin-top:4px;
+  flex:0 0 10px;
+}
+.scatter-point-badge strong{
+  display:block;
+  font-size:9px;
+  letter-spacing:.10em;
+  text-transform:uppercase;
+  font-weight:900;
+  color:var(--ink);
+}
+.scatter-point-badge span{
+  display:block;
+  margin-top:3px;
+  color:var(--stone);
+  font-size:10px;
+  line-height:1.35;
+}
+.opt-frontier-card{
+  margin-top:14px;
+}
+@media (max-width:1100px){
+  .scatter-pair,
+  .scatter-risk-grid{grid-template-columns:1fr}
+}
+@media (max-width:860px){
+  .scatter-zone-grid,
+  .scatter-key-grid,
+  .scatter-points-legend{grid-template-columns:1fr}
+}
+@media print{
+  .scatter-pair,
+  .scatter-risk-grid{display:block !important}
+  .scatter-shell{margin:0 0 8mm !important}
+  .scatter-zone,
+  .scatter-key,
+  .scatter-point-badge,
+  .scatter-inline-note{
+    border:1px solid #ddd !important;
+    background:#fff !important;
+    border-radius:0 !important;
+  }
+}
+
+
+/* v18: native pathStats, seed audit and executive scatter narratives */
+.audit-toolbar{
+  display:grid;
+  grid-template-columns:1.2fr 1fr;
+  gap:14px;
+  margin:0 0 18px;
+}
+.audit-card{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  padding:14px 16px;
+  border:1px solid rgba(226,216,201,.92);
+  background:linear-gradient(180deg,#fffefa,#fbf6ee);
+  border-radius:18px;
+  box-shadow:0 10px 26px rgba(56,42,25,.045);
+}
+.audit-card p{
+  margin:5px 0 0;
+  color:var(--stone);
+  font-size:11.5px;
+  line-height:1.45;
+}
+.audit-controls{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.seed-input-wrap{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 10px;
+  border:1px solid rgba(205,191,174,.78);
+  background:#fffdf8;
+  border-radius:999px;
+  color:var(--muted);
+  font-size:9px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  font-weight:900;
+}
+.seed-input-wrap input{
+  width:112px;
+  border:0;
+  outline:0;
+  background:transparent;
+  color:var(--ink);
+  font-size:12px;
+  font-weight:900;
+}
+.seed-input-wrap input:disabled{
+  color:var(--muted);
+  opacity:.65;
+}
+.self-test-results{
+  display:none;
+  margin:-6px 0 18px;
+  padding:12px;
+  border:1px solid rgba(205,191,174,.72);
+  background:#fffdf8;
+  border-radius:16px;
+}
+.self-test-results.active{display:block}
+.self-test-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
+}
+.self-test-item{
+  padding:10px 11px;
+  border:1px solid rgba(226,216,201,.9);
+  border-radius:12px;
+  background:linear-gradient(180deg,#fffefa,#fbf6ee);
+}
+.self-test-item.pass{
+  border-color:rgba(100,112,73,.22);
+  background:rgba(100,112,73,.045);
+}
+.self-test-item.fail{
+  border-color:rgba(127,39,55,.25);
+  background:rgba(127,39,55,.045);
+}
+.self-test-item strong{
+  display:block;
+  color:var(--ink);
+  font-size:10px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  font-weight:900;
+}
+.self-test-item span{
+  display:block;
+  margin-top:5px;
+  color:var(--stone);
+  font-size:10.5px;
+  line-height:1.4;
+}
+.native-narrative-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+  margin-top:10px;
+}
+.native-narrative-card{
+  border:1px solid rgba(226,216,201,.92);
+  background:linear-gradient(180deg,#fffefa,#fbf6ee);
+  border-radius:16px;
+  padding:13px 14px;
+}
+.native-narrative-card.olive{
+  border-color:rgba(100,112,73,.22);
+  background:rgba(100,112,73,.045);
+}
+.native-narrative-card.terra{
+  border-color:rgba(198,91,54,.20);
+  background:rgba(198,91,54,.045);
+}
+.native-narrative-card.ruby{
+  border-color:rgba(127,39,55,.22);
+  background:rgba(127,39,55,.045);
+}
+.native-narrative-kicker{
+  color:var(--muted);
+  font-size:8.5px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  font-weight:900;
+}
+.native-narrative-card strong{
+  display:block;
+  margin-top:5px;
+  color:var(--ink);
+  font-size:13px;
+  line-height:1.25;
+}
+.native-narrative-card p{
+  margin:7px 0 0;
+  color:var(--stone);
+  font-size:11px;
+  line-height:1.48;
+}
+.native-narrative-card .mono{
+  color:var(--ink);
+  font-weight:900;
+}
+.scatter-native-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+}
+.scatter-native-badge::before{
+  content:"";
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--olive);
+  box-shadow:0 0 0 4px rgba(100,112,73,.10);
+}
+@media (max-width:1180px){
+  .audit-toolbar{grid-template-columns:1fr}
+  .audit-card{align-items:flex-start; flex-direction:column}
+  .audit-controls{justify-content:flex-start}
+  .native-narrative-grid{grid-template-columns:1fr}
+  .self-test-grid{grid-template-columns:1fr}
+}
+@media print{
+  .audit-toolbar,
+  .self-test-results{display:none!important}
+}
+
+
+/* v19: diagnostics tab and scatter pruning */
+.mode-tabs{
+  grid-template-columns:repeat(5,minmax(0,1fr)) !important;
+}
+.diagnostic-single{
+  grid-template-columns:minmax(0,1fr) !important;
+}
+#diagnostics .chart-shell{
+  margin-top:16px;
+}
+#diagnostics .scatter-shell-group{
+  display:block;
+}
+@media (max-width:1240px){
+  .mode-tabs{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+}
+@media (max-width:720px){
+  .mode-tabs{grid-template-columns:1fr !important}
+}
+
+
+/* v18: executive concept guide expansion */
+.concept-grid.executive-guide{
+  grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  align-items:stretch;
+}
+.concept-card.deep{
+  min-height:360px;
+  display:flex;
+  flex-direction:column;
+}
+.concept-card.deep p{
+  margin-bottom:8px;
+}
+.concept-points{
+  display:grid;
+  gap:7px;
+  margin-top:10px;
+  padding:0;
+  list-style:none;
+}
+.concept-points li{
+  position:relative;
+  padding-left:15px;
+  color:var(--stone);
+  font-size:11.2px;
+  line-height:1.45;
+}
+.concept-points li::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:.62em;
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:rgba(198,91,54,.58);
+}
+.concept-card.olive .concept-points li::before{background:rgba(100,112,73,.7)}
+.concept-card.ruby .concept-points li::before{background:rgba(127,39,55,.65)}
+.concept-mini{
+  margin-top:auto;
+  padding-top:10px;
+}
+.concept-formula{
+  margin-top:10px;
+  padding:10px 11px;
+  border:1px solid rgba(100,112,73,.18);
+  background:rgba(100,112,73,.045);
+  border-radius:12px;
+  color:var(--olive);
+  font-size:10.5px;
+  line-height:1.42;
+  font-weight:800;
+}
+@media (max-width:1360px){
+  .concept-grid.executive-guide{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+}
+@media (max-width:860px){
+  .concept-grid.executive-guide{grid-template-columns:1fr !important}
+  .concept-card.deep{min-height:auto}
+}
+
 </style>
 </head>
 <body>
@@ -2361,7 +2859,7 @@ table{width:100%;border-collapse:collapse}
     <div>
       <div class="brand-kicker">Trade Monte Carlo</div>
       <h1>Strateji Dayanıklılık Laboratuvarı</h1>
-      <p class="hero-copy">R-multiple mantığıyla binlerce olası equity curve üretir; hedefe ulaşma ihtimalini, kötü senaryo sermaye erimesini, drawdown süresini ve sonucu en fazla taşıyan parametreyi net gösterir.</p>
+      <p class="hero-copy">R-multiple mantığıyla binlerce olası sermaye yolu üretir; hedefe ulaşma ihtimalini, kötü senaryo sermaye erimesini, drawdown süresini ve sonucu en fazla taşıyan parametreyi net gösterir.</p>
     </div>
     <div class="hero-actions">
       <button class="btn primary run-sim" type="button"><svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9V3z"/></svg>Simülasyonu Çalıştır</button>
@@ -2397,12 +2895,12 @@ table{width:100%;border-collapse:collapse}
       <div class="metric-sub">P(eşik altına temas)</div>
     </div>
     <div class="metric">
-      <div class="metric-label">Expected R</div>
+      <div class="metric-label">Dağılım-Ayarlı Beklenen R</div>
       <div class="metric-value mono" id="hudER">—</div>
-      <div class="metric-sub">Trade başına net edge</div>
+      <div class="metric-sub" id="hudERSub">Teorik avantaj bekleniyor</div>
     </div>
     <div class="metric">
-      <div class="metric-label">Health Score</div>
+      <div class="metric-label">Model Sağlığı</div>
       <div class="metric-value mono" id="hudHealth">—</div>
       <div class="metric-sub">0–100 model skoru</div>
     </div>
@@ -2422,7 +2920,7 @@ table{width:100%;border-collapse:collapse}
         <div class="panel-title">Rapor Parametre Seti</div>
         <p class="panel-copy">PDF çıktısında kullanılan güncel model parametreleri. Bu tablo ekrandaki seçili değerlerden otomatik üretilir.</p>
       </div>
-      <span class="badge" id="printPresetBadge">Preset: özel</span>
+      <span class="badge" id="printPresetBadge">Hazır set: özel</span>
     </div>
     <div class="print-param-grid" id="printParamGrid"></div>
   </section>
@@ -2432,6 +2930,7 @@ table{width:100%;border-collapse:collapse}
     <button class="mode-btn" type="button" data-mode="advanced">Gelişmiş Risk Ayarları · Ek Katman</button>
     <button class="mode-btn" type="button" data-mode="optimization">Optimizasyon · Parametre Taraması</button>
     <button class="mode-btn" type="button" data-mode="concepts">Kavramlar · Model Rehberi</button>
+    <button class="mode-btn" type="button" data-mode="diagnostics">Risk Haritaları · Kuyruk Analizi</button>
   </nav>
 
   <section id="basic" class="mode-panel active">
@@ -2458,13 +2957,43 @@ table{width:100%;border-collapse:collapse}
         </div>
       </div>
 
-      <details class="preset-panel preset-drawer" aria-label="Senaryo presetleri">
+      <div class="audit-toolbar" aria-label="Seed ve audit modu">
+        <div class="audit-card">
+          <div>
+            <div class="compact-label">Tekrarlanabilirlik Modu <span class="mono">simSeed</span></div>
+            <p><strong>Otomatik</strong> her çalıştırmada yeni rastgelelik anahtarı üretir. <strong>Sabit</strong> aynı parametrelerle aynı Monte Carlo yollarını tekrar üretir; rapor, kontrol ve müşteri sunumu için önerilir.</p>
+          </div>
+          <div class="audit-controls">
+            <div class="segmented-selector seed-selector" role="group" aria-label="Seed modu">
+              <button class="segmented-option active" type="button" data-seed-mode="auto" aria-pressed="true">Otomatik</button>
+              <button class="segmented-option" type="button" data-seed-mode="fixed" aria-pressed="false">Sabit Anahtar</button>
+            </div>
+            <label class="seed-input-wrap">
+              <span class="mono">Anahtar</span>
+              <input class="mono" id="seedValueInput" type="number" min="1" max="2147483646" step="1" value="161803398" disabled>
+            </label>
+          </div>
+        </div>
+        <div class="audit-card self-test-card">
+          <div>
+            <div class="compact-label">Model Sağlık Kontrolü <span class="mono">invariants</span></div>
+            <p>İşlem maliyeti, sıfır frekans, deterministik R, sabit/bileşik risk ayrımı ve negatif avantaj gibi temel hesap davranışlarını hızlı kontrol eder.</p>
+          </div>
+          <div class="audit-controls">
+            <button class="btn olive" type="button" id="runSelfTests">Sağlık Kontrolü Çalıştır</button>
+            <span class="analysis-status" id="selfTestStatus">Henüz çalışmadı</span>
+          </div>
+        </div>
+      </div>
+      <div class="self-test-results" id="selfTestResults" aria-live="polite"></div>
+
+      <details class="preset-panel preset-drawer" aria-label="Senaryo hazır senaryolari">
         <summary class="preset-head preset-summary">
           <div>
-            <div class="preset-title">Senaryo Preset’leri</div>
-            <p>Tek tıkla temel ve gelişmiş parametre setini uygular. Açmak için tıkla; dropdown değil, tüm presetler panel içinde görünür.</p>
+            <div class="preset-title">Hazır Senaryo Setleri</div>
+            <p>Tek tıkla temel ve gelişmiş parametre setini uygular. Açıldığında tüm hazır senaryolar panel içinde görünür.</p>
           </div>
-          <span class="badge" id="activePresetBadge">Preset: özel</span>
+          <span class="badge" id="activePresetBadge">Hazır set: özel</span>
         </summary>
         <div class="preset-body">
           <div class="preset-grid" id="scenarioPresets"></div>
@@ -2488,20 +3017,23 @@ table{width:100%;border-collapse:collapse}
             <label class="form-card"><span class="form-label">Yön</span>
               <input type="hidden" id="rDirection" value="long">
               <div class="segmented-selector direction-selector" role="group" aria-label="R hesaplayıcı yön">
-                <button class="segmented-option active" type="button" data-r-direction="long" aria-pressed="true">Long</button>
-                <button class="segmented-option" type="button" data-r-direction="short" aria-pressed="false">Short</button>
+                <button class="segmented-option active" type="button" data-r-direction="long" aria-pressed="true">Alış</button>
+                <button class="segmented-option" type="button" data-r-direction="short" aria-pressed="false">Satış</button>
               </div>
             </label>
             <label class="form-card"><span class="form-label">Entry Price</span><input class="field mono" id="rEntry" type="number" value="100" step="0.01"></label>
             <label class="form-card"><span class="form-label">Stop-Loss Price</span><input class="field mono" id="rStop" type="number" value="95" step="0.01"></label>
             <label class="form-card"><span class="form-label">Take-Profit Price</span><input class="field mono" id="rTarget" type="number" value="110" step="0.01"></label>
           </div>
-          <div class="note">Örnek: Long işlemde entry 100, stop 95, hedef 110 ise risk birimi 5 puan, potansiyel kazanç 10 puan ve hedef 2R olur. Yani stop olursa −1R, hedef gelirse +2R.</div>
+          <div class="note">Örnek: Alış işlemde entry 100, stop 95, hedef 110 ise risk birimi 5 puan, potansiyel kazanç 10 puan ve hedef 2R olur. Yani stop olursa −1R, hedef gelirse +2R.</div>
         </div>
-        <div class="r-summary">
-          <div class="r-box"><div class="r-label">Risk Birimi</div><div class="r-value mono" id="riskUnit">—</div></div>
-          <div class="r-box"><div class="r-label">Hedef R</div><div class="r-value mono" id="targetR">—</div></div>
-          <div class="r-box"><div class="r-label">Risk / Reward</div><div class="r-value mono" id="riskReward">—</div></div>
+        <div>
+          <div class="r-summary">
+            <div class="r-box"><div class="r-label">Risk Birimi</div><div class="r-value mono" id="riskUnit">—</div></div>
+            <div class="r-box"><div class="r-label">Hedef R</div><div class="r-value mono" id="targetR">—</div></div>
+            <div class="r-box"><div class="r-label">Risk / Reward</div><div class="r-value mono" id="riskReward">—</div></div>
+          </div>
+          <div class="r-validation" id="rCalcValidation">Alış yönü için stop giriş fiyatının altında, hedef giriş fiyatının üstünde olmalı; satış yönü için bunun tersi gerekir.</div>
         </div>
       </div>
     </div>
@@ -2526,7 +3058,7 @@ table{width:100%;border-collapse:collapse}
       <div class="panel-head">
         <div>
           <div class="panel-title"><svg viewBox="0 0 24 24"><path d="M4 19V5"/><path d="M4 19h16"/><path d="M8 16l3-3 3 2 5-7"/><path d="M15 7h4v4"/></svg>Optimizasyon</div>
-          <p class="panel-copy">Seçili hedefe göre açıklanabilir grid arama yapar. Hızlı analiz analitik tahmin üretir; MC doğrulama yalnızca Top 5 kombinasyonu aynı seed ile hafif simülasyonda teyit eder.</p>
+          <p class="panel-copy">Seçili hedefe göre açıklanabilir parametre taraması yapar. Hızlı analiz analitik tahmin üretir; Monte Carlo doğrulama yalnızca ilk 5 kombinasyonu aynı rastgelelik anahtarıyla hafif simülasyonda teyit eder.</p>
         </div>
         <button class="btn primary" type="button" id="optRunFast">Hızlı Analiz</button>
       </div>
@@ -2536,13 +3068,13 @@ table{width:100%;border-collapse:collapse}
         <div class="opt-segmented opt-goals" role="group" aria-label="Optimizasyon hedefi">
           <button class="opt-option active" type="button" data-opt-goal="balanced" aria-pressed="true">Dengeli</button>
           <button class="opt-option" type="button" data-opt-goal="target" aria-pressed="false">Hedefe Ulaşma</button>
-          <button class="opt-option" type="button" data-opt-goal="ruin" aria-pressed="false">Ruin Min.</button>
-          <button class="opt-option" type="button" data-opt-goal="drawdown" aria-pressed="false">DD Min.</button>
-          <button class="opt-option" type="button" data-opt-goal="riskAdjusted" aria-pressed="false">Risk Adj.</button>
+          <button class="opt-option" type="button" data-opt-goal="ruin" aria-pressed="false">Kritik Risk Min.</button>
+          <button class="opt-option" type="button" data-opt-goal="drawdown" aria-pressed="false">Drawdown Min.</button>
+          <button class="opt-option" type="button" data-opt-goal="riskAdjusted" aria-pressed="false">Risk Ayarlı</button>
           <button class="opt-option" type="button" data-opt-goal="p5p75" aria-pressed="false">P5 Koru · P75</button>
           <button class="opt-option" type="button" data-opt-goal="median" aria-pressed="false">P50 Max.</button>
         </div>
-        <div class="opt-goal-copy" id="optGoalHelp">Dengeli hedef; profit factor, drawdown ve kritik sermaye riskini birlikte dengeler.</div>
+        <div class="opt-goal-copy" id="optGoalHelp">Dengeli hedef; net kâr faktörü, drawdown ve kritik sermaye riskini birlikte dengeler.</div>
       </div>
 
       <div class="opt-layout">
@@ -2552,11 +3084,11 @@ table{width:100%;border-collapse:collapse}
 
           <div class="opt-param-grid">
             <label class="opt-field-card">
-              <span class="opt-field-title">Risk/Trade Min</span>
+              <span class="opt-field-title">İşlem Riski Min</span>
               <input class="opt-input mono" id="optRiskMin" type="number" value="0.4" min="0.1" max="100" step="0.1">
             </label>
             <label class="opt-field-card">
-              <span class="opt-field-title">Risk/Trade Max</span>
+              <span class="opt-field-title">İşlem Riski Max</span>
               <input class="opt-input mono" id="optRiskMax" type="number" value="2.4" min="0.1" max="100" step="0.1">
             </label>
             <label class="opt-field-card">
@@ -2565,15 +3097,15 @@ table{width:100%;border-collapse:collapse}
             </label>
 
             <label class="opt-field-card">
-              <span class="opt-field-title">AvgWinR Min</span>
+              <span class="opt-field-title">Ort. Kazanç R Min</span>
               <input class="opt-input mono" id="optWinRMin" type="number" value="1.2" min="0.2" max="20" step="0.05">
             </label>
             <label class="opt-field-card">
-              <span class="opt-field-title">AvgWinR Max</span>
+              <span class="opt-field-title">Ort. Kazanç R Max</span>
               <input class="opt-input mono" id="optWinRMax" type="number" value="2.6" min="0.2" max="20" step="0.05">
             </label>
             <label class="opt-field-card">
-              <span class="opt-field-title">AvgWinR Adımı</span>
+              <span class="opt-field-title">Ort. Kazanç R Adımı</span>
               <input class="opt-input mono" id="optWinRSteps" type="number" value="8" min="5" max="15" step="1">
             </label>
           </div>
@@ -2615,17 +3147,17 @@ table{width:100%;border-collapse:collapse}
           </div>
 
           <div class="opt-constraint" data-opt-constraint-row="maxRuin">
-            <button class="opt-toggle" type="button" data-opt-constraint="maxRuin" aria-pressed="false">Ruin Maks. Kapalı</button>
+            <button class="opt-toggle" type="button" data-opt-constraint="maxRuin" aria-pressed="false">Kritik Eşik Maks. Kapalı</button>
             <label class="opt-field-card">
-              <span class="opt-field-title">Ruin maksimum</span>
+              <span class="opt-field-title">Kritik eşik maksimum</span>
               <input class="opt-input mono" id="optMaxRuin" type="number" value="5" min="0" max="100" step="0.1" disabled>
             </label>
           </div>
 
           <div class="opt-constraint" data-opt-constraint-row="maxDD">
-            <button class="opt-toggle" type="button" data-opt-constraint="maxDD" aria-pressed="false">Max DD Kapalı</button>
+            <button class="opt-toggle" type="button" data-opt-constraint="maxDD" aria-pressed="false">Maksimum Drawdown Kapalı</button>
             <label class="opt-field-card">
-              <span class="opt-field-title">Ort. DD maksimum</span>
+              <span class="opt-field-title">Ort. drawdown maksimum</span>
               <input class="opt-input mono" id="optMaxDD" type="number" value="20" min="0" max="100" step="0.5" disabled>
             </label>
           </div>
@@ -2633,7 +3165,7 @@ table{width:100%;border-collapse:collapse}
           <div class="opt-combo-summary" id="optComboSummary">72 kombinasyon · hızlı analiz hazır</div>
           <div class="opt-actions">
             <button class="btn primary" type="button" id="optRunFastSecondary">Hızlı Analiz</button>
-            <button class="btn olive" type="button" id="optRunMC" disabled>MC ile Doğrula</button>
+            <button class="btn olive" type="button" id="optRunMC" disabled>Monte Carlo ile Doğrula</button>
           </div>
           <div class="opt-progress" id="optProgress" aria-hidden="true">
             <div class="sim-progress-top"><span id="optProgressText">Optimizasyon hesaplanıyor</span><span class="mono" id="optProgressPct">0%</span></div>
@@ -2656,23 +3188,38 @@ table{width:100%;border-collapse:collapse}
           <div class="opt-output-card opt-heatmap-card">
             <div class="chart-title">Optimizasyon Isı Haritası</div>
             <div class="chart-copy">X ekseni risk yüzdesi, Y ekseni ortalama kazanç R. Hücre rengi seçili hedef skoruna göre değişir.</div>
-            <div class="opt-heatmap-note" id="optHeatmapNote">Üçüncü parametre kapalıyken her hücre Risk × AvgWinR skorunu gösterir.</div>
+            <div class="opt-heatmap-note" id="optHeatmapNote">Üçüncü parametre kapalıyken her hücre Risk × Ort. Kazanç R skorunu gösterir.</div>
             <div class="opt-heatmap" id="optHeatmap"></div>
           </div>
 
           <div class="opt-output-card">
-            <div class="chart-title">Top 5 Kombinasyon</div>
-            <div class="chart-copy">Satıra tıklayınca özet kartı güncellenir. MC doğrulama çalışırsa değerler gerçek lite simülasyonla yenilenir.</div>
+            <div class="chart-title">İlk 5 Kombinasyon</div>
+            <div class="chart-copy">Satıra tıklayınca özet kartı güncellenir. Monte Carlo doğrulama çalışırsa değerler hafif doğrulama simülasyonuyla yenilenir.</div>
             <div class="table-wrap opt-table-wrap">
               <table class="fin-table opt-table">
-                <thead><tr><th>Sıra</th><th>Risk%</th><th>AvgWinR</th><th>P50</th><th>P5</th><th>Ruin</th><th>ExpR</th><th>Skor</th></tr></thead>
+                <thead><tr><th>Sıra</th><th>Risk %</th><th>Ort. Kazanç R</th><th>P50</th><th>P5</th><th>Kritik Eşik</th><th>Beklenen R</th><th>Skor</th></tr></thead>
                 <tbody id="optResultsBody"></tbody>
               </table>
             </div>
           </div>
         </div>
 
-        <div class="opt-narrative" id="optNarrative">Analiz çalıştırılınca kombinasyon yorumu burada görünür.</div>
+        
+<div class="opt-output-card opt-frontier-card">
+  <div class="chart-title">Etkin Sınır Haritası · Optimizasyon Kararı</div>
+  <div class="chart-copy">Isı haritası skoru gösterir; etkin sınır haritası ise aynı adayları risk-getiri uzayına taşır. X ekseni ortalama maksimum drawdown (bulunamazsa kritik eşik olasılığı), Y ekseni P50 final sermaye. İdeal alan sol-üsttür: daha düşük risk ile daha yüksek medyan sonuç.</div>
+  <div class="canvas-wrap small"><canvas id="optFrontierChart"></canvas></div>
+  <div class="scatter-guide">
+    <div class="scatter-zone-grid">
+      <div class="scatter-zone olive"><strong>Sol · Üst · Etkin Çekirdek</strong><span>Daha düşük risk ile daha yüksek P50. Öncelikli adaylar burada kümelenir.</span></div>
+      <div class="scatter-zone terra"><strong>Sağ · Üst · Agresif Getiri</strong><span>Sonuç güçlüdür ancak risk yüzeyi büyür. Yatırım komitesi için ek filtre gerekir.</span></div>
+      <div class="scatter-zone gold"><strong>Sol · Alt · Savunmacı</strong><span>Risk yönetimi güçlü ama büyüme etkisi sınırlıdır. Sermaye koruma mandatında değerli olabilir.</span></div>
+      <div class="scatter-zone ruby"><strong>Sağ · Alt · Dominated Zone</strong><span>Aynı risk seviyesinde daha iyi adaylar varken bu bölge genelde elenir.</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="opt-narrative" id="optNarrative">Analiz çalıştırılınca kombinasyon yorumu burada görünür.</div>
         <div class="opt-current-compare" id="optCurrentCompare">Mevcut parametre karşılaştırması analizden sonra görünür.</div>
       </div>
     </div>
@@ -2684,49 +3231,302 @@ table{width:100%;border-collapse:collapse}
       <div class="panel-head">
         <div>
           <div class="panel-title"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M12 4h9"/><path d="M4 9h16"/><path d="M4 15h16"/><path d="M4 4h.01"/><path d="M4 20h.01"/></svg>Kavramlar ve Model Rehberi</div>
-          <p class="panel-copy">Bu alan parametre ekranını kalabalıklaştırmadan model mantığını açıklar. Yeni kavramlar gerektiğinde aynı yapıya eklenebilir.</p>
+          <p class="panel-copy">Bu bölüm, simülasyondaki her ana kavramı yatırımcı diliyle açıklar. Amaç yalnızca tanım vermek değil; her parametrenin sermaye, risk, psikoloji ve rapor yorumu üzerinde neyi değiştirdiğini örnekle göstermektir.</p>
         </div>
         <button class="btn primary run-sim" type="button">Çalıştır</button>
       </div>
 
-      <div class="concept-grid">
-        <article class="concept-card">
+      <div class="concept-grid executive-guide">
+        <article class="concept-card deep">
           <div class="concept-kicker mono">tradeCostR</div>
-          <h3>Maliyet Tanımı</h3>
-          <p>Maliyet artık equity yüzdesi değildir. Komisyon, spread ve slippage toplamı doğrudan <strong>R cinsinden trade başı maliyet</strong> olarak girilir.</p>
-          <div class="concept-example mono">Örnek: 0.05R maliyet = her trade’de riske edilen tutarın %5’i kadar toplam işlem sürtünmesi.</div>
+          <h3>Trade Başı Maliyet R</h3>
+          <p>Komisyon, spread, slippage ve emir gerçekleşme farkının toplam etkisi R cinsinden girilir. Bu maliyet sermayenin sabit yüzdesi değildir; her işlemde riske edilen 1R tutarının içinden düşülür.</p>
+          <ul class="concept-points">
+            <li>Kazanan işlemde brüt R’den düşülür; örneğin +2.00R kazanç ve 0.05R maliyet net +1.95R üretir.</li>
+            <li>Break-even işlem bile maliyet varsa net negatif olabilir; 0R brüt sonuç ve 0.05R maliyet net −0.05R demektir.</li>
+            <li>Yüksek frekanslı stratejilerde küçük görünen maliyet, toplam avantaj’i belirgin biçimde aşındırabilir.</li>
+          </ul>
+          <div class="concept-example mono concept-mini">Örnek: 100.000 TL sermaye, %1 risk → 1R = 1.000 TL. Maliyet 0.05R ise işlem başı maliyet 50 TL’dir.</div>
         </article>
 
-        <article class="concept-card ruby">
+        <article class="concept-card deep ruby">
           <div class="concept-kicker mono">riskPerTradePct</div>
-          <h3>Pozisyon büyüklüğü ≠ Risk yüzdesi</h3>
-          <p>Trade başına risk, pozisyon büyüklüğü değil stop olursa kaybedilecek tutardır. 80k pozisyon açmak tek başına %80 risk anlamına gelmez; stop mesafesi sonucu belirler.</p>
-          <div class="concept-example mono" id="riskMathLive">—</div>
+          <h3>Trade Başına Risk</h3>
+          <p>Bu oran pozisyon büyüklüğü değil, stop çalışırsa kaybedilecek tutardır. Stratejinin büyüme hızını, drawdown derinliğini ve kritik sermaye riskini aynı anda belirleyen ana kaldıraçtır.</p>
+          <ul class="concept-points">
+            <li>Bileşik risk modunda 1R, mevcut sermayeye göre büyür veya küçülür.</li>
+            <li>Sabit risk modunda 1R, başlangıç sermayesine bağlı kalır; sermaye düştüğünde fiili risk baskısı artabilir.</li>
+            <li>Risk yüzdesi arttıkça iyi yollar hızlanır, kötü yollar ise geometrik olarak daha sert bozulur.</li>
+          </ul>
+          <div class="concept-example mono concept-mini" id="riskMathLive">—</div>
         </article>
 
-        <article class="concept-card olive">
+        <article class="concept-card deep olive">
           <div class="concept-kicker mono">R-Multiple</div>
-          <h3>1R ne demek?</h3>
-          <p>1R, trade açarken baştan kabul edilen zarar birimidir. +2R, riske edilen tutarın iki katı kazanç; −1R, planlanan stop kaybı demektir.</p>
-          <div class="concept-example mono">Entry 100 · Stop 95 · Hedef 110 → Risk 5 puan · Ödül 10 puan · Hedef 2R.</div>
+          <h3>1R ve R-Multiple</h3>
+          <p>1R, işlem açmadan önce kabul edilen planlı zarar birimidir. Tüm kazanç, kayıp, maliyet ve şoklar bu ortak ölçekle ölçülür; böylece farklı fiyat seviyeleri ve stop mesafeleri aynı dilde karşılaştırılır.</p>
+          <ul class="concept-points">
+            <li>+2R, riske edilen tutarın iki katı kâr anlamına gelir.</li>
+            <li>−1R, planlanan stop kaybıdır; −1.5R ise stop kayması, gap veya disiplin bozulması gibi ek kayıp anlamına gelebilir.</li>
+            <li>R bazlı düşünmek, “kaç TL kazandım?” yerine “aldığım riske göre ne kazandım?” sorusunu cevaplar.</li>
+          </ul>
+          <div class="concept-example mono concept-mini">Örnek: Entry 100 · Stop 95 · Hedef 110 → Risk 5 puan · Ödül 10 puan · Hedef +2R.</div>
         </article>
 
-        <article class="concept-card">
+        <article class="concept-card deep ruby">
+          <div class="concept-kicker mono">volatilityFactor</div>
+          <h3>R Dağılım Volatilitesi</h3>
+          <p>Bu parametre günlük trade sayısı, piyasa gürültüsü veya pozisyon büyüklüğü değildir. Her işlemin gerçekleşen R sonucunun, girilen ortalama kazanç R ve ortalama kayıp R etrafında ne kadar dağıldığını belirler.</p>
+          <ul class="concept-points">
+            <li>0x değerinde sonuçlar ortalamaya yakınlaşır; kazanç ve kayıp R’ler daha sabit davranır.</li>
+            <li>Değer yükseldikçe P5–P95 bandı genişler; aynı medyan korunuyor gibi görünse bile kötü senaryo tabanı bozulabilir.</li>
+            <li>Modelde kayıp tarafı lognormal kuyrukla üretildiği için yüksek volatilite, drawdown ve kritik sermaye temasını asimetrik büyütebilir.</li>
+          </ul>
+          <div class="concept-example mono concept-mini">Örnek: Ort. Kazanç R 1.8R, AvgLossR 1.0R. Volatilite 1x iken kötü bant makul kalabilir; 2x değerinde P5 sert düşebilir ve ruin riski artabilir.</div>
+        </article>
+
+        <article class="concept-card deep olive">
+          <div class="concept-kicker mono">breakEvenRate</div>
+          <h3>Break-even Oranı</h3>
+          <p>Break-even, işlemin brüt R sonucunun yaklaşık 0R kapanmasıdır. Ancak maliyet R sıfır değilse bu işlem yatırımcı açısından tamamen nötr değildir; maliyet kadar küçük bir negatif sonuç üretir.</p>
+          <ul class="concept-points">
+            <li>Break-even oranı yükselirse tam kayıp sayısı azalabilir, fakat maliyet birikimi devam eder.</li>
+            <li>Win rate ile break-even toplamı modelde mantıklı sınırda tutulur; kalan olasılık kayıp tarafına ayrılır.</li>
+            <li>Çok yüksek break-even oranı, stratejinin kârlı görünmesini değil, işlem sürtünmesine ne kadar dayanıklı olduğunu test eder.</li>
+          </ul>
+          <div class="concept-example mono concept-mini">Örnek: Break-even trade 0R, maliyet 0.05R → net sonuç −0.05R. 100 adet böyle işlem toplam −5R sürtünme yaratır.</div>
+        </article>
+
+        <article class="concept-card deep">
+          <div class="concept-kicker mono">Beklenen R</div>
+          <h3>Teorik ve Dağılım-Ayarlı Avantaj</h3>
+          <p>Beklenen R, bir işlemin ortalama R beklentisini gösterir. Teorik değer yalnızca win rate, break-even, ortalama kazanç/kayıp ve maliyeti kullanır. Dağılım-ayarlı değer ise R volatilitesinin kazanç ve kayıp dağılımını nasıl genişlettiğini de hesaba katar.</p>
+          <ul class="concept-points">
+            <li>Pozitif Beklenen R, uzun vadeli avantaj olduğunu gösterir; ancak tek başına düşük drawdown garantisi vermez.</li>
+            <li>Dağılım-ayarlı değer teorikten düşükse, volatilite özellikle kayıp kuyruğunu pahalılaştırıyor olabilir.</li>
+            <li>Avantaj küçükse maliyet, şok olasılığı ve yüksek işlem frekansı stratejiyi kolayca negatife çevirebilir.</li>
+          </ul>
+          <div class="concept-formula mono">Basit okuma: Win% × Ort. Kazanç R − Loss% × AvgLossR − CostR.</div>
+          <div class="concept-example mono concept-mini">Örnek: %55 kazanma, +1.8R kazanç, %40 kayıp, −1R kayıp, 0.05R maliyet → 0.55×1.8 − 0.40×1 − 0.05 = +0.54R.</div>
+        </article>
+
+        <article class="concept-card deep ruby">
+          <div class="concept-kicker mono">maxDailyLossPct</div>
+          <h3>Günlük Zarar Freni</h3>
+          <p>Bu ayar gün içi zarar eşiğine ulaşıldığında yeni işlem açılmasını durdurur. Bu bir zarar garantisi veya kesin kayıp tavanı değildir; büyük tekil kayıp veya şok etkisi eşiğin ötesine geçebilir.</p>
+          <ul class="concept-points">
+            <li>Özellikle yüksek frekanslı stratejilerde kötü günlerin aynı gün içinde büyümesini sınırlar.</li>
+            <li>Şok önce gelirse sermaye zaten düşmüş olabilir; fren sonraki işlemleri durdurur.</li>
+            <li>Çok gevşek limit, disiplin kırılmasını; çok sıkı limit ise stratejinin toparlanma fırsatını azaltabilir.</li>
+          </ul>
+          <div class="concept-example mono concept-mini">Örnek: Gün başı 100.000 TL ve limit %5 ise 5.000 TL gün içi zarardan sonra yeni trade açılmaz.</div>
+        </article>
+
+        <article class="concept-card deep ruby">
+          <div class="concept-kicker mono">shockProbability / shockImpactR</div>
+          <h3>Şok Günü Varsayımı</h3>
+          <p>Şok parametreleri olağan dışı piyasa koşullarını temsil eder. Normal işlem dağılımından ayrı bir günlük darbe olarak çalışır ve özellikle P5, maksimum drawdown ve kritik sermaye temasını etkiler.</p>
+          <ul class="concept-points">
+            <li>Şok olasılığı, herhangi bir işlem gününde olağan dışı kötü gün yaşanma ihtimalidir.</li>
+            <li>Şok etkisi R cinsindendir; 3R şok, o anki 1R tutarının üç katı negatif darbe anlamına gelir.</li>
+            <li>Şoklar bağımsız günler olarak modellenir; gerçek piyasalardaki rejim kümelenmesini tam temsil etmez.</li>
+          </ul>
+          <div class="concept-example mono concept-mini">Örnek: Risk %1 ve sermaye 200.000 TL ise 1R = 2.000 TL. 3R şok yaklaşık 6.000 TL ek kayıp yaratır.</div>
+        </article>
+
+        <article class="concept-card deep olive">
+          <div class="concept-kicker mono">riskMode</div>
+          <h3>Bileşik ve Sabit Risk</h3>
+          <p>Risk modu, 1R tutarının hangi sermaye tabanına göre hesaplanacağını belirler. Bu seçim stratejinin büyüme eğrisini ve kötü dönemde savunma davranışını değiştirir.</p>
+          <ul class="concept-points">
+            <li>Bileşik modda sermaye büyüdükçe 1R büyür; sermaye düştükçe 1R küçülür. Bu doğal bir fren mekanizması yaratır.</li>
+            <li>Sabit modda 1R başlangıç sermayesine bağlı kalır; büyümede daha doğrusal, düşüşte ise daha sert davranabilir.</li>
+            <li>Uzun vadeli büyüme analizinde bileşik mod, prop veya limitli hesap disiplininde sabit mod ayrıca incelenebilir.</li>
+          </ul>
+          <div class="concept-example mono concept-mini">Örnek: Başlangıç 100.000 TL, risk %1. Bileşik modda sermaye 80.000 TL’ye düşerse 1R = 800 TL; sabit modda 1R hâlâ 1.000 TL olabilir.</div>
+        </article>
+
+        <article class="concept-card deep">
+          <div class="concept-kicker mono">P5 / P50 / P95</div>
+          <h3>Percentile Okuması</h3>
+          <p>Percentile değerleri tek bir tahmin değil, olasılık dağılımının farklı noktalarıdır. P50 medyan yolu, P5 kötü senaryo tabanını, P95 ise güçlü ama daha az olası üst bandı gösterir.</p>
+          <ul class="concept-points">
+            <li>P5 düşükse strateji “ortalama olarak iyi” görünse bile sermaye koruma riski yüksektir.</li>
+            <li>P50, tipik sonuçtur; yatırımcı sunumunda tek başına yeterli değildir.</li>
+            <li>P95, potansiyeli gösterir; ancak stratejinin kalitesi P95 kadar P5 ve drawdown ile de değerlendirilmelidir.</li>
+          </ul>
+          <div class="concept-example mono concept-mini">Örnek: 5.000 yolun P5’i, yaklaşık en kötü 250 yolun üst sınırıdır. Bu seviye alt kuyruk güvenliği için izlenir.</div>
+        </article>
+
+        <article class="concept-card deep">
           <div class="concept-kicker mono">P(final &gt; başlangıç)</div>
-          <h3>Kârda Bitme metriği</h3>
-          <p>Bu metrik percentile değildir. Tüm simülasyon yolları içinde final sermayesi başlangıç sermayesinden yüksek biten yolların oranıdır.</p>
-          <div class="concept-example mono">2.160 / 3.000 yol kârda biterse → Kârda Bitme %72.</div>
+          <h3>Kârda Bitme Olasılığı</h3>
+          <p>Bu metrik, final sermayesi başlangıç sermayesinin üzerinde kapanan yolların oranıdır. Percentile değildir; tüm simülasyon yolları içinde kârla bitenlerin payını gösterir.</p>
+          <ul class="concept-points">
+            <li>Yüksek kârda bitme oranı istikrar göstergesidir, ancak hedefe ulaşma anlamına gelmez.</li>
+            <li>Bir strateji sık kârda bitebilir ama hedef sermayeye nadiren ulaşabilir.</li>
+            <li>Bu metrik P5 ile birlikte okunursa “sık küçük kâr mı, seyrek büyük sonuç mu?” ayrımı yapılır.</li>
+          </ul>
+          <div class="concept-example mono concept-mini">Örnek: 5.000 yolun 3.400’ü başlangıcın üzerinde kapanırsa kârda bitme olasılığı %68 olur.</div>
         </article>
 
-        <article class="concept-card olive">
-          <div class="concept-kicker mono">ΔRuin</div>
-          <h3>Kritik risk değişimi</h3>
-          <p>Gerçek MC Sensitivity içinde ΔRuin, parametre değişince kritik sermaye riskinin baz modele göre kaç yüzde puan değiştiğini gösterir.</p>
-          <div class="concept-example mono">Baz ruin %4.0 · Şok sonrası %5.7 → ΔRuin +1.7 pp.</div>
+        <article class="concept-card deep olive">
+          <div class="concept-kicker mono">MOIC / Hedef</div>
+          <h3>Hedef Sermaye ve Büyüme Çarpanı</h3>
+          <p>Hedef sermaye, simülasyon sırasında en az bir kez temas edilirse gerçekleşmiş sayılır. MOIC mantığı ise final sermayenin başlangıca oranını gösterir; 2.0x, sermayenin iki katına çıkmasıdır.</p>
+          <ul class="concept-points">
+            <li>Hedefe temas olasılığı, finalde hedef üstünde kalma olasılığıyla aynı şey değildir.</li>
+            <li>Yüksek hedef agresif riskleri teşvik edebilir; bu nedenle hedef olasılığı P5 ve drawdown ile birlikte okunmalıdır.</li>
+            <li>MOIC büyümeyi sade anlatır ama yol boyunca yaşanan sualtı dönemini göstermez.</li>
+          </ul>
+          <div class="concept-example mono concept-mini">Örnek: Başlangıç 100.000 TL, hedef 200.000 TL ise hedef MOIC 2.0x’tir. Bir yol 210.000 TL’ye çıkıp 180.000 TL final kapatsa bile hedefe temas etmiş sayılır.</div>
+        </article>
+
+        <article class="concept-card deep ruby">
+          <div class="concept-kicker mono">Kritik Sermaye Eşiği</div>
+          <h3>Kritik Sermaye Teması</h3>
+          <p>Kritik eşik burada hesabın sıfırlanması anlamına gelmek zorunda değildir. Kullanıcının belirlediği kritik sermaye eşiğine temas edilmesi, risk yönetimi açısından ciddi uyarı olarak sayılır.</p>
+          <ul class="concept-points">
+            <li>Eşik %50 ise başlangıç sermayesinin yarısına düşmek kritik olaydır.</li>
+            <li>Bu metrik final sonucundan bağımsızdır; yol içinde eşiğe temas edilirse risk yaşanmış kabul edilir.</li>
+            <li>kritik eşik olasılığı özellikle risk yüzdesi, R volatilitesi, şok etkisi ve stop kaymasıyla büyür.</li>
+          </ul>
+          <div class="concept-example mono concept-mini">Örnek: Başlangıç 100.000 TL ve kritik eşik %50 ise 50.000 TL’ye temas eden yol kritik olay olarak işaretlenir.</div>
+        </article>
+
+        <article class="concept-card deep olive">
+          <div class="concept-kicker mono">Drawdown / TUW</div>
+          <h3>Drawdown ve Sualtı Süresi</h3>
+          <p>Drawdown, sermayenin gördüğü zirveden ne kadar aşağı indiğini ölçer. Sualtı süresi ise yeni zirve görülmeden geçirilen en uzun zamanı gösterir. Biri acının derinliğini, diğeri süresini anlatır.</p>
+          <ul class="concept-points">
+            <li>%25 drawdown, önceki zirveden dörtte bir aşağıda olmak demektir.</li>
+            <li>Uzun sualtı süresi, strateji matematiksel olarak çalışsa bile yatırımcı sabrını zorlayabilir.</li>
+            <li>İyi bir strateji yalnızca yüksek final sermaye değil, taşınabilir drawdown profili üretmelidir.</li>
+          </ul>
+          <div class="concept-example mono concept-mini">Örnek: Sermaye 150.000 TL zirveden 120.000 TL’ye inerse drawdown %20’dir. Yeni zirve 40 gün gelmezse TUW 40 gündür.</div>
+        </article>
+
+        <article class="concept-card deep">
+          <div class="concept-kicker mono">Duyarlılık</div>
+          <h3>Parametre Duyarlılığı</h3>
+          <p>Duyarlılık analizi, hangi varsayım değiştiğinde sonucun en fazla oynadığını gösterir. Bu bölüm “tahmin kesinliği” değil, modelin hangi düğmelerden daha çok etkilendiğini anlamak için kullanılır.</p>
+          <ul class="concept-points">
+            <li>Analitik duyarlılık hızlı bir ön okuma sağlar.</li>
+            <li>Monte Carlo duyarlılığı, seçili parametreleri tekrar simüle ederek P50, P5 ve kritik eşik etkisini ölçer.</li>
+            <li>En hassas parametreler, veri kalitesi ve gerçek işlem disiplini açısından en dikkatli doğrulanması gereken alanlardır.</li>
+          </ul>
+          <div class="concept-example mono concept-mini">Örnek: Risk % artışı P50’yi yükseltip P5’i sert düşürüyorsa büyüme vardır ama alt kuyruk bedeli yüksektir.</div>
+        </article>
+
+        <article class="concept-card deep olive">
+          <div class="concept-kicker mono">Simülasyon Anahtarı</div>
+          <h3>Tekrarlanabilir Simülasyon Anahtarı</h3>
+          <p>Simülasyon anahtarı, Monte Carlo rastgeleliğinin başlangıç değeridir. Sabit anahtar kullanıldığında aynı parametrelerle aynı yollar tekrar üretilir; bu da rapor, denetim ve müşteri sunumu için tutarlı karşılaştırma sağlar.</p>
+          <ul class="concept-points">
+            <li>Otomatik anahtar keşif ve hızlı deneme için uygundur.</li>
+            <li>Sabit anahtar, “bu sonuç neden değişti?” sorusunu ortadan kaldırır.</li>
+            <li>Karşılaştırmalarda yalnızca parametre değişsin isteniyorsa simülasyon anahtarı sabit tutulmalıdır.</li>
+          </ul>
+          <div class="concept-example mono concept-mini">Örnek: Anahtar 161803398 ve aynı parametreler kullanılırsa P5/P50/P95 aynı simülasyon evreninden tekrar hesaplanır.</div>
         </article>
       </div>
     </div>
   </section>
+
+
+  
+<section id="diagnostics" class="mode-panel">
+    <div class="panel">
+      <div class="panel-head">
+        <div>
+          <div class="panel-title"><svg viewBox="0 0 24 24"><path d="M4 19h16"/><path d="M4 5v14"/><circle cx="8" cy="15" r="1.5"/><circle cx="13" cy="10" r="1.5"/><circle cx="18" cy="7" r="1.5"/></svg>Risk Haritaları</div>
+          <p class="panel-copy">Bu bölüm, ana sonuçların arkasındaki yol kalitesini ve kötü senaryo hassasiyetini gösterir. Amaç daha fazla grafik göstermek değil; yüksek final sermayenin hangi drawdown bedeliyle geldiğini ve R dağılımındaki genişlemenin alt senaryo tabanını nasıl etkilediğini netleştirmektir.</p>
+        </div>
+        <button class="btn primary run-sim" type="button">Çalıştır</button>
+      </div>
+
+      <div class="scatter-inline-note"><strong>Okuma sırası:</strong> Önce final sermaye ile maksimum drawdown ilişkisine bakın. Noktalar sol-üstte yoğunlaşıyorsa strateji daha taşınabilir görünür. Ardından R volatilitesi haritasında P50 ve P5’in birbirinden ayrılıp ayrılmadığını kontrol edin; ayrışma büyüyorsa medyan sonuç iyi kalsa bile kötü senaryo riski artıyor olabilir.</div>
+
+  <section class="chart-shell scatter-shell-group" aria-label="Yol kalitesi haritası">
+    <div class="chart-head">
+      <div>
+        <div class="chart-title">Yol Kalitesi Haritası · Final Sermaye ve Drawdown</div>
+        <div class="chart-copy">Her nokta ana Monte Carlo simülasyonundaki bir sermaye yolunu temsil eder. Dikey eksen final sermayeyi, yatay eksen yol boyunca yaşanan en derin drawdown’ı gösterir. Bu grafik, sonucun yalnızca büyüklüğünü değil, o sonuca hangi taşıma yüküyle ulaşıldığını gösterir.</div>
+      </div>
+      <div class="scatter-meta">
+        <div class="scatter-status" id="scatterPathStatus">Simülasyon çalışınca yol kalitesi güncellenir</div>
+      </div>
+    </div>
+
+    <div class="scatter-pair diagnostic-single">
+      <div class="scatter-shell">
+        <div class="chart-head">
+          <div>
+            <div class="chart-title">Final Sermaye × Maksimum Drawdown Haritası</div>
+            <div class="chart-copy">İdeal alan sol-üsttür: yüksek final sermaye ve düşük drawdown. Sağa doğru ilerledikçe sermayeyi taşımak zorlaşır; aşağı indikçe büyüme kalitesi zayıflar.</div>
+          </div>
+          <div class="scatter-status good" id="scatterOutcomeDDStatus">Hazır</div>
+        </div>
+        <div class="canvas-wrap tall"><canvas id="scatterOutcomeDD"></canvas></div>
+        <div class="scatter-guide">
+          <div class="scatter-guide-title">Bölge Okuması</div>
+          <div class="scatter-zone-grid">
+            <div class="scatter-zone olive"><strong>Sol · Üst · Taşınabilir Büyüme</strong><span>Düşük drawdown ile yüksek final sonuç. Portföy komitesi açısından en sağlıklı bölgedir.</span></div>
+            <div class="scatter-zone terra"><strong>Sağ · Üst · Güçlü Ama Zorlu</strong><span>Sermaye büyür fakat yol serttir. Uygulama disiplini ve yatırımcı sabrı daha fazla sınanır.</span></div>
+            <div class="scatter-zone gold"><strong>Sol · Alt · Savunmacı Ama Sınırlı</strong><span>Drawdown makul olsa da sonuç zayıftır. Sistem fazla temkinli, maliyet baskılı veya avantaj açısından yetersiz olabilir.</span></div>
+            <div class="scatter-zone ruby"><strong>Sağ · Alt · Kaçınılacak Alan</strong><span>Hem sonuç zayıf hem drawdown yüksektir. Bu bölge, parametre setinin risk-getiri dengesinin bozulduğunu gösterir.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="native-narrative-grid" id="pathQualityNarrative">
+      <div class="native-narrative-card"><div class="native-narrative-kicker">Yol Kalitesi</div><strong>Simülasyon sonrası yorum oluşur.</strong><p>Final sermaye, drawdown, kayıp serisi ve hedef/kritik eşik bilgileri aynı ana Monte Carlo yollarından okunacaktır.</p></div>
+    </div>
+  </section>
+
+<section class="chart-grid equal scatter-risk-grid diagnostic-single" aria-label="R volatilitesi haritası">
+  <div class="chart-shell scatter-shell">
+    <div class="chart-head">
+      <div>
+        <div class="chart-title">R Volatilitesi Etki Haritası</div>
+        <div class="chart-copy">Bu grafik, R dağılımındaki genişlemenin tipik sonuç ve kötü senaryo tabanı üzerindeki etkisini gösterir. Yeşil seri P50 final sermayeyi, yakut seri P5 final sermayeyi temsil eder.</div>
+      </div>
+      <div class="scatter-status warn" id="scatterVolatilityStatus">Hazır</div>
+    </div>
+    <div class="canvas-wrap"><canvas id="scatterVolatilitySweep"></canvas></div>
+    <div class="scatter-guide">
+      <div class="scatter-inline-note"><strong>Nasıl okunur?</strong> Sağ tarafa gittikçe R sonuçlarının dağılımı genişler. Yeşil seri yatay kalırken yakut seri aşağı kayıyorsa, tipik sonuç korunuyor gibi görünse bile kötü senaryo tabanı zayıflıyor demektir.</div>
+      <div class="scatter-key-grid">
+        <div class="scatter-key"><strong>Düşük Volatilite</strong><span>R sonuçları ortalamaya daha yakın seyreder. Beklenen sonuç ile kötü senaryo arasındaki fark görece sınırlı kalır.</span></div>
+        <div class="scatter-key"><strong>Aktif Bölge</strong><span>Mevcut parametrenin çevresidir. Karar verirken en çok bu aralıktaki P50/P5 ayrışmasına bakılmalıdır.</span></div>
+        <div class="scatter-key"><strong>Yüksek Volatilite</strong><span>Kuyruklar genişler. Özellikle P5, drawdown ve kritik sermaye teması daha dikkatli izlenmelidir.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="native-narrative-grid" id="riskDriverNarrative">
+  <div class="native-narrative-card"><div class="native-narrative-kicker">Risk Sürücüleri</div><strong>Simülasyon sonrası yorum oluşur.</strong><p>R volatilitesi etkisi ve duyarlılık sonuçları burada yönetici notuna çevrilir.</p></div>
+</div>
+
+<section class="chart-shell" aria-label="Nokta renkleri açıklaması">
+  <div class="chart-head">
+    <div>
+      <div class="chart-title">Nokta Renkleri</div>
+      <div class="chart-copy">Haritadaki renkler, her simülasyon yolunun sonuç statüsünü gösterir. Böylece yalnızca sermaye seviyesi değil, hedefe temas ve kritik eşik riski de aynı bakışta okunur.</div>
+    </div>
+  </div>
+  <div class="scatter-points-legend">
+    <div class="scatter-point-badge"><span class="scatter-point-dot" style="background:#647049"></span><div><strong>Hedefe Ulaşan</strong><span>Yol içinde hedef sermayeye en az bir kez temas eden sonuçlar.</span></div></div>
+    <div class="scatter-point-badge"><span class="scatter-point-dot" style="background:#c65b36"></span><div><strong>Kârda Biten</strong><span>Hedefe ulaşmasa da başlangıç sermayesinin üzerinde kapanan sonuçlar.</span></div></div>
+    <div class="scatter-point-badge"><span class="scatter-point-dot" style="background:#a88442"></span><div><strong>Ara Bölgede Kalan</strong><span>Ne hedefe ulaşan ne de kritik eşiğe düşen, fakat getirisi sınırlı kalan sonuçlar.</span></div></div>
+    <div class="scatter-point-badge"><span class="scatter-point-dot" style="background:#7f2737"></span><div><strong>Kritik Eşiğe Temas Eden</strong><span>Belirlenen kritik sermaye seviyesine yol içinde temas eden sonuçlar.</span></div></div>
+  </div>
+</section>
+
+    </div>
+  </section>
+
 
   <div class="error-box" id="errorBox"></div>
 
@@ -2748,24 +3548,29 @@ table{width:100%;border-collapse:collapse}
       <div class="stat-card"><div class="stat-label">En Kötü Max Drawdown</div><div class="stat-value mono" id="worstDD">—</div><div class="stat-note">En sert simülasyon yolu</div></div>
       <div class="stat-card"><div class="stat-label">Ort. Sualtı Süresi</div><div class="stat-value mono" id="avgTUW">—</div><div class="stat-note">Yeni zirve görememe süresi</div></div>
       <div class="stat-card"><div class="stat-label">En Uzun Sualtı Süresi</div><div class="stat-value mono" id="maxTUW">—</div><div class="stat-note">Maksimum drawdown duration</div></div>
-      <div class="stat-card"><div class="stat-label">En Uzun Kayıp Serisi</div><div class="stat-value mono" id="maxStreak">—</div><div class="stat-note">Psikolojik baskı ölçüsü</div></div>
+      <div class="stat-card"><div class="stat-label">En Uzun Kayıp Serisi</div><div class="stat-value mono" id="maxStreak">—</div><div class="stat-note">Net R negatifse seri devam eder</div></div>
+      <div class="stat-card"><div class="stat-label">Teorik Beklenen R</div><div class="stat-value mono" id="theoreticalER">—</div><div class="stat-note">Volatilite etkisi yok: WR×WinR−LossP×LossR−CostR</div></div>
+      <div class="stat-card"><div class="stat-label">Dağılım-Ayarlı Beklenen R</div><div class="stat-value mono" id="adjustedER">—</div><div class="stat-note">Kazanç/kayıp R dağılım kuyrukları dahil</div></div>
+      <div class="stat-card"><div class="stat-label">Net Kâr Faktörü</div><div class="stat-value mono" id="netPF">—</div><div class="stat-note">Maliyet sonrası pozitif R / negatif R</div></div>
     </div>
+    <div class="edge-note" id="edgeNote"><strong>Avantaj notu:</strong> Teorik Beklenen R deterministik R varsayımıdır. Dağılım-ayarlı değer, volatilite çarpanının kazanç ve kayıp R sonuçlarını nasıl genişlettiğini hesaba katar.</div>
   </section>
 
   
 
   <section class="chart-shell priority-chart-shell" aria-label="Equity curve fan chart">
     <div class="chart-head">
-      <div><div class="chart-title">Equity Curve Fan Chart</div><div class="chart-copy">P5, P25, P50, P75 ve P95 çizgileri stratejinin zaman içindeki dağılımını geniş yüzeyde gösterir; bu grafik ana öncelikli okuma alanıdır.</div></div>
+      <div><div class="chart-title">Sermaye Fan Grafiği</div><div class="chart-copy">P5, P25, P50, P75 ve P95 çizgileri stratejinin zaman içindeki dağılımını geniş yüzeyde gösterir; bu grafik ana öncelikli okuma alanıdır.</div></div>
     </div>
-    <div class="canvas-wrap priority"><canvas id="fanChart"></canvas></div>
+    
+<div class="canvas-wrap priority"><canvas id="fanChart"></canvas></div>
   </section>
 
   <section class="chart-shell priority-chart-shell sensitivity-shell" aria-label="Parametre duyarlılığı">
     <div class="chart-head">
       <div>
         <div class="chart-title">Parametre Duyarlılığı · Analitik Etki Haritası</div>
-        <div class="chart-copy">Bu hızlı skor MC sonucunu yeniden üretmez; mevcut sonuçlardan parametre etkisini analitik olarak sıralar. Gerçek ΔP50 için aşağıdaki MC sensitivity panelini çalıştır.</div>
+        <div class="chart-copy">Bu hızlı skor Monte Carlo sonucunu yeniden üretmez; mevcut sonuçlardan parametre etkisini analitik olarak sıralar. Gerçek ΔP50 için aşağıdaki Monte Carlo duyarlılık panelini çalıştır.</div>
       </div>
     </div>
     <div class="canvas-wrap priority-sensitivity"><canvas id="sensitivityChart"></canvas></div>
@@ -2775,13 +3580,13 @@ table{width:100%;border-collapse:collapse}
   <section class="chart-grid equal">
     <div class="chart-shell">
       <div class="chart-head">
-        <div><div class="chart-title">Final Equity Distribution</div><div class="chart-copy">Final sermaye sonuçlarının hangi bölgelerde yoğunlaştığını gösterir.</div></div>
+        <div><div class="chart-title">Final Sermaye Dağılımı</div><div class="chart-copy">Final sermaye sonuçlarının hangi bölgelerde yoğunlaştığını gösterir.</div></div>
       </div>
       <div class="canvas-wrap"><canvas id="distChart"></canvas></div>
     </div>
     <div class="chart-shell">
       <div class="chart-head">
-        <div><div class="chart-title">Percentile Outcome</div><div class="chart-copy">Başlangıç sermayesinin farklı olasılık dilimlerinde nereye taşındığı.</div></div>
+        <div><div class="chart-title">Olasılık Dilimi Sonuçları</div><div class="chart-copy">Başlangıç sermayesinin farklı olasılık dilimlerinde nereye taşındığı.</div></div>
       </div>
       <div class="canvas-wrap small"><canvas id="outcomeChart"></canvas></div>
     </div>
@@ -2790,8 +3595,8 @@ table{width:100%;border-collapse:collapse}
   <section class="chart-shell scenario-compare-shell" aria-label="Senaryo karşılaştırması">
     <div class="chart-head">
       <div>
-        <div class="chart-title">Senaryo Karşılaştırması · Preset Overlay</div>
-        <div class="chart-copy">Aktif set ile ana presetlerin P5, P50 ve P95 final sermaye bantlarını aynı seed ve hafifletilmiş MC koşusuyla yan yana gösterir. Agresif preset diğerlerini ezmesin diye grafik log ölçeklidir; aşağıdaki kartlarda nominal değerler aynen korunur.</div>
+        <div class="chart-title">Senaryo Karşılaştırması · Hazır Senaryo Katmanı</div>
+        <div class="chart-copy">Aktif set ile ana hazır senaryoların P5, P50 ve P95 final sermaye bantlarını aynı simülasyon anahtarı ve hafifletilmiş Monte Carlo koşusuyla yan yana gösterir. Agresif senaryolar diğerlerini ezmesin diye grafik log ölçeklidir; aşağıdaki kartlarda nominal değerler aynen korunur.</div>
       </div>
       <div class="chart-utility">
         <span class="analysis-status" id="scenarioCompareStatus">Simülasyon sonrası otomatik güncellenir</span>
@@ -2799,16 +3604,16 @@ table{width:100%;border-collapse:collapse}
       </div>
     </div>
     <div class="canvas-wrap small"><canvas id="scenarioCompareChart"></canvas></div>
-    <div class="scenario-scale-note"><strong>Ölçek notu:</strong> Bu grafikte sol eksen logaritmik çalışır. Bu, çok agresif presetlerin P95/P50 değerleri diğer senaryoları görsel olarak sıfıra sıkıştırmasın diye yapılır; tooltip ve kartlardaki ₺ değerler gerçek nominal sonuçlardır.</div>
+    <div class="scenario-scale-note"><strong>Ölçek notu:</strong> Bu grafikte sol eksen logaritmik çalışır. Bu, çok agresif hazır senaryoların P95/P50 değerleri diğer senaryoları görsel olarak sıfıra sıkıştırmasın diye yapılır; açıklama balonu ve kartlardaki ₺ değerler gerçek nominal sonuçlardır.</div>
     <div class="comparison-grid" id="scenarioCompareGrid">
-      <div class="compare-card"><strong>Hazır</strong><span>Simülasyon çalışınca preset karşılaştırması burada oluşur.</span></div>
+      <div class="compare-card"><strong>Hazır</strong><span>Simülasyon çalışınca hazır senaryo karşılaştırması burada oluşur.</span></div>
     </div>
   </section>
 
   <section class="chart-grid equal">
     <div class="chart-shell">
       <div class="chart-head">
-        <div><div class="chart-title">Underwater Curve</div><div class="chart-copy">Medyan ve kötü bant drawdown’ın günlere göre nasıl derinleştiğini gösterir. Sıfır çizgisi yeni zirve anlamına gelir.</div></div>
+        <div><div class="chart-title">Sualtı Eğrisi</div><div class="chart-copy">Medyan ve kötü bant drawdown’ın günlere göre nasıl derinleştiğini gösterir. Sıfır çizgisi yeni zirve anlamına gelir.</div></div>
       </div>
       <div class="canvas-wrap small"><canvas id="underwaterChart"></canvas></div>
     </div>
@@ -2829,7 +3634,7 @@ table{width:100%;border-collapse:collapse}
     </div>
     <div class="chart-shell">
       <div class="chart-head">
-        <div><div class="chart-title">Recovery / Sualtı Süresi Dağılımı</div><div class="chart-copy">Her yolun yeni zirve görmeden geçirdiği en uzun gün sayısı. Stratejinin sermayeyi ne kadar süre psikolojik baskı altında tuttuğunu gösterir.</div></div>
+        <div><div class="chart-title">Toparlanma / Sualtı Süresi Dağılımı</div><div class="chart-copy">Her yolun yeni zirve görmeden geçirdiği en uzun gün sayısı. Stratejinin sermayeyi ne kadar süre psikolojik baskı altında tuttuğunu gösterir.</div></div>
       </div>
       <div class="canvas-wrap small"><canvas id="recoveryChart"></canvas></div>
     </div>
@@ -2838,22 +3643,24 @@ table{width:100%;border-collapse:collapse}
   <section class="chart-shell mc-sensitivity-shell" aria-label="Gerçek Monte Carlo sensitivity">
     <div class="chart-head">
       <div>
-        <div class="chart-title">Gerçek MC Sensitivity · ΔP50 / ΔP5 / ΔRuin</div>
-        <div class="chart-copy">Her parametre için aynı seed ile aşağı/yukarı şok koşuları çalıştırır; P50, P5 ve kritik sermaye riskindeki gerçek MC farkını ölçer. <strong>ΔRuin</strong>, kritik sermaye riskinin baz modele göre yüzde puan değişimidir; +2 pp risk artışı, −2 pp risk azalması demektir.</div>
+        <div class="chart-title">Monte Carlo Duyarlılık · P50 / P5 / Kritik Eşik</div>
+        <div class="chart-copy">Her parametre için aynı rastgelelik anahtarıyla aşağı/yukarı şok koşuları çalıştırır; P50, P5 ve kritik sermaye riskindeki Monte Carlo farkını ölçer. <strong>ΔKritik Eşik</strong>, kritik sermaye riskinin baz modele göre yüzde puan değişimidir; +2 pp risk artışı, −2 pp risk azalması demektir.</div>
       </div>
       <div class="chart-utility">
         <span class="analysis-status" id="mcSensitivityStatus">Simülasyon sonrası hazır</span>
-        <button class="btn olive" type="button" id="runRealSensitivity">Gerçek Sensitivity Çalıştır</button>
+        <button class="btn olive" type="button" id="runRealSensitivity">Duyarlılığı Çalıştır</button>
       </div>
     </div>
     <div class="canvas-wrap small"><canvas id="mcSensitivityChart"></canvas></div>
-    <div class="delta-note"><strong>ΔRuin tanımı:</strong> “Ruin” kritik sermaye eşiğine temas olasılığıdır. “ΔRuin” ise parametre şokundan sonra bu olasılığın baz modele göre değişimidir ve yüzde puanla okunur. Örneğin +1.8 pp, kritik sermaye riskinin 1.8 yüzde puan arttığını gösterir.</div>
+    <div class="delta-note"><strong>ΔKritik Eşik tanımı:</strong> Kritik eşik, belirlenen sermaye seviyesine temas olasılığıdır. ΔKritik Eşik ise parametre şokundan sonra bu olasılığın baz modele göre değişimidir ve yüzde puanla okunur. Örneğin +1.8 pp, kritik sermaye riskinin 1.8 yüzde puan arttığını gösterir.</div>
     <div class="mc-sensitivity-grid" id="mcSensitivityGrid">
-      <div class="mc-sensitivity-card"><strong>Hazır</strong><span>Butona basınca gerçek MC sensitivity sonuçları burada oluşur.</span></div>
+      <div class="mc-sensitivity-card"><strong>Hazır</strong><span>Butona basınca Monte Carlo duyarlılık sonuçları burada oluşur.</span></div>
     </div>
   </section>
 
-  <section class="interpretation">
+  
+<section class="interpretation">
+
     <div class="callout model-commentary">
       <h3>Model Yorumu</h3>
       <ul id="interpretationList" class="model-insights">
@@ -2862,14 +3669,14 @@ table{width:100%;border-collapse:collapse}
     </div>
     <div class="callout">
       <h3>Parametre Mantığı</h3>
-      <p><strong>Temel Mod</strong> stratejinin edge, büyüme hızı ve hedefe ulaşma ihtimalini belirler. <strong>Trade Başına Risk</strong>, 1R kaybın sermayenin yüzde kaçı olduğunu söyler; başlangıç sermayesindeki nominal karşılığı kontrol kartında canlı gösterilir. Risk artışı bir noktaya kadar büyümeyi hızlandırabilir, fakat kritik eşiğin üzerinde drawdown, ruin olasılığı ve bileşik kayıp geometrisi hızla kötüleşebilir. <strong>Gelişmiş Risk Ayarları</strong> kötü günlerin etkisini ve dağılım genişliğini kontrol eder. Maliyet R cinsinden ölçüldüğü için stop mesafesini bilmeden equity üzerinden hatalı komisyon kesilmez.</p>
+      <p><strong>Temel Mod</strong> stratejinin avantajını, büyüme hızını ve hedefe ulaşma ihtimalini belirler. <strong>Trade Başına Risk</strong>, 1R kaybın sermayenin yüzde kaçı olduğunu söyler; başlangıç sermayesine göre nominal karşılığı kontrol kartında canlı gösterilir. Risk artışı bir noktaya kadar büyümeyi hızlandırabilir, fakat kritik eşiğin üzerinde drawdown, kritik eşik olasılığı ve bileşik kayıp geometrisi hızla kötüleşebilir. <strong>Gelişmiş Risk Ayarları</strong> kötü günlerin etkisini ve dağılım genişliğini kontrol eder. Maliyet R cinsinden ölçüldüğü için stop mesafesini bilmeden sermaye üzerinden hatalı komisyon kesilmez.</p>
     </div>
   </section>
 
   <section class="panel">
     <div class="panel-head">
       <div>
-        <div class="panel-title"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>Percentile Tablosu</div>
+        <div class="panel-title"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>Olasılık Dilimi Tablosu</div>
         <p class="panel-copy">Kötü, orta ve iyi senaryo sonuçlarını tablo halinde karşılaştırır.</p>
       </div>
     </div>
@@ -2903,39 +3710,39 @@ table{width:100%;border-collapse:collapse}
     {group:"basic",key:"tradeCostR",label:"Trade Başı Toplam Maliyet",code:"tradeCostR",min:0,max:5,step:0.01,value:0.05,suffix:"R",tone:"terra",help:"Komisyon, spread ve slippage toplamıdır. 0.05R, riske edilen tutarın %5’i kadar maliyet demektir."},
     {group:"basic",key:"targetCapital",label:"Hedef Sermaye",code:"targetCapital",min:1000,max:10000000,step:1000,value:200000,prefix:"₺",tone:"olive",help:"Simülasyon yollarında bu seviyeye en az bir kez temas edilirse hedefe ulaşmış kabul edilir."},
     {group:"basic",key:"ruinThresholdPct",label:"Kritik Sermaye Eşiği",code:"ruinThresholdPct",min:5,max:90,step:1,value:50,suffix:"%",tone:"ruby",help:"Başlangıç sermayesinin bu yüzdesinin altı kritik bölgedir. 50%, sermayenin yarıya düşmesini kritik olay sayar."},
-    {group:"advanced",key:"breakEvenRate",label:"Break-even Oranı",code:"breakEvenRate",min:0,max:40,step:1,value:5,suffix:"%",tone:"olive",help:"Ne kâr ne zarar kapanan trade oranıdır. Trade maliyeti yine düşer; bu yüzden break-even trade tamamen etkisiz değildir."},
-    {group:"advanced",key:"volatilityFactor",label:"R Dağılım Volatilitesi",code:"volatilityFactor",min:0,max:5,step:0.05,value:1,suffix:"x",tone:"terra",help:"Günlük trade sayısı değildir. Kazanç ve kayıp R sonuçlarının ortalamadan ne kadar saptığını belirleyen dağılım çarpanıdır; artarsa P5–P95 bandı genişler."},
+    {group:"advanced",key:"breakEvenRate",label:"Break-even Oranı",code:"breakEvenRate",min:0,max:40,step:1,value:5,suffix:"%",tone:"olive",help:"Ne kâr ne zarar kapanan trade oranıdır. Trade maliyeti yine düşer; bu yüzden break-even trade net R açısından hafif negatif olabilir. Win rate ile birlikte model toplamı %98 üst sınırına göre görünür biçimde sınırlar."},
+    {group:"advanced",key:"volatilityFactor",label:"R Dağılım Volatilitesi",code:"volatilityFactor",min:0,max:5,step:0.05,value:1,suffix:"x",tone:"terra",help:"Günlük trade sayısı değildir. Her trade’in gerçekleşen R sonucunun ortalama kazanç/kayıp R etrafında ne kadar saçıldığını belirler. Kazanç tarafı kırpılmış normal, kayıp tarafı lognormal kuyrukla üretildiği için artış özellikle P5, drawdown ve ruin riskini büyütebilir."},
     {group:"advanced",key:"shockProbability",label:"Şok Olasılığı",code:"shockProbability",min:0,max:20,step:0.5,value:3,suffix:"%",tone:"ruby",help:"Her işlem gününde olağan dışı kötü piyasa günü yaşanma olasılığıdır. Şoklar özellikle P5 ve drawdown metriklerini bozar."},
     {group:"advanced",key:"shockImpactR",label:"Şok Etkisi",code:"shockImpactR",min:0,max:20,step:0.25,value:2,suffix:"R",tone:"ruby",help:"Şok gününde sermayeye eklenen negatif R etkisidir. 2R şok, trade başına riskin iki katı günlük darbe demektir."},
-    {group:"advanced",key:"maxDailyLossPct",label:"Günlük Zarar Limiti",code:"maxDailyLossPct",min:0.5,max:20,step:0.25,value:5,suffix:"%",tone:"olive",help:"Gün içi zarar bu eşiğe ulaşınca o gün yeni trade açılmaz. Kötü serileri keser ama toparlanma hızını da sınırlayabilir."}
+    {group:"advanced",key:"maxDailyLossPct",label:"Günlük Zarar Limiti",code:"maxDailyLossPct",min:0.5,max:20,step:0.25,value:5,suffix:"%",tone:"olive",help:"Gün içi zarar bu eşiğe ulaşınca o gün yeni trade açılmaz. Bu bir zarar cap’i değildir; tek bir büyük kayıp veya şok eşiği aşabilir, eşik sonrası yeni işlem durur."}
   ];
 
   const scenarioPresets = [
     {
       key:"base",
-      name:"Base Case",
+      name:"Ana Senaryo",
       desc:"Normal piyasa, varsayılan edge. 6 aylık işlem takvimi, 5.000 yol ve kontrollü 1.3% risk.",
       meta:"126g · 5.000 yol · WR 55% · Risk 1.3%",
       values:{days:126,iterations:5000,tradesPerDay:3,winRate:55,avgWinR:1.8,avgLossR:1,riskPerTradePct:1.3,tradeCostR:0.05,targetCapital:200000,ruinThresholdPct:50,breakEvenRate:5,volatilityFactor:1,shockProbability:3,shockImpactR:2,maxDailyLossPct:5,riskMode:"compounding"}
     },
     {
       key:"conservative",
-      name:"Conservative",
+      name:"Koruyucu",
       desc:"Düşük risk, daha sınırlı büyüme. Sermaye koruması ve düşük günlük zarar freni önde.",
       meta:"Risk 0.6% · DD savunması · Hedef 140K",
       values:{days:126,iterations:5000,tradesPerDay:2,winRate:53,avgWinR:1.45,avgLossR:0.9,riskPerTradePct:0.6,tradeCostR:0.04,targetCapital:140000,ruinThresholdPct:60,breakEvenRate:8,volatilityFactor:0.75,shockProbability:2,shockImpactR:1.5,maxDailyLossPct:3,riskMode:"compounding"}
     },
     {
       key:"aggressive",
-      name:"Aggressive",
+      name:"Agresif",
       desc:"Yüksek risk, yüksek büyüme. İyi yollarda hızlanır; kötü yollarda drawdown sertleşir.",
       meta:"Risk 2.5% · Hedef 250K · Vol 1.2x",
       values:{days:126,iterations:5000,tradesPerDay:4,winRate:55,avgWinR:2.1,avgLossR:1,riskPerTradePct:2.5,tradeCostR:0.06,targetCapital:250000,ruinThresholdPct:45,breakEvenRate:4,volatilityFactor:1.2,shockProbability:3,shockImpactR:2,maxDailyLossPct:7.5,riskMode:"compounding"}
     },
     {
       key:"high-vol",
-      name:"High Volatility",
-      desc:"Geniş sonuç dağılımı. Edge benzer kalır ama R sonuçlarının saçılımı ve şok etkisi yükselir.",
+      name:"Yüksek Volatilite",
+      desc:"Geniş sonuç dağılımı. Avantaj benzer kalır ama R sonuçlarının saçılımı ve şok etkisi yükselir.",
       meta:"volatilityFactor 2.2x · Şok 4% / 2.5R",
       values:{days:126,iterations:5000,tradesPerDay:3,winRate:55,avgWinR:2,avgLossR:1.2,riskPerTradePct:1.3,tradeCostR:0.06,targetCapital:200000,ruinThresholdPct:50,breakEvenRate:5,volatilityFactor:2.2,shockProbability:4,shockImpactR:2.5,maxDailyLossPct:5,riskMode:"compounding"}
     },
@@ -2949,7 +3756,7 @@ table{width:100%;border-collapse:collapse}
     {
       key:"execution-stress",
       name:"Uygulama Stresi",
-      desc:"Spread, slippage ve komisyon yükü yüksek. Edge’in işlem maliyetine ne kadar duyarlı olduğunu test eder.",
+      desc:"Spread, slippage ve komisyon yükü yüksek. Avantaj’in işlem maliyetine ne kadar duyarlı olduğunu test eder.",
       meta:"tradeCostR 0.22R · WR 52% · BE 7%",
       values:{days:126,iterations:5000,tradesPerDay:3,winRate:52,avgWinR:1.7,avgLossR:1.15,riskPerTradePct:1.1,tradeCostR:0.22,targetCapital:175000,ruinThresholdPct:55,breakEvenRate:7,volatilityFactor:1.2,shockProbability:4,shockImpactR:2,maxDailyLossPct:5,riskMode:"compounding"}
     },
@@ -2986,7 +3793,7 @@ table{width:100%;border-collapse:collapse}
 
   const FIXED_OPT_SEED = 161803;
 
-  const state = {
+  const state = window.__AETHELGARD_STATE = {
     charts:{},
     last:null,
     worker:null,
@@ -3004,7 +3811,9 @@ table{width:100%;border-collapse:collapse}
     optGoal:"balanced",
     optThird:"none",
     optConstraints:{minP5:false,maxRuin:false,maxDD:false},
-    optBusy:false
+    optBusy:false,
+    seedMode:"auto",
+    seedValue:161803398
   };
 
   function $(id){ return document.getElementById(id); }
@@ -3148,9 +3957,29 @@ table{width:100%;border-collapse:collapse}
     const c = getControl(key);
     const r = $(key + "Range");
     if(!c || !r) return;
+    const spec = displaySpec(c);
     const v = parseFloat(r.value);
-    const pct = ((v - c.min) / (c.max - c.min)) * 100;
+    const pct = ((v - spec.min) / (spec.max - spec.min)) * 100;
     r.style.setProperty("--fill", clamp(pct,0,100).toFixed(2) + "%");
+  }
+
+  function enforceBreakEvenConstraint(source){
+    if(source === "constraint") return;
+    const winInput = $("winRateNumber");
+    const beInput = $("breakEvenRateNumber");
+    if(!winInput || !beInput) return;
+    const win = parseFloat(winInput.dataset.applied ?? winInput.value);
+    const be = parseFloat(beInput.dataset.applied ?? beInput.value);
+    if(!isFinite(win) || !isFinite(be)) return;
+    const maxBE = Math.max(0, 98 - win);
+    if(be > maxBE + 1e-9){
+      setParam("breakEvenRate", maxBE, "constraint");
+      const el = $("breakEvenRateApplied");
+      if(el){
+        el.textContent = `${formatControlValue(getControl("breakEvenRate"), maxBE)} uygulandı · winRate ile toplam %98 sınırı`;
+        el.closest(".applied-line")?.classList.add("warn");
+      }
+    }
   }
 
   function setParam(key, value, source){
@@ -3173,6 +4002,7 @@ table{width:100%;border-collapse:collapse}
     if(n) n.dataset.applied = String(applied);
     updateFill(key);
     updateApplied(key, applied, raw);
+    if(key === "winRate" || key === "breakEvenRate") enforceBreakEvenConstraint(source);
     if(key === "initialCapital" || key === "riskPerTradePct") updateRiskMath();
     updatePrintParams();
   }
@@ -3212,6 +4042,7 @@ table{width:100%;border-collapse:collapse}
     const rows = [
       ["Preset", state.activePresetName || "özel", "Seçili senaryo seti"],
       ["Risk Modeli", p.riskMode === "fixed" ? "Sabit risk" : "Bileşik risk", p.riskMode],
+      ["Tekrarlanabilirlik", p.seedMode === "fixed" ? String(p.simSeed) : "Otomatik", p.seedMode === "fixed" ? "Tekrarlanabilir simülasyon" : "Her koşuda yeni seed"],
       ["Gün Sayısı", formatControlValue(byKey("days"), p.days), "İşlem günü"],
       ["Simülasyon Sayısı", formatControlValue(byKey("iterations"), p.iterations), "Monte Carlo yolu"],
       ["Günlük Trade", formatControlValue(byKey("tradesPerDay"), p.tradesPerDay), "Ortalama işlem frekansı"],
@@ -3262,6 +4093,8 @@ table{width:100%;border-collapse:collapse}
     p.tradeFrequency = source.tradeFrequency === "weekly" ? "weekly" : "daily";
     p.tradesPerPeriod = p.tradeFrequency === "weekly" ? p.tradesPerDay * 5 : p.tradesPerDay;
     if(p.breakEvenRate + p.winRate > 98) p.breakEvenRate = Math.max(0, 98 - p.winRate);
+    p.seedMode = source.seedMode === "fixed" ? "fixed" : "auto";
+    p.simSeed = Math.max(1, Math.min(2147483646, Math.floor(Number(source.simSeed) || 161803398)));
     return p;
   }
 
@@ -3356,7 +4189,7 @@ table{width:100%;border-collapse:collapse}
     document.querySelectorAll(".preset-card").forEach(card => card.classList.remove("active"));
     state.activePresetName = "özel";
     const badge = $("activePresetBadge");
-    if(badge) badge.textContent = "Preset: özel";
+    if(badge) badge.textContent = "Hazır set: özel";
     updatePrintParams();
   }
 
@@ -3392,7 +4225,9 @@ function setupModes(){
         document.querySelectorAll(".mode-btn").forEach(b => b.classList.remove("active"));
         document.querySelectorAll(".mode-panel").forEach(p => p.classList.remove("active"));
         btn.classList.add("active");
-        $(btn.dataset.mode).classList.add("active");
+        const panel = $(btn.dataset.mode);
+        if(panel) panel.classList.add("active");
+        window.setTimeout(() => window.dispatchEvent(new Event("resize")), 80);
       });
     });
   }
@@ -3401,7 +4236,7 @@ function setupModes(){
     const grid = $("scenarioPresets");
     if(!grid) return;
     grid.innerHTML = scenarioPresets.map(preset => `
-      <button class="preset-card" type="button" data-preset="${preset.key}" aria-label="${preset.name} presetini uygula">
+      <button class="preset-card" type="button" data-preset="${preset.key}" aria-label="${preset.name} hazır senaryosunu uygula">
         <span class="preset-name">${preset.name}</span>
         <span class="preset-desc">${preset.desc}</span>
         <span class="preset-meta">${preset.meta}</span>
@@ -3417,7 +4252,7 @@ function setupModes(){
       if(param === "riskMode"){
         setRiskMode(value, false);
       } else if(param !== "tradeFrequency") {
-        setParam(param, value, "preset");
+        setParam(param, value, "hazır senaryo");
       }
     });
     updateRiskMath();
@@ -3426,7 +4261,7 @@ function setupModes(){
     });
     state.activePresetName = preset.name;
     const badge = $("activePresetBadge");
-    if(badge) badge.textContent = "Preset: " + preset.name;
+    if(badge) badge.textContent = "Hazır set: " + preset.name;
     const runMeta = $("runMeta");
     if(runMeta) runMeta.textContent = preset.name + " uygulandı · Çalıştır";
     updatePrintParams();
@@ -3449,12 +4284,32 @@ function setupModes(){
     const entry = parseFloat($("rEntry").value);
     const stop = parseFloat($("rStop").value);
     const target = parseFloat($("rTarget").value);
-    const risk = Math.abs(entry - stop);
-    const reward = dir === "long" ? (target - entry) : (entry - target);
-    const r = risk > 0 ? reward / risk : NaN;
+    const validation = $("rCalcValidation");
+    const apply = $("applyR");
+    const numericOk = [entry, stop, target].every(isFinite);
+    const directionOk = numericOk && (
+      dir === "long"
+        ? (stop < entry && target > entry)
+        : (stop > entry && target < entry)
+    );
+    const risk = numericOk ? Math.abs(entry - stop) : NaN;
+    const reward = numericOk ? (dir === "long" ? (target - entry) : (entry - target)) : NaN;
+    const r = directionOk && risk > 0 ? reward / risk : NaN;
+
     $("riskUnit").textContent = isFinite(risk) && risk > 0 ? fmtNum(risk,2) : "—";
-    $("targetR").textContent = isFinite(r) ? fmtNum(r,2) + "R" : "—";
+    $("targetR").textContent = isFinite(r) && r > 0 ? fmtNum(r,2) + "R" : "Geçersiz";
     $("riskReward").textContent = isFinite(r) && r > 0 ? "1 : " + fmtNum(r,2) : "Geçersiz";
+
+    if(validation){
+      validation.style.display = "block";
+      validation.classList.toggle("valid", !!(isFinite(r) && r > 0));
+      validation.textContent = isFinite(r) && r > 0
+        ? `${dir === "long" ? "Alış" : "Satış"} yön geçerli · risk birimi ${fmtNum(risk,2)} · hedef ${fmtNum(r,2)}R.`
+        : (dir === "long"
+          ? "Geçersiz long kurgusu: stop entry altında, hedef entry üstünde olmalı."
+          : "Geçersiz short kurgusu: stop entry üstünde, hedef entry altında olmalı.");
+    }
+    if(apply) apply.disabled = !(isFinite(r) && r > 0);
     return r;
   }
 
@@ -3526,6 +4381,34 @@ function setupModes(){
     return winP * p.avgWinR - lossP * p.avgLossR - p.tradeCostR;
   }
 
+  function normalPdf(x){
+    return Math.exp(-0.5 * x * x) / Math.sqrt(2 * Math.PI);
+  }
+
+  function normalCdf(x){
+    const sign = x < 0 ? -1 : 1;
+    const z = Math.abs(x) / Math.sqrt(2);
+    const t = 1 / (1 + 0.3275911 * z);
+    const a1 = 0.254829592, a2 = -0.284496736, a3 = 1.421413741, a4 = -1.453152027, a5 = 1.061405429;
+    const erf = 1 - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * Math.exp(-z * z);
+    return 0.5 * (1 + sign * erf);
+  }
+
+  function positiveNormalMeanMultiplier(sigma){
+    if(!isFinite(sigma) || sigma <= 0) return 1;
+    const z = 1 / sigma;
+    return normalCdf(z) + sigma * normalPdf(z);
+  }
+
+  function distributionAdjustedExpectedR(p){
+    const winP = p.winRate / 100;
+    const beP = p.breakEvenRate / 100;
+    const lossP = Math.max(0, 1 - winP - beP);
+    const winMultiplier = positiveNormalMeanMultiplier(0.18 * p.volatilityFactor);
+    const lossMultiplier = Math.exp(0.5 * Math.pow(0.25 * p.volatilityFactor, 2));
+    return winP * p.avgWinR * winMultiplier - lossP * p.avgLossR * lossMultiplier - p.tradeCostR;
+  }
+
   function riskAmount(equity, p){
     const base = p.riskMode === "fixed" ? p.initialCapital : equity;
     return Math.max(0, Math.min(equity, base * (p.riskPerTradePct / 100)));
@@ -3544,8 +4427,9 @@ function setupModes(){
     const dds = [];
     const tuws = [];
     const streaks = [];
+    const pathStats = [];
     let targetHits = 0, profitCount = 0, ruinCount = 0;
-    let totalTrades = 0, grossProfitR = 0, grossLossR = 0;
+    let totalTrades = 0, netProfitR = 0, netLossR = 0;
 
     for(let i=0;i<iterations;i++){
       let equity = initial;
@@ -3575,7 +4459,7 @@ function setupModes(){
           const shockLoss = risk * p.shockImpactR;
           equity = Math.max(0, equity - shockLoss);
           dailyPnl -= shockLoss;
-          grossLossR += p.shockImpactR;
+          netLossR += p.shockImpactR;
         }
 
         const trades = Math.max(0, poisson(p.tradesPerDay, rng));
@@ -3587,23 +4471,26 @@ function setupModes(){
           let r = 0;
           if(u < p.breakEvenRate){
             r = 0;
-            streak = 0;
           } else if(u < p.breakEvenRate + p.winRate){
             const noise = 1 + rng.normal() * 0.18 * p.volatilityFactor;
             r = Math.max(0, p.avgWinR * noise);
-            streak = 0;
-            grossProfitR += r;
           } else {
             const lossMultiplier = Math.max(0.01, Math.exp(rng.normal() * 0.25 * p.volatilityFactor));
             r = -p.avgLossR * lossMultiplier;
-            streak += 1;
-            maxStreak = Math.max(maxStreak, streak);
-            grossLossR += Math.abs(r);
           }
 
           const risk = riskAmount(equity, p);
           const netR = r - p.tradeCostR;
-          grossLossR += p.tradeCostR;
+          if(netR > 0){
+            netProfitR += netR;
+            streak = 0;
+          } else if(netR < 0){
+            netLossR += Math.abs(netR);
+            streak += 1;
+            maxStreak = Math.max(maxStreak, streak);
+          } else {
+            streak = 0;
+          }
           const pnl = risk * netR;
           equity = Math.max(0, equity + pnl);
           dailyPnl += pnl;
@@ -3630,6 +4517,7 @@ function setupModes(){
       dds.push(maxDD);
       tuws.push(maxTUW);
       streaks.push(maxStreak);
+      pathStats.push({final:equity,maxDD,maxStreak,maxTUW,hitTarget,hitRuin,profitable:equity > initial});
       if(hitTarget) targetHits += 1;
       if(hitRuin) ruinCount += 1;
       if(equity > initial) profitCount += 1;
@@ -3649,16 +4537,17 @@ function setupModes(){
     const avgStreak = streaks.reduce((a,b)=>a+b,0) / streaks.length;
     const maxStreak = streaks[streaks.length-1] || 0;
     const er = expectedR(p);
+    const erAdjusted = distributionAdjustedExpectedR(p);
     const targetProb = targetHits / iterations * 100;
     const profitProb = profitCount / iterations * 100;
     const ruinProb = ruinCount / iterations * 100;
-    const pf = grossLossR > 0 ? grossProfitR / grossLossR : 0;
+    const pf = netLossR > 0 ? netProfitR / netLossR : (netProfitR > 0 ? Infinity : 0);
     const health = clamp(
-      50 + er * 22 + (profitProb - 50) * .24 + targetProb * .10 - ruinProb * .45 - Math.max(0, avgDD - 18) * .50 - Math.max(0, avgTUW - 45) * .10,
+      50 + erAdjusted * 22 + (profitProb - 50) * .24 + targetProb * .10 - ruinProb * .45 - Math.max(0, avgDD - 18) * .50 - Math.max(0, avgTUW - 45) * .10,
       0, 100
     );
 
-    return {p, seed:rng.seed, finals, dds, tuws, streaks, p5,p25,p50,p75,p95,mean,avgDD,worstDD,avgTUW,maxTUW,avgStreak,maxStreak,er,targetProb,profitProb,ruinProb,pf,health,totalTrades};
+    return {p, seed:rng.seed, finals, dds, tuws, streaks, pathStats, p5,p25,p50,p75,p95,mean,avgDD,worstDD,avgTUW,maxTUW,avgStreak,maxStreak,er,erAdjusted,targetProb,profitProb,ruinProb,pf,health,totalTrades};
   }
 
   function runSimulation(){
@@ -3671,7 +4560,7 @@ function setupModes(){
       return null;
     }
 
-    const rng = createRng();
+    const rng = createRng(p.seedMode === "fixed" ? p.simSeed : undefined);
     const days = Math.round(p.days);
     const iterations = Math.round(p.iterations);
     const initial = p.initialCapital;
@@ -3682,8 +4571,9 @@ function setupModes(){
     const streaks = [];
     const paths = [];
     const ddPaths = [];
+    const pathStats = [];
     let targetHits = 0, profitCount = 0, ruinCount = 0;
-    let totalTrades = 0, grossProfitR = 0, grossLossR = 0;
+    let totalTrades = 0, netProfitR = 0, netLossR = 0;
 
     for(let i=0;i<iterations;i++){
       let equity = initial;
@@ -3718,7 +4608,7 @@ function setupModes(){
           const shockLoss = risk * p.shockImpactR;
           equity = Math.max(0, equity - shockLoss);
           dailyPnl -= shockLoss;
-          grossLossR += p.shockImpactR;
+          netLossR += p.shockImpactR;
         }
 
         const trades = Math.max(0, poisson(p.tradesPerDay, rng));
@@ -3730,23 +4620,26 @@ function setupModes(){
           let r = 0;
           if(u < p.breakEvenRate){
             r = 0;
-            streak = 0;
           } else if(u < p.breakEvenRate + p.winRate){
             const noise = 1 + rng.normal() * 0.18 * p.volatilityFactor;
             r = Math.max(0, p.avgWinR * noise);
-            streak = 0;
-            grossProfitR += r;
           } else {
             const lossMultiplier = Math.max(0.01, Math.exp(rng.normal() * 0.25 * p.volatilityFactor));
             r = -p.avgLossR * lossMultiplier;
-            streak += 1;
-            maxStreak = Math.max(maxStreak, streak);
-            grossLossR += Math.abs(r);
           }
 
           const risk = riskAmount(equity, p);
           const netR = r - p.tradeCostR;
-          grossLossR += p.tradeCostR;
+          if(netR > 0){
+            netProfitR += netR;
+            streak = 0;
+          } else if(netR < 0){
+            netLossR += Math.abs(netR);
+            streak += 1;
+            maxStreak = Math.max(maxStreak, streak);
+          } else {
+            streak = 0;
+          }
           const pnl = risk * netR;
           equity = Math.max(0, equity + pnl);
           dailyPnl += pnl;
@@ -3777,6 +4670,7 @@ function setupModes(){
       streaks.push(maxStreak);
       paths.push(path);
       ddPaths.push(ddPath);
+      pathStats.push({index:i,final:equity,maxDD,maxStreak,maxTUW,hitTarget,hitRuin,profitable:equity > initial});
       if(hitTarget) targetHits += 1;
       if(hitRuin) ruinCount += 1;
       if(equity > initial) profitCount += 1;
@@ -3796,16 +4690,17 @@ function setupModes(){
     const avgStreak = streaks.reduce((a,b)=>a+b,0) / streaks.length;
     const maxStreak = streaks[streaks.length-1] || 0;
     const er = expectedR(p);
+    const erAdjusted = distributionAdjustedExpectedR(p);
     const targetProb = targetHits / iterations * 100;
     const profitProb = profitCount / iterations * 100;
     const ruinProb = ruinCount / iterations * 100;
-    const pf = grossLossR > 0 ? grossProfitR / grossLossR : 0;
+    const pf = netLossR > 0 ? netProfitR / netLossR : (netProfitR > 0 ? Infinity : 0);
     const health = clamp(
-      50 + er * 22 + (profitProb - 50) * .24 + targetProb * .10 - ruinProb * .45 - Math.max(0, avgDD - 18) * .50 - Math.max(0, avgTUW - 45) * .10,
+      50 + erAdjusted * 22 + (profitProb - 50) * .24 + targetProb * .10 - ruinProb * .45 - Math.max(0, avgDD - 18) * .50 - Math.max(0, avgTUW - 45) * .10,
       0, 100
     );
 
-    const result = {p, seed:rng.seed, paths, ddPaths, finals, dds, tuws, streaks, p5,p25,p50,p75,p95,mean,avgDD,worstDD,avgTUW,maxTUW,avgStreak,maxStreak,er,targetProb,profitProb,ruinProb,pf,health,totalTrades};
+    const result = {p, seed:rng.seed, paths, ddPaths, pathStats, finals, dds, tuws, streaks, p5,p25,p50,p75,p95,mean,avgDD,worstDD,avgTUW,maxTUW,avgStreak,maxStreak,er,erAdjusted,targetProb,profitProb,ruinProb,pf,health,totalTrades};
     state.last = result;
     return result;
   }
@@ -3909,7 +4804,7 @@ function setupModes(){
 
   function sensitivity(result){
     const p = result.p;
-    const er = Math.abs(expectedR(p));
+    const er = Math.abs(distributionAdjustedExpectedR(p));
     const lossProb = Math.max(0, 1 - p.winRate/100 - p.breakEvenRate/100);
     const distributionWidth = Math.max(0, (result.p95 - result.p5) / Math.max(result.p50, 1));
     const nominalRisk = p.initialCapital * p.riskPerTradePct / 100;
@@ -3944,7 +4839,7 @@ function setupModes(){
         score:lossProb * 44 + result.avgDD * .10,
         value:fmtNum(p.avgLossR,2) + "R",
         reading:"Kaybeden trade başına ortalama hasardır.",
-        action:"Stop violation, geç çıkış ve kötü execution bu değeri yükseltir; drawdown ve ruin olasılığı üzerinde sert etkisi olabilir."
+        action:"Stop violation, geç çıkış ve kötü execution bu değeri yükseltir; drawdown ve kritik eşik olasılığı üzerinde sert etkisi olabilir."
       },
       {
         key:"tradeCostR",
@@ -3976,7 +4871,7 @@ function setupModes(){
         score:p.tradesPerDay * (Math.abs(er) + p.tradeCostR) * 2.2,
         value:fmtNum(p.tradesPerDay,2) + " trade/gün",
         reading:"Her gün ortalama kaç işlem açıldığını belirler.",
-        action:"Edge pozitifse fırsat sayısını artırır; maliyet veya avgLossR yüksekse aynı hızla sürtünmeyi ve hata birikimini de büyütür."
+        action:"Avantaj pozitifse fırsat sayısını artırır; maliyet veya avgLossR yüksekse aynı hızla sürtünmeyi ve hata birikimini de büyütür."
       },
       {
         key:"breakEvenRate",
@@ -4240,7 +5135,7 @@ function renderCharts(result){
       return;
     }
     state.mcSensitivityBusy = true;
-    if(status) status.textContent = "Gerçek MC sensitivity çalışıyor";
+    if(status) status.textContent = "Monte Carlo duyarlılık çalışıyor";
     const btn = $("runRealSensitivity");
     if(btn) btn.disabled = true;
 
@@ -4300,7 +5195,7 @@ function renderCharts(result){
         }
         if(status) status.textContent = `${sensitivityIterations.toLocaleString("tr-TR")} yol · aynı seed · ${rows.length} parametre`;
       } catch(err){
-        if(status) status.textContent = "Sensitivity hatası";
+        if(status) status.textContent = "Duyarlılık hatası";
         console.error(err);
       } finally {
         state.mcSensitivityBusy = false;
@@ -4313,11 +5208,11 @@ function renderCharts(result){
 
   function optGoalMeta(goal){
     const map = {
-      balanced:{code:"dengeli", help:"Dengeli hedef; profit factor, drawdown ve kritik sermaye riskini birlikte dengeler."},
+      balanced:{code:"dengeli", help:"Dengeli hedef; net kâr faktörü, drawdown ve kritik sermaye riskini birlikte dengeler."},
       target:{code:"hedefe_ulaşma", help:"Hedefe ulaşma olasılığını maksimize eder. Kısıt kapalıysa kötü senaryo riski ikinci planda kalabilir."},
       ruin:{code:"ruin_minimize", help:"Kritik sermaye eşiğine temas olasılığını minimize eder. Büyüme yerine sermaye savunması öne çıkar."},
       drawdown:{code:"drawdown_minimize", help:"Ortalama maksimum drawdown değerini minimize eder. Daha sakin ama daha yavaş kombinasyonlar öne çıkabilir."},
-      riskAdjusted:{code:"risk_adjusted", help:"Expected R / drawdown dengesiyle risk başına verimi maksimize eder."},
+      riskAdjusted:{code:"risk_adjusted", help:"Beklenen R / drawdown dengesiyle risk başına verimi maksimize eder."},
       p5p75:{code:"p5_koruyarak_p75", help:"P5 kötü senaryo eşiğini koruyarak P75 güçlü senaryo sonucunu büyütür."},
       median:{code:"medyan_maksimize", help:"P50 medyan final sermayeyi maksimize eder. Kısıt yoksa kuyruk riski ihmal edilebilir."}
     };
@@ -4388,10 +5283,11 @@ function renderCharts(result){
   function optEstimateMetrics(params){
     const p = normalizeParams(params);
     const er = expectedR(p);
+    const erAdjusted = distributionAdjustedExpectedR(p);
     const expectedTrades = Math.max(0, p.days * p.tradesPerDay);
     const risk = p.riskPerTradePct / 100;
     const vol = Math.max(.15, p.volatilityFactor || 1);
-    const drift = er * expectedTrades * risk;
+    const drift = erAdjusted * expectedTrades * risk;
     const sigma = Math.sqrt(Math.max(1, expectedTrades)) * risk * (0.9 + vol * 0.55 + (p.shockProbability/100) * Math.max(0,p.shockImpactR));
     const medianMultiplier = Math.exp(drift - 0.5 * sigma * sigma * .18);
     const p50 = p.initialCapital * medianMultiplier;
@@ -4399,14 +5295,14 @@ function renderCharts(result){
     const p75 = Math.max(0, p.initialCapital * Math.exp(drift + 0.67 * sigma));
     const ddFromRisk = p.riskPerTradePct * Math.sqrt(Math.max(1, expectedTrades)) * (0.75 + vol * .45);
     const ddFromShock = p.shockProbability * p.shockImpactR * .25;
-    const avgDD = clamp(ddFromRisk + ddFromShock - Math.max(0, er) * 6, 0, 99);
+    const avgDD = clamp(ddFromRisk + ddFromShock - Math.max(0, erAdjusted) * 6, 0, 99);
     const ruinLevel = p.initialCapital * (p.ruinThresholdPct / 100);
     const p5Gap = (ruinLevel - p5) / Math.max(p.initialCapital,1);
-    const ruinProb = clamp((1 / (1 + Math.exp(-p5Gap * 10))) * 100 + Math.max(0, avgDD - 35) * .45 - Math.max(0, er) * 3, 0, 100);
+    const ruinProb = clamp((1 / (1 + Math.exp(-p5Gap * 10))) * 100 + Math.max(0, avgDD - 35) * .45 - Math.max(0, erAdjusted) * 3, 0, 100);
     const targetGap = (p50 - p.targetCapital) / Math.max(p.targetCapital,1);
     const targetProb = clamp((1 / (1 + Math.exp(-targetGap * 6))) * 100 + Math.max(0, p75 - p.targetCapital) / Math.max(p.targetCapital,1) * 18, 0, 100);
-    const profitFactor = Math.max(0, (p.winRate/100 * p.avgWinR) / Math.max(.001, (1 - p.winRate/100 - p.breakEvenRate/100) * p.avgLossR + p.tradeCostR));
-    return {p, p5, p50, p75, avgDD, ruinProb, targetProb, er, pf:profitFactor, fast:true};
+    const profitFactor = Math.max(0, (p.winRate/100 * Math.max(0, p.avgWinR - p.tradeCostR)) / Math.max(.001, Math.max(0, 1 - p.winRate/100 - p.breakEvenRate/100) * (p.avgLossR * Math.exp(0.5 * Math.pow(0.25 * p.volatilityFactor, 2)) + p.tradeCostR) + (p.breakEvenRate/100) * p.tradeCostR));
+    return {p, p5, p50, p75, avgDD, ruinProb, targetProb, er, erAdjusted, pf:profitFactor, fast:true};
   }
 
   function optScore(metrics, goal, constraints){
@@ -4426,7 +5322,7 @@ function renderCharts(result){
         score = -metrics.avgDD;
         break;
       case "riskAdjusted":
-        score = metrics.er / Math.max(metrics.avgDD / 100, .01);
+        score = (metrics.erAdjusted ?? metrics.er) / Math.max(metrics.avgDD / 100, .01);
         break;
       case "p5p75": {
         const minP5 = constraints.minP5 !== null ? constraints.minP5 : metrics.p.initialCapital * .60;
@@ -4547,7 +5443,7 @@ function renderCharts(result){
     state.optBusy = true;
     const btn = $("optRunMC");
     if(btn) btn.disabled = true;
-    optSetProgress(true, 8, "Top 5 MC doğrulanıyor");
+    optSetProgress(true, 8, "İlk 5 MC doğrulanıyor");
 
     window.setTimeout(() => {
       try{
@@ -4563,11 +5459,11 @@ function renderCharts(result){
         state.optResults = {...state.optResults, rows:[...verified, ...rest], mcIterations:iterations};
         state.optSelectedIndex = 0;
         optRenderResults(state.optResults);
-        optSetProgress(true, 100, "MC doğrulama tamamlandı");
+        optSetProgress(true, 100, "Monte Carlo doğrulama tamamlandı");
         window.setTimeout(()=>optSetProgress(false, 0, ""), 550);
       } catch(err){
         console.error(err);
-        optSetProgress(true, 100, "MC doğrulama hatası");
+        optSetProgress(true, 100, "Monte Carlo doğrulama hatası");
       } finally {
         state.optBusy = false;
         if(btn) btn.disabled = false;
@@ -4579,7 +5475,7 @@ function renderCharts(result){
     const third = row.thirdKey && row.thirdKey !== "none" && row.z !== null
       ? ` · ${row.thirdKey === "tradeCostR" ? "Maliyet " + fmtNum(row.z,2) + "R" : "Frekans " + fmtNum(row.z, row.z < 1 ? 2 : 1) + "/gün"}`
       : "";
-    return `Risk ${fmtPct(row.p.riskPerTradePct,1)} · AvgWinR ${fmtNum(row.p.avgWinR,2)}R${third}`;
+    return `Risk ${fmtPct(row.p.riskPerTradePct,1)} · Ort. Kazanç R ${fmtNum(row.p.avgWinR,2)}R${third}`;
   }
 
   function optRenderResults(pack){
@@ -4601,7 +5497,7 @@ function renderCharts(result){
     const summary = $("optComboSummary");
     if(summary){
       summary.classList.remove("warn");
-      const mc = pack.mcIterations ? ` · Top 5 MC doğrulandı (${pack.mcIterations.toLocaleString("tr-TR")} yol)` : "";
+      const mc = pack.mcIterations ? ` · İlk 5 MC doğrulandı (${pack.mcIterations.toLocaleString("tr-TR")} yol)` : "";
       const elim = pack.eliminated?.total ? ` · ${pack.eliminated.total} kombinasyon kısıt nedeniyle elendi` : "";
       summary.textContent = `${pack.cfg.total.toLocaleString("tr-TR")} kombinasyon tarandı${elim}${mc}`;
     }
@@ -4616,7 +5512,7 @@ function renderCharts(result){
       return;
     }
     if(main) main.textContent = `${fmtPct(row.p.riskPerTradePct,1)} risk · ${fmtNum(row.p.avgWinR,2)}R avgWin`;
-    if(sub) sub.innerHTML = `Skor <strong class="mono">${optScoreDisplay(row)}</strong> · P50 <strong class="mono">${fmtMoney(row.metrics.p50)}</strong> · P5 <strong class="mono">${fmtMoney(row.metrics.p5)}</strong> · Ruin <strong class="mono">${fmtPct(row.metrics.ruinProb,1)}</strong> · ExpR <strong class="mono">${fmtNum(row.metrics.er,2)}R</strong>${row.verified ? " · MC doğrulandı" : " · hızlı tahmin"}`;
+    if(sub) sub.innerHTML = `Skor <strong class="mono">${optScoreDisplay(row)}</strong> · P50 <strong class="mono">${fmtMoney(row.metrics.p50)}</strong> · P5 <strong class="mono">${fmtMoney(row.metrics.p5)}</strong> · Ruin <strong class="mono">${fmtPct(row.metrics.ruinProb,1)}</strong> · Adj. Beklenen R <strong class="mono">${fmtNum(row.metrics.erAdjusted ?? row.metrics.er,2)}R</strong>${row.verified ? " · MC doğrulandı" : " · hızlı tahmin"}`;
   }
 
   function optRenderTable(topRows){
@@ -4634,7 +5530,7 @@ function renderCharts(result){
         <td class="mono">${fmtMoney(row.metrics.p50)}</td>
         <td class="mono">${fmtMoney(row.metrics.p5)}</td>
         <td class="mono">${fmtPct(row.metrics.ruinProb,1)}</td>
-        <td class="mono">${fmtNum(row.metrics.er,2)}R</td>
+        <td class="mono">${fmtNum(row.metrics.erAdjusted ?? row.metrics.er,2)}R</td>
         <td class="mono">${optScoreDisplay(row)}</td>
       </tr>
     `).join("");
@@ -4671,9 +5567,9 @@ function renderCharts(result){
     if(note){
       if(cfg.thirdKey && cfg.thirdKey !== "none"){
         const label = cfg.thirdKey === "tradeCostR" ? "Maliyet R" : "Trade frekansı";
-        note.innerHTML = `<strong>${label} aktif:</strong> Isı haritası hâlâ Risk × AvgWinR düzlemini gösterir; her hücrede bu iki değer için en yüksek skoru veren ${label.toLowerCase()} seçimi küçük etiket olarak yazılır.`;
+        note.innerHTML = `<strong>${label} aktif:</strong> Isı haritası hâlâ Risk × Ort. Kazanç R düzlemini gösterir; her hücrede bu iki değer için en yüksek skoru veren ${label.toLowerCase()} seçimi küçük etiket olarak yazılır.`;
       } else {
-        note.innerHTML = `<strong>2D tarama:</strong> Her hücre doğrudan Risk × AvgWinR kombinasyonunun skorunu gösterir. Üçüncü parametre kapalı.`;
+        note.innerHTML = `<strong>2D tarama:</strong> Her hücre doğrudan Risk × Ort. Kazanç R kombinasyonunun skorunu gösterir. Üçüncü parametre kapalı.`;
       }
     }
 
@@ -4696,7 +5592,7 @@ function renderCharts(result){
     };
 
     let html = `<div class="opt-heatmap-grid" style="grid-template-columns:76px repeat(${xs.length}, minmax(54px,1fr));">`;
-    html += `<div class="opt-heatmap-axis">AvgWinR ↓ / Risk →</div>`;
+    html += `<div class="opt-heatmap-axis">Ort. Kazanç R ↓ / Risk →</div>`;
     xs.forEach(x => html += `<div class="opt-heatmap-axis">${fmtPct(x,1)}</div>`);
     ys.forEach(y => {
       html += `<div class="opt-heatmap-axis">${fmtNum(y,2)}R</div>`;
@@ -4745,18 +5641,18 @@ function renderCharts(result){
     const eligibleRows = pack.rows.filter(x=>x.eligible);
     const eliminated = pack.eliminated || {total:0};
     const verified = row.verified
-      ? `Bu satır <strong>gerçek lite MC doğrulamasından</strong> geçti; P5/P50/Ruin okumaları hızlı tahmine göre daha güvenilir.`
-      : `Bu okuma <strong>hızlı analitik taramadır</strong>; nihai karar öncesi Top 5'i MC ile Doğrula butonuyla teyit et.`;
+      ? `Bu satır <strong>gerçek lite Monte Carlo doğrulamasından</strong> geçti; P5/P50/Ruin okumaları hızlı tahmine göre daha güvenilir.`
+      : `Bu okuma <strong>hızlı analitik taramadır</strong>; nihai karar öncesi İlk 5'i Monte Carlo ile Doğrula butonuyla teyit et.`;
 
     const constraintText = [];
     if(pack.cfg.constraints.minP5 !== null) constraintText.push(`P5 ≥ ${fmtMoney(pack.cfg.constraints.minP5)}`);
     if(pack.cfg.constraints.maxRuin !== null) constraintText.push(`Ruin ≤ ${fmtPct(pack.cfg.constraints.maxRuin,1)}`);
     if(pack.cfg.constraints.maxDD !== null) constraintText.push(`Ort. DD ≤ ${fmtPct(pack.cfg.constraints.maxDD,1)}`);
 
-    let thirdText = "Üçüncü parametre kapalı; öneri yalnızca Risk/Trade ve AvgWinR ekseninde okunmalı.";
+    let thirdText = "Üçüncü parametre kapalı; öneri yalnızca Risk/Trade ve Ort. Kazanç R ekseninde okunmalı.";
     if(row.thirdKey && row.thirdKey !== "none" && row.z !== null){
       thirdText = row.thirdKey === "tradeCostR"
-        ? `Bu hücrede öne çıkan üçüncü tercih <strong>Maliyet ${fmtNum(row.z,2)}R</strong>. Maliyet yükseldikçe aynı AvgWinR hedefinin daha seçici trade kalitesiyle desteklenmesi gerekir.`
+        ? `Bu hücrede öne çıkan üçüncü tercih <strong>Maliyet ${fmtNum(row.z,2)}R</strong>. Maliyet yükseldikçe aynı Ort. Kazanç R hedefinin daha seçici trade kalitesiyle desteklenmesi gerekir.`
         : `Bu hücrede öne çıkan üçüncü tercih <strong>Frekans ${fmtNum(row.z, row.z < 1 ? 2 : 1)} trade/gün</strong>. Frekans artışı P50'yi büyütebilir fakat drawdown ve ruin kuyruklarını da hızlandırabilir.`;
     }
 
@@ -4767,10 +5663,10 @@ function renderCharts(result){
         : `Risk mevcut ayarla aynı bölgede; önerinin ana farkı daha çok R profili ve kısıt dengesinden geliyor.`;
 
     const winSentence = winMove > .05
-      ? `AvgWinR hedefi mevcut ayardan <strong>${fmtNum(winMove,2)}R yüksek</strong>; bu mekanik olarak daha iyi hedef/stop oranı veya daha seçici trade filtresi gerektirir.`
+      ? `Ort. Kazanç R hedefi mevcut ayardan <strong>${fmtNum(winMove,2)}R yüksek</strong>; bu mekanik olarak daha iyi hedef/stop oranı veya daha seçici trade filtresi gerektirir.`
       : winMove < -.05
-        ? `AvgWinR hedefi mevcut ayardan <strong>${fmtNum(Math.abs(winMove),2)}R düşük</strong>; model daha sık ama daha mütevazı kâr profiline tolerans gösteriyor.`
-        : `AvgWinR mevcut ayara çok yakın; sonuç daha çok risk yüzdesi ve kısıt seçiminden etkileniyor.`;
+        ? `Ort. Kazanç R hedefi mevcut ayardan <strong>${fmtNum(Math.abs(winMove),2)}R düşük</strong>; model daha sık ama daha mütevazı kâr profiline tolerans gösteriyor.`
+        : `Ort. Kazanç R mevcut ayara çok yakın; sonuç daha çok risk yüzdesi ve kısıt seçiminden etkileniyor.`;
 
     const constraintSentence = constraintText.length
       ? `Aktif kısıtlar: <strong>${constraintText.join(" · ")}</strong>. ${eliminated.total ? `<strong>${eliminated.total}</strong> kombinasyon elendi; bu, önerinin sadece yüksek getiri değil, tanımlı risk sınırları içinde seçildiğini gösterir.` : "Hiçbir kombinasyon elenmedi; kısıtlar bu aralıkta gevşek kalıyor."}`
@@ -4787,7 +5683,7 @@ function renderCharts(result){
       </div>
       <div class="opt-narrative-section action">
         <span class="opt-narrative-kicker">Karar notu</span>
-        ${constraintSentence} ${verified} ${eligibleRows.length ? `Top 5 içinde yakın skorlar varsa tek satıra değil, P5/Ruin dengesine göre seçim yap.` : ""}
+        ${constraintSentence} ${verified} ${eligibleRows.length ? `İlk 5 içinde yakın skorlar varsa tek satıra değil, P5/Ruin dengesine göre seçim yap.` : ""}
       </div>`;
   }
 
@@ -4801,7 +5697,7 @@ function renderCharts(result){
     const eligible = pack.rows.filter(x=>x.eligible);
     const rank = scoring.eligible ? 1 + eligible.filter(x => (x.score ?? -Infinity) > (scoring.score ?? -Infinity)).length : null;
     el.innerHTML = scoring.eligible
-      ? `Mevcut ayarınız <strong class="mono">Risk ${fmtPct(current.riskPerTradePct,1)} · AvgWinR ${fmtNum(current.avgWinR,2)}R</strong> bu taramada yaklaşık <strong>#${rank}</strong> olurdu. Skor: <strong class="mono">${optScoreDisplay({score:scoring.score})}</strong>.`
+      ? `Mevcut ayarınız <strong class="mono">Risk ${fmtPct(current.riskPerTradePct,1)} · Ort. Kazanç R ${fmtNum(current.avgWinR,2)}R</strong> bu taramada yaklaşık <strong>#${rank}</strong> olurdu. Skor: <strong class="mono">${optScoreDisplay({score:scoring.score})}</strong>.`
       : `Mevcut ayarınız aktif kısıtları karşılamıyor; bu yüzden tarama listesinde sıralanmaz.`;
   }
 
@@ -4863,7 +5759,7 @@ function renderCharts(result){
     const btn = document.querySelector(`[data-opt-constraint="${key}"]`);
     const row = document.querySelector(`[data-opt-constraint-row="${key}"]`);
     const input = key === "minP5" ? $("optMinP5") : key === "maxRuin" ? $("optMaxRuin") : $("optMaxDD");
-    const labels = {minP5:["P5 Minimum Kapalı","P5 Minimum Açık"],maxRuin:["Ruin Maks. Kapalı","Ruin Maks. Açık"],maxDD:["Max DD Kapalı","Max DD Açık"]};
+    const labels = {minP5:["P5 Minimum Kapalı","P5 Minimum Açık"],maxRuin:["Kritik Eşik Maks. Kapalı","Kritik Eşik Maks. Açık"],maxDD:["Maksimum Drawdown Kapalı","Max DD Açık"]};
     if(btn){
       btn.classList.toggle("active", active);
       btn.setAttribute("aria-pressed", active ? "true" : "false");
@@ -4925,7 +5821,9 @@ function renderCharts(result){
     $("hudTarget").textContent = fmtPct(result.targetProb,1);
     $("hudProfit").textContent = fmtPct(result.profitProb,1);
     $("hudRuin").textContent = fmtPct(result.ruinProb,1);
-    $("hudER").textContent = fmtNum(result.er,2) + "R";
+    $("hudER").textContent = fmtNum(result.erAdjusted ?? result.er,2) + "R";
+    const hudERSub = $("hudERSub");
+    if(hudERSub) hudERSub.textContent = "Teorik: " + fmtNum(result.er,2) + "R · Net PF: " + (isFinite(result.pf) ? fmtNum(result.pf,2) : "∞");
     $("hudHealth").textContent = Math.round(result.health) + "/100";
 
     $("p5Final").textContent = fmtMoney(result.p5);
@@ -4938,7 +5836,16 @@ function renderCharts(result){
     $("avgTUW").textContent = Math.round(result.avgTUW) + " gün";
     $("maxTUW").textContent = Math.round(result.maxTUW) + " gün";
     $("maxStreak").textContent = Math.round(result.maxStreak) + " trade";
-    $("runMeta").textContent = `${Math.round(result.p.iterations).toLocaleString("tr-TR")} yol · ${Math.round(result.totalTrades).toLocaleString("tr-TR")} trade`;
+    if($("theoreticalER")) $("theoreticalER").textContent = fmtNum(result.er,2) + "R";
+    if($("adjustedER")) $("adjustedER").textContent = fmtNum(result.erAdjusted ?? result.er,2) + "R";
+    if($("netPF")) $("netPF").textContent = isFinite(result.pf) ? fmtNum(result.pf,2) : "∞";
+    const edgeNote = $("edgeNote");
+    if(edgeNote){
+      const gap = (result.erAdjusted ?? result.er) - result.er;
+      const sign = gap >= 0 ? "+" : "";
+      edgeNote.innerHTML = `<strong>Avantaj notu:</strong> Teorik Beklenen R <span class="mono">${fmtNum(result.er,2)}R</span>; dağılım-ayarlı Beklenen R <span class="mono">${fmtNum(result.erAdjusted ?? result.er,2)}R</span>. Volatilite kaynaklı fark <span class="mono">${sign}${fmtNum(gap,2)}R</span>. Net PF, maliyet sonrası pozitif R toplamının negatif R toplamına oranıdır.`;
+    }
+    $("runMeta").textContent = `${Math.round(result.p.iterations).toLocaleString("tr-TR")} yol · ${Math.round(result.totalTrades).toLocaleString("tr-TR")} trade · seed ${result.seed}${result.p.seedMode === "fixed" ? " sabit" : " auto"}`;
 
     const rows = [
       ["P5", result.p5],
@@ -4966,9 +5873,10 @@ function renderCharts(result){
     const ruin = Number(result.ruinProb) || 0;
     const maxTUW = Number(result.maxTUW) || 0;
     const underwaterShare = p.days > 0 ? maxTUW / p.days : 0;
+    const edgeAdj = Number(result.erAdjusted ?? result.er) || 0;
 
     function toneByScore(kind){
-      if(kind === "edge") return result.er <= 0 ? "ruby" : (result.er >= .35 ? "olive" : "gold");
+      if(kind === "edge") return edgeAdj <= 0 ? "ruby" : (edgeAdj >= .35 ? "olive" : "gold");
       if(kind === "risk") return (riskPct >= 25 || avgDD >= 45 || ruin >= 25) ? "ruby" : ((riskPct >= 5 || avgDD >= 30 || ruin >= 15) ? "terra" : "olive");
       if(kind === "p5") return p5Ratio < .7 ? "ruby" : (p5Ratio < 1 ? "gold" : "olive");
       if(kind === "tuw") return underwaterShare > .45 ? "terra" : (underwaterShare > .25 ? "gold" : "olive");
@@ -4993,7 +5901,7 @@ function renderCharts(result){
         </div>`;
     }
 
-    const summaryTone = result.er > 0 && result.targetProb >= 60 && p5Ratio >= .7 ? "Strateji pozitif" : (result.er <= 0 || p5Ratio < .7 ? "Dikkat" : "İzleme");
+    const summaryTone = edgeAdj > 0 && result.targetProb >= 60 && p5Ratio >= .7 ? "Strateji pozitif" : (edgeAdj <= 0 || p5Ratio < .7 ? "Dikkat" : "İzleme");
     const summaryClass = summaryTone === "Strateji pozitif" ? "olive" : (summaryTone === "Dikkat" ? "ruby" : "gold");
     const summary = `
       <div class="model-compact-head">
@@ -5004,7 +5912,7 @@ function renderCharts(result){
         <span class="model-status-badge ${summaryClass}">${summaryTone}</span>
       </div>
       <div class="model-compact-metrics">
-        <div class="model-compact-metric"><span>Expected R</span><strong>${fmtNum(result.er,2)}R</strong></div>
+        <div class="model-compact-metric"><span>Adj. Beklenen R</span><strong>${fmtNum(edgeAdj,2)}R</strong></div>
         <div class="model-compact-metric"><span>P5 Final</span><strong>${fmtMoney(result.p5)}</strong></div>
         <div class="model-compact-metric"><span>Hedefe Ulaşma</span><strong>${fmtPct(result.targetProb,1)}</strong></div>
         <div class="model-compact-metric"><span>Max Sualtı</span><strong>${Math.round(maxTUW)} gün</strong></div>
@@ -5012,23 +5920,23 @@ function renderCharts(result){
       <div class="model-compact-lines">`;
     const items = [summary];
 
-    if(result.er <= 0){
+    if(edgeAdj <= 0){
       items.push(insight(
         "ruby",
         "EDGE",
-        `${fmtNum(result.er,2)}R`,
-        "Trade başına edge negatif",
-        `Bu parametre setinde stratejinin trade başına edge’i <span class="bad">negatif</span>. Win rate, ortalama kazanç R veya maliyet R düzelmeden dağılım sermaye büyümesini desteklemiyor.`,
-        [{label:"Win rate",value:fmtPct(p.winRate,1)},{label:"AvgWinR",value:`${fmtNum(p.avgWinR,2)}R`},{label:"Maliyet",value:`${fmtNum(p.tradeCostR,2)}R`}]
+        `${fmtNum(edgeAdj,2)}R`,
+        "Dağılım-ayarlı edge negatif",
+        `Bu parametre setinde dağılım-ayarlı trade başına edge <span class="bad">negatif</span>. Win rate, ortalama kazanç R, kayıp kuyruğu veya maliyet R düzelmeden dağılım sermaye büyümesini desteklemiyor.`,
+        [{label:"Win rate",value:fmtPct(p.winRate,1)},{label:"Ort. Kazanç R",value:`${fmtNum(p.avgWinR,2)}R`},{label:"Maliyet",value:`${fmtNum(p.tradeCostR,2)}R`}]
       ));
     } else {
       items.push(insight(
         toneByScore("edge"),
         "EDGE",
-        `+${fmtNum(result.er,2)}R`,
-        "Pozitif teorik edge var",
-        `Bu model sonucuna göre trade başına expected R <span class="good">pozitif</span>: <span class="em">${fmtNum(result.er,2)}R</span>. Bu, stratejinin teorik avantaj ürettiğini gösterir; yine de bu avantajın sürdürülebilirliği maliyet, R dağılımı ve trade frekansıyla birlikte okunmalı.`,
-        [{label:"Expected R",value:`${fmtNum(result.er,2)}R`},{label:"Maliyet sonrası",value:"net"},{label:"P50 çarpan",value:`${fmtNum(p50Ratio,2)}×`}]
+        `${edgeAdj >= 0 ? "+" : ""}${fmtNum(edgeAdj,2)}R`,
+        "Pozitif dağılım-ayarlı edge var",
+        `Bu model sonucuna göre dağılım-ayarlı expected R <span class="good">pozitif</span>: <span class="em">${fmtNum(edgeAdj,2)}R</span>. Teorik edge <span class="em">${fmtNum(result.er,2)}R</span>; fark R dağılımı ve kayıp kuyruğundan gelir.`,
+        [{label:"Adj. Beklenen R",value:`${fmtNum(edgeAdj,2)}R`},{label:"Teorik",value:`${fmtNum(result.er,2)}R`},{label:"P50 çarpan",value:`${fmtNum(p50Ratio,2)}×`}]
       ));
     }
 
@@ -5291,8 +6199,8 @@ function renderCharts(result){
         };
       }
 
-      function createRng(){
-        const seed = Math.floor(Date.now() % 2147483647);
+      function createRng(seedOverride){
+        const seed = Number.isFinite(seedOverride) ? Math.floor(Math.abs(seedOverride)) : Math.floor(Date.now() % 2147483647);
         const rand = mulberry32(seed);
         let spare = null;
         return {
@@ -5335,6 +6243,34 @@ function renderCharts(result){
         const beP = p.breakEvenRate / 100;
         const lossP = Math.max(0, 1 - winP - beP);
         return winP * p.avgWinR - lossP * p.avgLossR - p.tradeCostR;
+      }
+
+      function normalPdf(x){
+        return Math.exp(-0.5 * x * x) / Math.sqrt(2 * Math.PI);
+      }
+
+      function normalCdf(x){
+        const sign = x < 0 ? -1 : 1;
+        const z = Math.abs(x) / Math.sqrt(2);
+        const t = 1 / (1 + 0.3275911 * z);
+        const a1 = 0.254829592, a2 = -0.284496736, a3 = 1.421413741, a4 = -1.453152027, a5 = 1.061405429;
+        const erf = 1 - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * Math.exp(-z * z);
+        return 0.5 * (1 + sign * erf);
+      }
+
+      function positiveNormalMeanMultiplier(sigma){
+        if(!isFinite(sigma) || sigma <= 0) return 1;
+        const z = 1 / sigma;
+        return normalCdf(z) + sigma * normalPdf(z);
+      }
+
+      function distributionAdjustedExpectedR(p){
+        const winP = p.winRate / 100;
+        const beP = p.breakEvenRate / 100;
+        const lossP = Math.max(0, 1 - winP - beP);
+        const winMultiplier = positiveNormalMeanMultiplier(0.18 * p.volatilityFactor);
+        const lossMultiplier = Math.exp(0.5 * Math.pow(0.25 * p.volatilityFactor, 2));
+        return winP * p.avgWinR * winMultiplier - lossP * p.avgLossR * lossMultiplier - p.tradeCostR;
       }
 
       function riskAmount(equity, p){
@@ -5385,7 +6321,7 @@ function renderCharts(result){
       }
 
       function runSimulationInWorker(p, reportProgress){
-        const rng = createRng();
+        const rng = createRng(p.seedMode === "fixed" ? p.simSeed : undefined);
         const days = Math.round(p.days);
         const iterations = Math.round(p.iterations);
         const initial = p.initialCapital;
@@ -5394,6 +6330,7 @@ function renderCharts(result){
         const dds = new Float64Array(iterations);
         const tuws = new Float64Array(iterations);
         const streaks = new Float64Array(iterations);
+        const pathStats = [];
         const sampleDays = buildSampleDays(days);
         const sampleCount = sampleDays.length;
         const fanMatrix = new Float64Array(sampleCount * iterations);
@@ -5401,7 +6338,7 @@ function renderCharts(result){
         const progressEvery = Math.max(1, Math.floor(iterations / 100));
 
         let targetHits = 0, profitCount = 0, ruinCount = 0;
-        let totalTrades = 0, grossProfitR = 0, grossLossR = 0;
+        let totalTrades = 0, netProfitR = 0, netLossR = 0;
 
         for(let i=0; i<iterations; i++){
           let equity = initial;
@@ -5445,7 +6382,7 @@ function renderCharts(result){
               const shockLoss = risk * p.shockImpactR;
               equity = Math.max(0, equity - shockLoss);
               dailyPnl -= shockLoss;
-              grossLossR += p.shockImpactR;
+              netLossR += p.shockImpactR;
             }
 
             const trades = Math.max(0, poisson(p.tradesPerDay, rng));
@@ -5457,23 +6394,26 @@ function renderCharts(result){
               let r = 0;
               if(u < p.breakEvenRate){
                 r = 0;
-                streak = 0;
               } else if(u < p.breakEvenRate + p.winRate){
                 const noise = 1 + rng.normal() * 0.18 * p.volatilityFactor;
                 r = Math.max(0, p.avgWinR * noise);
-                streak = 0;
-                grossProfitR += r;
               } else {
                 const lossMultiplier = Math.max(0.01, Math.exp(rng.normal() * 0.25 * p.volatilityFactor));
                 r = -p.avgLossR * lossMultiplier;
-                streak += 1;
-                maxStreak = Math.max(maxStreak, streak);
-                grossLossR += Math.abs(r);
               }
 
               const risk = riskAmount(equity, p);
               const netR = r - p.tradeCostR;
-              grossLossR += p.tradeCostR;
+              if(netR > 0){
+                netProfitR += netR;
+                streak = 0;
+              } else if(netR < 0){
+                netLossR += Math.abs(netR);
+                streak += 1;
+                maxStreak = Math.max(maxStreak, streak);
+              } else {
+                streak = 0;
+              }
               const pnl = risk * netR;
               equity = Math.max(0, equity + pnl);
               dailyPnl += pnl;
@@ -5508,6 +6448,7 @@ function renderCharts(result){
           dds[i] = maxDD;
           tuws[i] = maxTUW;
           streaks[i] = maxStreak;
+          pathStats.push({index:i,final:equity,maxDD,maxStreak,maxTUW,hitTarget,hitRuin,profitable:equity > initial});
           if(hitTarget) targetHits += 1;
           if(hitRuin) ruinCount += 1;
           if(equity > initial) profitCount += 1;
@@ -5535,12 +6476,13 @@ function renderCharts(result){
         const avgStreak = mean(streaks);
         const maxStreak = streaks[streaks.length-1] || 0;
         const er = expectedR(p);
+        const erAdjusted = distributionAdjustedExpectedR(p);
         const targetProb = targetHits / iterations * 100;
         const profitProb = profitCount / iterations * 100;
         const ruinProb = ruinCount / iterations * 100;
-        const pf = grossLossR > 0 ? grossProfitR / grossLossR : 0;
+        const pf = netLossR > 0 ? netProfitR / netLossR : (netProfitR > 0 ? Infinity : 0);
         const health = clamp(
-          50 + er * 22 + (profitProb - 50) * .24 + targetProb * .10 - ruinProb * .45 - Math.max(0, avgDD - 18) * .50 - Math.max(0, avgTUW - 45) * .10,
+          50 + erAdjusted * 22 + (profitProb - 50) * .24 + targetProb * .10 - ruinProb * .45 - Math.max(0, avgDD - 18) * .50 - Math.max(0, avgTUW - 45) * .10,
           0, 100
         );
 
@@ -5553,10 +6495,11 @@ function renderCharts(result){
           dds,
           tuws,
           streaks,
+          pathStats,
           p5,p25,p50,p75,p95,
           mean:mean(finals),
           avgDD,worstDD,avgTUW,maxTUW,avgStreak,maxStreak,
-          er,targetProb,profitProb,ruinProb,pf,health,totalTrades
+          er,erAdjusted,targetProb,profitProb,ruinProb,pf,health,totalTrades
         };
       }
 
@@ -5615,7 +6558,6 @@ function renderCharts(result){
               renderMetrics(result);
               renderCharts(result);
               interpretation(result);
-              renderScenarioComparison(result);
               renderScenarioComparison(result);
             } else {
               finishSimulationBusy();
@@ -5677,6 +6619,7 @@ function renderCharts(result){
         renderMetrics(result);
         renderCharts(result);
         interpretation(result);
+        renderScenarioComparison(result);
       }
     };
 
@@ -5692,6 +6635,101 @@ function renderCharts(result){
     worker.postMessage({p, reportProgress:profile.reportProgress});
   }
 
+
+  function setupSeedAuditEvents(){
+    const input = $("seedValueInput");
+    const update = () => {
+      const fixed = state.seedMode === "fixed";
+      document.querySelectorAll("[data-seed-mode]").forEach(btn => {
+        const active = btn.dataset.seedMode === state.seedMode;
+        btn.classList.toggle("active", active);
+        btn.setAttribute("aria-pressed", active ? "true" : "false");
+      });
+      if(input){
+        input.disabled = !fixed;
+        input.value = String(Math.max(1, Math.min(2147483646, Math.floor(Number(state.seedValue) || 161803398))));
+      }
+    };
+
+    document.querySelectorAll("[data-seed-mode]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        state.seedMode = btn.dataset.seedMode === "fixed" ? "fixed" : "auto";
+        update();
+        updatePrintParams();
+      });
+    });
+    if(input){
+      input.addEventListener("change", () => {
+        state.seedValue = Math.max(1, Math.min(2147483646, Math.floor(Number(input.value) || 161803398)));
+        input.value = String(state.seedValue);
+        updatePrintParams();
+      });
+    }
+    const testBtn = $("runSelfTests");
+    if(testBtn) testBtn.addEventListener("click", runSelfTests);
+    update();
+  }
+
+  function selfTestAssert(name, pass, detail){
+    return {name, pass:!!pass, detail};
+  }
+
+  function runSelfTests(){
+    const status = $("selfTestStatus");
+    const box = $("selfTestResults");
+    if(status) status.textContent = "Testler çalışıyor";
+    window.setTimeout(() => {
+      const tests = [];
+      try{
+        const base = normalizeParams({
+          days:30,initialCapital:100000,iterations:700,tradesPerDay:3,winRate:55,avgWinR:1.8,avgLossR:1,riskPerTradePct:1,
+          tradeCostR:0.05,targetCapital:120000,ruinThresholdPct:50,breakEvenRate:5,volatilityFactor:1,shockProbability:0,shockImpactR:0,maxDailyLossPct:99,riskMode:"compounding",seedMode:"fixed",simSeed:424242
+        });
+
+        const zeroTrades = runLiteSimulation(mergeParams(base,{tradesPerDay:0,shockProbability:0,tradeCostR:0}), {iterations:700, seed:101});
+        tests.push(selfTestAssert("Sıfır trade sabit sermaye", Math.abs(zeroTrades.p50 - base.initialCapital) < 1e-6 && Math.abs(zeroTrades.p5 - base.initialCapital) < 1e-6, `P50 ${fmtMoney(zeroTrades.p50)}`));
+
+        const costlessBE = runLiteSimulation(mergeParams(base,{tradesPerDay:4,winRate:0,breakEvenRate:98,tradeCostR:0,shockProbability:0}), {iterations:700, seed:102});
+        tests.push(selfTestAssert("Maliyetsiz BE nötr", Math.abs(costlessBE.p50 - base.initialCapital) < 1e-6, `P50 ${fmtMoney(costlessBE.p50)}`));
+
+        const deterministic = runLiteSimulation(mergeParams(base,{volatilityFactor:0,shockProbability:0,tradeCostR:0.03}), {iterations:700, seed:103});
+        tests.push(selfTestAssert("Deterministic vol=0 çalışıyor", isFinite(deterministic.erAdjusted) && Math.abs(deterministic.erAdjusted - deterministic.er) < 1e-9, `Teorik ${fmtNum(deterministic.er,3)}R · Adj ${fmtNum(deterministic.erAdjusted,3)}R`));
+
+        const beWithCost = runLiteSimulation(mergeParams(base,{tradesPerDay:4,winRate:0,breakEvenRate:98,tradeCostR:.05,shockProbability:0}), {iterations:700, seed:104});
+        tests.push(selfTestAssert("BE + maliyet sermayeyi azaltır", beWithCost.p50 < base.initialCapital, `P50 ${fmtMoney(beWithCost.p50)} · maliyet ${fmtNum(beWithCost.p.tradeCostR,2)}R`));
+
+        const negAvantaj = runLiteSimulation(mergeParams(base,{winRate:20,avgWinR:.6,avgLossR:1.2,tradeCostR:.08,shockProbability:0}), {iterations:700, seed:105});
+        tests.push(selfTestAssert("Negatif edge kötüleşir", negAvantaj.erAdjusted < 0 && negAvantaj.p50 < base.initialCapital, `Adj ER ${fmtNum(negAvantaj.erAdjusted,3)}R · P50 ${fmtMoney(negAvantaj.p50)}`));
+
+        const fixed = runLiteSimulation(mergeParams(base,{riskMode:"fixed",riskPerTradePct:2,winRate:65,avgWinR:2.2,avgLossR:.9,shockProbability:0}), {iterations:700, seed:106});
+        const comp = runLiteSimulation(mergeParams(base,{riskMode:"compounding",riskPerTradePct:2,winRate:65,avgWinR:2.2,avgLossR:.9,shockProbability:0}), {iterations:700, seed:106});
+        tests.push(selfTestAssert("Fixed/compounding ayrışır", Math.abs(fixed.p50 - comp.p50) > 100, `Fixed P50 ${fmtMoney(fixed.p50)} · Comp P50 ${fmtMoney(comp.p50)}`));
+
+        const allPass = tests.every(t => t.pass);
+        if(status){
+          status.textContent = allPass ? "Tüm testler geçti" : "Test hatası var";
+          status.classList.toggle("warn", !allPass);
+        }
+        if(box){
+          box.classList.add("active");
+          box.innerHTML = `<div class="self-test-grid">${tests.map(t => `
+            <div class="self-test-item ${t.pass ? "pass" : "fail"}">
+              <strong>${t.pass ? "✓" : "!"} ${t.name}</strong>
+              <span>${t.detail}</span>
+            </div>`).join("")}</div>`;
+        }
+      } catch(err){
+        if(status) status.textContent = "Test hatası";
+        if(box){
+          box.classList.add("active");
+          box.innerHTML = `<div class="self-test-item fail"><strong>Test harness exception</strong><span>${err && err.message ? err.message : String(err)}</span></div>`;
+        }
+        console.error(err);
+      }
+    }, 20);
+  }
+
+
   function init(){
     renderControls();
     setupControlEvents();
@@ -5702,6 +6740,7 @@ function renderCharts(result){
     setupScenarioPresets();
     setupRCalc();
     setupOptimization();
+    setupSeedAuditEvents();
     updateRiskMath();
     updatePrintParams();
     document.querySelectorAll(".run-sim").forEach(btn => btn.addEventListener("click", runAndRender));
@@ -5720,5 +6759,431 @@ function renderCharts(result){
   }
 })();
 </script>
+
+
+<script>
+(function(){
+  const THEME = {
+    terra:"#c65b36",
+    olive:"#647049",
+    ruby:"#7f2737",
+    gold:"#a88442",
+    ink:"#171411",
+    stone:"#6f675d",
+    line:"#e2d8c9",
+    paper:"#fffdf8"
+  };
+  const charts = {};
+  const runtime = {lastSig:"", optSig:""};
+  const quadPlugin = {
+    id:"aethelgardQuadrants",
+    beforeDatasetsDraw(chart, args, opts){
+      if(!opts || opts.enabled === false) return;
+      const {ctx, chartArea, scales} = chart;
+      if(!chartArea || !scales?.x || !scales?.y) return;
+      const xCut = opts.xCut ?? (scales.x.min + scales.x.max) / 2;
+      const yCut = opts.yCut ?? (scales.y.min + scales.y.max) / 2;
+      const x = Math.max(chartArea.left, Math.min(chartArea.right, scales.x.getPixelForValue(xCut)));
+      const y = Math.max(chartArea.top, Math.min(chartArea.bottom, scales.y.getPixelForValue(yCut)));
+      const zones = opts.zones || {
+        topLeft:"rgba(100,112,73,.045)",
+        topRight:"rgba(198,91,54,.040)",
+        bottomLeft:"rgba(168,132,66,.045)",
+        bottomRight:"rgba(127,39,55,.040)"
+      };
+      ctx.save();
+      ctx.fillStyle = zones.topLeft; ctx.fillRect(chartArea.left, chartArea.top, x-chartArea.left, y-chartArea.top);
+      ctx.fillStyle = zones.topRight; ctx.fillRect(x, chartArea.top, chartArea.right-x, y-chartArea.top);
+      ctx.fillStyle = zones.bottomLeft; ctx.fillRect(chartArea.left, y, x-chartArea.left, chartArea.bottom-y);
+      ctx.fillStyle = zones.bottomRight; ctx.fillRect(x, y, chartArea.right-x, chartArea.bottom-y);
+      ctx.strokeStyle = "rgba(205,191,174,.62)";
+      ctx.setLineDash([4,4]);
+      ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(x, chartArea.top); ctx.lineTo(x, chartArea.bottom); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(chartArea.left, y); ctx.lineTo(chartArea.right, y); ctx.stroke();
+      ctx.restore();
+    }
+  };
+  if(typeof Chart !== "undefined"){
+    try{ Chart.register(quadPlugin); } catch(err){}
+  }
+
+  function $(id){ return document.getElementById(id); }
+  function fmtNum(v,d=1){ return isFinite(v) ? Number(v).toLocaleString("tr-TR",{minimumFractionDigits:d, maximumFractionDigits:d}) : "—"; }
+  function money(v){ return isFinite(v) ? new Intl.NumberFormat("tr-TR",{style:"currency",currency:"TRY",maximumFractionDigits:0}).format(v) : "—"; }
+  function pct(v,d=1){ return isFinite(v) ? fmtNum(v,d) + "%" : "—"; }
+  function pickState(){ return window.__AETHELGARD_STATE || null; }
+  function destroyChart(id){ if(charts[id]){ charts[id].destroy(); delete charts[id]; } }
+  function chart(id, cfg){
+    const canvas = $(id);
+    if(!canvas || typeof Chart === "undefined") return null;
+    destroyChart(id);
+    charts[id] = new Chart(canvas.getContext("2d"), cfg);
+    return charts[id];
+  }
+  function axisGrid(){ return {color:"rgba(226,216,201,.75)", drawBorder:false}; }
+  function axisTitle(text){ return {display:true, text, color:THEME.stone, font:{family:"Inter", weight:"700", size:11}}; }
+  function tooltipBase(extra){
+    return {
+      backgroundColor:"rgba(255,253,248,.97)",
+      borderColor:"rgba(205,191,174,.95)",
+      borderWidth:1,
+      titleColor:THEME.ink,
+      bodyColor:THEME.stone,
+      padding:12,
+      displayColors:true,
+      boxPadding:5,
+      callbacks:extra || {}
+    };
+  }
+  function setStatus(id, text, tone){
+    const el = $(id); if(!el) return;
+    el.classList.remove("good","warn","bad");
+    if(tone) el.classList.add(tone);
+    el.innerHTML = `<span class="scatter-native-badge">${text}</span>`;
+  }
+  function quantile(sorted, q){
+    const arr = Array.from(sorted || []).filter(Number.isFinite).sort((a,b)=>a-b);
+    if(!arr.length) return 0;
+    const pos = (arr.length - 1) * q, lo = Math.floor(pos), hi = Math.ceil(pos);
+    return lo === hi ? arr[lo] : arr[lo] + (arr[hi] - arr[lo]) * (pos - lo);
+  }
+  function classifyPath(p){
+    if(p.hitRuin) return "ruin";
+    if(p.hitTarget) return "target";
+    if(p.profitable) return "profit";
+    return "neutral";
+  }
+  function splitPathDatasets(points, axisKey){
+    const buckets = {
+      target:{label:"Hedefe Ulaşan", color:THEME.olive, data:[]},
+      profit:{label:"Kârda Biten", color:THEME.terra, data:[]},
+      neutral:{label:"Nötr / Zayıf", color:THEME.gold, data:[]},
+      ruin:{label:"Kritik Eşik / Ruin", color:THEME.ruby, data:[]}
+    };
+    points.forEach(p => {
+      const key = classifyPath(p);
+      buckets[key].data.push({x:axisKey === "maxDD" ? p.maxDD : p.maxStreak, y:p.final, meta:p});
+    });
+    return Object.values(buckets).map(x => ({
+      label:x.label,
+      data:x.data,
+      backgroundColor:x.color,
+      borderColor:x.color,
+      pointRadius:points.length > 7000 ? 2.2 : (points.length > 3000 ? 2.8 : 4.2),
+      pointHoverRadius:6,
+      pointBorderWidth:0
+    })).filter(x => x.data.length);
+  }
+  function pathSummary(stats, result){
+    const n = stats.length || 1;
+    const target = stats.filter(x=>x.hitTarget).length / n * 100;
+    const ruin = stats.filter(x=>x.hitRuin).length / n * 100;
+    const profit = stats.filter(x=>x.profitable).length / n * 100;
+    const finals = stats.map(x=>x.final).sort((a,b)=>a-b);
+    const dds = stats.map(x=>x.maxDD).sort((a,b)=>a-b);
+    const streaks = stats.map(x=>x.maxStreak).sort((a,b)=>a-b);
+    return {
+      n,target,ruin,profit,
+      p5:quantile(finals,.05),p50:quantile(finals,.50),p95:quantile(finals,.95),
+      dd50:quantile(dds,.50),dd75:quantile(dds,.75),dd95:quantile(dds,.95),
+      streak50:quantile(streaks,.50),streak75:quantile(streaks,.75),streak95:quantile(streaks,.95),
+      initial:result?.p?.initialCapital || 0,
+      targetCapital:result?.p?.targetCapital || 0
+    };
+  }
+  function narrativeCard(tone,kicker,title,body){
+    return `<div class="native-narrative-card ${tone}">
+      <div class="native-narrative-kicker">${kicker}</div>
+      <strong>${title}</strong>
+      <p>${body}</p>
+    </div>`;
+  }
+  function renderPathNarrative(stats, result){
+    const box = $("pathQualityNarrative"); if(!box) return;
+    const s = pathSummary(stats, result);
+    const qualityTone = s.ruin >= 20 || s.p5 < s.initial*.7 ? "ruby" : (s.dd75 >= 30 || s.streak75 >= 12 ? "terra" : "olive");
+    const qualityTitle = qualityTone === "olive" ? "Patika kalitesi taşınabilir görünüyor" : (qualityTone === "terra" ? "Getiri potansiyeli var ama taşıma yükü yüksek" : "Alt kuyruk ve davranışsal risk baskın");
+    const ddBody = `Native pathStats ile <span class="mono">${s.n.toLocaleString("tr-TR")}</span> yolun tamamı okunuyor. Medyan max DD <span class="mono">${pct(s.dd50,1)}</span>, P75 DD <span class="mono">${pct(s.dd75,1)}</span>, P95 DD <span class="mono">${pct(s.dd95,1)}</span>.`;
+    const streakTone = s.streak75 >= 15 ? "ruby" : (s.streak75 >= 9 ? "terra" : "olive");
+    const streakBody = `Medyan en uzun net-negatif seri <span class="mono">${fmtNum(s.streak50,0)}</span> trade; P75 <span class="mono">${fmtNum(s.streak75,0)}</span>, P95 <span class="mono">${fmtNum(s.streak95,0)}</span>. Bu değer execution disiplini için pratik eşiktir.`;
+    const outcomeTone = s.ruin >= 20 ? "ruby" : (s.target >= 55 ? "olive" : "terra");
+    const outcomeBody = `Hedefe temas <span class="mono">${pct(s.target,1)}</span>, kârda bitme <span class="mono">${pct(s.profit,1)}</span>, kritik eşik teması <span class="mono">${pct(s.ruin,1)}</span>. Sol-üst yoğunluk artarsa model daha kurumsal taşınabilir hale gelir.`;
+    box.innerHTML = [
+      narrativeCard(qualityTone,"PATH QUALITY",qualityTitle,ddBody),
+      narrativeCard(streakTone,"BEHAVIORAL ENDURANCE","Kayıp serisi psikolojik uygulanabilirliği ölçer",streakBody),
+      narrativeCard(outcomeTone,"OUTCOME MIX","Hedef/ruin dağılımı karar notunu belirler",outcomeBody)
+    ].join("");
+  }
+
+  function renderPathScatters(result){
+    const stats = Array.from(result?.pathStats || []);
+    if(!stats.length) return;
+    const summary = pathSummary(stats, result);
+    setStatus("scatterPathStatus", `${stats.length.toLocaleString("tr-TR")} native yol · seed ${result.seed}`, "good");
+    setStatus("scatterOutcomeDDStatus", `P50 ${money(summary.p50)} · P75 DD ${pct(summary.dd75,1)}`, summary.dd75 > 35 ? "bad" : "good");
+    renderPathNarrative(stats, result);
+
+    const commonTooltip = {
+      title:(items)=>items[0]?.dataset?.label || "",
+      label:(ctx)=>`Final Sermaye: ${money(ctx.raw.y)}`,
+      afterLabel:(ctx)=>{
+        const m = ctx.raw.meta || {};
+        return [
+          `Max DD: ${pct(m.maxDD,1)}`,
+          `En uzun negatif seri: ${fmtNum(m.maxStreak,0)} trade`,
+          `Max TUW: ${fmtNum(m.maxTUW,0)} gün`,
+          m.hitTarget ? "Hedefe temas etti" : (m.hitRuin ? "Kritik eşiğe temas etti" : "Ara bölgede kapandı")
+        ];
+      }
+    };
+
+    chart("scatterOutcomeDD", {
+      type:"scatter",
+      data:{datasets:splitPathDatasets(stats, "maxDD")},
+      options:{
+        responsive:true, maintainAspectRatio:false, animation:false, parsing:false,
+        plugins:{
+          legend:{position:"top", labels:{usePointStyle:true, boxWidth:10, color:THEME.stone}},
+          tooltip:tooltipBase(commonTooltip),
+          aethelgardQuadrants:{enabled:true, xCut:summary.dd75, yCut:summary.p50}
+        },
+        scales:{
+          x:{grid:axisGrid(), title:axisTitle("Maksimum Drawdown % (sol = daha iyi)"), ticks:{color:THEME.stone, callback:v=>Number(v).toFixed(0)+"%"}},
+          y:{grid:axisGrid(), title:axisTitle("Final Sermaye (yukarı = daha iyi)"), ticks:{color:THEME.stone, callback:v=>money(v)}}
+        }
+      }
+    });
+
+    if(false && $("scatterOutcomeStreak")) chart("scatterOutcomeStreak", {
+      type:"scatter",
+      data:{datasets:splitPathDatasets(stats, "maxStreak")},
+      options:{
+        responsive:true, maintainAspectRatio:false, animation:false, parsing:false,
+        plugins:{
+          legend:{position:"top", labels:{usePointStyle:true, boxWidth:10, color:THEME.stone}},
+          tooltip:tooltipBase(commonTooltip),
+          aethelgardQuadrants:{enabled:true, xCut:summary.streak75, yCut:summary.p50}
+        },
+        scales:{
+          x:{grid:axisGrid(), title:axisTitle("En Uzun Net-Negatif Seri (sol = daha iyi)"), ticks:{color:THEME.stone, callback:v=>Number(v).toFixed(0)}},
+          y:{grid:axisGrid(), title:axisTitle("Final Sermaye (yukarı = daha iyi)"), ticks:{color:THEME.stone, callback:v=>money(v)}}
+        }
+      }
+    });
+  }
+
+  function makeRng(seed){
+    let s = Math.floor(seed || 1234567) % 2147483647;
+    if(s <= 0) s += 2147483646;
+    return function(){ s = s * 16807 % 2147483647; return (s - 1) / 2147483646; };
+  }
+  function normal(rand){
+    let u=0,v=0; while(u===0) u=rand(); while(v===0) v=rand();
+    return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);
+  }
+  function poisson(lambda, rand){
+    if(lambda <= 0) return 0;
+    if(lambda > 30) return Math.max(0, Math.round(lambda + Math.sqrt(lambda)*normal(rand)));
+    const L = Math.exp(-lambda); let k=0,p=1;
+    do{ k++; p*=rand(); }while(p>L);
+    return k-1;
+  }
+  function sanitizeParams(p){
+    const x = Object.assign({}, p || {});
+    x.days = Math.max(1, Math.round(+x.days || 1));
+    x.initialCapital = Math.max(1, +x.initialCapital || 1);
+    x.iterations = Math.max(100, Math.round(+x.iterations || 1000));
+    x.tradesPerDay = Math.max(0, +x.tradesPerDay || 0);
+    x.winRate = Math.max(0, Math.min(98, +x.winRate || 0));
+    x.breakEvenRate = Math.max(0, Math.min(98-x.winRate, +x.breakEvenRate || 0));
+    x.avgWinR = Math.max(0, +x.avgWinR || 0);
+    x.avgLossR = Math.max(0, +x.avgLossR || 0);
+    x.riskPerTradePct = Math.max(0, +x.riskPerTradePct || 0);
+    x.tradeCostR = Math.max(0, +x.tradeCostR || 0);
+    x.targetCapital = Math.max(1, +x.targetCapital || x.initialCapital);
+    x.ruinThresholdPct = Math.max(0, Math.min(100, +x.ruinThresholdPct || 0));
+    x.volatilityFactor = Math.max(0, +x.volatilityFactor || 0);
+    x.shockProbability = Math.max(0, +x.shockProbability || 0);
+    x.shockImpactR = Math.max(0, +x.shockImpactR || 0);
+    x.maxDailyLossPct = Math.max(0, +x.maxDailyLossPct || 0);
+    x.riskMode = x.riskMode === "fixed" ? "fixed" : "compounding";
+    return x;
+  }
+  function runQuickMC(params, iterations, seed){
+    const p = sanitizeParams(params);
+    const rand = makeRng(seed || 1234);
+    const ruinLevel = p.initialCapital * (p.ruinThresholdPct / 100);
+    const paths = [];
+    let targetHits=0, ruinHits=0, profitHits=0;
+    for(let i=0;i<iterations;i++){
+      let equity=p.initialCapital, peak=equity, maxDD=0, streak=0, maxStreak=0, maxTUW=0, tuw=0;
+      let hitTarget=equity>=p.targetCapital, hitRuin=equity<=ruinLevel;
+      for(let d=0; d<p.days; d++){
+        const dayStart=equity; let dailyPnl=0;
+        if(equity > 0 && rand() < p.shockProbability/100){
+          const riskBase = p.riskMode === "fixed" ? p.initialCapital : equity;
+          const risk = Math.min(equity, riskBase * p.riskPerTradePct/100);
+          const loss = risk * p.shockImpactR;
+          equity = Math.max(0, equity-loss); dailyPnl -= loss;
+        }
+        const trades = poisson(p.tradesPerDay, rand);
+        for(let t=0;t<trades;t++){
+          if(equity <= 0) break;
+          if((-dailyPnl/Math.max(dayStart,1))*100 >= p.maxDailyLossPct) break;
+          const riskBase = p.riskMode === "fixed" ? p.initialCapital : equity;
+          const risk = Math.min(equity, riskBase * p.riskPerTradePct/100);
+          const u=rand()*100; let r=0;
+          if(u < p.breakEvenRate){ r=0; }
+          else if(u < p.breakEvenRate + p.winRate){ r=Math.max(0,p.avgWinR*(1+normal(rand)*.18*p.volatilityFactor)); }
+          else { r=-p.avgLossR*Math.max(.01,Math.exp(normal(rand)*.25*p.volatilityFactor)); }
+          const netR = r - p.tradeCostR;
+          if(netR < 0){ streak++; maxStreak=Math.max(maxStreak,streak); } else streak=0;
+          const pnl = risk*netR; equity=Math.max(0,equity+pnl); dailyPnl += pnl;
+          if(equity>=p.targetCapital) hitTarget=true; if(equity<=ruinLevel) hitRuin=true;
+        }
+        if(equity>=peak){ peak=equity; tuw=0; } else { tuw++; maxTUW=Math.max(maxTUW,tuw); }
+        maxDD=Math.max(maxDD, peak>0 ? (peak-equity)/peak*100 : 0);
+      }
+      if(equity > p.initialCapital) profitHits++;
+      if(hitTarget) targetHits++;
+      if(hitRuin) ruinHits++;
+      paths.push({final:equity,maxDD,maxStreak,maxTUW,hitTarget,hitRuin,profitable:equity>p.initialCapital});
+    }
+    const finals=paths.map(x=>x.final).sort((a,b)=>a-b);
+    const dds=paths.map(x=>x.maxDD);
+    return {paths,p5:quantile(finals,.05),p50:quantile(finals,.50),p95:quantile(finals,.95),avgDD:dds.reduce((a,b)=>a+b,0)/(dds.length||1),targetProb:targetHits/iterations*100,ruinProb:ruinHits/iterations*100,profitProb:profitHits/iterations*100};
+  }
+  function volatilitySweepValues(base){
+    const b = Math.max(0, +base || 0);
+    return Array.from(new Set([0, Math.max(.25,b*.5), Math.max(.55,b*.8), Math.max(.8,b||.8), Math.max(1.05,b*1.2), Math.max(1.35,b*1.5), Math.min(6,Math.max(1.8,b*2))].map(v=>+v.toFixed(2)))).sort((a,b)=>a-b);
+  }
+  function renderVolatilitySweep(result){
+    const xs = volatilitySweepValues(result?.p?.volatilityFactor);
+    const iter = Math.min(1600, Math.max(700, Math.round((result?.p?.iterations || 5000) * .18)));
+    const p50pts=[], p5pts=[]; let worstRuin=0, worstP5Drop=0;
+    xs.forEach((v,idx)=>{
+      const sim=runQuickMC(Object.assign({},result.p,{volatilityFactor:v}), iter, (result.seed||1)+1200+idx*31);
+      p50pts.push({x:v,y:sim.p50,meta:sim}); p5pts.push({x:v,y:sim.p5,meta:sim});
+      worstRuin=Math.max(worstRuin,sim.ruinProb);
+      if(idx>0) worstP5Drop=Math.min(worstP5Drop, sim.p5-p5pts[0].y);
+    });
+    setStatus("scatterVolatilityStatus", `${iter.toLocaleString("tr-TR")} yol/sweep · aktif ${fmtNum(result?.p?.volatilityFactor||0,2)}x`, worstRuin>30?"bad":"warn");
+    chart("scatterVolatilitySweep",{
+      type:"scatter",
+      data:{datasets:[
+        {label:"P50 Final Sermaye",data:p50pts,backgroundColor:THEME.olive,borderColor:THEME.olive,pointRadius:5,pointHoverRadius:6},
+        {label:"P5 Final Sermaye",data:p5pts,backgroundColor:THEME.ruby,borderColor:THEME.ruby,pointRadius:5,pointHoverRadius:6}
+      ]},
+      options:{responsive:true,maintainAspectRatio:false,animation:false,
+        plugins:{legend:{position:"top",labels:{usePointStyle:true,boxWidth:10,color:THEME.stone}},tooltip:tooltipBase({
+          title:(items)=>`Volatilite: ${fmtNum(items[0]?.raw?.x||0,2)}x`,
+          label:(ctx)=>`${ctx.dataset.label}: ${money(ctx.raw.y)}`,
+          afterLabel:(ctx)=>[`Ruin: ${pct(ctx.raw.meta.ruinProb,1)}`,`Target: ${pct(ctx.raw.meta.targetProb,1)}`,`Avg DD: ${pct(ctx.raw.meta.avgDD,1)}`]
+        })},
+        scales:{x:{grid:axisGrid(),title:axisTitle("R Dağılım Volatilitesi (sağ = daha geniş kuyruk)"),ticks:{color:THEME.stone}},y:{grid:axisGrid(),title:axisTitle("Final Sermaye (P50 / P5)"),ticks:{color:THEME.stone,callback:v=>money(v)}}}
+      }
+    });
+    const box=$("riskDriverNarrative");
+    if(box){
+      const tone = worstRuin>30 || worstP5Drop < -result.p.initialCapital*.25 ? "ruby" : (worstP5Drop < -result.p.initialCapital*.1 ? "terra" : "olive");
+      box.innerHTML = narrativeCard(tone,"VOLATILITY FRAGILITY","R volatilitesi alt kuyruğu ayrı okunmalı",`Sweep sonucunda en kötü ruin <span class="mono">${pct(worstRuin,1)}</span>. Başlangıç volatiliteye göre P5 farkı <span class="mono">${money(worstP5Drop)}</span>. Medyan sabit kalsa bile P5 düşüyorsa strateji kuyruk riski taşıyor.`) +
+        narrativeCard("gold","SENSITIVITY OKUMASI","Kategori etkisi bar grafikle daha doğru okunur",`Monte Carlo duyarlılık scatter kaldırıldı; çünkü az sayıda parametre ve tekrar eden ΔRuin değerleri scatter yerine bar/tablo okumasına daha uygundur. Parametre kırılganlığını ana MC Sensitivity panelindeki ΔP50, ΔP5 ve ΔRuin kartlarından izleyin.`);
+    }
+  }
+
+  function sensitivityPerturbations(p){
+    return [
+      {key:"winRate",label:"Win Rate",down:{winRate:Math.max(5,p.winRate-4)},up:{winRate:Math.min(95,p.winRate+4)}},
+      {key:"avgWinR",label:"Ort. Kazanç R",down:{avgWinR:Math.max(.2,p.avgWinR*.85)},up:{avgWinR:p.avgWinR*1.15}},
+      {key:"avgLossR",label:"AvgLossR",down:{avgLossR:Math.max(.2,p.avgLossR*.85)},up:{avgLossR:p.avgLossR*1.15}},
+      {key:"riskPerTradePct",label:"Risk %",down:{riskPerTradePct:Math.max(.1,p.riskPerTradePct*.80)},up:{riskPerTradePct:p.riskPerTradePct*1.20}},
+      {key:"tradeCostR",label:"Trade Cost",down:{tradeCostR:Math.max(0,p.tradeCostR-.03)},up:{tradeCostR:p.tradeCostR+.05}},
+      {key:"tradesPerDay",label:"Trade Freq.",down:{tradesPerDay:Math.max(.1,p.tradesPerDay*.80)},up:{tradesPerDay:p.tradesPerDay*1.20}},
+      {key:"volatilityFactor",label:"R Vol",down:{volatilityFactor:Math.max(0,p.volatilityFactor*.75)},up:{volatilityFactor:p.volatilityFactor*1.25+.1}},
+      {key:"shockProbability",label:"Shock Prob.",down:{shockProbability:Math.max(0,p.shockProbability-2)},up:{shockProbability:p.shockProbability+2}}
+    ];
+  }
+  function renderMCSensitivityScatter(result){
+    const p=sanitizeParams(result.p); const iter=Math.min(1200,Math.max(600,Math.round((p.iterations||5000)*.14)));
+    const base=runQuickMC(p,iter,(result.seed||1)+2200); const rows=[];
+    sensitivityPerturbations(p).forEach((item,idx)=>{
+      const sims=[{dir:"↓",sim:runQuickMC(Object.assign({},p,item.down),iter,(result.seed||1)+2300+idx*17)},{dir:"↑",sim:runQuickMC(Object.assign({},p,item.up),iter,(result.seed||1)+2400+idx*17)}];
+      sims.forEach(x=>{x.x=x.sim.p5-base.p5; x.y=x.sim.ruinProb-base.ruinProb; x.score=(-x.x/Math.max(1,p.initialCapital))*35 + x.y*1.4;});
+      sims.sort((a,b)=>b.score-a.score); const w=sims[0];
+      rows.push({label:item.label,key:item.key,dir:w.dir,x:w.x,y:w.y,meta:{base,worst:w.sim}});
+    });
+    setStatus("scatterMCSensitivityStatus", `${iter.toLocaleString("tr-TR")} yol/şok · ${rows.length} parametre`, rows.some(r=>r.x<0&&r.y>0)?"bad":"warn");
+    const xCut=0, yCut=0;
+    chart("scatterMCSensitivity",{type:"scatter",data:{datasets:[{label:"Parametre Şokları",data:rows,backgroundColor:rows.map(r=>r.x<0&&r.y>0?THEME.ruby:(r.x>=0&&r.y<=0?THEME.olive:THEME.terra)),borderColor:rows.map(r=>r.x<0&&r.y>0?THEME.ruby:(r.x>=0&&r.y<=0?THEME.olive:THEME.terra)),pointRadius:rows.map(r=>r.key==="volatilityFactor"?7:5),pointHoverRadius:8}]},
+      options:{responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{display:false},tooltip:tooltipBase({
+        title:(items)=>{const r=items[0]?.raw; return r?`${r.label} · ${r.dir} yönü`:"";},
+        label:(ctx)=>`ΔP5: ${money(ctx.raw.x)} · ΔRuin: ${pct(ctx.raw.y,1)}`,
+        afterLabel:(ctx)=>[`Base P5: ${money(ctx.raw.meta.base.p5)}`,`Base Ruin: ${pct(ctx.raw.meta.base.ruinProb,1)}`,`Worst P5: ${money(ctx.raw.meta.worst.p5)}`,`Worst Ruin: ${pct(ctx.raw.meta.worst.ruinProb,1)}`]
+      }),aethelgardQuadrants:{enabled:true,xCut,yCut,zones:{topLeft:"rgba(127,39,55,.040)",topRight:"rgba(198,91,54,.038)",bottomLeft:"rgba(168,132,66,.040)",bottomRight:"rgba(100,112,73,.048)"}}},
+      scales:{x:{grid:axisGrid(),title:axisTitle("ΔP5 (sağ = daha iyi, sol = daha kötü)"),ticks:{color:THEME.stone,callback:v=>money(v)}},y:{grid:axisGrid(),title:axisTitle("ΔRuin puanı (aşağı = daha iyi)"),ticks:{color:THEME.stone,callback:v=>Number(v).toFixed(0)+"pp"}}}
+    }});
+  }
+
+  function extractFrontierRows(state){
+    const rows=Array.isArray(state?.optResults?.rows)?state.optResults.rows:[];
+    return rows.map((row,idx)=>{
+      const sim=row.sim||row.metrics||row.mc||{};
+      const params=row.params||row.values||row;
+      const risk=params.riskPerTradePct??row.riskPerTradePct??row.risk;
+      const avgWinR=params.avgWinR??row.avgWinR;
+      const p50=sim.p50??row.p50;
+      const avgDD=sim.avgDD??row.avgDD;
+      const ruin=sim.ruinProb??row.ruinProb;
+      const score=row.scorePct??row.score;
+      if(!isFinite(risk)||!isFinite(avgWinR)||!isFinite(p50)) return null;
+      return {idx,label:`Risk ${fmtNum(risk,2)}% · Ort. Kazanç R ${fmtNum(avgWinR,2)}R`,x:isFinite(avgDD)?avgDD:ruin,y:p50,meta:{risk,avgWinR,p50,avgDD,ruin,score,eligible:row.eligible!==false}};
+    }).filter(Boolean);
+  }
+  function renderOptFrontier(){
+    const state=pickState(); const canvas=$("optFrontierChart"); if(!canvas) return;
+    const rows=extractFrontierRows(state);
+    if(!rows.length){ destroyChart("optFrontierChart"); return; }
+    const eligible=rows.filter(r=>r.meta.eligible), filtered=rows.filter(r=>!r.meta.eligible);
+    const xCut=quantile(rows.map(r=>r.x),.50), yCut=quantile(rows.map(r=>r.y),.50);
+    chart("optFrontierChart",{type:"scatter",data:{datasets:[{label:"Uygun Adaylar",data:eligible,backgroundColor:THEME.olive,borderColor:THEME.olive,pointRadius:eligible.map(r=>4+Math.min(4,(r.meta.score||50)/25)),pointHoverRadius:8},{label:"Filtre Dışı / Sınırda",data:filtered,backgroundColor:THEME.gold,borderColor:THEME.gold,pointRadius:4,pointHoverRadius:6}]},
+      options:{responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{position:"top",labels:{usePointStyle:true,boxWidth:10,color:THEME.stone}},tooltip:tooltipBase({
+        title:(items)=>items[0]?.raw?.label||"",
+        label:(ctx)=>`P50 Final Sermaye: ${money(ctx.raw.y)}`,
+        afterLabel:(ctx)=>{const m=ctx.raw.meta; return [`Avg DD: ${pct(m.avgDD,1)}`,`Risk/Trade: ${pct(m.risk,2)}`,`Ort. Kazanç R: ${fmtNum(m.avgWinR,2)}R`,`Ruin: ${pct(m.ruin,1)}`,isFinite(m.score)?`Skor: ${fmtNum(m.score,0)}`:"Skor: —"];}
+      }),aethelgardQuadrants:{enabled:true,xCut,yCut}},
+      scales:{x:{grid:axisGrid(),title:axisTitle("Ortalama Max Drawdown % (sol = daha iyi)"),ticks:{color:THEME.stone,callback:v=>Number(v).toFixed(0)+"%"}},y:{grid:axisGrid(),title:axisTitle("P50 Final Sermaye (yukarı = daha iyi)"),ticks:{color:THEME.stone,callback:v=>money(v)}}}
+    }});
+  }
+
+  function renderAllScatters(){
+    const state=pickState(), result=state?.last; if(!result?.p) return;
+    renderPathScatters(result);
+    renderVolatilitySweep(result);
+  }
+  function makeSig(result){
+    if(!result?.p) return "";
+    const p=result.p;
+    return [result.seed,p.seedMode,p.simSeed,p.days,p.initialCapital,p.targetCapital,p.riskPerTradePct,p.tradesPerDay,p.winRate,p.avgWinR,p.avgLossR,p.tradeCostR,p.breakEvenRate,p.volatilityFactor,p.shockProbability,p.shockImpactR,p.maxDailyLossPct,result.pathStats?.length].join("|");
+  }
+  function makeOptSig(state){
+    const rows=state?.optResults?.rows; if(!Array.isArray(rows)) return "";
+    return [rows.length,rows[0]?.score,rows[0]?.eligible,rows[0]?.sim?.p50,state.optSelectedIndex].join("|");
+  }
+  function boot(){
+    window.setInterval(()=>{
+      const state=pickState(); if(!state) return;
+      const sig=makeSig(state.last);
+      if(sig && sig!==runtime.lastSig){ runtime.lastSig=sig; try{renderAllScatters();}catch(err){console.error("scatter render",err);} }
+      const optSig=makeOptSig(state);
+      if(optSig!==runtime.optSig){ runtime.optSig=optSig; try{renderOptFrontier();}catch(err){console.error("frontier render",err);} }
+    },700);
+    window.setTimeout(()=>{try{renderAllScatters();renderOptFrontier();}catch(err){console.error(err);}},1100);
+  }
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",boot); else boot();
+})();
+</script>
+
+
 </body>
 </html>
