@@ -4716,6 +4716,902 @@ body{
   .metric-ledger-row span{font-size:9px !important}
   .metric-ledger-row strong{font-size:12px !important}
 }
+
+/* === P9 HUD LOCK: executive metrics remain visible at viewport top === */
+:root{
+  --sticky-hud-h:104px;
+  --sticky-hud-gap:8px;
+}
+body{
+  padding-top:calc(var(--sticky-hud-h) + 14px) !important;
+}
+.result-strip{
+  position:fixed !important;
+  top:0 !important;
+  left:50% !important;
+  transform:translateX(-50%) !important;
+  width:min(calc(100vw - 32px),1780px) !important;
+  max-width:1780px !important;
+  z-index:900 !important;
+  margin:0 !important;
+  box-sizing:border-box !important;
+  display:grid !important;
+  grid-template-columns:minmax(210px,1.22fr) minmax(250px,1.52fr) repeat(5,minmax(132px,.88fr)) !important;
+  gap:8px !important;
+  padding:8px 0 10px !important;
+  border-top:0 !important;
+  border-bottom:1px solid rgba(222,212,196,.72) !important;
+  background:rgba(247,243,235,.97) !important;
+  backdrop-filter:blur(18px) saturate(1.02) !important;
+  -webkit-backdrop-filter:blur(18px) saturate(1.02) !important;
+  box-shadow:0 10px 24px rgba(32,27,21,.055) !important;
+}
+.mode-tabs{
+  position:sticky !important;
+  top:calc(var(--sticky-hud-h) + var(--sticky-hud-gap)) !important;
+  z-index:650 !important;
+}
+.sim-progress{
+  position:fixed !important;
+  top:calc(var(--sticky-hud-h) + 4px) !important;
+  left:50% !important;
+  transform:translateX(-50%) !important;
+  width:min(calc(100vw - 32px),1780px) !important;
+  max-width:1780px !important;
+  z-index:890 !important;
+}
+@media (max-width:1120px){
+  :root{--sticky-hud-h:116px;}
+  body{padding-top:calc(var(--sticky-hud-h) + 12px) !important;}
+  .result-strip{
+    display:flex !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    -webkit-overflow-scrolling:touch !important;
+    scroll-snap-type:x proximity !important;
+    gap:8px !important;
+    padding:7px 0 9px !important;
+    width:calc(100vw - 24px) !important;
+    scrollbar-width:none !important;
+  }
+  .result-strip::-webkit-scrollbar{display:none !important;}
+  .result-strip .metric{
+    flex:0 0 156px !important;
+    width:auto !important;
+    min-height:94px !important;
+    scroll-snap-align:start !important;
+  }
+  .result-strip .hero-metric{flex-basis:270px !important;}
+  .mode-tabs{
+    top:calc(var(--sticky-hud-h) + var(--sticky-hud-gap)) !important;
+  }
+  .sim-progress{
+    top:calc(var(--sticky-hud-h) + 4px) !important;
+    width:calc(100vw - 24px) !important;
+  }
+}
+@media (max-width:640px){
+  :root{--sticky-hud-h:110px; --sticky-hud-gap:6px;}
+  body{padding-top:calc(var(--sticky-hud-h) + 10px) !important;}
+  .result-strip{
+    width:calc(100vw - 18px) !important;
+    gap:7px !important;
+    padding:6px 0 8px !important;
+  }
+  .result-strip .metric{
+    flex-basis:148px !important;
+    min-height:88px !important;
+    padding:9px 10px !important;
+  }
+  .result-strip .hero-metric{flex-basis:258px !important;}
+  .sim-progress{width:calc(100vw - 18px) !important;}
+}
+@media print{
+  body{padding-top:0 !important;}
+  .result-strip{
+    position:relative !important;
+    top:auto !important;
+    left:auto !important;
+    transform:none !important;
+    width:auto !important;
+    max-width:none !important;
+    z-index:auto !important;
+  }
+  .mode-tabs{position:static !important; top:auto !important;}
+  .sim-progress{display:none !important;}
+}
+
+
+/* === DEPLOY P10: final interaction and responsive audit guard === */
+.mode-tabs{
+  position:sticky !important;
+  top:calc(var(--sticky-hud-h,104px) + var(--sticky-hud-gap,8px)) !important;
+  z-index:650 !important;
+  display:grid !important;
+  grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+  gap:6px !important;
+  overflow:visible !important;
+}
+.mode-btn{min-width:0 !important;}
+@media (max-width:860px){
+  .mode-tabs{
+    display:flex !important;
+    grid-template-columns:none !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    -webkit-overflow-scrolling:touch !important;
+    scroll-snap-type:x proximity !important;
+    padding:6px !important;
+  }
+  .mode-btn{
+    flex:0 0 auto !important;
+    min-width:136px !important;
+    scroll-snap-align:start !important;
+  }
+}
+.result-strip{
+  position:fixed !important;
+  top:0 !important;
+  left:50% !important;
+  transform:translateX(-50%) !important;
+  z-index:900 !important;
+}
+@media print{
+  body{padding-top:0 !important;}
+  .result-strip{position:relative !important;left:auto !important;transform:none !important;top:auto !important;}
+  .mode-tabs{position:relative !important;top:auto !important;display:none !important;}
+}
+
+
+/* === P11: index-style sticky HUD, compact final band and per-slider play actions === */
+body{
+  padding-top:24px !important;
+}
+.result-strip{
+  position:sticky !important;
+  top:0 !important;
+  left:auto !important;
+  right:auto !important;
+  transform:none !important;
+  width:100% !important;
+  max-width:100% !important;
+  z-index:720 !important;
+  margin:0 !important;
+  box-sizing:border-box !important;
+  display:grid !important;
+  grid-template-columns:minmax(142px,.82fr) minmax(150px,.9fr) minmax(206px,1.32fr) repeat(5,minmax(112px,.72fr)) !important;
+  gap:7px !important;
+  padding:8px 0 10px !important;
+  border:0 !important;
+  border-top:1px solid rgba(230,222,210,.62) !important;
+  border-bottom:1px solid rgba(222,212,196,.70) !important;
+  border-radius:0 !important;
+  background:rgba(247,243,235,.965) !important;
+  backdrop-filter:blur(16px) saturate(1.02) !important;
+  -webkit-backdrop-filter:blur(16px) saturate(1.02) !important;
+  box-shadow:0 8px 18px rgba(32,27,21,.045) !important;
+}
+.result-strip .metric{
+  min-width:0 !important;
+  width:auto !important;
+  min-height:74px !important;
+  padding:9px 10px !important;
+  border-radius:0 !important;
+  overflow:hidden !important;
+}
+.result-strip .metric-value{
+  max-width:100% !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  white-space:nowrap !important;
+  font-size:clamp(17px,1.25vw,22px) !important;
+  line-height:1 !important;
+}
+.result-strip .hero-metric .metric-value{
+  font-size:clamp(23px,2.15vw,36px) !important;
+}
+.result-strip .metric-label,
+.result-strip .metric-sub{
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+.mode-tabs{
+  position:sticky !important;
+  top:calc(var(--live-hud-h,92px) + 6px) !important;
+  z-index:650 !important;
+}
+.sim-progress{
+  position:fixed !important;
+  top:calc(var(--live-hud-h,92px) + 6px) !important;
+}
+.final-band{
+  padding:14px !important;
+}
+.final-band .panorama-head{
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) minmax(138px,.45fr) !important;
+  gap:12px !important;
+  align-items:center !important;
+  margin-bottom:8px !important;
+}
+.final-band .panorama-head h3{
+  font-size:clamp(22px,2vw,30px) !important;
+  line-height:.95 !important;
+  margin:2px 0 0 !important;
+}
+.panorama-anchor{
+  min-width:0 !important;
+  padding:8px 10px !important;
+}
+.panorama-anchor strong{
+  display:block !important;
+  max-width:100% !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  white-space:nowrap !important;
+  font-size:clamp(21px,2.2vw,32px) !important;
+}
+.compact-final-ledger{
+  display:grid !important;
+  grid-template-columns:repeat(7,minmax(0,1fr)) !important;
+  gap:6px !important;
+}
+.compact-final-ledger .percentile-row{
+  display:flex !important;
+  flex-direction:column !important;
+  gap:3px !important;
+  min-width:0 !important;
+  padding:8px 8px !important;
+  border:1px solid rgba(222,212,196,.68) !important;
+  border-radius:10px !important;
+  background:#fffdf8 !important;
+}
+.compact-final-ledger .percentile-row span{
+  font-size:8px !important;
+  letter-spacing:.1em !important;
+  text-transform:uppercase !important;
+  color:var(--stone) !important;
+}
+.compact-final-ledger .percentile-row strong{
+  display:block !important;
+  max-width:100% !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  white-space:nowrap !important;
+  font-size:clamp(12px,1.08vw,16px) !important;
+  line-height:1.05 !important;
+}
+.compact-final-ledger .percentile-row em{
+  display:block !important;
+  max-width:100% !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  white-space:nowrap !important;
+  font-size:9px !important;
+  line-height:1.2 !important;
+}
+.compact-final-ledger .tail-mean{
+  border-color:rgba(206,90,55,.28) !important;
+  background:linear-gradient(180deg,rgba(206,90,55,.055),#fffdf8) !important;
+}
+.control-top{
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) auto !important;
+  align-items:start !important;
+  gap:10px !important;
+}
+.control-run{
+  width:34px !important;
+  height:34px !important;
+  min-width:34px !important;
+  border:1px solid rgba(206,90,55,.30) !important;
+  background:linear-gradient(180deg,#fffdf8,#f6efe4) !important;
+  color:var(--terra) !important;
+  display:inline-grid !important;
+  place-items:center !important;
+  border-radius:999px !important;
+  cursor:pointer !important;
+  box-shadow:0 6px 14px rgba(56,42,25,.055) !important;
+}
+.control-run svg{
+  width:14px !important;
+  height:14px !important;
+  fill:currentColor !important;
+  stroke:none !important;
+}
+.control-run:hover{
+  border-color:var(--terra) !important;
+  box-shadow:0 8px 18px rgba(206,90,55,.12) !important;
+}
+@media (max-width:1120px){
+  body{padding-top:16px !important;}
+  .result-strip{
+    display:flex !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    -webkit-overflow-scrolling:touch !important;
+    scroll-snap-type:x proximity !important;
+    gap:8px !important;
+    padding:7px 0 9px !important;
+    width:100% !important;
+    scrollbar-width:none !important;
+  }
+  .result-strip::-webkit-scrollbar{display:none !important;}
+  .result-strip .metric{
+    flex:0 0 148px !important;
+    min-height:86px !important;
+    scroll-snap-align:start !important;
+  }
+  .result-strip .hero-metric{flex-basis:248px !important;}
+  .result-strip .tail-avg-metric{flex-basis:176px !important;}
+  .mode-tabs{top:calc(var(--live-hud-h,104px) + 6px) !important;}
+  .compact-final-ledger{
+    grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+  }
+}
+@media (max-width:640px){
+  body{padding:12px !important;}
+  .result-strip{
+    gap:7px !important;
+    padding:6px 0 8px !important;
+  }
+  .result-strip .metric{
+    flex-basis:136px !important;
+    min-height:82px !important;
+    padding:8px 9px !important;
+  }
+  .result-strip .hero-metric{flex-basis:232px !important;}
+  .result-strip .tail-avg-metric{flex-basis:168px !important;}
+  .mode-tabs{top:calc(var(--live-hud-h,98px) + 5px) !important;}
+  .final-band .panorama-head{
+    grid-template-columns:1fr !important;
+  }
+  .compact-final-ledger{
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  }
+  .control-run{
+    width:38px !important;
+    height:38px !important;
+    min-width:38px !important;
+  }
+}
+@media print{
+  .result-strip{
+    position:relative !important;
+    top:auto !important;
+    box-shadow:none !important;
+    background:#fff !important;
+  }
+  .mode-tabs{position:relative !important;top:auto !important;display:none !important;}
+}
+
+
+/* === P13: index-style HUD flow + scroll dock + compact tail band === */
+:root{
+  --metric-dock-h:58px;
+  --metric-dock-bg:rgba(255,253,248,.972);
+}
+body{
+  padding-top:24px !important;
+}
+.result-strip{
+  position:relative !important;
+  top:auto !important;
+  left:auto !important;
+  right:auto !important;
+  transform:none !important;
+  z-index:30 !important;
+  width:100% !important;
+  max-width:100% !important;
+  margin:0 !important;
+  box-sizing:border-box !important;
+  display:grid !important;
+  grid-template-columns:minmax(120px,.68fr) minmax(136px,.74fr) minmax(178px,1.08fr) repeat(5,minmax(96px,.52fr)) !important;
+  gap:6px !important;
+  padding:7px 0 9px !important;
+  border:0 !important;
+  border-top:1px solid rgba(230,222,210,.54) !important;
+  border-bottom:1px solid rgba(222,212,196,.62) !important;
+  border-radius:0 !important;
+  background:transparent !important;
+  box-shadow:none !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+}
+.result-strip .metric{
+  min-width:0 !important;
+  width:auto !important;
+  min-height:62px !important;
+  padding:8px 9px !important;
+  border-radius:0 !important;
+  background:#fffefb !important;
+  border:1px solid rgba(224,216,203,.62) !important;
+  box-shadow:0 7px 16px rgba(32,27,21,.018) !important;
+  overflow:hidden !important;
+}
+.result-strip .metric-label{
+  display:block !important;
+  color:#756d64 !important;
+  font-size:7.6px !important;
+  line-height:1.1 !important;
+  letter-spacing:.085em !important;
+  font-weight:750 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+.result-strip .metric-value{
+  display:block !important;
+  max-width:100% !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  white-space:nowrap !important;
+  font-size:clamp(15px,1.02vw,19px) !important;
+  line-height:1 !important;
+  margin-top:5px !important;
+}
+.result-strip .hero-metric{
+  border-left:4px solid rgba(206,90,55,.52) !important;
+}
+.result-strip .hero-metric .metric-value{
+  font-size:clamp(21px,1.8vw,31px) !important;
+}
+.result-strip .tail-avg-metric{
+  border-left:3px solid rgba(127,39,55,.34) !important;
+}
+.result-strip .metric-sub{
+  display:block !important;
+  margin-top:4px !important;
+  color:#978f86 !important;
+  font-size:8.2px !important;
+  line-height:1.12 !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  white-space:nowrap !important;
+}
+.metric-dock{
+  position:fixed !important;
+  top:0 !important;
+  left:0 !important;
+  right:0 !important;
+  z-index:1200 !important;
+  height:var(--metric-dock-h) !important;
+  min-height:var(--metric-dock-h) !important;
+  padding:0 24px !important;
+  display:flex !important;
+  align-items:center !important;
+  background:var(--metric-dock-bg) !important;
+  border-bottom:1px solid rgba(222,212,196,.78) !important;
+  box-shadow:0 8px 20px rgba(32,27,21,.068) !important;
+  backdrop-filter:blur(18px) saturate(1.04) !important;
+  -webkit-backdrop-filter:blur(18px) saturate(1.04) !important;
+  transform:translateY(-110%) !important;
+  opacity:0 !important;
+  pointer-events:none !important;
+  transition:transform .22s ease, opacity .18s ease !important;
+}
+body.show-metric-dock .metric-dock{
+  transform:translateY(0) !important;
+  opacity:1 !important;
+  pointer-events:auto !important;
+}
+.metric-dock-inner{
+  width:100% !important;
+  height:100% !important;
+  display:flex !important;
+  align-items:stretch !important;
+  overflow-x:auto !important;
+  overflow-y:hidden !important;
+  -webkit-overflow-scrolling:touch !important;
+  scrollbar-width:none !important;
+  scroll-snap-type:x proximity !important;
+}
+.metric-dock-inner::-webkit-scrollbar{display:none !important;}
+.dock-card{
+  flex:1 1 0 !important;
+  min-width:92px !important;
+  height:100% !important;
+  padding:8px 12px 7px !important;
+  border-right:1px solid rgba(222,212,196,.48) !important;
+  display:flex !important;
+  flex-direction:column !important;
+  justify-content:center !important;
+  overflow:hidden !important;
+  background:transparent !important;
+  box-shadow:none !important;
+  border-radius:0 !important;
+  scroll-snap-align:start !important;
+}
+.dock-card span{
+  display:block !important;
+  color:#9a9087 !important;
+  font-size:7.5px !important;
+  line-height:1 !important;
+  letter-spacing:.11em !important;
+  text-transform:uppercase !important;
+  font-weight:760 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  margin:0 0 4px !important;
+}
+.dock-card strong{
+  display:block !important;
+  color:var(--ink) !important;
+  font-family:"Cormorant Garamond",Georgia,serif !important;
+  font-size:clamp(16px,1.2vw,22px) !important;
+  font-weight:520 !important;
+  line-height:1 !important;
+  letter-spacing:-.02em !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+.dock-primary{
+  flex:1.55 1 0 !important;
+  min-width:178px !important;
+  border-left:3px solid rgba(206,90,55,.58) !important;
+}
+.dock-primary strong{font-size:clamp(19px,1.75vw,29px) !important;}
+.dock-tail{border-left:3px solid rgba(127,39,55,.32) !important;}
+.dock-risk{border-left:3px solid rgba(127,39,55,.38) !important;}
+.dock-card em{
+  display:block !important;
+  color:#9a9087 !important;
+  font-size:8px !important;
+  line-height:1 !important;
+  font-style:normal !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  margin-top:3px !important;
+}
+.mode-tabs{
+  position:sticky !important;
+  top:0 !important;
+  z-index:700 !important;
+}
+body.show-metric-dock .mode-tabs{
+  top:calc(var(--metric-dock-h) + 6px) !important;
+}
+.sim-progress{
+  position:fixed !important;
+  top:calc(var(--metric-dock-h) + 6px) !important;
+  z-index:1300 !important;
+}
+.final-band{
+  padding:10px 12px !important;
+}
+.final-band .panorama-head{
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) auto !important;
+  gap:10px !important;
+  align-items:center !important;
+  margin-bottom:7px !important;
+}
+.final-band .panorama-head h3{
+  font-size:clamp(20px,1.8vw,27px) !important;
+  line-height:.95 !important;
+  margin:0 !important;
+}
+.panorama-anchor{
+  padding:7px 10px !important;
+  min-width:128px !important;
+}
+.panorama-anchor .value{
+  font-size:clamp(18px,1.45vw,25px) !important;
+  max-width:100% !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  white-space:nowrap !important;
+}
+.compact-final-ledger{
+  grid-template-columns:repeat(7,minmax(0,1fr)) !important;
+  gap:5px !important;
+}
+.compact-final-ledger .tile{
+  min-width:0 !important;
+  padding:7px 8px !important;
+}
+.compact-final-ledger .tile span{
+  font-size:7.3px !important;
+  line-height:1 !important;
+}
+.compact-final-ledger .tile strong{
+  font-size:clamp(12px,.9vw,16px) !important;
+  line-height:1 !important;
+  max-width:100% !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  white-space:nowrap !important;
+}
+@media (max-width:1120px){
+  body{padding-top:16px !important;}
+  .result-strip{
+    display:flex !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    -webkit-overflow-scrolling:touch !important;
+    scroll-snap-type:x proximity !important;
+    gap:7px !important;
+    padding:6px 0 8px !important;
+    scrollbar-width:none !important;
+  }
+  .result-strip::-webkit-scrollbar{display:none !important;}
+  .result-strip .metric{
+    flex:0 0 132px !important;
+    min-height:76px !important;
+    scroll-snap-align:start !important;
+  }
+  .result-strip .hero-metric{flex-basis:226px !important;}
+  .result-strip .tail-avg-metric{flex-basis:158px !important;}
+  .metric-dock{padding:0 12px !important; --metric-dock-h:56px;}
+  .dock-card{
+    flex:0 0 104px !important;
+    min-width:104px !important;
+    padding:7px 10px !important;
+  }
+  .dock-primary{flex-basis:204px !important; min-width:204px !important;}
+  .dock-tail{flex-basis:146px !important; min-width:146px !important;}
+  .compact-final-ledger{
+    grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+  }
+}
+@media (max-width:640px){
+  body{padding:12px !important;}
+  .result-strip .metric{
+    flex-basis:124px !important;
+    min-height:72px !important;
+    padding:7px 8px !important;
+  }
+  .result-strip .hero-metric{flex-basis:212px !important;}
+  .result-strip .tail-avg-metric{flex-basis:150px !important;}
+  .metric-dock{padding:0 10px !important; --metric-dock-h:54px;}
+  .dock-card{
+    flex-basis:98px !important;
+    min-width:98px !important;
+    padding:7px 9px !important;
+  }
+  .dock-primary{flex-basis:190px !important; min-width:190px !important;}
+  .dock-tail{flex-basis:140px !important; min-width:140px !important;}
+  .final-band .panorama-head{
+    grid-template-columns:1fr !important;
+  }
+  .compact-final-ledger{
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  }
+}
+@media print{
+  .metric-dock{display:none !important;}
+  .result-strip{
+    position:relative !important;
+    top:auto !important;
+    box-shadow:none !important;
+    background:#fff !important;
+  }
+  .mode-tabs{position:relative !important;top:auto !important;display:none !important;}
+}
+
+
+/* === P14: dock contrast + icon-only play buttons + executive final band === */
+.metric-dock{
+  background:
+    linear-gradient(180deg,rgba(255,253,248,.992),rgba(247,243,235,.972)) !important;
+  border-bottom:1px solid rgba(198,91,54,.18) !important;
+  box-shadow:0 10px 28px rgba(44,32,20,.105) !important;
+  backdrop-filter:blur(18px) saturate(1.14) !important;
+  -webkit-backdrop-filter:blur(18px) saturate(1.14) !important;
+}
+.dock-card{
+  background:linear-gradient(180deg,rgba(255,253,248,.72),rgba(255,250,242,.48)) !important;
+  border-right:1px solid rgba(205,191,174,.62) !important;
+}
+.dock-card span{
+  color:#655c52 !important;
+  font-weight:850 !important;
+  letter-spacing:.12em !important;
+}
+.dock-card strong{
+  color:#171411 !important;
+  font-weight:610 !important;
+}
+.dock-card em{
+  color:#7f766c !important;
+  font-weight:520 !important;
+}
+.dock-primary{
+  background:linear-gradient(180deg,rgba(206,90,55,.092),rgba(255,253,248,.84)) !important;
+  border-left:4px solid rgba(206,90,55,.78) !important;
+}
+.dock-primary strong{ color:var(--terra) !important; }
+.dock-tail{
+  background:linear-gradient(180deg,rgba(127,39,55,.074),rgba(255,253,248,.86)) !important;
+  border-left:4px solid rgba(127,39,55,.70) !important;
+}
+.dock-tail strong{ color:var(--ruby) !important; }
+.dock-risk{
+  background:linear-gradient(180deg,rgba(127,39,55,.064),rgba(255,253,248,.88)) !important;
+  border-left:4px solid rgba(127,39,55,.66) !important;
+}
+.dock-risk strong{ color:var(--ruby) !important; }
+
+.control-run{
+  font-size:0 !important;
+  letter-spacing:0 !important;
+  line-height:0 !important;
+  padding:0 !important;
+  overflow:visible !important;
+  isolation:isolate !important;
+}
+.control-run svg{
+  display:block !important;
+  pointer-events:none !important;
+}
+.control-run.is-running{
+  opacity:1 !important;
+  color:#fffdf8 !important;
+  background:linear-gradient(135deg,var(--terra),#9f3f24) !important;
+  border-color:rgba(206,90,55,.85) !important;
+  animation:controlRunPulse .84s ease-in-out infinite alternate !important;
+}
+.control-run.is-running::before{
+  content:"" !important;
+  position:absolute !important;
+  inset:-5px !important;
+  border-radius:999px !important;
+  border:1px solid rgba(206,90,55,.34) !important;
+  opacity:.74 !important;
+  animation:controlRunHalo 1.05s ease-out infinite !important;
+}
+.control-run.is-running::after{
+  content:"" !important;
+  position:absolute !important;
+  right:4px !important;
+  top:4px !important;
+  width:6px !important;
+  height:6px !important;
+  border-radius:50% !important;
+  background:#fffdf8 !important;
+  box-shadow:0 0 0 2px rgba(255,253,248,.34) !important;
+  animation:simPulse .72s ease-in-out infinite alternate !important;
+}
+@keyframes controlRunPulse{
+  from{transform:translateY(0) scale(.98);box-shadow:0 8px 18px rgba(206,90,55,.13)}
+  to{transform:translateY(-1px) scale(1.02);box-shadow:0 12px 26px rgba(206,90,55,.22)}
+}
+@keyframes controlRunHalo{
+  from{transform:scale(.86);opacity:.62}
+  to{transform:scale(1.18);opacity:0}
+}
+
+.results-panorama .panorama-grid{
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  align-items:start !important;
+}
+.results-panorama .final-band{
+  grid-column:1 / -1 !important;
+  grid-row:auto !important;
+  display:grid !important;
+  grid-template-columns:minmax(230px,.42fr) minmax(0,1fr) !important;
+  gap:10px !important;
+  padding:12px !important;
+  border-left:0 !important;
+  border-top:3px solid rgba(206,90,55,.52) !important;
+  background:linear-gradient(135deg,#fffdf8 0%,#fbf4ea 100%) !important;
+}
+.final-band .panorama-head{
+  margin:0 !important;
+  padding:12px 13px !important;
+  border:1px solid rgba(226,216,201,.75) !important;
+  background:
+    radial-gradient(circle at 0 0,rgba(206,90,55,.10),transparent 58%),
+    linear-gradient(180deg,#fffefb,#fbf6ee) !important;
+  display:flex !important;
+  flex-direction:column !important;
+  justify-content:space-between !important;
+  min-height:132px !important;
+}
+.final-band .panorama-head h3{
+  font-size:clamp(22px,2vw,32px) !important;
+  letter-spacing:-.02em !important;
+}
+.final-band .panorama-anchor{
+  width:100% !important;
+  min-width:0 !important;
+  text-align:left !important;
+  padding:0 !important;
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+}
+.final-band .panorama-anchor span{
+  font-size:8px !important;
+  color:#82786e !important;
+}
+.final-band .panorama-anchor strong{
+  display:block !important;
+  max-width:100% !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  white-space:nowrap !important;
+  color:var(--terra) !important;
+  font-size:clamp(22px,2.45vw,40px) !important;
+  line-height:.96 !important;
+}
+.compact-final-ledger{
+  display:grid !important;
+  grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+  gap:8px !important;
+  align-self:stretch !important;
+}
+.compact-final-ledger .percentile-row{
+  display:flex !important;
+  flex-direction:column !important;
+  justify-content:space-between !important;
+  gap:6px !important;
+  min-height:62px !important;
+  padding:9px 10px !important;
+  border-radius:10px !important;
+  border:1px solid rgba(226,216,201,.76) !important;
+  border-left-width:3px !important;
+  background:#fffefb !important;
+  min-width:0 !important;
+}
+.compact-final-ledger .percentile-row span{
+  font-size:8px !important;
+  letter-spacing:.105em !important;
+  line-height:1 !important;
+  color:#71685f !important;
+}
+.compact-final-ledger .percentile-row strong{
+  display:block !important;
+  width:100% !important;
+  max-width:100% !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  white-space:nowrap !important;
+  font-size:clamp(13px,1vw,18px) !important;
+  line-height:1.02 !important;
+  color:var(--ink) !important;
+}
+.compact-final-ledger .percentile-row em{
+  display:block !important;
+  max-width:100% !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  white-space:nowrap !important;
+  font-size:8.6px !important;
+  line-height:1.1 !important;
+  color:#92897f !important;
+}
+.compact-final-ledger .percentile-row.median{
+  background:linear-gradient(180deg,rgba(206,90,55,.082),#fffdf8) !important;
+  border-color:rgba(206,90,55,.34) !important;
+}
+.compact-final-ledger .percentile-row.median strong{
+  color:var(--terra) !important;
+}
+.compact-final-ledger .percentile-row.tail-mean{
+  background:linear-gradient(180deg,rgba(127,39,55,.055),#fffdf8) !important;
+  border-color:rgba(127,39,55,.24) !important;
+}
+@media (max-width:1120px){
+  .results-panorama .final-band{
+    grid-template-columns:1fr !important;
+  }
+  .final-band .panorama-head{
+    min-height:0 !important;
+  }
+}
+@media (max-width:720px){
+  .results-panorama .panorama-grid{
+    grid-template-columns:1fr !important;
+  }
+  .compact-final-ledger{
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -4737,6 +5633,11 @@ body{
 <div class="metric-label">P5 Final Sermaye</div>
 <div class="metric-value mono" id="hudP5">—</div>
 <div class="metric-sub" id="hudP5Sub">Kötü senaryo bandı</div>
+</div>
+<div class="metric bad tail-avg-metric">
+<div class="metric-label">Alt %10 Ortalaması</div>
+<div class="metric-value mono" id="hudTailAvg">—</div>
+<div class="metric-sub" id="hudTailAvgSub">Alt %5: —</div>
 </div>
 <div class="metric hero-metric">
 <div class="metric-label">Medyan Final Sermaye</div>
@@ -4769,6 +5670,20 @@ body{
 <div class="metric-sub">0–100 uygunluk göstergesi</div>
 </div>
 </section>
+
+<section aria-label="Sabit özet göstergeleri" class="metric-dock" id="metricDock">
+  <div class="metric-dock-inner" id="metricDockInner">
+    <div class="dock-card dock-tail"><span>P5 Final</span><strong data-dock-value="hudP5">—</strong><em data-dock-sub="hudP5Sub">Kötü senaryo</em></div>
+    <div class="dock-card dock-tail"><span>Alt %10 Ort.</span><strong data-dock-value="hudTailAvg">—</strong><em data-dock-sub="hudTailAvgSub">Alt %5: —</em></div>
+    <div class="dock-card dock-primary"><span>Medyan Final</span><strong data-dock-value="hudMedian">—</strong><em data-dock-sub="hudMedianSub">Bekleniyor</em></div>
+    <div class="dock-card"><span>Hedef</span><strong data-dock-value="hudTarget">—</strong><em>Temas olasılığı</em></div>
+    <div class="dock-card"><span>Kârda Bitiş</span><strong data-dock-value="hudProfit">—</strong><em>Final &gt; başlangıç</em></div>
+    <div class="dock-card dock-risk"><span>Kritik Risk</span><strong data-dock-value="hudRuin">—</strong><em>Eşik teması</em></div>
+    <div class="dock-card"><span>Beklenen R</span><strong data-dock-value="hudER">—</strong><em data-dock-sub="hudERSub">Bekleniyor</em></div>
+    <div class="dock-card"><span>Skor</span><strong data-dock-value="hudHealth">—</strong><em>0–100</em></div>
+  </div>
+</section>
+
 <section aria-label="Simülasyon ilerleme durumu" aria-live="polite" class="sim-progress" id="simProgress">
 <div class="sim-progress-top">
 <span id="simProgressText">Hesaplanıyor</span>
@@ -4817,8 +5732,8 @@ body{
 <div aria-label="Anahtar ve audit modu" class="audit-toolbar">
 <div class="audit-card">
 <div>
-<div class="compact-label">Tekrarlanabilirlik Modu <span class="mono">simAnahtar</span></div>
-<p><strong>Otomatik</strong> her çalıştırmada yeni seed üretir. <strong>Sabit</strong> aynı parametrelerle aynı Monte Carlo yollarını tekrar üretir; rapor, test ve müşteri sunumu için önerilir.</p>
+<div class="compact-label">Simülasyon Anahtarı <span class="mono">audit</span></div>
+<p><strong>Otomatik</strong> her çalıştırmada yeni anahtar üretir. <strong>Sabit</strong> aynı parametrelerle aynı olasılık yollarını tekrar üretir; rapor, test ve müşteri sunumu için önerilir.</p>
 </div>
 <div class="audit-controls">
 <div aria-label="Anahtar modu" class="segmented-selector seed-selector" role="group">
@@ -4990,7 +5905,7 @@ body{
 <div class="opt-constraint" data-opt-constraint-row="maxDD">
 <button aria-pressed="false" class="opt-toggle" data-opt-constraint="maxDD" type="button">Drawdown Kapalı</button>
 <label class="opt-field-card">
-<span class="opt-field-title">Ort. DD maksimum</span>
+<span class="opt-field-title">Ortalama drawdown üst sınırı</span>
 <input class="opt-input mono" disabled="" id="optMaxDD" max="100" min="0" step="0.5" type="number" value="20"/>
 </label>
 </div>
@@ -5034,7 +5949,7 @@ body{
 </div>
 <div class="opt-output-card opt-frontier-card">
 <div class="chart-title">Etkin Sınır Haritası · Optimizasyon Kararı</div>
-<div class="chart-copy">Isı haritası skoru gösterir; etkin sınır haritası ise aynı adayları risk-getiri uzayına taşır. X ekseni ortalama max drawdown (bulunamazsa ruin olasılığı), Y ekseni P50 final sermaye. İdeal alan sol-üsttür: daha düşük risk ile daha yüksek medyan sonuç.</div>
+<div class="chart-copy">Isı haritası skoru gösterir; etkin sınır haritası ise aynı adayları risk-getiri uzayına taşır. X ekseni ortalama drawdown yükünü, Y ekseni P50 final sermayeyi gösterir. İdeal alan sol-üsttür: daha düşük risk ile daha yüksek medyan sonuç.</div>
 <div class="canvas-wrap small"><canvas id="optFrontierChart"></canvas></div>
 <div class="scatter-guide">
 <div class="scatter-zone-grid">
@@ -5336,15 +6251,18 @@ body{
 <div class="panorama-head">
 <div>
 <span class="panorama-kicker">Final Sermaye Aralığı</span>
-<h3>Olası bitiş bandı</h3>
+<h3>Final bandı</h3>
 </div>
 <div class="panorama-anchor">
 <span>P50</span>
 <strong class="mono" id="p50Final">—</strong>
 </div>
 </div>
-<div class="percentile-ledger">
+<div class="percentile-ledger compact-final-ledger">
 <div class="percentile-row danger"><span>P5</span><strong class="mono" id="p5Final">—</strong><em>Kötü senaryo tabanı</em></div>
+<div class="percentile-row tail-mean"><span>Alt %5 Ort.</span><strong class="mono" id="p1p5Avg">—</strong><em>P1–P5 ortalaması</em></div>
+<div class="percentile-row danger soft"><span>P10</span><strong class="mono" id="p10Final">—</strong><em>Alt kuyruk eşiği</em></div>
+<div class="percentile-row tail-mean"><span>Alt %10 Ort.</span><strong class="mono" id="p1p10Avg">—</strong><em>P1–P10 ortalaması</em></div>
 <div class="percentile-row watch"><span>P25</span><strong class="mono" id="p25Final">—</strong><em>Zayıf ama olağan bant</em></div>
 <div class="percentile-row median"><span>P50</span><strong class="mono" id="p50FinalMirror">—</strong><em>Medyan sermaye yolu</em></div>
 <div class="percentile-row good"><span>P75</span><strong class="mono" id="p75Final">—</strong><em>Güçlü senaryo</em></div>
@@ -5392,7 +6310,7 @@ body{
 <div class="chart-head">
 <div>
 <div class="chart-title">Parametre Duyarlılığı · Analitik Etki Haritası</div>
-<div class="chart-copy">Bu hızlı skor MC sonucunu yeniden üretmez; mevcut sonuçlardan parametre etkisini analitik olarak sıralar. Gerçek ΔP50 için aşağıdaki MC sensitivity panelini çalıştır.</div>
+<div class="chart-copy">Bu hızlı skor, mevcut sonuçlardan parametre etkisini analitik olarak sıralar. Gerçek ΔP50 etkisini görmek için aşağıdaki olasılık duyarlılığı panelini çalıştır.</div>
 </div>
 </div>
 <div class="canvas-wrap priority-sensitivity"><canvas id="sensitivityChart"></canvas></div>
@@ -5424,7 +6342,7 @@ body{
 </div>
 </div>
 <div class="canvas-wrap small"><canvas id="scenarioCompareChart"></canvas></div>
-<div class="scenario-scale-note"><strong>Ölçek notu:</strong> Bu grafikte sol eksen logaritmik çalışır. Bu, çok agresif presetlerin P95/P50 değerleri diğer senaryoları görsel olarak sıfıra sıkıştırmasın diye yapılır; açıklama balonu ve kartlardaki ₺ değerler gerçek nominal sonuçlardır.</div>
+<div class="scenario-scale-note"><strong>Ölçek notu:</strong> Bu grafikte sol eksen logaritmik çalışır; böylece çok agresif senaryolar diğer sonuçları görsel olarak sıkıştırmaz. Kartlardaki ₺ değerler gerçek nominal sonuçlardır.</div>
 <div class="comparison-grid" id="scenarioCompareGrid">
 <div class="compare-card"><strong>Hazır</strong><span>Simülasyon çalışınca hazır senaryo karşılaştırması burada oluşur.</span></div>
 </div>
@@ -5702,6 +6620,9 @@ body{
           <div class="control-label">${c.label}</div>
           <div class="control-code mono">${c.code}</div>
         </div>
+        <button class="control-run run-sim" type="button" aria-label="${c.label} sonrası simülasyonu çalıştır" title="Bu ayarla çalıştır">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5l11 7-11 7V5z"></path></svg>
+        </button>
       </div>
       <p class="control-help">${c.help}</p>
       ${periodToggle}
@@ -6191,6 +7112,19 @@ function setupModes(){
     return sorted[lo] + (sorted[hi] - sorted[lo]) * (idx - lo);
   }
 
+  function averagePercentileBand(sorted, fromPct, toPct){
+    if(!sorted.length) return NaN;
+    const from = Math.max(1, Math.round(fromPct * 100));
+    const to = Math.max(from, Math.round(toPct * 100));
+    let total = 0;
+    let count = 0;
+    for(let pct = from; pct <= to; pct++){
+      total += percentile(sorted, pct / 100);
+      count += 1;
+    }
+    return count ? total / count : NaN;
+  }
+
   function expectedR(p){
     const winP = p.winRate / 100;
     const beP = p.breakEvenRate / 100;
@@ -6345,7 +7279,8 @@ function setupModes(){
     tuws.sort((a,b)=>a-b);
     streaks.sort((a,b)=>a-b);
 
-    const p5 = percentile(finals,.05), p25 = percentile(finals,.25), p50 = percentile(finals,.50), p75 = percentile(finals,.75), p95 = percentile(finals,.95);
+    const p5 = percentile(finals,.05), p10 = percentile(finals,.10), p25 = percentile(finals,.25), p50 = percentile(finals,.50), p75 = percentile(finals,.75), p95 = percentile(finals,.95);
+    const p1p5Avg = averagePercentileBand(finals,.01,.05), p1p10Avg = averagePercentileBand(finals,.01,.10);
     const mean = finals.reduce((a,b)=>a+b,0) / finals.length;
     const avgDD = dds.reduce((a,b)=>a+b,0) / dds.length;
     const worstDD = dds[dds.length-1] || 0;
@@ -6364,7 +7299,7 @@ function setupModes(){
       0, 100
     );
 
-    return {p, seed:rng.seed, finals, dds, tuws, streaks, pathStats, p5,p25,p50,p75,p95,mean,avgDD,worstDD,avgTUW,maxTUW,avgStreak,maxStreak,er,erAdjusted,targetProb,profitProb,ruinProb,pf,health,totalTrades};
+    return {p, seed:rng.seed, finals, dds, tuws, streaks, pathStats, p5,p10,p1p5Avg,p1p10Avg,p25,p50,p75,p95,mean,avgDD,worstDD,avgTUW,maxTUW,avgStreak,maxStreak,er,erAdjusted,targetProb,profitProb,ruinProb,pf,health,totalTrades};
   }
 
   function runSimulation(){
@@ -6498,7 +7433,8 @@ function setupModes(){
     tuws.sort((a,b)=>a-b);
     streaks.sort((a,b)=>a-b);
 
-    const p5 = percentile(finals,.05), p25 = percentile(finals,.25), p50 = percentile(finals,.50), p75 = percentile(finals,.75), p95 = percentile(finals,.95);
+    const p5 = percentile(finals,.05), p10 = percentile(finals,.10), p25 = percentile(finals,.25), p50 = percentile(finals,.50), p75 = percentile(finals,.75), p95 = percentile(finals,.95);
+    const p1p5Avg = averagePercentileBand(finals,.01,.05), p1p10Avg = averagePercentileBand(finals,.01,.10);
     const mean = finals.reduce((a,b)=>a+b,0) / finals.length;
     const avgDD = dds.reduce((a,b)=>a+b,0) / dds.length;
     const worstDD = dds[dds.length-1] || 0;
@@ -6517,7 +7453,7 @@ function setupModes(){
       0, 100
     );
 
-    const result = {p, seed:rng.seed, paths, ddPaths, pathStats, finals, dds, tuws, streaks, p5,p25,p50,p75,p95,mean,avgDD,worstDD,avgTUW,maxTUW,avgStreak,maxStreak,er,erAdjusted,targetProb,profitProb,ruinProb,pf,health,totalTrades};
+    const result = {p, seed:rng.seed, paths, ddPaths, pathStats, finals, dds, tuws, streaks, p5,p10,p1p5Avg,p1p10Avg,p25,p50,p75,p95,mean,avgDD,worstDD,avgTUW,maxTUW,avgStreak,maxStreak,er,erAdjusted,targetProb,profitProb,ruinProb,pf,health,totalTrades};
     state.last = result;
     return result;
   }
@@ -6752,8 +7688,8 @@ function setupModes(){
 
 function renderCharts(result){
     if(typeof Chart === "undefined") return;
-    if(Chart.defaults && Chart.defaults.font) Chart.defaults.font.family = "Inter";
-    if(Chart.defaults) Chart.defaults.color = "#6f675d";
+    Chart.defaults.font.family = "Inter";
+    Chart.defaults.color = "#6f675d";
     const fan = result.fan || sampledFan(result);
     const uw = result.uw || sampledUnderwater(result);
     const moneyTick = value => {
@@ -7633,6 +8569,8 @@ function renderCharts(result){
   function renderMetrics(result){
     $("hudP5").textContent = fmtMoney(result.p5);
     $("hudP5Sub").textContent = "P5: yolların %5’i bu seviyenin altında";
+    if($("hudTailAvg")) $("hudTailAvg").textContent = fmtMoney(result.p1p10Avg ?? result.p10 ?? result.p5);
+    if($("hudTailAvgSub")) $("hudTailAvgSub").textContent = "Alt %5: " + fmtMoney(result.p1p5Avg ?? result.p5);
     $("hudMedian").textContent = fmtMoney(result.p50);
     $("hudMedianSub").textContent = "Başlangıç: " + fmtMoney(result.p.initialCapital);
     $("hudTarget").textContent = fmtPct(result.targetProb,1);
@@ -7644,6 +8582,9 @@ function renderCharts(result){
     $("hudHealth").textContent = Math.round(result.health) + "/100";
 
     $("p5Final").textContent = fmtMoney(result.p5);
+    if($("p10Final")) $("p10Final").textContent = fmtMoney(result.p10 ?? result.p5);
+    if($("p1p5Avg")) $("p1p5Avg").textContent = fmtMoney(result.p1p5Avg ?? result.p5);
+    if($("p1p10Avg")) $("p1p10Avg").textContent = fmtMoney(result.p1p10Avg ?? result.p10 ?? result.p5);
     $("p25Final").textContent = fmtMoney(result.p25);
     $("p50Final").textContent = fmtMoney(result.p50);
     if($("p50FinalMirror")) $("p50FinalMirror").textContent = fmtMoney(result.p50);
@@ -7667,6 +8608,8 @@ function renderCharts(result){
 
     const rows = [
       ["P5", result.p5],
+      ["P10", result.p10 ?? result.p5],
+      ["Alt %10 Ort.", result.p5p10Avg ?? ((result.p5 + (result.p10 ?? result.p5)) / 2)],
       ["P25", result.p25],
       ["P50", result.p50],
       ["P75", result.p75],
@@ -7895,12 +8838,17 @@ function renderCharts(result){
     state.lastProgressLabel = label || "Hesaplanıyor";
 
     document.querySelectorAll(".run-sim").forEach(btn => {
+      const iconOnly = btn.classList.contains("control-run");
       if(active){
         if(!btn.dataset.originalHtml) btn.dataset.originalHtml = btn.innerHTML;
         btn.disabled = true;
         btn.classList.add("is-running");
         btn.setAttribute("aria-busy", "true");
-        btn.innerHTML = opts.buttonLabel || "Hesaplanıyor...";
+        if(iconOnly){
+          btn.setAttribute("aria-label", "Simülasyon çalışıyor");
+        } else {
+          btn.innerHTML = opts.buttonLabel || "Hesaplanıyor...";
+        }
       } else {
         btn.disabled = false;
         btn.classList.remove("is-running");
@@ -7909,6 +8857,7 @@ function renderCharts(result){
           btn.innerHTML = btn.dataset.originalHtml;
           delete btn.dataset.originalHtml;
         }
+        if(iconOnly) btn.setAttribute("aria-label", "Bu ayarla simülasyonu çalıştır");
       }
     });
 
@@ -8054,6 +9003,19 @@ function renderCharts(result){
         const lo = Math.floor(idx), hi = Math.ceil(idx);
         if(lo === hi) return sorted[lo];
         return sorted[lo] + (sorted[hi] - sorted[lo]) * (idx - lo);
+      }
+
+      function averagePercentileBand(sorted, fromPct, toPct){
+        if(!sorted.length) return NaN;
+        const from = Math.max(1, Math.round(fromPct * 100));
+        const to = Math.max(from, Math.round(toPct * 100));
+        let total = 0;
+        let count = 0;
+        for(let pct = from; pct <= to; pct++){
+          total += percentile(sorted, pct / 100);
+          count += 1;
+        }
+        return count ? total / count : NaN;
       }
 
       function expectedR(p){
@@ -8286,7 +9248,8 @@ function renderCharts(result){
         const fan = buildPercentileSeries(fanMatrix, sampleDays, iterations, false);
         const uw = buildPercentileSeries(ddMatrix, sampleDays, iterations, true);
 
-        const p5 = percentile(finals,.05), p25 = percentile(finals,.25), p50 = percentile(finals,.50), p75 = percentile(finals,.75), p95 = percentile(finals,.95);
+        const p5 = percentile(finals,.05), p10 = percentile(finals,.10), p25 = percentile(finals,.25), p50 = percentile(finals,.50), p75 = percentile(finals,.75), p95 = percentile(finals,.95);
+        const p1p5Avg = averagePercentileBand(finals,.01,.05), p1p10Avg = averagePercentileBand(finals,.01,.10);
         const avgDD = mean(dds);
         const worstDD = dds[dds.length-1] || 0;
         const avgTUW = mean(tuws);
@@ -8314,7 +9277,7 @@ function renderCharts(result){
           tuws,
           streaks,
           pathStats,
-          p5,p25,p50,p75,p95,
+          p5,p10,p1p5Avg,p1p10Avg,p25,p50,p75,p95,
           mean:mean(finals),
           avgDD,worstDD,avgTUW,maxTUW,avgStreak,maxStreak,
           er,erAdjusted,targetProb,profitProb,ruinProb,pf,health,totalTrades
@@ -8758,7 +9721,7 @@ function renderCharts(result){
     const s = pathSummary(stats, result);
     const qualityTone = s.ruin >= 20 || s.p5 < s.initial*.7 ? "ruby" : (s.dd75 >= 30 || s.streak75 >= 12 ? "terra" : "olive");
     const qualityTitle = qualityTone === "olive" ? "Patika kalitesi taşınabilir görünüyor" : (qualityTone === "terra" ? "Getiri potansiyeli var ama taşıma yükü yüksek" : "Alt kuyruk ve davranışsal risk baskın");
-    const ddBody = `Simülasyon yolları içinde <span class="mono">${s.n.toLocaleString("tr-TR")}</span> yolun tamamı okunuyor. Medyan max DD <span class="mono">${pct(s.dd50,1)}</span>, P75 DD <span class="mono">${pct(s.dd75,1)}</span>, P95 DD <span class="mono">${pct(s.dd95,1)}</span>.`;
+    const ddBody = `Simülasyon yolları içinde <span class="mono">${s.n.toLocaleString("tr-TR")}</span> yolun tamamı okunuyor. Medyan drawdown <span class="mono">${pct(s.dd50,1)}</span>, P75 drawdown <span class="mono">${pct(s.dd75,1)}</span>, P95 drawdown <span class="mono">${pct(s.dd95,1)}</span>.`;
     const streakTone = s.streak75 >= 15 ? "ruby" : (s.streak75 >= 9 ? "terra" : "olive");
     const streakBody = `Medyan en uzun net-negatif seri <span class="mono">${fmtNum(s.streak50,0)}</span> trade; P75 <span class="mono">${fmtNum(s.streak75,0)}</span>, P95 <span class="mono">${fmtNum(s.streak95,0)}</span>. Bu değer execution disiplini için pratik eşiktir.`;
     const outcomeTone = s.ruin >= 20 ? "ruby" : (s.target >= 55 ? "olive" : "terra");
@@ -8779,7 +9742,7 @@ function renderCharts(result){
       ? `${stats.length.toLocaleString("tr-TR")} yol hesaplandı · grafikte ${visualStats.length.toLocaleString("tr-TR")} temsili yol`
       : `${stats.length.toLocaleString("tr-TR")} sermaye yolu`;
     setStatus("scatterPathStatus", `${visualNote} · anahtar ${result.seed}`, "good");
-    setStatus("scatterOutcomeDDStatus", `P50 ${money(summary.p50)} · P75 DD ${pct(summary.dd75,1)}`, summary.dd75 > 35 ? "bad" : "good");
+    setStatus("scatterOutcomeDDStatus", `P50 ${money(summary.p50)} · P75 drawdown ${pct(summary.dd75,1)}`, summary.dd75 > 35 ? "bad" : "good");
     renderPathNarrative(stats, result);
 
     const commonTooltip = {
@@ -9041,5 +10004,66 @@ function renderCharts(result){
   if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",boot); else boot();
 })();
 </script>
+
+<script>
+(function(){
+  function updateHudHeight(){
+    var hud = document.querySelector('.result-strip');
+    if(!hud) return;
+    document.documentElement.style.setProperty('--live-hud-h', Math.ceil(hud.getBoundingClientRect().height) + 'px');
+  }
+  window.addEventListener('load', updateHudHeight);
+  window.addEventListener('resize', updateHudHeight);
+  document.addEventListener('DOMContentLoaded', updateHudHeight);
+  setTimeout(updateHudHeight, 250);
+  setTimeout(updateHudHeight, 1000);
+})();
+</script>
+
+
+<script>
+(function(){
+  const sourceIds = ["hudP5","hudTailAvg","hudMedian","hudTarget","hudProfit","hudRuin","hudER","hudHealth","hudP5Sub","hudTailAvgSub","hudMedianSub","hudERSub"];
+  let ticking = false;
+  function copyDockMetric(){
+    document.querySelectorAll("[data-dock-value]").forEach(el => {
+      const src = document.getElementById(el.getAttribute("data-dock-value"));
+      if(src) el.textContent = src.textContent || "—";
+    });
+    document.querySelectorAll("[data-dock-sub]").forEach(el => {
+      const src = document.getElementById(el.getAttribute("data-dock-sub"));
+      if(src) el.textContent = src.textContent || "";
+    });
+  }
+  function updateDockVisibility(){
+    ticking = false;
+    const strip = document.querySelector(".result-strip");
+    const dock = document.getElementById("metricDock");
+    if(!strip || !dock) return;
+    const rect = strip.getBoundingClientRect();
+    const shouldShow = rect.bottom <= 2;
+    document.body.classList.toggle("show-metric-dock", shouldShow);
+    copyDockMetric();
+  }
+  function requestUpdate(){
+    if(ticking) return;
+    ticking = true;
+    requestAnimationFrame(updateDockVisibility);
+  }
+  window.addEventListener("scroll", requestUpdate, {passive:true});
+  window.addEventListener("resize", requestUpdate, {passive:true});
+  document.addEventListener("DOMContentLoaded", () => {
+    copyDockMetric();
+    requestUpdate();
+    const strip = document.querySelector(".result-strip");
+    if(window.MutationObserver && strip){
+      const obs = new MutationObserver(copyDockMetric);
+      obs.observe(strip, {childList:true, subtree:true, characterData:true});
+    }
+  });
+  window.addEventListener("load", requestUpdate, {passive:true});
+})();
+</script>
+
 </body>
 </html>
