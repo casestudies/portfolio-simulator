@@ -2075,8 +2075,7 @@ white-space:nowrap !important;
 overflow:hidden !important;
 text-overflow:ellipsis !important;
 flex:0 0 auto !important;
-margin:0 0 5px !important;
-margin-bottom:3px !important;
+margin:0 0 3px !important;
 font-family:'Inter',sans-serif !important;
 }
 .dock-card strong{
@@ -2299,12 +2298,8 @@ border-radius:0 !important;
   top:68px !important;
   }
 
-}.metric-dock .dock-primary, .dock-primary{
-border-left:4px solid var(--terra) !important;
-}
-.metric-dock .dock-life, .dock-life{
-border-left:4px solid var(--olive) !important;
-}
+}/* dock-primary 4px → normalized to 3px above */
+/* dock-life border → normalized to 3px above */
 .btn.primary:hover{
 background:linear-gradient(135deg,#da704a 0%,#ce5a37 56%,#a9472b 100%) !important;
 border-color:#ce5a37 !important;
@@ -4725,6 +4720,78 @@ display:inline-flex;
   animation:dockGlowOlive 2.2s ease-in-out infinite;
 }
 
+/* ── HUD scroll track (mobile horizontal scroll + fade hint) ── */
+.hud-scroll-track{position:relative}
+.hud-scroll-track::after{
+  content:'';position:absolute;
+  top:0;right:0;bottom:0;width:48px;
+  background:linear-gradient(to right,transparent,rgba(251,247,239,.94));
+  pointer-events:none;z-index:5;border-radius:0 20px 20px 0;
+  display:none;
+}
+@media(max-width:1120px){
+  .hud-scroll-track::after{display:block}
+  /* Explicit horizontal scroll on mobile — overrides any legacy grid */
+  .executive-hud.gallery-ledger-hud{
+    grid-template-columns:none!important;
+    grid-template-rows:none!important;
+    grid-auto-flow:column!important;
+    grid-auto-columns:minmax(175px,1fr)!important;
+    overflow-x:auto!important;
+    scroll-snap-type:x mandatory!important;
+    -webkit-overflow-scrolling:touch!important;
+    scrollbar-width:none!important;
+  }
+  .executive-hud.gallery-ledger-hud::-webkit-scrollbar{display:none!important}
+  .executive-hud.gallery-ledger-hud .hud-card{
+    scroll-snap-align:start!important;
+    min-width:175px!important;
+  }
+  .executive-hud.gallery-ledger-hud .hud-card.hero{min-width:240px!important}
+  .executive-hud.gallery-ledger-hud .hud-card.life{min-width:200px!important}
+}
+@media(max-width:640px){
+  .hud-scroll-track::after{width:40px}
+  .executive-hud.gallery-ledger-hud{
+    padding:7px!important;gap:6px!important;
+  }
+  .executive-hud.gallery-ledger-hud .hud-card{min-width:164px!important}
+  .executive-hud.gallery-ledger-hud .hud-card.hero{min-width:220px!important}
+  .executive-hud.gallery-ledger-hud .hud-card.life{min-width:188px!important}
+}
+
+/* ── Dock: fix border-left inconsistency (all 3px) ── */
+.dock-primary{border-left:3px solid var(--terra)!important}
+.dock-life{border-left:3px solid var(--olive)!important}
+
+/* ── Dock mobile: smaller primary/life widths → more cards visible ── */
+@media(max-width:640px){
+  .metric-dock-inner{
+    display:flex!important;
+    overflow-x:auto!important;
+    -webkit-overflow-scrolling:touch!important;
+    scroll-snap-type:x proximity!important;
+    scrollbar-width:none!important;
+  }
+  .metric-dock-inner::-webkit-scrollbar{display:none!important}
+  .dock-card{flex:0 0 88px!important;height:50px!important;padding:0 10px!important}
+  .dock-primary{flex-basis:152px!important}
+  .dock-life{flex-basis:130px!important}
+  .dock-card strong{font-size:15px!important}
+  .dock-primary strong{font-size:18px!important}
+  .dock-life strong{font-size:15px!important}
+  /* fix tabs-wrap top so no gap below dock */
+  body.show-metric-dock .tabs-wrap,
+  body.dock-visible .tabs-wrap{top:60px!important}
+}
+@media(max-width:1120px){
+  .dock-card{flex:0 0 96px!important}
+  .dock-primary{flex-basis:168px!important}
+  .dock-life{flex-basis:148px!important}
+}
+
+/* ── Remove old conflicting 4px rule below ── */
+
 </style>
 
 </head>
@@ -4803,6 +4870,7 @@ display:inline-flex;
       </div>
     </section>
 
+    <div class="hud-scroll-track">
     <section class="executive-hud gallery-ledger-hud" aria-label="Executive metrics">
       <article class="hud-card hero">
         <div class="hud-label">
@@ -4902,6 +4970,7 @@ display:inline-flex;
       </article>
     
 </section>
+  </div><!-- /hud-scroll-track -->
 
     <section class="metric-dock" aria-label="Compact executive metrics" aria-hidden="true">
       <div class="metric-dock-inner">
