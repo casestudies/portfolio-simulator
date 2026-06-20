@@ -7118,6 +7118,688 @@ body[data-active-mode="basic"] .simulation-output{
   }
 }
 
+
+/* === P25: non-sticky metric cards aligned with index.html ledger cards === */
+/* This patch intentionally styles STATIC metric surfaces too, not only the sticky HUD. */
+:root{
+  --p25-ledger-bg:#fffdf8;
+  --p25-ledger-line:rgba(222,212,196,.92);
+  --p25-ledger-line-strong:rgba(216,205,189,.78);
+  --p25-ledger-shadow:0 10px 28px rgba(56,42,25,.045);
+  --p25-ledger-radius:10px;
+}
+
+/* Static metric/card surfaces: white paper, thin border, subtle shadow, no candy fills. */
+.stat-card,
+.r-box,
+.metric-card,
+.compare-card,
+.mc-sensitivity-card,
+.model-compact-metric,
+.model-summary-metric,
+.math-threshold-card,
+.math-system-card,
+.math-slider-card,
+.math-matrix-section,
+.opt-card,
+.opt-field-card,
+.opt-output-card,
+.opt-best-card,
+.opt-current-compare,
+.opt-narrative,
+.ana-narrative-card,
+.audit-card,
+.final-ledger-cell,
+.tail-avg-metric,
+.metric-line,
+.final-band-board,
+.tail-ledger,
+.compact-final-ledger,
+.sensitivity-note .sens-selected{
+  background:var(--p25-ledger-bg) !important;
+  border:1px solid var(--p25-ledger-line) !important;
+  border-radius:var(--p25-ledger-radius) !important;
+  box-shadow:var(--p25-ledger-shadow) !important;
+  color:var(--ink) !important;
+  min-width:0 !important;
+  overflow:hidden !important;
+}
+
+/* Remove previous colorful/tinted blobs and gradients from static metric cards. */
+.stat-card::before,.stat-card::after,
+.r-box::before,.r-box::after,
+.metric-card::before,.metric-card::after,
+.compare-card::before,.compare-card::after,
+.mc-sensitivity-card::before,.mc-sensitivity-card::after,
+.model-compact-metric::before,.model-compact-metric::after,
+.model-summary-metric::before,.model-summary-metric::after,
+.math-threshold-card::before,.math-threshold-card::after,
+.math-system-card::before,.math-system-card::after,
+.math-slider-card::before,.math-slider-card::after,
+.math-matrix-section::before,.math-matrix-section::after,
+.opt-card::before,.opt-card::after,
+.opt-field-card::before,.opt-field-card::after,
+.opt-output-card::before,.opt-output-card::after,
+.opt-best-card::before,.opt-best-card::after,
+.opt-current-compare::before,.opt-current-compare::after,
+.opt-narrative::before,.opt-narrative::after,
+.ana-narrative-card::before,.ana-narrative-card::after,
+.audit-card::before,.audit-card::after,
+.final-ledger-cell::before,.final-ledger-cell::after,
+.tail-avg-metric::before,.tail-avg-metric::after,
+.metric-line::before,.metric-line::after,
+.final-band-board::before,.final-band-board::after,
+.tail-ledger::before,.tail-ledger::after,
+.compact-final-ledger::before,.compact-final-ledger::after{
+  display:none !important;
+  content:none !important;
+}
+
+/* Accent is a thin left ledger rule, not a colored filled card. */
+.stat-card,
+.r-box,
+.metric-card,
+.compare-card,
+.mc-sensitivity-card,
+.model-compact-metric,
+.model-summary-metric,
+.opt-field-card,
+.final-ledger-cell,
+.tail-avg-metric,
+.metric-line{
+  border-left:3px solid rgba(198,91,54,.46) !important;
+}
+.stat-card.good,.r-box.good,.metric-card.good,.compare-card.good,.mc-sensitivity-card.good,
+.model-compact-metric.good,.model-summary-metric.good,.final-ledger-cell.good,.metric-line.good,
+.cell-good,.cell-ok{
+  border-left-color:rgba(100,112,73,.58) !important;
+}
+.stat-card.bad,.r-box.bad,.metric-card.bad,.compare-card.bad,.mc-sensitivity-card.bad,
+.model-compact-metric.bad,.model-summary-metric.bad,.final-ledger-cell.bad,.metric-line.bad,
+.cell-bad,.cell-risk{
+  border-left-color:rgba(143,59,53,.58) !important;
+}
+.cell-warn,.cell-mid{
+  border-left-color:rgba(168,132,66,.58) !important;
+}
+
+/* Typography: index-like small uppercase labels and serif values for every static metric. */
+.stat-label,
+.r-label,
+.compare-card strong,
+.mc-sensitivity-card strong,
+.model-summary-metric span,
+.model-compact-metric span,
+.final-ledger-cell span,
+.tail-avg-metric span,
+.metric-line span,
+.opt-field-title,
+.math-threshold-card .math-threshold-label,
+.math-system-card .math-sys-label,
+.math-matrix-section .math-section-kicker{
+  display:block !important;
+  color:var(--stone) !important;
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif !important;
+  font-size:8.4px !important;
+  line-height:1.18 !important;
+  letter-spacing:.12em !important;
+  text-transform:uppercase !important;
+  font-weight:800 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+
+.stat-value,
+.r-value,
+.compare-card .mono,
+.mc-sensitivity-card .mono,
+.model-summary-metric strong,
+.model-compact-metric strong,
+.final-ledger-cell strong,
+.tail-avg-metric strong,
+.metric-line strong,
+.opt-best-main,
+.math-sys-edge,
+.math-threshold-card .math-threshold-value{
+  display:block !important;
+  color:var(--ink) !important;
+  font-family:"Cormorant Garamond",Georgia,serif !important;
+  font-size:clamp(23px,2.05vw,33px) !important;
+  font-weight:600 !important;
+  line-height:1 !important;
+  letter-spacing:-.024em !important;
+  margin-top:7px !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+
+/* Smaller static cards need controlled value scale. */
+.compare-card .mono,
+.mc-sensitivity-card .mono,
+.model-summary-metric strong,
+.model-compact-metric strong,
+.final-ledger-cell strong,
+.tail-avg-metric strong,
+.metric-line strong{
+  font-size:clamp(18px,1.5vw,25px) !important;
+}
+
+/* Notes: muted, clipped, readable. */
+.stat-note,
+.compare-card span,
+.mc-sensitivity-card span,
+.model-summary-metric small,
+.model-compact-metric small,
+.final-ledger-cell em,
+.tail-avg-metric em,
+.metric-line em,
+.opt-muted,
+.opt-current-compare,
+.opt-narrative,
+.math-system-card p,
+.math-threshold-card p{
+  color:var(--stone) !important;
+  font-size:10.5px !important;
+  line-height:1.42 !important;
+  overflow-wrap:anywhere !important;
+}
+
+/* Section cards should remain plain ledger boxes, not decorative colored panels. */
+.opt-output-card,
+.opt-card,
+.math-matrix-section,
+.final-band-board,
+.tail-ledger,
+.compact-final-ledger,
+.ana-narrative-card,
+.audit-card{
+  border-left:0 !important;
+  background:#fffdf8 !important;
+}
+
+/* Matrix cells: keep meaning with text/border accent, not strong color fills. */
+.math-matrix td,
+.math-matrix th,
+.fin-table td,
+.fin-table th{
+  background:#fffdf8 !important;
+}
+.math-matrix tr:nth-child(even) td,
+.fin-table tr:nth-child(even) td{
+  background:#fbf8f1 !important;
+}
+.math-matrix td.cell-good,
+.math-matrix td.cell-ok,
+.fin-table td.cell-good,
+.fin-table td.cell-ok{
+  color:var(--olive) !important;
+  background:#fffdf8 !important;
+  font-weight:850 !important;
+}
+.math-matrix td.cell-warn,
+.math-matrix td.cell-mid,
+.fin-table td.cell-warn,
+.fin-table td.cell-mid{
+  color:var(--gold) !important;
+  background:#fffdf8 !important;
+  font-weight:850 !important;
+}
+.math-matrix td.cell-bad,
+.math-matrix td.cell-risk,
+.fin-table td.cell-bad,
+.fin-table td.cell-risk{
+  color:var(--ruby) !important;
+  background:#fffdf8 !important;
+  font-weight:850 !important;
+}
+
+/* Pills/status chips: squared, paper-like, no rounded candy fills. */
+.badge,
+.pill,
+.math-grade-chip,
+.analysis-status,
+.scatter-status,
+.opt-toggle,
+.opt-option,
+.math-result-tab{
+  border-radius:7px !important;
+  background:#fffdf8 !important;
+  border:1px solid var(--line) !important;
+  color:var(--stone) !important;
+  box-shadow:none !important;
+}
+.badge.terra,.pill.terra,.math-grade-chip.terra,
+.opt-option.active,.math-result-tab.active{
+  color:var(--terra) !important;
+  border-color:rgba(198,91,54,.40) !important;
+  background:#fffdf8 !important;
+}
+.badge.positive,.pill.positive,.math-grade-chip.good{
+  color:var(--olive) !important;
+  border-color:rgba(100,112,73,.40) !important;
+  background:#fffdf8 !important;
+}
+.badge.negative,.pill.negative,.math-grade-chip.bad{
+  color:var(--ruby) !important;
+  border-color:rgba(143,59,53,.40) !important;
+  background:#fffdf8 !important;
+}
+
+/* Static metric grids: tighter, no wasted gaps, mobile-safe. */
+.results-grid,
+.r-summary,
+.comparison-grid,
+.mc-sensitivity-grid,
+.model-summary-grid,
+.final-ledger-grid{
+  gap:10px !important;
+  align-items:stretch !important;
+}
+
+/* Mobile: static cards become compact ledger strips without overflow. */
+@media (max-width:860px){
+  .stat-card,
+  .r-box,
+  .metric-card,
+  .compare-card,
+  .mc-sensitivity-card,
+  .model-compact-metric,
+  .model-summary-metric,
+  .final-ledger-cell,
+  .tail-avg-metric,
+  .metric-line,
+  .opt-field-card,
+  .math-threshold-card{
+    padding:12px !important;
+    min-height:auto !important;
+  }
+  .stat-value,
+  .r-value,
+  .compare-card .mono,
+  .mc-sensitivity-card .mono,
+  .model-summary-metric strong,
+  .model-compact-metric strong,
+  .final-ledger-cell strong,
+  .tail-avg-metric strong,
+  .metric-line strong,
+  .math-sys-edge,
+  .math-threshold-card .math-threshold-value{
+    font-size:22px !important;
+  }
+}
+
+
+/* === P26 final product QA patch: true index-ledger metric cards, formulas, hover, print === */
+
+/* Metric cards: remove candy rounded/fill style; match index ledger language */
+.metric,
+.stat-card,
+.r-box,
+.compare-card,
+.mc-sensitivity-card,
+.opt-best-card,
+.opt-output-card,
+.opt-current-compare,
+.opt-narrative-section,
+.math-threshold-card,
+.math-system-card,
+.math-slider-card,
+.math-matrix-block,
+.final-ledger-cell,
+.metric-line,
+.tail-ledger,
+.model-summary-metric,
+.mathlab-metric,
+.results-grid > *,
+.r-summary > *{
+  border-radius:0 !important;
+  background:#fffdf8 !important;
+  background-image:none !important;
+  border:1px solid rgba(226,216,201,.92) !important;
+  box-shadow:none !important;
+  overflow:hidden !important;
+  min-width:0 !important;
+}
+.metric.hero-metric,
+.metric.good,
+.metric.bad,
+.stat-card.good,
+.stat-card.bad,
+.r-box.good,
+.r-box.bad,
+.compare-card.good,
+.compare-card.bad,
+.math-threshold-card,
+.math-system-card.active,
+.mathlab-metric.good,
+.final-ledger-cell.good{
+  border-left-width:4px !important;
+}
+.metric.hero-metric,
+.math-system-card.active,
+.mathlab-metric.primary{
+  border-left-color:var(--terra) !important;
+}
+.metric.good,
+.stat-card.good,
+.r-box.good,
+.compare-card.good,
+.mathlab-metric.good,
+.final-ledger-cell.good{
+  border-left-color:var(--olive) !important;
+}
+.metric.bad,
+.stat-card.bad,
+.r-box.bad,
+.compare-card.bad,
+.mathlab-metric.bad,
+.final-ledger-cell.bad{
+  border-left-color:var(--ruby) !important;
+}
+.metric::before,.metric::after,
+.stat-card::before,.stat-card::after,
+.r-box::before,.r-box::after,
+.compare-card::before,.compare-card::after,
+.mc-sensitivity-card::before,.mc-sensitivity-card::after,
+.math-system-card::before,.math-system-card::after,
+.math-slider-card::before,.math-slider-card::after,
+.math-threshold-card::before,.math-threshold-card::after{
+  display:none !important;
+}
+.metric-label,
+.stat-label,
+.r-label,
+.compare-card strong,
+.mc-sensitivity-card strong,
+.math-threshold-card span,
+.math-sys-top,
+.math-slider-top,
+.math-matrix-block h3,
+.metric-line-label,
+.final-ledger-label,
+.model-summary-metric span{
+  color:#6f675d !important;
+  font-family:Inter,system-ui,sans-serif !important;
+  font-size:8px !important;
+  letter-spacing:.12em !important;
+  text-transform:uppercase !important;
+  font-weight:800 !important;
+  line-height:1.16 !important;
+}
+.metric-value,
+.stat-value,
+.r-value,
+.compare-card .mono,
+.mc-sensitivity-card .mono,
+.mathlab-metric-value,
+.final-ledger-value,
+.metric-line-value,
+.model-summary-metric strong{
+  font-family:"Cormorant Garamond",Georgia,serif !important;
+  color:var(--ink) !important;
+  font-weight:500 !important;
+  letter-spacing:-.025em !important;
+  line-height:1 !important;
+}
+.metric-sub,
+.stat-note,
+.compare-card span,
+.mc-sensitivity-card span,
+.math-threshold-card p,
+.math-sys-line,
+.math-sys-grade,
+.metric-line-note,
+.final-ledger-note{
+  color:#716a60 !important;
+  font-size:10.5px !important;
+  line-height:1.38 !important;
+  overflow-wrap:normal !important;
+}
+.math-sys-grade,
+.math-grade-chip,
+.pill,
+.badge{
+  border-radius:0 !important;
+  background:#fffdf8 !important;
+  border:1px solid rgba(226,216,201,.92) !important;
+  color:var(--ink) !important;
+  box-shadow:none !important;
+}
+.math-sys-grade.good,.math-grade-chip.good,.pill.positive,.badge.olive{color:var(--olive) !important;border-color:rgba(100,112,73,.45) !important;}
+.math-sys-grade.warn,.math-grade-chip.warn,.pill.terra,.badge.terra{color:var(--terra) !important;border-color:rgba(198,91,54,.45) !important;}
+.math-sys-grade.bad,.math-grade-chip.bad,.pill.negative{color:var(--ruby) !important;border-color:rgba(127,39,55,.38) !important;}
+
+/* Color-coded table cells: no heavy background, keep readable category color */
+.math-matrix td.good,
+.math-matrix td.watch,
+.math-matrix td.bad,
+.fin-table td.good,
+.fin-table td.watch,
+.fin-table td.bad{
+  background:#fffdf8 !important;
+  border-left:3px solid transparent !important;
+}
+.math-matrix td.good,.fin-table td.good{color:var(--olive) !important;border-left-color:rgba(100,112,73,.55) !important;}
+.math-matrix td.watch,.fin-table td.watch{color:var(--terra) !important;border-left-color:rgba(198,91,54,.55) !important;}
+.math-matrix td.bad,.fin-table td.bad{color:var(--ruby) !important;border-left-color:rgba(127,39,55,.50) !important;}
+
+/* Keep formulas and grade thresholds visible, especially on mobile */
+.math-thresholds{
+  display:grid !important;
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  gap:10px !important;
+  visibility:visible !important;
+  height:auto !important;
+  overflow:visible !important;
+}
+.math-formula-card p strong{
+  color:var(--ink) !important;
+  font-weight:850 !important;
+}
+@media (max-width:860px){
+  .math-thresholds{grid-template-columns:1fr !important;}
+  .math-threshold-card{
+    display:block !important;
+    padding:12px !important;
+    max-height:none !important;
+    overflow:visible !important;
+  }
+  .math-threshold-card p{
+    display:block !important;
+    font-size:11px !important;
+    line-height:1.5 !important;
+  }
+}
+
+/* Restore chart hover and legend click interaction */
+.chart-shell canvas,
+.canvas-wrap canvas,
+.mathlab-equity-wrap canvas{
+  pointer-events:auto !important;
+  touch-action:auto !important;
+}
+@media (pointer:coarse){
+  .chart-shell canvas,
+  .canvas-wrap canvas,
+  .mathlab-equity-wrap canvas{
+    pointer-events:auto !important;
+    touch-action:auto !important;
+  }
+}
+
+/* Print/PDF report: stable A4 layout, no sticky/fixed, no hidden overflow, no broken duplicate panels */
+@page{size:A4 portrait;margin:11mm 9mm;}
+@media print{
+  html,body{
+    background:#fff !important;
+    color:#111 !important;
+    padding:0 !important;
+    margin:0 !important;
+    overflow:visible !important;
+    -webkit-print-color-adjust:exact !important;
+    print-color-adjust:exact !important;
+  }
+  .hero-actions,
+  .mode-tabs,
+  .math-result-tabs,
+  .chart-actions,
+  .footer-actions,
+  .btn,
+  .run-sim,
+  .sim-progress,
+  .preset-panel,
+  .mathlab-play,
+  .math-toggle-card{
+    display:none !important;
+  }
+  .app{
+    max-width:none !important;
+    width:100% !important;
+    display:block !important;
+  }
+  .hero,
+  .result-strip,
+  .panel,
+  .chart-shell,
+  .table-wrap,
+  .math-matrix-block,
+  .math-threshold-card,
+  .metric,
+  .stat-card,
+  .r-box{
+    position:static !important;
+    top:auto !important;
+    box-shadow:none !important;
+    border-radius:0 !important;
+    background:#fff !important;
+    break-inside:avoid-page !important;
+    page-break-inside:avoid !important;
+  }
+  .hero{
+    border:0 !important;
+    border-bottom:1px solid #ccc !important;
+    padding:0 0 5mm !important;
+    margin:0 0 5mm !important;
+  }
+  .hero h1{font-size:26pt !important;line-height:1 !important;}
+  .result-strip{
+    display:grid !important;
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    gap:3mm !important;
+    padding:0 !important;
+    margin:0 0 6mm !important;
+    overflow:visible !important;
+    border:0 !important;
+  }
+  .metric{
+    min-height:auto !important;
+    padding:3mm !important;
+    border:1px solid #ccc !important;
+  }
+  .mode-panel{display:none !important;}
+  .mode-panel.active{display:block !important;}
+  .math-result-pane{display:none !important;}
+  .math-result-pane.active{display:block !important;}
+  .panel,.chart-shell{
+    padding:0 !important;
+    margin:0 0 6mm !important;
+    border:0 !important;
+  }
+  .panel-head,.chart-head{
+    display:block !important;
+    padding:0 0 2.5mm !important;
+    margin:0 0 3mm !important;
+    border-bottom:1px solid #ccc !important;
+  }
+  .math-workbench,
+  .mathlab-grid,
+  .math-slider-grid,
+  .results-grid,
+  .chart-grid,
+  .chart-grid.equal,
+  .opt-layout,
+  .opt-output-grid{
+    display:block !important;
+  }
+  .canvas-wrap,
+  .canvas-wrap.small,
+  .canvas-wrap.priority,
+  .mathlab-equity-wrap{
+    height:72mm !important;
+    max-height:72mm !important;
+    page-break-inside:avoid !important;
+  }
+  .table-wrap,
+  .math-matrix-wrap,
+  .opt-heatmap{
+    overflow:visible !important;
+    border:0 !important;
+  }
+  .fin-table,
+  .math-matrix,
+  .opt-table{
+    min-width:0 !important;
+    width:100% !important;
+    font-size:7.5pt !important;
+  }
+  th,td{
+    white-space:normal !important;
+    padding:2mm !important;
+    break-inside:avoid-page !important;
+  }
+}
+
+
+/* P26.1: extend index-ledger styling to every non-sticky metric/card surface */
+.metric-card,
+.metric-ledger,
+.metric-line,
+.tail-avg-metric,
+.audit-card,
+.ana-narrative-card,
+.opt-card,
+.opt-field-card,
+.opt-frontier-card,
+.opt-heatmap-card,
+.form-card,
+.control-card,
+.choice-card{
+  border-radius:0 !important;
+  background:#fffdf8 !important;
+  background-image:none !important;
+  box-shadow:none !important;
+  border:1px solid rgba(226,216,201,.92) !important;
+  overflow:hidden !important;
+}
+.metric-card::before,.metric-card::after,
+.metric-ledger::before,.metric-ledger::after,
+.tail-avg-metric::before,.tail-avg-metric::after,
+.audit-card::before,.audit-card::after,
+.ana-narrative-card::before,.ana-narrative-card::after,
+.opt-card::before,.opt-card::after,
+.opt-field-card::before,.opt-field-card::after,
+.opt-frontier-card::before,.opt-frontier-card::after,
+.opt-heatmap-card::before,.opt-heatmap-card::after,
+.form-card::before,.form-card::after,
+.control-card::before,.control-card::after,
+.choice-card::before,.choice-card::after{
+  display:none !important;
+}
+.metric-card .metric-value,
+.metric-ledger strong,
+.tail-avg-metric strong,
+.audit-card strong,
+.ana-narrative-card strong,
+.opt-field-card .mono,
+.opt-frontier-card .mono,
+.opt-heatmap-card .mono{
+  font-family:"Cormorant Garamond",Georgia,serif !important;
+  font-weight:500 !important;
+  color:var(--ink) !important;
+}
+
 </style>
 </head>
 <body data-active-mode="basic">
@@ -7503,9 +8185,9 @@ body[data-active-mode="basic"] .simulation-output{
             <span>Grade eşikleri</span>
             <p><strong>Negative</strong>: E_net ≤ 0R · <strong>Fragile</strong>: PF &lt; 1.30 veya Edge Buffer &lt; 5pp veya g ≤ 0 · <strong>Aggressive</strong>: pozitif edge ama P(10 kayıp) ≥ 25% · <strong>Balanced</strong>: g &gt; 0, PF ≥ 1.30, Edge Buffer ≥ 5pp · <strong>Institutional</strong>: PF ≥ 1.80, Edge Buffer ≥ 15pp, P(10 kayıp) &lt; 15%.</p>
           </div>
-          <div class="math-threshold-card">
-            <span>Performans notu</span>
-            <p>Slider değişiminde yalnızca metrikler ve aktif sekme güncellenir. Monte Carlo yolları manuel butonla yenilenir; böylece tarayıcı slider sırasında kilitlenmez.</p>
+          <div class="math-threshold-card math-formula-card">
+            <span>Temel formüller</span>
+            <p><strong>E_net</strong> = WR × Avg Win R − Loss Rate × Avg Loss R − Cost. <strong>PF</strong> = Gross Wins / Gross Losses; net versiyonda kayıp tarafına maliyet eklenir. <strong>Break-even WR</strong> = (L + Cost) / (R + L). <strong>Required R</strong> = ((1−WR)×L + Cost) / WR.</p>
           </div>
         </div>
       </section>
@@ -11891,7 +12573,29 @@ function renderCharts(result){
   function baseChart(id,type,data,opts){
     const el=$(id); if(!el || typeof Chart==="undefined") return;
     destroyChart(id);
-    charts[id]=new Chart(el,{type,data,options:Object.assign({responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:10,usePointStyle:true}}},animation:false},opts||{})});
+    const defaults = {
+      responsive:true,
+      maintainAspectRatio:false,
+      animation:false,
+      events:["mousemove","mouseout","click","touchstart","touchmove"],
+      interaction:{mode:"nearest",intersect:false},
+      plugins:{
+        tooltip:{enabled:true},
+        legend:{
+          labels:{boxWidth:10,usePointStyle:true},
+          onClick: Chart.defaults.plugins.legend.onClick
+        }
+      }
+    };
+    opts = opts || {};
+    const merged = Object.assign({}, defaults, opts);
+    merged.plugins = Object.assign({}, defaults.plugins, opts.plugins || {});
+    merged.plugins.tooltip = Object.assign({}, defaults.plugins.tooltip, (opts.plugins && opts.plugins.tooltip) || {});
+    merged.plugins.legend = Object.assign({}, defaults.plugins.legend, (opts.plugins && opts.plugins.legend) || {});
+    if(merged.plugins.legend.display === false){
+      merged.plugins.legend.onClick = undefined;
+    }
+    charts[id]=new Chart(el,{type,data,options:merged});
   }
   function renderGrowth(){
     const {s,m}=selectedPack(); const labels=[], vals=[]; for(let r=.1;r<=5.001;r+=.1){const x=Object.assign({},s,{risk:+r.toFixed(1)}); labels.push(r.toFixed(1)+"%"); vals.push(calc(x).g*100);}
@@ -11900,7 +12604,7 @@ function renderCharts(result){
   function renderBurden(){
     const packs=enabled(); const labels=Array.from({length:14},(_,i)=>String(i+2));
     baseChart("mathStreakChart","line",{labels,datasets:packs.map(p=>({label:p.s.name,data:labels.map(k=>{const kk=+k;return (1-Math.exp(-p.s.N*(p.s.wr/100)*Math.pow(1-p.s.wr/100,kk)))*100;}),borderColor:colors[p.i],borderWidth:2,pointRadius:0}))},{scales:{y:{ticks:{callback:v=>v+"%"}}}});
-    const dds=[.05,.1,.15,.2,.3,.4,.5,.6,.7]; baseChart("mathRecoveryChart","line",{labels:dds.map(d=>Math.round(d*100)+"%"),datasets:[{label:"Geri dönüş gereksinimi",data:dds.map(d=>d/(1-d)*100),borderColor:"#a88442",borderWidth:2,pointRadius:3}]},{scales:{y:{ticks:{callback:v=>v+"%"}}}});
+    const dds=[.05,.10,.15,.20,.25,.30,.35,.40,.45,.50]; baseChart("mathRecoveryChart","line",{labels:dds.map(d=>Math.round(d*100)+"%"),datasets:[{label:"Geri dönüş gereksinimi",data:dds.map(d=>d/(1-d)*100),borderColor:"#a88442",borderWidth:2,pointRadius:3}]},{scales:{y:{min:0,max:100,ticks:{callback:v=>v+"%"}}}});
   }
   function runMonteCarlo(){
     const {s}=selectedPack(); const paths=[]; const finals=[]; const N=Math.min(800,Math.max(20,Math.round(s.N))); const its=360; const p=s.wr/100;
@@ -12739,6 +13443,376 @@ body[data-active-mode="basic"] .simulation-output{
   visibility:visible !important;
   height:auto !important;
   overflow:visible !important;
+}
+
+
+/* === P26 final product QA patch: true index-ledger metric cards, formulas, hover, print === */
+
+/* Metric cards: remove candy rounded/fill style; match index ledger language */
+.metric,
+.stat-card,
+.r-box,
+.compare-card,
+.mc-sensitivity-card,
+.opt-best-card,
+.opt-output-card,
+.opt-current-compare,
+.opt-narrative-section,
+.math-threshold-card,
+.math-system-card,
+.math-slider-card,
+.math-matrix-block,
+.final-ledger-cell,
+.metric-line,
+.tail-ledger,
+.model-summary-metric,
+.mathlab-metric,
+.results-grid > *,
+.r-summary > *{
+  border-radius:0 !important;
+  background:#fffdf8 !important;
+  background-image:none !important;
+  border:1px solid rgba(226,216,201,.92) !important;
+  box-shadow:none !important;
+  overflow:hidden !important;
+  min-width:0 !important;
+}
+.metric.hero-metric,
+.metric.good,
+.metric.bad,
+.stat-card.good,
+.stat-card.bad,
+.r-box.good,
+.r-box.bad,
+.compare-card.good,
+.compare-card.bad,
+.math-threshold-card,
+.math-system-card.active,
+.mathlab-metric.good,
+.final-ledger-cell.good{
+  border-left-width:4px !important;
+}
+.metric.hero-metric,
+.math-system-card.active,
+.mathlab-metric.primary{
+  border-left-color:var(--terra) !important;
+}
+.metric.good,
+.stat-card.good,
+.r-box.good,
+.compare-card.good,
+.mathlab-metric.good,
+.final-ledger-cell.good{
+  border-left-color:var(--olive) !important;
+}
+.metric.bad,
+.stat-card.bad,
+.r-box.bad,
+.compare-card.bad,
+.mathlab-metric.bad,
+.final-ledger-cell.bad{
+  border-left-color:var(--ruby) !important;
+}
+.metric::before,.metric::after,
+.stat-card::before,.stat-card::after,
+.r-box::before,.r-box::after,
+.compare-card::before,.compare-card::after,
+.mc-sensitivity-card::before,.mc-sensitivity-card::after,
+.math-system-card::before,.math-system-card::after,
+.math-slider-card::before,.math-slider-card::after,
+.math-threshold-card::before,.math-threshold-card::after{
+  display:none !important;
+}
+.metric-label,
+.stat-label,
+.r-label,
+.compare-card strong,
+.mc-sensitivity-card strong,
+.math-threshold-card span,
+.math-sys-top,
+.math-slider-top,
+.math-matrix-block h3,
+.metric-line-label,
+.final-ledger-label,
+.model-summary-metric span{
+  color:#6f675d !important;
+  font-family:Inter,system-ui,sans-serif !important;
+  font-size:8px !important;
+  letter-spacing:.12em !important;
+  text-transform:uppercase !important;
+  font-weight:800 !important;
+  line-height:1.16 !important;
+}
+.metric-value,
+.stat-value,
+.r-value,
+.compare-card .mono,
+.mc-sensitivity-card .mono,
+.mathlab-metric-value,
+.final-ledger-value,
+.metric-line-value,
+.model-summary-metric strong{
+  font-family:"Cormorant Garamond",Georgia,serif !important;
+  color:var(--ink) !important;
+  font-weight:500 !important;
+  letter-spacing:-.025em !important;
+  line-height:1 !important;
+}
+.metric-sub,
+.stat-note,
+.compare-card span,
+.mc-sensitivity-card span,
+.math-threshold-card p,
+.math-sys-line,
+.math-sys-grade,
+.metric-line-note,
+.final-ledger-note{
+  color:#716a60 !important;
+  font-size:10.5px !important;
+  line-height:1.38 !important;
+  overflow-wrap:normal !important;
+}
+.math-sys-grade,
+.math-grade-chip,
+.pill,
+.badge{
+  border-radius:0 !important;
+  background:#fffdf8 !important;
+  border:1px solid rgba(226,216,201,.92) !important;
+  color:var(--ink) !important;
+  box-shadow:none !important;
+}
+.math-sys-grade.good,.math-grade-chip.good,.pill.positive,.badge.olive{color:var(--olive) !important;border-color:rgba(100,112,73,.45) !important;}
+.math-sys-grade.warn,.math-grade-chip.warn,.pill.terra,.badge.terra{color:var(--terra) !important;border-color:rgba(198,91,54,.45) !important;}
+.math-sys-grade.bad,.math-grade-chip.bad,.pill.negative{color:var(--ruby) !important;border-color:rgba(127,39,55,.38) !important;}
+
+/* Color-coded table cells: no heavy background, keep readable category color */
+.math-matrix td.good,
+.math-matrix td.watch,
+.math-matrix td.bad,
+.fin-table td.good,
+.fin-table td.watch,
+.fin-table td.bad{
+  background:#fffdf8 !important;
+  border-left:3px solid transparent !important;
+}
+.math-matrix td.good,.fin-table td.good{color:var(--olive) !important;border-left-color:rgba(100,112,73,.55) !important;}
+.math-matrix td.watch,.fin-table td.watch{color:var(--terra) !important;border-left-color:rgba(198,91,54,.55) !important;}
+.math-matrix td.bad,.fin-table td.bad{color:var(--ruby) !important;border-left-color:rgba(127,39,55,.50) !important;}
+
+/* Keep formulas and grade thresholds visible, especially on mobile */
+.math-thresholds{
+  display:grid !important;
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  gap:10px !important;
+  visibility:visible !important;
+  height:auto !important;
+  overflow:visible !important;
+}
+.math-formula-card p strong{
+  color:var(--ink) !important;
+  font-weight:850 !important;
+}
+@media (max-width:860px){
+  .math-thresholds{grid-template-columns:1fr !important;}
+  .math-threshold-card{
+    display:block !important;
+    padding:12px !important;
+    max-height:none !important;
+    overflow:visible !important;
+  }
+  .math-threshold-card p{
+    display:block !important;
+    font-size:11px !important;
+    line-height:1.5 !important;
+  }
+}
+
+/* Restore chart hover and legend click interaction */
+.chart-shell canvas,
+.canvas-wrap canvas,
+.mathlab-equity-wrap canvas{
+  pointer-events:auto !important;
+  touch-action:auto !important;
+}
+@media (pointer:coarse){
+  .chart-shell canvas,
+  .canvas-wrap canvas,
+  .mathlab-equity-wrap canvas{
+    pointer-events:auto !important;
+    touch-action:auto !important;
+  }
+}
+
+/* Print/PDF report: stable A4 layout, no sticky/fixed, no hidden overflow, no broken duplicate panels */
+@page{size:A4 portrait;margin:11mm 9mm;}
+@media print{
+  html,body{
+    background:#fff !important;
+    color:#111 !important;
+    padding:0 !important;
+    margin:0 !important;
+    overflow:visible !important;
+    -webkit-print-color-adjust:exact !important;
+    print-color-adjust:exact !important;
+  }
+  .hero-actions,
+  .mode-tabs,
+  .math-result-tabs,
+  .chart-actions,
+  .footer-actions,
+  .btn,
+  .run-sim,
+  .sim-progress,
+  .preset-panel,
+  .mathlab-play,
+  .math-toggle-card{
+    display:none !important;
+  }
+  .app{
+    max-width:none !important;
+    width:100% !important;
+    display:block !important;
+  }
+  .hero,
+  .result-strip,
+  .panel,
+  .chart-shell,
+  .table-wrap,
+  .math-matrix-block,
+  .math-threshold-card,
+  .metric,
+  .stat-card,
+  .r-box{
+    position:static !important;
+    top:auto !important;
+    box-shadow:none !important;
+    border-radius:0 !important;
+    background:#fff !important;
+    break-inside:avoid-page !important;
+    page-break-inside:avoid !important;
+  }
+  .hero{
+    border:0 !important;
+    border-bottom:1px solid #ccc !important;
+    padding:0 0 5mm !important;
+    margin:0 0 5mm !important;
+  }
+  .hero h1{font-size:26pt !important;line-height:1 !important;}
+  .result-strip{
+    display:grid !important;
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    gap:3mm !important;
+    padding:0 !important;
+    margin:0 0 6mm !important;
+    overflow:visible !important;
+    border:0 !important;
+  }
+  .metric{
+    min-height:auto !important;
+    padding:3mm !important;
+    border:1px solid #ccc !important;
+  }
+  .mode-panel{display:none !important;}
+  .mode-panel.active{display:block !important;}
+  .math-result-pane{display:none !important;}
+  .math-result-pane.active{display:block !important;}
+  .panel,.chart-shell{
+    padding:0 !important;
+    margin:0 0 6mm !important;
+    border:0 !important;
+  }
+  .panel-head,.chart-head{
+    display:block !important;
+    padding:0 0 2.5mm !important;
+    margin:0 0 3mm !important;
+    border-bottom:1px solid #ccc !important;
+  }
+  .math-workbench,
+  .mathlab-grid,
+  .math-slider-grid,
+  .results-grid,
+  .chart-grid,
+  .chart-grid.equal,
+  .opt-layout,
+  .opt-output-grid{
+    display:block !important;
+  }
+  .canvas-wrap,
+  .canvas-wrap.small,
+  .canvas-wrap.priority,
+  .mathlab-equity-wrap{
+    height:72mm !important;
+    max-height:72mm !important;
+    page-break-inside:avoid !important;
+  }
+  .table-wrap,
+  .math-matrix-wrap,
+  .opt-heatmap{
+    overflow:visible !important;
+    border:0 !important;
+  }
+  .fin-table,
+  .math-matrix,
+  .opt-table{
+    min-width:0 !important;
+    width:100% !important;
+    font-size:7.5pt !important;
+  }
+  th,td{
+    white-space:normal !important;
+    padding:2mm !important;
+    break-inside:avoid-page !important;
+  }
+}
+
+
+/* P26.1: extend index-ledger styling to every non-sticky metric/card surface */
+.metric-card,
+.metric-ledger,
+.metric-line,
+.tail-avg-metric,
+.audit-card,
+.ana-narrative-card,
+.opt-card,
+.opt-field-card,
+.opt-frontier-card,
+.opt-heatmap-card,
+.form-card,
+.control-card,
+.choice-card{
+  border-radius:0 !important;
+  background:#fffdf8 !important;
+  background-image:none !important;
+  box-shadow:none !important;
+  border:1px solid rgba(226,216,201,.92) !important;
+  overflow:hidden !important;
+}
+.metric-card::before,.metric-card::after,
+.metric-ledger::before,.metric-ledger::after,
+.tail-avg-metric::before,.tail-avg-metric::after,
+.audit-card::before,.audit-card::after,
+.ana-narrative-card::before,.ana-narrative-card::after,
+.opt-card::before,.opt-card::after,
+.opt-field-card::before,.opt-field-card::after,
+.opt-frontier-card::before,.opt-frontier-card::after,
+.opt-heatmap-card::before,.opt-heatmap-card::after,
+.form-card::before,.form-card::after,
+.control-card::before,.control-card::after,
+.choice-card::before,.choice-card::after{
+  display:none !important;
+}
+.metric-card .metric-value,
+.metric-ledger strong,
+.tail-avg-metric strong,
+.audit-card strong,
+.ana-narrative-card strong,
+.opt-field-card .mono,
+.opt-frontier-card .mono,
+.opt-heatmap-card .mono{
+  font-family:"Cormorant Garamond",Georgia,serif !important;
+  font-weight:500 !important;
+  color:var(--ink) !important;
 }
 
 </style>
@@ -13617,6 +14691,376 @@ body[data-active-mode="basic"] .simulation-output{
   overflow:visible !important;
 }
 
+
+/* === P26 final product QA patch: true index-ledger metric cards, formulas, hover, print === */
+
+/* Metric cards: remove candy rounded/fill style; match index ledger language */
+.metric,
+.stat-card,
+.r-box,
+.compare-card,
+.mc-sensitivity-card,
+.opt-best-card,
+.opt-output-card,
+.opt-current-compare,
+.opt-narrative-section,
+.math-threshold-card,
+.math-system-card,
+.math-slider-card,
+.math-matrix-block,
+.final-ledger-cell,
+.metric-line,
+.tail-ledger,
+.model-summary-metric,
+.mathlab-metric,
+.results-grid > *,
+.r-summary > *{
+  border-radius:0 !important;
+  background:#fffdf8 !important;
+  background-image:none !important;
+  border:1px solid rgba(226,216,201,.92) !important;
+  box-shadow:none !important;
+  overflow:hidden !important;
+  min-width:0 !important;
+}
+.metric.hero-metric,
+.metric.good,
+.metric.bad,
+.stat-card.good,
+.stat-card.bad,
+.r-box.good,
+.r-box.bad,
+.compare-card.good,
+.compare-card.bad,
+.math-threshold-card,
+.math-system-card.active,
+.mathlab-metric.good,
+.final-ledger-cell.good{
+  border-left-width:4px !important;
+}
+.metric.hero-metric,
+.math-system-card.active,
+.mathlab-metric.primary{
+  border-left-color:var(--terra) !important;
+}
+.metric.good,
+.stat-card.good,
+.r-box.good,
+.compare-card.good,
+.mathlab-metric.good,
+.final-ledger-cell.good{
+  border-left-color:var(--olive) !important;
+}
+.metric.bad,
+.stat-card.bad,
+.r-box.bad,
+.compare-card.bad,
+.mathlab-metric.bad,
+.final-ledger-cell.bad{
+  border-left-color:var(--ruby) !important;
+}
+.metric::before,.metric::after,
+.stat-card::before,.stat-card::after,
+.r-box::before,.r-box::after,
+.compare-card::before,.compare-card::after,
+.mc-sensitivity-card::before,.mc-sensitivity-card::after,
+.math-system-card::before,.math-system-card::after,
+.math-slider-card::before,.math-slider-card::after,
+.math-threshold-card::before,.math-threshold-card::after{
+  display:none !important;
+}
+.metric-label,
+.stat-label,
+.r-label,
+.compare-card strong,
+.mc-sensitivity-card strong,
+.math-threshold-card span,
+.math-sys-top,
+.math-slider-top,
+.math-matrix-block h3,
+.metric-line-label,
+.final-ledger-label,
+.model-summary-metric span{
+  color:#6f675d !important;
+  font-family:Inter,system-ui,sans-serif !important;
+  font-size:8px !important;
+  letter-spacing:.12em !important;
+  text-transform:uppercase !important;
+  font-weight:800 !important;
+  line-height:1.16 !important;
+}
+.metric-value,
+.stat-value,
+.r-value,
+.compare-card .mono,
+.mc-sensitivity-card .mono,
+.mathlab-metric-value,
+.final-ledger-value,
+.metric-line-value,
+.model-summary-metric strong{
+  font-family:"Cormorant Garamond",Georgia,serif !important;
+  color:var(--ink) !important;
+  font-weight:500 !important;
+  letter-spacing:-.025em !important;
+  line-height:1 !important;
+}
+.metric-sub,
+.stat-note,
+.compare-card span,
+.mc-sensitivity-card span,
+.math-threshold-card p,
+.math-sys-line,
+.math-sys-grade,
+.metric-line-note,
+.final-ledger-note{
+  color:#716a60 !important;
+  font-size:10.5px !important;
+  line-height:1.38 !important;
+  overflow-wrap:normal !important;
+}
+.math-sys-grade,
+.math-grade-chip,
+.pill,
+.badge{
+  border-radius:0 !important;
+  background:#fffdf8 !important;
+  border:1px solid rgba(226,216,201,.92) !important;
+  color:var(--ink) !important;
+  box-shadow:none !important;
+}
+.math-sys-grade.good,.math-grade-chip.good,.pill.positive,.badge.olive{color:var(--olive) !important;border-color:rgba(100,112,73,.45) !important;}
+.math-sys-grade.warn,.math-grade-chip.warn,.pill.terra,.badge.terra{color:var(--terra) !important;border-color:rgba(198,91,54,.45) !important;}
+.math-sys-grade.bad,.math-grade-chip.bad,.pill.negative{color:var(--ruby) !important;border-color:rgba(127,39,55,.38) !important;}
+
+/* Color-coded table cells: no heavy background, keep readable category color */
+.math-matrix td.good,
+.math-matrix td.watch,
+.math-matrix td.bad,
+.fin-table td.good,
+.fin-table td.watch,
+.fin-table td.bad{
+  background:#fffdf8 !important;
+  border-left:3px solid transparent !important;
+}
+.math-matrix td.good,.fin-table td.good{color:var(--olive) !important;border-left-color:rgba(100,112,73,.55) !important;}
+.math-matrix td.watch,.fin-table td.watch{color:var(--terra) !important;border-left-color:rgba(198,91,54,.55) !important;}
+.math-matrix td.bad,.fin-table td.bad{color:var(--ruby) !important;border-left-color:rgba(127,39,55,.50) !important;}
+
+/* Keep formulas and grade thresholds visible, especially on mobile */
+.math-thresholds{
+  display:grid !important;
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  gap:10px !important;
+  visibility:visible !important;
+  height:auto !important;
+  overflow:visible !important;
+}
+.math-formula-card p strong{
+  color:var(--ink) !important;
+  font-weight:850 !important;
+}
+@media (max-width:860px){
+  .math-thresholds{grid-template-columns:1fr !important;}
+  .math-threshold-card{
+    display:block !important;
+    padding:12px !important;
+    max-height:none !important;
+    overflow:visible !important;
+  }
+  .math-threshold-card p{
+    display:block !important;
+    font-size:11px !important;
+    line-height:1.5 !important;
+  }
+}
+
+/* Restore chart hover and legend click interaction */
+.chart-shell canvas,
+.canvas-wrap canvas,
+.mathlab-equity-wrap canvas{
+  pointer-events:auto !important;
+  touch-action:auto !important;
+}
+@media (pointer:coarse){
+  .chart-shell canvas,
+  .canvas-wrap canvas,
+  .mathlab-equity-wrap canvas{
+    pointer-events:auto !important;
+    touch-action:auto !important;
+  }
+}
+
+/* Print/PDF report: stable A4 layout, no sticky/fixed, no hidden overflow, no broken duplicate panels */
+@page{size:A4 portrait;margin:11mm 9mm;}
+@media print{
+  html,body{
+    background:#fff !important;
+    color:#111 !important;
+    padding:0 !important;
+    margin:0 !important;
+    overflow:visible !important;
+    -webkit-print-color-adjust:exact !important;
+    print-color-adjust:exact !important;
+  }
+  .hero-actions,
+  .mode-tabs,
+  .math-result-tabs,
+  .chart-actions,
+  .footer-actions,
+  .btn,
+  .run-sim,
+  .sim-progress,
+  .preset-panel,
+  .mathlab-play,
+  .math-toggle-card{
+    display:none !important;
+  }
+  .app{
+    max-width:none !important;
+    width:100% !important;
+    display:block !important;
+  }
+  .hero,
+  .result-strip,
+  .panel,
+  .chart-shell,
+  .table-wrap,
+  .math-matrix-block,
+  .math-threshold-card,
+  .metric,
+  .stat-card,
+  .r-box{
+    position:static !important;
+    top:auto !important;
+    box-shadow:none !important;
+    border-radius:0 !important;
+    background:#fff !important;
+    break-inside:avoid-page !important;
+    page-break-inside:avoid !important;
+  }
+  .hero{
+    border:0 !important;
+    border-bottom:1px solid #ccc !important;
+    padding:0 0 5mm !important;
+    margin:0 0 5mm !important;
+  }
+  .hero h1{font-size:26pt !important;line-height:1 !important;}
+  .result-strip{
+    display:grid !important;
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    gap:3mm !important;
+    padding:0 !important;
+    margin:0 0 6mm !important;
+    overflow:visible !important;
+    border:0 !important;
+  }
+  .metric{
+    min-height:auto !important;
+    padding:3mm !important;
+    border:1px solid #ccc !important;
+  }
+  .mode-panel{display:none !important;}
+  .mode-panel.active{display:block !important;}
+  .math-result-pane{display:none !important;}
+  .math-result-pane.active{display:block !important;}
+  .panel,.chart-shell{
+    padding:0 !important;
+    margin:0 0 6mm !important;
+    border:0 !important;
+  }
+  .panel-head,.chart-head{
+    display:block !important;
+    padding:0 0 2.5mm !important;
+    margin:0 0 3mm !important;
+    border-bottom:1px solid #ccc !important;
+  }
+  .math-workbench,
+  .mathlab-grid,
+  .math-slider-grid,
+  .results-grid,
+  .chart-grid,
+  .chart-grid.equal,
+  .opt-layout,
+  .opt-output-grid{
+    display:block !important;
+  }
+  .canvas-wrap,
+  .canvas-wrap.small,
+  .canvas-wrap.priority,
+  .mathlab-equity-wrap{
+    height:72mm !important;
+    max-height:72mm !important;
+    page-break-inside:avoid !important;
+  }
+  .table-wrap,
+  .math-matrix-wrap,
+  .opt-heatmap{
+    overflow:visible !important;
+    border:0 !important;
+  }
+  .fin-table,
+  .math-matrix,
+  .opt-table{
+    min-width:0 !important;
+    width:100% !important;
+    font-size:7.5pt !important;
+  }
+  th,td{
+    white-space:normal !important;
+    padding:2mm !important;
+    break-inside:avoid-page !important;
+  }
+}
+
+
+/* P26.1: extend index-ledger styling to every non-sticky metric/card surface */
+.metric-card,
+.metric-ledger,
+.metric-line,
+.tail-avg-metric,
+.audit-card,
+.ana-narrative-card,
+.opt-card,
+.opt-field-card,
+.opt-frontier-card,
+.opt-heatmap-card,
+.form-card,
+.control-card,
+.choice-card{
+  border-radius:0 !important;
+  background:#fffdf8 !important;
+  background-image:none !important;
+  box-shadow:none !important;
+  border:1px solid rgba(226,216,201,.92) !important;
+  overflow:hidden !important;
+}
+.metric-card::before,.metric-card::after,
+.metric-ledger::before,.metric-ledger::after,
+.tail-avg-metric::before,.tail-avg-metric::after,
+.audit-card::before,.audit-card::after,
+.ana-narrative-card::before,.ana-narrative-card::after,
+.opt-card::before,.opt-card::after,
+.opt-field-card::before,.opt-field-card::after,
+.opt-frontier-card::before,.opt-frontier-card::after,
+.opt-heatmap-card::before,.opt-heatmap-card::after,
+.form-card::before,.form-card::after,
+.control-card::before,.control-card::after,
+.choice-card::before,.choice-card::after{
+  display:none !important;
+}
+.metric-card .metric-value,
+.metric-ledger strong,
+.tail-avg-metric strong,
+.audit-card strong,
+.ana-narrative-card strong,
+.opt-field-card .mono,
+.opt-frontier-card .mono,
+.opt-heatmap-card .mono{
+  font-family:"Cormorant Garamond",Georgia,serif !important;
+  font-weight:500 !important;
+  color:var(--ink) !important;
+}
+
 </style>
 
 <script id="p21-stable-interaction-js">
@@ -13639,6 +15083,8 @@ body[data-active-mode="basic"] .simulation-output{
       Chart.defaults.transitions.resize.animation.duration = 0;
       Chart.defaults.responsive = true;
       Chart.defaults.plugins.tooltip.animation = false;
+      Chart.defaults.plugins.tooltip.enabled = true;
+      Chart.defaults.plugins.legend.onClick = Chart.defaults.plugins.legend.onClick;
     }
 
     // Preserve full text access without letting labels force layout expansion.
