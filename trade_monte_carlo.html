@@ -2594,7 +2594,7 @@ table{width:100%;border-collapse:collapse}
 }
 
 
-/* v18: ana pathStats, seed audit and executive scatter narratives */
+/* v18: core path metrics and executive scatter narratives */
 .audit-toolbar{
   display:grid;
   grid-template-columns:1.2fr 1fr;
@@ -5612,9 +5612,885 @@ body.show-metric-dock .mode-tabs{
   }
 }
 
+
+/* === P15: index-aligned dock color and rebuilt final band === */
+:root{
+  --metric-dock-bg:rgba(255,253,248,.97);
+}
+.metric-dock{
+  background:rgba(255,253,248,.97) !important;
+  border-bottom:1px solid rgba(222,212,196,.78) !important;
+  box-shadow:0 3px 20px rgba(32,27,21,.07) !important;
+  backdrop-filter:blur(18px) !important;
+  -webkit-backdrop-filter:blur(18px) !important;
+}
+.metric-dock .dock-card{
+  background:transparent !important;
+  border-right:1px solid rgba(222,212,196,.45) !important;
+}
+.metric-dock .dock-card span{
+  color:#8b837a !important;
+  font-weight:700 !important;
+  letter-spacing:.13em !important;
+}
+.metric-dock .dock-card strong{
+  color:var(--ink) !important;
+  font-weight:540 !important;
+}
+.metric-dock .dock-card em{
+  color:#8f877f !important;
+}
+.metric-dock .dock-primary{
+  border-left:3px solid rgba(206,90,55,.58) !important;
+}
+.metric-dock .dock-tail{
+  border-left:3px solid rgba(143,59,53,.48) !important;
+}
+.metric-dock .dock-risk{
+  border-left:3px solid rgba(143,59,53,.52) !important;
+}
+.result-strip{
+  background:transparent !important;
+  border-top:1px solid rgba(230,222,210,.54) !important;
+  border-bottom:1px solid rgba(222,212,196,.52) !important;
+  box-shadow:none !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+}
+.result-strip .metric{
+  background:#fffefb !important;
+  border:1px solid rgba(224,216,203,.62) !important;
+  box-shadow:0 7px 16px rgba(32,27,21,.022) !important;
+}
+.result-strip .metric-label{
+  color:#726b62 !important;
+}
+.result-strip .metric-value{
+  color:var(--ink) !important;
+}
+.result-strip .metric-sub{
+  color:#8f877f !important;
+}
+.result-strip .hero-metric{
+  border-left:4px solid rgba(206,90,55,.58) !important;
+}
+.result-strip .tail-avg-metric{
+  border-left:3px solid rgba(143,59,53,.42) !important;
+}
+.final-band-v2{
+  grid-row:span 2 !important;
+  border-left:4px solid rgba(206,90,55,.68) !important;
+  padding:16px !important;
+  background:linear-gradient(180deg,#fffdf8,#fbf7ef) !important;
+}
+.final-band-v2-head{
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) minmax(260px,.64fr) !important;
+  align-items:end !important;
+  gap:18px !important;
+  padding-bottom:13px !important;
+  margin-bottom:14px !important;
+  border-bottom:1px solid rgba(230,222,210,.78) !important;
+}
+.final-band-v2-head h3{
+  font-family:"Cormorant Garamond",Georgia,serif !important;
+  font-size:clamp(28px,2.2vw,38px) !important;
+  line-height:.92 !important;
+  font-weight:560 !important;
+  letter-spacing:-.035em !important;
+  margin:0 !important;
+}
+.final-band-v2-head p{
+  margin:0 !important;
+  color:#7b736b !important;
+  font-size:12px !important;
+  line-height:1.45 !important;
+  text-align:right !important;
+}
+.final-band-v2-grid{
+  display:grid !important;
+  grid-template-columns:minmax(260px,.72fr) minmax(0,1fr) !important;
+  gap:12px !important;
+  align-items:stretch !important;
+}
+.final-median-panel{
+  min-width:0 !important;
+  border:1px solid rgba(224,216,203,.72) !important;
+  background:radial-gradient(circle at 0% 0%,rgba(206,90,55,.08),transparent 42%),#fffefb !important;
+  padding:14px !important;
+  display:flex !important;
+  flex-direction:column !important;
+  justify-content:space-between !important;
+  min-height:188px !important;
+}
+.final-label{
+  display:block !important;
+  color:#726b62 !important;
+  font-size:8px !important;
+  letter-spacing:.13em !important;
+  text-transform:uppercase !important;
+  font-weight:800 !important;
+  margin-bottom:8px !important;
+}
+.final-main-value{
+  display:block !important;
+  max-width:100% !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  white-space:nowrap !important;
+  font-family:"Cormorant Garamond",Georgia,serif !important;
+  color:var(--ink) !important;
+  font-size:clamp(29px,2.9vw,48px) !important;
+  line-height:.92 !important;
+  font-weight:540 !important;
+  letter-spacing:-.04em !important;
+}
+.final-median-panel > em{
+  display:block !important;
+  margin-top:7px !important;
+  color:#8f877f !important;
+  font-size:11px !important;
+  line-height:1.38 !important;
+  font-style:normal !important;
+}
+.tail-average-strip{
+  display:grid !important;
+  grid-template-columns:1fr 1fr !important;
+  gap:8px !important;
+  margin-top:14px !important;
+}
+.tail-average-card{
+  min-width:0 !important;
+  border:1px solid rgba(143,59,53,.16) !important;
+  border-left:3px solid rgba(143,59,53,.46) !important;
+  background:rgba(143,59,53,.045) !important;
+  padding:9px 10px !important;
+}
+.tail-average-card span,
+.final-tile span{
+  display:block !important;
+  color:#756d64 !important;
+  font-size:7.5px !important;
+  line-height:1 !important;
+  letter-spacing:.12em !important;
+  text-transform:uppercase !important;
+  font-weight:780 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+.tail-average-card strong,
+.final-tile strong{
+  display:block !important;
+  margin-top:6px !important;
+  max-width:100% !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  white-space:nowrap !important;
+  color:var(--ink) !important;
+  font-family:"JetBrains Mono",ui-monospace,monospace !important;
+  font-size:clamp(11px,.88vw,15px) !important;
+  line-height:1.05 !important;
+}
+.tail-average-card em,
+.final-tile em{
+  display:block !important;
+  margin-top:5px !important;
+  color:#968e85 !important;
+  font-size:8.3px !important;
+  line-height:1.2 !important;
+  font-style:normal !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+.final-percentile-panel{
+  min-width:0 !important;
+  border:1px solid rgba(224,216,203,.72) !important;
+  background:#fffefb !important;
+  padding:12px !important;
+  display:flex !important;
+  flex-direction:column !important;
+  justify-content:space-between !important;
+}
+.final-scale{
+  position:relative !important;
+  display:grid !important;
+  grid-template-columns:repeat(6,minmax(0,1fr)) !important;
+  gap:6px !important;
+  margin-bottom:10px !important;
+  padding:7px 0 8px !important;
+}
+.final-scale::before{
+  content:"" !important;
+  position:absolute !important;
+  left:7.5% !important;
+  right:7.5% !important;
+  top:50% !important;
+  height:2px !important;
+  transform:translateY(-50%) !important;
+  background:linear-gradient(90deg,rgba(143,59,53,.38),rgba(168,132,66,.36),rgba(107,117,75,.38)) !important;
+  z-index:0 !important;
+}
+.scale-node{
+  position:relative !important;
+  z-index:1 !important;
+  justify-self:center !important;
+  display:grid !important;
+  place-items:center !important;
+  min-width:31px !important;
+  height:22px !important;
+  padding:0 6px !important;
+  border:1px solid rgba(224,216,203,.86) !important;
+  background:#fffdf8 !important;
+  color:#756d64 !important;
+  font-size:8px !important;
+  letter-spacing:.08em !important;
+  text-transform:uppercase !important;
+  font-weight:800 !important;
+}
+.scale-node.danger{border-color:rgba(143,59,53,.30);color:var(--ruby)}
+.scale-node.watch{border-color:rgba(168,132,66,.34);color:var(--gold)}
+.scale-node.median{border-color:rgba(206,90,55,.42);color:var(--terra)}
+.scale-node.good,.scale-node.excellent{border-color:rgba(107,117,75,.34);color:var(--olive)}
+.final-tile-grid{
+  display:grid !important;
+  grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  gap:8px !important;
+}
+.final-tile{
+  min-width:0 !important;
+  border:1px solid rgba(224,216,203,.72) !important;
+  background:#fffdf8 !important;
+  padding:10px !important;
+  min-height:78px !important;
+}
+.final-tile.danger{border-left:3px solid rgba(143,59,53,.54) !important}
+.final-tile.watch{border-left:3px solid rgba(168,132,66,.55) !important}
+.final-tile.median{border-left:3px solid rgba(206,90,55,.62) !important;background:linear-gradient(90deg,rgba(206,90,55,.052),#fffdf8 58%) !important}
+.final-tile.good,.final-tile.excellent{border-left:3px solid rgba(107,117,75,.55) !important}
+.percentile-ledger.compact-final-ledger{
+  display:none !important;
+}
+@media (max-width:1180px){
+  .final-band-v2-head{
+    grid-template-columns:1fr !important;
+  }
+  .final-band-v2-head p{
+    text-align:left !important;
+  }
+  .final-band-v2-grid{
+    grid-template-columns:1fr !important;
+  }
+  .final-median-panel{
+    min-height:0 !important;
+  }
+}
+@media (max-width:720px){
+  .final-band-v2{
+    padding:14px !important;
+  }
+  .final-band-v2-head{
+    gap:8px !important;
+  }
+  .final-band-v2-head h3{
+    font-size:29px !important;
+  }
+  .tail-average-strip{
+    grid-template-columns:1fr !important;
+  }
+  .final-scale{
+    overflow-x:auto !important;
+    grid-template-columns:repeat(6,58px) !important;
+    justify-content:start !important;
+    padding-bottom:10px !important;
+  }
+  .final-tile-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  }
+  .final-main-value{
+    font-size:36px !important;
+  }
+}
+@media print{
+  .metric-dock{display:none !important;}
+}
+
+
+/* mathlab-interactive-models */
+.mathlab-hero{display:flex;align-items:flex-end;justify-content:space-between;gap:22px;border-radius:14px !important;background:#fffdf8 !important}
+.mathlab-hero h2{font-family:"Cormorant Garamond",Georgia,serif;font-size:clamp(34px,4.1vw,58px);line-height:.94;letter-spacing:-.035em;font-weight:500;margin:12px 0 8px;max-width:820px}
+.mathlab-hero p{color:var(--stone);font-size:13px;line-height:1.62;max-width:780px}
+.mathlab-actions{display:grid;gap:8px;justify-items:end;min-width:220px}
+.mathlab-play{border:1px solid rgba(198,91,54,.38);background:linear-gradient(180deg,#fffdf8,#f7efe4);color:var(--ink);min-height:42px;padding:10px 14px;border-radius:10px;display:inline-flex;align-items:center;gap:9px;font-size:10px;text-transform:uppercase;letter-spacing:.105em;font-weight:850;cursor:pointer}
+.play-dot{width:18px;height:18px;border-radius:50%;background:var(--terra);position:relative;box-shadow:0 0 0 6px rgba(198,91,54,.08)}
+.play-dot::after{content:"";position:absolute;left:7px;top:5px;width:0;height:0;border-top:4px solid transparent;border-bottom:4px solid transparent;border-left:6px solid #fffdf8}
+.mathlab-play.is-running .play-dot{animation:mathPulse 880ms ease-in-out infinite}
+@keyframes mathPulse{0%,100%{box-shadow:0 0 0 5px rgba(198,91,54,.08);transform:scale(1)}50%{box-shadow:0 0 0 10px rgba(198,91,54,.16);transform:scale(1.04)}}
+.mathlab-seed-note{color:var(--muted);font-size:10px;font-weight:750;letter-spacing:.08em;text-transform:uppercase}
+.mathlab-grid{display:grid;grid-template-columns:minmax(290px,360px) minmax(0,1fr);gap:18px;align-items:start}
+.mathlab-controls{position:sticky;top:calc(var(--live-hud-h,92px) + 70px)}
+.mathlab-section-kicker{color:var(--stone);font-size:9px;letter-spacing:.15em;text-transform:uppercase;font-weight:900;margin-bottom:10px}
+.mathlab-control-stack{display:grid;gap:12px}
+.math-control{border:1px solid rgba(222,212,196,.92);border-radius:12px;background:linear-gradient(180deg,#fffdf8,#f8f2e8);padding:13px}
+.math-control-top{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:8px}
+.math-control-label{color:var(--stone);font-size:9px;letter-spacing:.12em;text-transform:uppercase;font-weight:900}
+.math-control-value{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:12px;font-weight:800;color:var(--ink);white-space:nowrap}
+.math-control-row{display:grid;grid-template-columns:minmax(0,1fr) 86px;gap:10px;align-items:center}
+.math-control input[type="range"]{width:100%;-webkit-appearance:none;appearance:none;height:34px;background:transparent;cursor:pointer}
+.math-control input[type="range"]::-webkit-slider-runnable-track{height:6px;border-radius:999px;background:linear-gradient(90deg,var(--terra) 0 var(--fill,50%),#e9dfd2 var(--fill,50%) 100%);border:1px solid rgba(205,191,174,.58)}
+.math-control input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;margin-top:-9px;border-radius:50%;background:var(--terra);border:2px solid #fffdf8;box-shadow:0 5px 14px rgba(56,42,25,.18)}
+.math-control input[type="number"]{width:100%;min-height:36px;border:1px solid var(--line);border-radius:10px;background:#fffdf8;padding:8px 9px;color:var(--ink);font-weight:750;font-size:12px;text-align:right}
+.mathlab-formula-card{margin-top:14px;border:1px solid rgba(168,132,66,.2);background:rgba(168,132,66,.055);border-radius:14px;padding:13px}
+.mathlab-formula{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:11px;line-height:1.45;color:#3c352b;margin:7px 0}
+.mathlab-formula-card p{margin-top:9px;color:var(--stone);font-size:11px;line-height:1.55}
+.mathlab-stage{display:grid;gap:16px;min-width:0}
+.mathlab-metrics{display:grid;grid-template-columns:1.2fr repeat(3,minmax(0,1fr));gap:10px}
+.mathlab-metric{min-width:0;border:1px solid rgba(222,212,196,.72);background:#fffdf8;border-radius:0;padding:14px 15px;box-shadow:0 8px 18px rgba(32,27,21,.025);overflow:hidden}
+.mathlab-metric.hero{border-left:4px solid var(--terra)}
+.mathlab-metric span{display:block;color:var(--stone);font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:850;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mathlab-metric strong{display:block;font-family:"Cormorant Garamond",Georgia,serif;font-size:clamp(25px,2.4vw,38px);font-weight:500;letter-spacing:-.03em;line-height:.96;margin-top:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mathlab-metric em{display:block;margin-top:7px;color:var(--muted);font-size:10px;font-style:normal;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mathlab-equity-wrap{height:380px}
+.mathlab-lower{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(300px,.72fr);gap:16px}
+.panel-head.compact{margin-bottom:12px;padding-bottom:12px}
+.math-heatmap-wrap{overflow:auto;border:1px solid var(--line);border-radius:12px;background:#fffdf8}
+.math-heatmap{width:100%;min-width:650px;border-collapse:collapse;font-size:11px;text-align:center}
+.math-heatmap th{position:sticky;top:0;background:#f5eee3;color:var(--stone);font-size:8px;letter-spacing:.11em;text-transform:uppercase;padding:8px 7px;border-bottom:1px solid var(--line)}
+.math-heatmap td{padding:8px 7px;border-right:1px solid rgba(222,212,196,.55);border-bottom:1px solid rgba(222,212,196,.55);font-family:"JetBrains Mono",ui-monospace,monospace;font-weight:800}
+.math-heatmap .active-cell{outline:2px solid var(--ink);outline-offset:-2px}
+.math-cell-pos-strong{background:rgba(107,117,75,.20);color:#2f3a21}
+.math-cell-pos{background:rgba(107,117,75,.11);color:#44502d}
+.math-cell-flat{background:rgba(168,132,66,.13);color:#765b24}
+.math-cell-neg{background:rgba(143,59,53,.10);color:var(--ruby)}
+.math-narrative{display:grid;gap:10px;color:var(--stone);font-size:12px;line-height:1.6}
+.math-narrative strong{color:var(--ink)}
+.math-narrative .callout{border-left:3px solid var(--terra);padding:10px 12px;background:rgba(198,91,54,.055);color:#3b332c}
+@media (min-width:1121px){.mode-tabs{grid-template-columns:repeat(5,minmax(0,1fr)) !important}}
+@media (max-width:1120px){.mathlab-hero{display:grid}.mathlab-actions{justify-items:start}.mathlab-grid{grid-template-columns:1fr}.mathlab-controls{position:relative;top:auto}.mathlab-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.mathlab-lower{grid-template-columns:1fr}}
+@media (max-width:640px){.mathlab-hero h2{font-size:33px}.mathlab-metrics{grid-template-columns:1fr}.math-control-row{grid-template-columns:1fr}.mathlab-equity-wrap{height:320px}}
+@media print{#mathlab .mathlab-controls,#mathLabResample{display:none !important}}
+
+
+/* === P17: index-aligned UX correction === */
+body[data-active-mode]:not([data-active-mode="basic"]) .simulation-output{
+  display:none !important;
+}
+body[data-active-mode="basic"] .simulation-output{
+  display:block !important;
+}
+.metric-dock{
+  background:rgba(255,253,248,.975) !important;
+  border-bottom:1px solid rgba(222,212,196,.88) !important;
+  box-shadow:0 8px 24px rgba(56,42,25,.075) !important;
+  color:var(--ink) !important;
+}
+.metric-dock .dock-card{
+  background:transparent !important;
+  border-right:1px solid rgba(222,212,196,.62) !important;
+}
+.metric-dock .dock-card span{
+  color:#746d64 !important;
+  opacity:1 !important;
+}
+.metric-dock .dock-card strong{
+  color:var(--ink) !important;
+  opacity:1 !important;
+}
+.metric-dock .dock-primary{
+  border-left:3px solid rgba(206,90,55,.62) !important;
+}
+.metric-dock .dock-life{
+  border-left:3px solid rgba(107,117,75,.56) !important;
+}
+.result-strip{
+  background:transparent !important;
+  border:0 !important;
+}
+.result-strip .metric-card,
+.result-strip .metric{
+  background:#fffefb !important;
+  border-color:rgba(224,216,203,.72) !important;
+  color:var(--ink) !important;
+}
+.mode-tabs{
+  grid-template-columns:repeat(5,minmax(0,1fr)) !important;
+}
+@media(max-width:900px){
+  .mode-tabs{
+    display:flex !important;
+    overflow-x:auto !important;
+    grid-template-columns:none !important;
+    -webkit-overflow-scrolling:touch !important;
+  }
+  .mode-btn{
+    flex:0 0 auto !important;
+    min-width:136px !important;
+  }
+}
+.results-panorama{
+  overflow:hidden !important;
+}
+.panorama-grid{
+  gap:14px !important;
+}
+.final-band-board{
+  display:grid !important;
+  grid-template-columns:minmax(280px,340px) minmax(0,1fr) !important;
+  gap:14px !important;
+  align-items:stretch !important;
+  min-width:0 !important;
+  padding:0 !important;
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+}
+.final-board-main,
+.final-board-scale{
+  min-width:0 !important;
+  border:1px solid rgba(224,216,203,.72) !important;
+  background:#fffefb !important;
+  box-shadow:0 10px 22px rgba(32,27,21,.028) !important;
+}
+.final-board-main{
+  padding:15px 16px !important;
+  border-left:4px solid rgba(206,90,55,.58) !important;
+  display:flex !important;
+  flex-direction:column !important;
+  gap:12px !important;
+}
+.final-board-title h3{
+  margin:4px 0 4px !important;
+  font-family:"Cormorant Garamond",Georgia,serif !important;
+  font-size:clamp(25px,2.2vw,34px) !important;
+  font-weight:560 !important;
+  line-height:.95 !important;
+  letter-spacing:-.025em !important;
+  color:var(--ink) !important;
+}
+.final-board-title p{
+  color:#746d64 !important;
+  font-size:11.5px !important;
+  line-height:1.45 !important;
+  margin:0 !important;
+  max-width:32ch !important;
+}
+.final-board-hero{
+  margin-top:auto !important;
+  padding-top:12px !important;
+  border-top:1px solid rgba(230,222,210,.7) !important;
+  min-width:0 !important;
+}
+.final-board-hero span,
+.tail-ledger span,
+.final-ledger-cell span{
+  display:block !important;
+  color:#746d64 !important;
+  font-size:8.4px !important;
+  letter-spacing:.12em !important;
+  text-transform:uppercase !important;
+  font-weight:750 !important;
+  white-space:nowrap !important;
+}
+.final-board-hero strong{
+  display:block !important;
+  margin-top:5px !important;
+  font-family:"Cormorant Garamond",Georgia,serif !important;
+  color:var(--ink) !important;
+  font-size:clamp(28px,3vw,42px) !important;
+  font-weight:520 !important;
+  line-height:.98 !important;
+  letter-spacing:-.028em !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  max-width:100% !important;
+}
+.final-board-hero em,
+.tail-ledger em,
+.final-ledger-cell em{
+  display:block !important;
+  margin-top:3px !important;
+  color:#9a9286 !important;
+  font-style:normal !important;
+  font-size:10px !important;
+  line-height:1.25 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+.tail-ledger{
+  display:grid !important;
+  grid-template-columns:1fr 1fr !important;
+  gap:8px !important;
+}
+.tail-ledger > div{
+  min-width:0 !important;
+  padding:10px 11px !important;
+  border:1px solid rgba(224,216,203,.66) !important;
+  background:#fffdf8 !important;
+}
+.tail-ledger strong{
+  display:block !important;
+  margin-top:4px !important;
+  font-family:"JetBrains Mono",monospace !important;
+  font-size:clamp(12px,1.05vw,15px) !important;
+  color:var(--ink) !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+.final-board-scale{
+  padding:14px !important;
+  display:flex !important;
+  flex-direction:column !important;
+  gap:12px !important;
+}
+.final-ribbon{
+  display:grid !important;
+  grid-template-columns:auto 1fr auto 1fr auto 1fr auto !important;
+  align-items:center !important;
+  gap:8px !important;
+  min-height:18px !important;
+}
+.ribbon-dot{
+  width:12px !important;
+  height:12px !important;
+  border-radius:50% !important;
+  display:block !important;
+  box-shadow:0 0 0 4px rgba(222,212,196,.34) !important;
+}
+.ribbon-dot.ruby{background:var(--ruby) !important}
+.ribbon-dot.terra{background:var(--terra) !important}
+.ribbon-dot.gold{background:var(--gold) !important}
+.ribbon-dot.olive{background:var(--olive) !important}
+.ribbon-line{
+  height:2px !important;
+  background:linear-gradient(90deg,rgba(143,59,53,.3),rgba(168,132,66,.25),rgba(107,117,75,.28)) !important;
+}
+.final-ledger-grid{
+  display:grid !important;
+  grid-template-columns:repeat(6,minmax(0,1fr)) !important;
+  gap:8px !important;
+  min-width:0 !important;
+}
+.final-ledger-cell{
+  min-width:0 !important;
+  padding:11px 10px !important;
+  border:1px solid rgba(224,216,203,.7) !important;
+  background:#fffdf8 !important;
+  overflow:hidden !important;
+}
+.final-ledger-cell strong{
+  display:block !important;
+  margin-top:6px !important;
+  font-family:"JetBrains Mono",monospace !important;
+  color:var(--ink) !important;
+  font-size:clamp(11px,.92vw,14px) !important;
+  line-height:1.08 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+.final-ledger-cell.tail{border-top:3px solid rgba(143,59,53,.58) !important}
+.final-ledger-cell.tail-soft{border-top:3px solid rgba(206,90,55,.52) !important}
+.final-ledger-cell.muted{border-top:3px solid rgba(168,132,66,.46) !important}
+.final-ledger-cell.median{border-top:3px solid rgba(23,20,17,.54) !important;background:#fffaf2 !important}
+.final-ledger-cell.upper{border-top:3px solid rgba(107,117,75,.46) !important}
+.final-ledger-cell.upper-strong{border-top:3px solid rgba(107,117,75,.64) !important}
+@media(max-width:1180px){
+  .final-band-board{grid-template-columns:1fr !important}
+  .final-ledger-grid{grid-template-columns:repeat(3,minmax(0,1fr)) !important}
+}
+@media(max-width:640px){
+  .final-board-main,.final-board-scale{padding:12px !important}
+  .tail-ledger{grid-template-columns:1fr !important}
+  .final-ledger-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+}
+.math-motion-board{
+  display:grid !important;
+  grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  gap:10px !important;
+  padding:12px !important;
+  background:#fffefb !important;
+  border:1px solid rgba(224,216,203,.72) !important;
+  box-shadow:0 10px 22px rgba(32,27,21,.026) !important;
+}
+.motion-cell{
+  min-width:0 !important;
+  padding:12px !important;
+  background:#fffdf8 !important;
+  border:1px solid rgba(224,216,203,.66) !important;
+}
+.motion-head{
+  display:flex !important;
+  justify-content:space-between !important;
+  align-items:baseline !important;
+  gap:8px !important;
+  color:#746d64 !important;
+  font-size:9px !important;
+  letter-spacing:.11em !important;
+  text-transform:uppercase !important;
+  font-weight:800 !important;
+}
+.motion-head strong{
+  color:var(--ink) !important;
+  font-family:"JetBrains Mono",monospace !important;
+  font-size:11px !important;
+  letter-spacing:0 !important;
+  white-space:nowrap !important;
+}
+.motion-track{
+  margin:10px 0 8px !important;
+  height:9px !important;
+  background:#eee5d8 !important;
+  border:1px solid rgba(205,191,174,.62) !important;
+  overflow:hidden !important;
+}
+.motion-fill{
+  height:100% !important;
+  width:var(--bar,0%) !important;
+  transition:width .22s ease, background .22s ease !important;
+  background:var(--terra) !important;
+  position:relative !important;
+}
+.motion-fill::after{
+  content:"" !important;
+  position:absolute !important;
+  inset:0 !important;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.45),transparent) !important;
+  transform:translateX(-100%) !important;
+  animation:barSheen 1.35s ease-in-out infinite !important;
+}
+.motion-cell.expectancy .motion-fill{background:var(--olive) !important}
+.motion-cell.kelly .motion-fill{background:var(--gold) !important}
+.motion-cell.ruin .motion-fill{background:var(--ruby) !important}
+.motion-cell em{
+  display:block !important;
+  color:#9a9286 !important;
+  font-size:10.5px !important;
+  line-height:1.35 !important;
+  font-style:normal !important;
+}
+@keyframes barSheen{
+  0%{transform:translateX(-100%)}
+  55%,100%{transform:translateX(100%)}
+}
+@media(max-width:900px){
+  .math-motion-board{grid-template-columns:1fr !important}
+}
+
+
+/* === P18 CORRECT TARGET: trade_monte_carlo UI cleanup, index-aligned === */
+.simulation-output{display:none !important;}
+body[data-active-mode="basic"] .simulation-output{display:block !important;}
+body[data-active-mode]:not([data-active-mode="basic"]) .simulation-output{display:none !important;}
+.mode-panel:not(.active){display:none !important;}
+.mode-panel.active{display:block !important;}
+
+.result-strip{
+  background:#fffdf8 !important;
+  border:1px solid rgba(226,216,201,.88) !important;
+  box-shadow:0 10px 28px rgba(56,42,25,.055) !important;
+}
+.result-strip .metric{
+  background:#fffdf8 !important;
+  border:1px solid rgba(226,216,201,.90) !important;
+  box-shadow:none !important;
+}
+.result-strip .metric-value{color:var(--ink) !important;}
+.result-strip .hero-metric{border-left:4px solid var(--terra) !important;}
+.result-strip .good{border-left-color:var(--olive) !important;}
+.result-strip .bad{border-left-color:var(--ruby) !important;}
+
+.mode-tabs{
+  display:grid !important;
+  grid-template-columns:repeat(5,minmax(0,1fr)) !important;
+  overflow:visible !important;
+  background:#fffdf8 !important;
+  border:1px solid var(--line) !important;
+  box-shadow:0 10px 28px rgba(56,42,25,.045) !important;
+}
+.mode-btn{
+  min-width:0 !important;
+  white-space:nowrap !important;
+  background:transparent !important;
+}
+@media(max-width:860px){
+  .mode-tabs{display:flex !important; overflow-x:auto !important; grid-template-columns:none !important;}
+  .mode-btn{flex:0 0 auto !important; min-width:128px !important;}
+}
+
+/* Fresh math model, no duplicated global charts */
+#mathlab{display:none;}
+#mathlab.active{display:flex !important; flex-direction:column; gap:14px;}
+.math-clean-panel,.math-output-panel{background:#fffdf8 !important;border:1px solid var(--line) !important;box-shadow:0 10px 28px rgba(56,42,25,.045) !important;border-radius:18px !important;}
+.math-clean-head{margin-bottom:16px !important;}
+.math-workbench{display:grid;grid-template-columns:minmax(250px,.34fr) minmax(0,1fr);gap:14px;align-items:start;}
+.math-system-row{display:grid;gap:9px;align-content:start;}
+.math-system-card{
+  display:grid;gap:7px;text-align:left;border:1px solid var(--line);background:#fffdf8;color:var(--ink);padding:12px;border-radius:14px;cursor:pointer;box-shadow:none;transition:border-color .15s ease,background .15s ease;
+}
+.math-system-card:hover{border-color:rgba(198,91,54,.38);}
+.math-system-card.active{border-color:rgba(198,91,54,.56);box-shadow:inset 3px 0 0 rgba(198,91,54,.75);background:#fffaf3;}
+.math-system-card.disabled{opacity:.55;}
+.math-sys-top{display:flex;justify-content:space-between;gap:8px;align-items:center;font-size:10px;letter-spacing:.11em;text-transform:uppercase;font-weight:900;}
+.math-sys-top em{font-style:normal;color:var(--muted);font-size:9px;}
+.math-sys-line{color:var(--stone);font-size:11px;}
+.math-sys-edge{font-size:14px;font-weight:900;}
+.math-sys-edge.good{color:var(--olive);}
+.math-sys-edge.bad{color:var(--ruby);}
+.math-sys-grade{justify-self:start;border:1px solid var(--line);background:#fffdf8;border-radius:999px;padding:5px 8px;font-size:9px;letter-spacing:.08em;text-transform:uppercase;font-weight:900;color:var(--stone);}
+.math-sys-grade.good{color:var(--olive);border-color:rgba(100,112,73,.28);}
+.math-sys-grade.warn{color:var(--terra);border-color:rgba(198,91,54,.30);}
+.math-sys-grade.bad{color:var(--ruby);border-color:rgba(127,39,55,.28);}
+
+.math-editor-board{border:1px solid var(--line);background:#fffdf8;border-radius:18px;padding:16px;}
+.math-editor-title{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding-bottom:12px;margin-bottom:12px;border-bottom:1px solid var(--line);}
+.math-kicker{display:block;color:var(--stone);font-size:9px;letter-spacing:.14em;text-transform:uppercase;font-weight:900;}
+.math-editor-title h3{font-family:"Cormorant Garamond",Georgia,serif;font-size:34px;font-weight:600;line-height:1;margin-top:6px;}
+.math-grade-chip{max-width:460px;border:1px solid var(--line);background:#fffdf8;border-radius:999px;padding:8px 10px;color:var(--stone);font-size:10px;line-height:1.25;font-weight:850;text-align:right;}
+.math-grade-chip.good{color:var(--olive);border-color:rgba(100,112,73,.28);}
+.math-grade-chip.warn{color:var(--terra);border-color:rgba(198,91,54,.30);}
+.math-grade-chip.bad{color:var(--ruby);border-color:rgba(127,39,55,.28);}
+.math-slider-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;}
+.math-slider-card{display:grid;gap:9px;border:1px solid var(--line);background:#fffdf8;border-radius:14px;padding:12px;min-width:0;}
+.math-slider-top{display:flex;justify-content:space-between;gap:8px;align-items:center;color:var(--stone);font-size:9px;letter-spacing:.11em;text-transform:uppercase;font-weight:900;}
+.math-slider-top b{color:var(--ink);}
+.math-slider-top em{font-style:normal;color:var(--terra);font-size:11px;letter-spacing:0;text-transform:none;}
+.math-range{height:32px !important;}
+.math-number{font-size:13px !important;min-height:38px !important;}
+.math-toggle-card{align-content:start;}
+.math-thresholds{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;}
+.math-threshold-card{border:1px solid rgba(226,216,201,.88);background:#fffdf8;border-radius:14px;padding:12px;color:var(--stone);font-size:11px;line-height:1.5;}
+.math-threshold-card span{display:block;color:var(--ink);font-size:9px;letter-spacing:.13em;text-transform:uppercase;font-weight:900;margin-bottom:5px;}
+
+.math-result-tabs{
+  display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;padding:6px;border:1px solid var(--line);background:#fffdf8;border-radius:14px;box-shadow:0 10px 28px rgba(56,42,25,.035);
+}
+.math-result-tab{
+  position:relative;border:1px solid transparent;background:transparent;color:var(--stone);min-height:42px;border-radius:10px;cursor:pointer;font-size:9px;letter-spacing:.10em;text-transform:uppercase;font-weight:900;
+}
+.math-result-tab::after{content:"";position:absolute;left:18px;right:18px;bottom:7px;height:2px;background:linear-gradient(90deg,var(--terra),var(--gold));transform:scaleX(0);transition:transform .15s ease;}
+.math-result-tab.active{color:var(--ink);background:#f7efe4;border-color:var(--line-strong);}
+.math-result-tab.active::after{transform:scaleX(1);}
+.math-result-pane{display:none;}
+.math-result-pane.active{display:block;}
+
+.math-matrix-sections{display:grid;gap:14px;}
+.math-matrix-block{border:1px solid var(--line);background:#fffdf8;border-radius:16px;padding:14px;}
+.math-matrix-block h3{font-family:"Cormorant Garamond",Georgia,serif;font-size:26px;font-weight:600;margin-bottom:10px;}
+.math-matrix-wrap{overflow:auto;border:1px solid var(--line);border-radius:12px;}
+.math-matrix{width:100%;border-collapse:collapse;min-width:720px;font-size:12px;text-align:right;}
+.math-matrix th{background:#f6efe4;color:var(--stone);font-size:9px;letter-spacing:.12em;text-transform:uppercase;font-weight:900;padding:11px;border-bottom:1px solid var(--line);white-space:nowrap;}
+.math-matrix td{padding:11px;border-bottom:1px solid rgba(226,216,201,.56);white-space:nowrap;}
+.math-matrix th:first-child,.math-matrix td:first-child{text-align:left;color:var(--ink);font-family:Inter,system-ui,sans-serif;font-weight:800;}
+.math-matrix td.good{color:var(--olive);background:rgba(100,112,73,.055);font-weight:900;}
+.math-matrix td.watch{color:var(--terra);background:rgba(198,91,54,.055);font-weight:900;}
+.math-matrix td.bad{color:var(--ruby);background:rgba(127,39,55,.055);font-weight:900;}
+
+.math-heatmap-table{overflow:auto;border:1px solid var(--line);border-radius:12px;background:#fffdf8;}
+.math-heatmap-table table{width:100%;min-width:620px;border-collapse:collapse;text-align:center;font-size:11px;}
+.math-heatmap-table th,.math-heatmap-table td{padding:10px;border-bottom:1px solid rgba(226,216,201,.58);border-right:1px solid rgba(226,216,201,.58);}
+.math-heatmap-table th{background:#f6efe4;color:var(--stone);font-size:9px;text-transform:uppercase;letter-spacing:.10em;}
+.hm-good{background:rgba(100,112,73,.14);color:var(--olive);font-weight:900;}
+.hm-watch{background:rgba(168,132,66,.13);color:#765b24;font-weight:900;}
+.hm-bad{background:rgba(127,39,55,.10);color:var(--ruby);font-weight:900;}
+
+@media(max-width:1180px){
+  .math-workbench{grid-template-columns:1fr;}
+  .math-system-row{grid-template-columns:repeat(3,minmax(0,1fr));}
+  .math-slider-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+}
+@media(max-width:760px){
+  .math-system-row,.math-slider-grid,.math-thresholds,.math-result-tabs{grid-template-columns:1fr;}
+  .math-editor-title{display:grid;}
+  .math-grade-chip{text-align:left;max-width:none;}
+}
+@media print{
+  .math-result-tabs{display:none !important;}
+  .math-result-pane{display:block !important;}
+}
+
+
+/* P18 panorama calm-down: remove heavy board styling, return to index-like ledger cards */
+.results-panorama,
+.results-panorama .panorama-block,
+.results-panorama .final-band-board,
+.results-panorama .capital-band-panel{
+  background:#fffdf8 !important;
+  border:1px solid var(--line) !important;
+  box-shadow:0 10px 28px rgba(56,42,25,.045) !important;
+  border-radius:16px !important;
+}
+.results-panorama .final-band-board{
+  display:block !important;
+  padding:16px !important;
+}
+.results-panorama .final-board-main,
+.results-panorama .final-board-metrics,
+.results-panorama .tail-ledger,
+.results-panorama .compact-final-ledger{
+  display:grid !important;
+  grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+  gap:10px !important;
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+}
+.results-panorama .final-board-title{
+  grid-column:1/-1 !important;
+  border-bottom:1px solid var(--line) !important;
+  padding-bottom:10px !important;
+  margin-bottom:2px !important;
+}
+.results-panorama .final-board-title h3{
+  font-family:"Cormorant Garamond",Georgia,serif !important;
+  color:var(--ink) !important;
+  font-weight:600 !important;
+  font-size:30px !important;
+  line-height:1 !important;
+}
+.results-panorama .final-board-title p{
+  color:var(--stone) !important;
+  font-size:12px !important;
+}
+.results-panorama .final-board-hero,
+.results-panorama .tail-ledger>div,
+.results-panorama .compact-final-ledger>div{
+  border:1px solid var(--line) !important;
+  background:#fffdf8 !important;
+  border-radius:12px !important;
+  padding:12px !important;
+  box-shadow:none !important;
+}
+.results-panorama .final-board-hero strong,
+.results-panorama .tail-ledger strong,
+.results-panorama .compact-final-ledger strong{
+  font-family:"Cormorant Garamond",Georgia,serif !important;
+  color:var(--ink) !important;
+  font-weight:600 !important;
+}
+@media(max-width:900px){
+  .results-panorama .final-board-main,
+  .results-panorama .final-board-metrics,
+  .results-panorama .tail-ledger,
+  .results-panorama .compact-final-ledger{
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  }
+}
+@media(max-width:560px){
+  .results-panorama .final-board-main,
+  .results-panorama .final-board-metrics,
+  .results-panorama .tail-ledger,
+  .results-panorama .compact-final-ledger{
+    grid-template-columns:1fr !important;
+  }
+}
+
 </style>
 </head>
-<body>
+<body data-active-mode="basic">
 <div class="app">
 <header class="hero">
 <div>
@@ -5704,8 +6580,9 @@ body.show-metric-dock .mode-tabs{
 <nav aria-label="Çalışma alanları" class="mode-tabs">
 <button class="mode-btn active" data-mode="basic" data-short="Strateji" type="button">Strateji</button>
 <button class="mode-btn" data-mode="optimization" data-short="Optimizasyon" type="button">Optimizasyon</button>
-<button class="mode-btn" data-mode="concepts" data-short="Rehber" type="button">Rehber</button>
+<button class="mode-btn" data-mode="mathlab" data-short="Model" type="button">Matematik Modeli</button>
 <button class="mode-btn" data-mode="diagnostics" data-short="Yollar" type="button">Sermaye Yolları</button>
+<button class="mode-btn" data-mode="concepts" data-short="Rehber" type="button">Rehber</button>
 </nav>
 <section class="mode-panel active" id="basic">
 <div class="panel">
@@ -5729,16 +6606,16 @@ body.show-metric-dock .mode-tabs{
 </div>
 </div>
 </div>
-<div aria-label="Anahtar ve audit modu" class="audit-toolbar">
+<div aria-label="Simülasyon tekrarı" class="audit-toolbar">
 <div class="audit-card">
 <div>
-<div class="compact-label">Simülasyon Anahtarı <span class="mono">audit</span></div>
+<div class="compact-label">Simülasyon Tekrarı</div>
 <p><strong>Otomatik</strong> her çalıştırmada yeni anahtar üretir. <strong>Sabit</strong> aynı parametrelerle aynı olasılık yollarını tekrar üretir; rapor, test ve müşteri sunumu için önerilir.</p>
 </div>
 <div class="audit-controls">
 <div aria-label="Anahtar modu" class="segmented-selector seed-selector" role="group">
 <button aria-pressed="true" class="segmented-option active" data-seed-mode="auto" type="button">Otomatik</button>
-<button aria-pressed="false" class="segmented-option" data-seed-mode="fixed" type="button">Sabit Anahtar</button>
+<button aria-pressed="false" class="segmented-option" data-seed-mode="fixed" type="button">Sabit</button>
 </div>
 <label class="seed-input-wrap">
 <span class="mono">Anahtar</span>
@@ -5747,7 +6624,7 @@ body.show-metric-dock .mode-tabs{
 </div>
 </div>
 </div>
-<details aria-label="Senaryo presetleri" class="preset-panel preset-drawer">
+<details aria-label="Hazır senaryolar" class="preset-panel preset-drawer">
 <summary class="preset-head preset-summary">
 <div>
 <div class="preset-title">Hazır Senaryolar</div>
@@ -5965,6 +6842,150 @@ body.show-metric-dock .mode-tabs{
 </div>
 </div>
 </section>
+
+
+<section class="mode-panel" id="mathlab">
+  <div class="panel math-clean-panel">
+    <div class="panel-head math-clean-head">
+      <div>
+        <div class="panel-title"><svg viewbox="0 0 24 24"><path d="M4 19h16"></path><path d="M7 16l3-4 3 2 4-7"></path><path d="M7 16v3"></path><path d="M17 7v12"></path></svg>Matematik Modeli</div>
+        <p class="panel-copy">Sistemleri geniş ana alanda konfigüre edin. Sonuçlar aşağıda yalnızca seçili analiz sekmesinde görünür; Monte Carlo ağır hesaplaması slider hareketinde çalışmaz.</p>
+      </div>
+      <button class="btn primary" id="mathMcRun" type="button">Monte Carlo Güncelle</button>
+    </div>
+
+    <div class="math-workbench">
+      <section class="math-system-row" id="mathSystemCards" aria-label="Sistem seçimi"></section>
+
+      <section class="math-editor-board" aria-label="Seçili sistem konfigürasyonu">
+        <div class="math-editor-title">
+          <div>
+            <span class="math-kicker">System Design Desk</span>
+            <h3 id="mathEditorTitle">Sistem A</h3>
+          </div>
+          <div class="math-grade-chip" id="mathGradeChip">—</div>
+        </div>
+
+        <div class="math-slider-grid" id="mathEditorControls"></div>
+
+        <div class="math-thresholds">
+          <div class="math-threshold-card">
+            <span>Grade eşikleri</span>
+            <p><strong>Negative</strong>: E_net ≤ 0R · <strong>Fragile</strong>: PF &lt; 1.30 veya Edge Buffer &lt; 5pp veya g ≤ 0 · <strong>Aggressive</strong>: pozitif edge ama P(10 kayıp) ≥ 25% · <strong>Balanced</strong>: g &gt; 0, PF ≥ 1.30, Edge Buffer ≥ 5pp · <strong>Institutional</strong>: PF ≥ 1.80, Edge Buffer ≥ 15pp, P(10 kayıp) &lt; 15%.</p>
+          </div>
+          <div class="math-threshold-card">
+            <span>Performans notu</span>
+            <p>Slider değişiminde yalnızca metrikler ve aktif sekme güncellenir. Monte Carlo yolları manuel butonla yenilenir; böylece tarayıcı slider sırasında kilitlenmez.</p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <nav class="math-result-tabs" aria-label="Matematik model sonuçları">
+    <button class="math-result-tab active" data-math-view="compare" type="button">Kıyaslama</button>
+    <button class="math-result-tab" data-math-view="growth" type="button">Büyüme</button>
+    <button class="math-result-tab" data-math-view="burden" type="button">Psikoloji</button>
+    <button class="math-result-tab" data-math-view="montecarlo" type="button">Monte Carlo</button>
+    <button class="math-result-tab" data-math-view="surface" type="button">Heatmap</button>
+    <button class="math-result-tab" data-math-view="cost" type="button">Cost</button>
+  </nav>
+
+  <section class="math-result-pane active" data-math-pane="compare">
+    <div class="panel math-output-panel">
+      <div class="panel-head">
+        <div>
+          <div class="panel-title">Kritik Metrikler</div>
+          <p class="panel-copy">Karar tablosu tek yerde okunur; metrikler kategori bloklarına ayrılır ve iyi/orta/kritik hücreler temaya uygun şekilde işaretlenir.</p>
+        </div>
+      </div>
+      <div id="mathMatrixSections" class="math-matrix-sections"></div>
+    </div>
+  </section>
+
+  <section class="math-result-pane" data-math-pane="growth">
+    <div class="chart-shell">
+      <div class="chart-head">
+        <div>
+          <div class="chart-title">Risk-Adjusted Büyüme</div>
+          <p class="chart-copy">Seçili sistem için risk/trade değiştikçe beklenen log büyümenin nasıl değiştiğini gösterir. Kelly ve Half-Kelly çizgileri risk aşırılığını görünür kılar.</p>
+        </div>
+      </div>
+      <div class="canvas-wrap small"><canvas id="mathGrowthChart"></canvas></div>
+    </div>
+  </section>
+
+  <section class="math-result-pane" data-math-pane="burden">
+    <div class="chart-grid equal">
+      <div class="chart-shell">
+        <div class="chart-head">
+          <div>
+            <div class="chart-title">Psikolojik Taşıma Yükü</div>
+            <p class="chart-copy">N trade içinde ardışık kayıp serisi görme olasılığı. Düşük win rate sistemler kârlı olsa bile daha sert psikolojik yük üretir.</p>
+          </div>
+        </div>
+        <div class="canvas-wrap small"><canvas id="mathStreakChart"></canvas></div>
+      </div>
+      <div class="chart-shell">
+        <div class="chart-head">
+          <div>
+            <div class="chart-title">Drawdown → Recovery</div>
+            <p class="chart-copy">Kaybın geri kazanım yükünü gösterir. %50 kayıp, başlangıca dönmek için %100 kazanç gerektirir.</p>
+          </div>
+        </div>
+        <div class="canvas-wrap small"><canvas id="mathRecoveryChart"></canvas></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="math-result-pane" data-math-pane="montecarlo">
+    <div class="chart-shell">
+      <div class="chart-head">
+        <div>
+          <div class="chart-title">Monte Carlo Sermaye Yolları</div>
+          <p class="chart-copy">Yalnızca bu sekmede ve butonla yenilenir. P5/P50/P95 bandı, aynı sistem matematiğinin farklı trade sıralarında nasıl ayrıştığını gösterir.</p>
+        </div>
+        <button class="btn olive" id="mathMcRunLocal" type="button">Yolları Yenile</button>
+      </div>
+      <div class="canvas-wrap tall"><canvas id="mathEquityChart"></canvas></div>
+    </div>
+  </section>
+
+  <section class="math-result-pane" data-math-pane="surface">
+    <div class="chart-grid equal">
+      <div class="chart-shell">
+        <div class="chart-head">
+          <div>
+            <div class="chart-title">Expectancy Heatmap</div>
+            <p class="chart-copy">Win rate ve R kombinasyonlarının net expectancy etkisi. Seçili sistemin mevcut maliyet ve kayıp varsayımıyla hesaplanır.</p>
+          </div>
+        </div>
+        <div id="mathHeatmapTable" class="math-heatmap-table"></div>
+      </div>
+      <div class="chart-shell">
+        <div class="chart-head">
+          <div>
+            <div class="chart-title">Break-even Curve</div>
+            <p class="chart-copy">R yükseldikçe gerekli minimum win rate’in nasıl düştüğünü gösterir.</p>
+          </div>
+        </div>
+        <div class="canvas-wrap small"><canvas id="mathBreakEvenChart"></canvas></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="math-result-pane" data-math-pane="cost">
+    <div class="chart-shell">
+      <div class="chart-head">
+        <div>
+          <div class="chart-title">Cost Drag</div>
+          <p class="chart-copy">Brüt expectancy’den işlem maliyeti düşüldüğünde net edge’in ne kadar aşındığını gösterir.</p>
+        </div>
+      </div>
+      <div class="canvas-wrap small"><canvas id="mathCostChart"></canvas></div>
+    </div>
+  </section>
+</section>
 <section class="mode-panel" id="concepts">
 <div class="panel">
 <div class="panel-head">
@@ -6096,7 +7117,7 @@ body.show-metric-dock .mode-tabs{
 <div class="concept-example mono concept-mini">Örnek: Başlangıç 100.000 TL, risk %1. Bileşik modda sermaye 80.000 TL’ye düşerse 1R = 800 TL; sabit modda 1R hâlâ 1.000 TL olabilir.</div>
 </article><article class="concept-card deep">
 <div class="concept-kicker mono">Duyarlılık</div>
-<h3>Parametre Duyarlılığı</h3>
+<h3>Varsayım Etkisi</h3>
 <p>Duyarlılık analizi, hangi varsayım değiştiğinde sonucun en fazla oynadığını gösterir. Bu bölüm “tahmin kesinliği” değil, modelin hangi düğmelerden daha çok etkilendiğini anlamak için kullanılır.</p>
 <ul class="concept-points">
 <li>Analitik duyarlılık hızlı bir ön okuma sağlar.</li>
@@ -6237,6 +7258,7 @@ body.show-metric-dock .mode-tabs{
 </section>
 </div>
 </section>
+<div class="simulation-output" aria-label="Simülasyon sonuçları">
 <div class="error-box" id="errorBox"></div>
 <section class="panel results-panorama">
 <div class="panel-head">
@@ -6247,27 +7269,49 @@ body.show-metric-dock .mode-tabs{
 <span class="badge terra" id="runMeta">Hazır</span>
 </div>
 <div class="panorama-grid">
-<article class="panorama-block final-band">
-<div class="panorama-head">
-<div>
-<span class="panorama-kicker">Final Sermaye Aralığı</span>
-<h3>Final bandı</h3>
-</div>
-<div class="panorama-anchor">
-<span>P50</span>
-<strong class="mono" id="p50Final">—</strong>
-</div>
-</div>
-<div class="percentile-ledger compact-final-ledger">
-<div class="percentile-row danger"><span>P5</span><strong class="mono" id="p5Final">—</strong><em>Kötü senaryo tabanı</em></div>
-<div class="percentile-row tail-mean"><span>Alt %5 Ort.</span><strong class="mono" id="p1p5Avg">—</strong><em>P1–P5 ortalaması</em></div>
-<div class="percentile-row danger soft"><span>P10</span><strong class="mono" id="p10Final">—</strong><em>Alt kuyruk eşiği</em></div>
-<div class="percentile-row tail-mean"><span>Alt %10 Ort.</span><strong class="mono" id="p1p10Avg">—</strong><em>P1–P10 ortalaması</em></div>
-<div class="percentile-row watch"><span>P25</span><strong class="mono" id="p25Final">—</strong><em>Zayıf ama olağan bant</em></div>
-<div class="percentile-row median"><span>P50</span><strong class="mono" id="p50FinalMirror">—</strong><em>Medyan sermaye yolu</em></div>
-<div class="percentile-row good"><span>P75</span><strong class="mono" id="p75Final">—</strong><em>Güçlü senaryo</em></div>
-<div class="percentile-row excellent"><span>P95</span><strong class="mono" id="p95Final">—</strong><em>Üst bant</em></div>
-</div>
+<article class="panorama-block final-band final-band-board">
+  <div class="final-board-main">
+    <div class="final-board-title">
+      <span class="panorama-kicker">Final Dağılım</span>
+      <h3>Medyan ve kuyruk görünümü</h3>
+      <p>Medyan sonucu ve alt kuyruk ortalamalarını aynı yüzeyde, kompakt bir olasılık bandı olarak okur.</p>
+    </div>
+    <div class="final-board-hero">
+      <span>Medyan Final</span>
+      <strong class="mono" id="p50Final">—</strong>
+      <em>Simülasyon yollarının orta sonucu</em>
+    </div>
+    <div class="tail-ledger">
+      <div>
+        <span>Alt %5 Ort.</span>
+        <strong class="mono" id="p1p5Avg">—</strong>
+      </div>
+      <div>
+        <span>Alt %10 Ort.</span>
+        <strong class="mono" id="p1p10Avg">—</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="final-board-scale">
+    <div class="final-ribbon" aria-hidden="true">
+      <span class="ribbon-dot ruby"></span>
+      <span class="ribbon-line"></span>
+      <span class="ribbon-dot terra"></span>
+      <span class="ribbon-line"></span>
+      <span class="ribbon-dot gold"></span>
+      <span class="ribbon-line"></span>
+      <span class="ribbon-dot olive"></span>
+    </div>
+    <div class="final-ledger-grid">
+      <div class="final-ledger-cell tail"><span>P5</span><strong class="mono" id="p5Final">—</strong><em>Kötü taban</em></div>
+      <div class="final-ledger-cell tail-soft"><span>P10</span><strong class="mono" id="p10Final">—</strong><em>Alt eşik</em></div>
+      <div class="final-ledger-cell muted"><span>P25</span><strong class="mono" id="p25Final">—</strong><em>Zayıf bant</em></div>
+      <div class="final-ledger-cell median"><span>P50</span><strong class="mono" id="p50FinalMirror">—</strong><em>Medyan</em></div>
+      <div class="final-ledger-cell upper"><span>P75</span><strong class="mono" id="p75Final">—</strong><em>Güçlü bant</em></div>
+      <div class="final-ledger-cell upper-strong"><span>P95</span><strong class="mono" id="p95Final">—</strong><em>Üst bant</em></div>
+    </div>
+  </div>
 </article>
 <article class="panorama-block comfort-block">
 <div class="panorama-head compact">
@@ -6309,7 +7353,7 @@ body.show-metric-dock .mode-tabs{
 <section aria-label="Parametre duyarlılığı" class="chart-shell priority-chart-shell sensitivity-shell">
 <div class="chart-head">
 <div>
-<div class="chart-title">Parametre Duyarlılığı · Analitik Etki Haritası</div>
+<div class="chart-title">Varsayım Etkisi · Etki Özeti</div>
 <div class="chart-copy">Bu hızlı skor, mevcut sonuçlardan parametre etkisini analitik olarak sıralar. Gerçek ΔP50 etkisini görmek için aşağıdaki olasılık duyarlılığı panelini çalıştır.</div>
 </div>
 </div>
@@ -6389,7 +7433,7 @@ body.show-metric-dock .mode-tabs{
 <div class="canvas-wrap small"><canvas id="mcSensitivityChart"></canvas></div>
 <div class="delta-note"><strong>ΔKritik Eşik tanımı:</strong> Kritik eşik, belirlenen sermaye seviyesine temas olasılığıdır. ΔKritik Eşik ise parametre şokundan sonra bu olasılığın baz modele göre değişimidir ve yüzde puanla okunur. Örneğin +1.8 pp, kritik sermaye riskinin 1.8 yüzde puan arttığını gösterir.</div>
 <div class="mc-sensitivity-grid" id="mcSensitivityGrid">
-<div class="mc-sensitivity-card"><strong>Hazır</strong><span>Butona basınca gerçek MC sensitivity sonuçları burada oluşur.</span></div>
+<div class="mc-sensitivity-card"><strong>Hazır</strong><span>Butona basınca gerçek olasılık duyarlılığı sonuçları burada oluşur.</span></div>
 </div>
 </section>
 <section class="interpretation">
@@ -6423,6 +7467,7 @@ body.show-metric-dock .mode-tabs{
 <button class="btn ghost" onclick="window.scrollTo({top:0,behavior:'smooth'})" type="button">Yukarı Dön</button>
 </div>
 
+</div>
 <script>
 (function(){
   "use strict";
@@ -6956,12 +8001,15 @@ body.show-metric-dock .mode-tabs{
   }
 
 function setupModes(){
+    document.body.dataset.activeMode = "basic";
     document.querySelectorAll(".mode-btn").forEach(btn => {
       btn.addEventListener("click", () => {
         document.querySelectorAll(".mode-btn").forEach(b => b.classList.remove("active"));
         document.querySelectorAll(".mode-panel").forEach(p => p.classList.remove("active"));
         btn.classList.add("active");
-        const panel = $(btn.dataset.mode);
+        const mode = btn.dataset.mode || "basic";
+        document.body.dataset.activeMode = mode;
+        const panel = $(mode);
         if(panel) panel.classList.add("active");
         window.setTimeout(() => window.dispatchEvent(new Event("resize")), 80);
       });
@@ -9909,7 +10957,7 @@ function renderCharts(result){
     if(box){
       const tone = worstRuin>30 || worstP5Drop < -result.p.initialCapital*.25 ? "ruby" : (worstP5Drop < -result.p.initialCapital*.1 ? "terra" : "olive");
       box.innerHTML = narrativeCard(tone,"VOLATILITY FRAGILITY","R volatilitesi alt kuyruğu ayrı okunmalı",`Sweep sonucunda en kötü ruin <span class="mono">${pct(worstRuin,1)}</span>. Başlangıç volatiliteye göre P5 farkı <span class="mono">${money(worstP5Drop)}</span>. Medyan sabit kalsa bile P5 düşüyorsa strateji kuyruk riski taşıyor.`) +
-        narrativeCard("gold","SENSITIVITY OKUMASI","Kategori etkisi bar grafikle daha doğru okunur",`MC sensitivity scatter kaldırıldı; çünkü az sayıda parametre ve tekrar eden ΔKritik Risk değerleri scatter yerine bar/tablo okumasına daha uygundur. Parametre kırılganlığını ana Olasılık Duyarlılığı panelindeki ΔP50, ΔP5 ve ΔKritik Risk kartlarından izleyin.`);
+        narrativeCard("gold","SENSITIVITY OKUMASI","Kategori etkisi bar grafikle daha doğru okunur",`Olasılık duyarlılığı grafiği kaldırıldı; çünkü az sayıda parametre ve tekrar eden ΔKritik Risk değerleri scatter yerine bar/tablo okumasına daha uygundur. Parametre kırılganlığını ana Olasılık Duyarlılığı panelindeki ΔP50, ΔP5 ve ΔKritik Risk kartlarından izleyin.`);
     }
   }
 
@@ -10064,6 +11112,258 @@ function renderCharts(result){
   window.addEventListener("load", requestUpdate, {passive:true});
 })();
 </script>
+
+
+
+<script>
+(function(){
+  "use strict";
+  const moneyFmt = new Intl.NumberFormat("tr-TR",{style:"currency",currency:"USD",maximumFractionDigits:0});
+  const pctFmt = new Intl.NumberFormat("tr-TR",{maximumFractionDigits:1});
+  const rFmt = new Intl.NumberFormat("tr-TR",{maximumFractionDigits:2});
+  const colors = ["#c65b36","#647049","#7f2737","#a88442","#716a60"];
+  const systems = [
+    {name:"Sys A",wr:52,R:1.8,L:1,cost:.04,risk:1.0,N:300,capital:10000,on:true},
+    {name:"Sys B",wr:62,R:1.25,L:1,cost:.04,risk:1.0,N:300,capital:10000,on:true},
+    {name:"Sys C",wr:38,R:3.8,L:1,cost:.05,risk:.8,N:300,capital:10000,on:true},
+    {name:"Sys D",wr:45,R:2.2,L:1,cost:.05,risk:1.0,N:300,capital:10000,on:false},
+    {name:"Sys E",wr:55,R:1.6,L:1,cost:.03,risk:1.0,N:300,capital:10000,on:false}
+  ];
+  const ranges = [
+    {key:"wr",label:"Win Rate",min:5,max:95,step:1,suffix:"%"},
+    {key:"R",label:"Average Win",min:.25,max:15,step:.25,suffix:"R"},
+    {key:"L",label:"Average Loss",min:.5,max:3,step:.05,suffix:"R"},
+    {key:"cost",label:"Maliyet / Trade",min:0,max:1,step:.01,suffix:"R"},
+    {key:"risk",label:"Risk / Trade",min:.1,max:5,step:.1,suffix:"%"},
+    {key:"N",label:"Trade Sayısı",min:20,max:2000,step:20,suffix:""},
+    {key:"capital",label:"Başlangıç Sermayesi",min:1000,max:1000000,step:1000,prefix:"$"}
+  ];
+  let selected = 0;
+  let activeView = "compare";
+  let charts = {};
+  let mcCache = null;
+  let raf = 0;
+  let seed = 9973;
+  function $(id){return document.getElementById(id);}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel));}
+  function clamp(x,min,max){return Math.max(min, Math.min(max, x));}
+  function fmtPct(x){return pctFmt.format(x*100)+"%";}
+  function fmtPP(x){return pctFmt.format(x*100)+"pp";}
+  function fmtR(x){return (Number.isFinite(x)?rFmt.format(x):"—")+"R";}
+  function normCdf(x){const t=1/(1+.2316419*Math.abs(x));const d=.3989423*Math.exp(-x*x/2);let p=d*t*(.3193815+t*(-.3565638+t*(1.781478+t*(-1.821256+t*1.330274))));return x>0?1-p:p;}
+  function rng(){seed=(seed*48271)%2147483647; return seed/2147483647;}
+  function calc(s){
+    const p=s.wr/100, q=1-p, R=s.R, L=s.L, c=s.cost, f=s.risk/100, N=s.N;
+    const gross=p*R-q*L;
+    const e=gross-c;
+    const be=(L+c)/(R+L);
+    const reqR=p>0?((q*L+c)/p):Infinity;
+    const pf=(q*L+c)>0?(p*R)/(q*L+c):Infinity;
+    const edge=p-be;
+    const win=R-c, loss=-(L+c);
+    const sigma=Math.sqrt(Math.max(0,p*Math.pow(win-e,2)+q*Math.pow(loss-e,2)));
+    const probNeg=(e>0&&sigma>0)?normCdf(-Math.sqrt(N)*e/sigma):(e<=0?1:0);
+    const streak10=1-Math.exp(-N*p*Math.pow(q,10));
+    const streak5=1-Math.exp(-N*p*Math.pow(q,5));
+    const maxStreak=q>0&&q<1?Math.max(0,Math.log(Math.max(1,N*p))/Math.log(1/q)):0;
+    const dd10=1-Math.pow(1-f*L,10);
+    const recovery=dd10/(1-dd10);
+    const safeWin=1+f*(R-c), safeLoss=1-f*(L+c);
+    let g=-Infinity, varLog=0;
+    if(safeWin>0 && safeLoss>0){
+      const lw=Math.log(safeWin), ll=Math.log(safeLoss);
+      g=p*lw+q*ll;
+      varLog=p*Math.pow(lw-g,2)+q*Math.pow(ll-g,2);
+    }
+    const kelly=R*L>0?Math.max(0,(p*R-q*L-c)/(R*L)):0;
+    const halfKelly=kelly/2;
+    const quality=sigma>0?e/sigma:0;
+    const nmin=e>0&&sigma>0?Math.ceil(Math.pow(1.645*sigma/e,2)):Infinity;
+    const p50=s.capital*Math.exp(N*g);
+    const p5=s.capital*Math.exp(N*g-1.645*Math.sqrt(Math.max(0,N*varLog)));
+    const p95=s.capital*Math.exp(N*g+1.645*Math.sqrt(Math.max(0,N*varLog)));
+    const grade=gradeOf({e,pf,edge,g,streak10});
+    return {p,q,R,L,c,f,N,gross,e,be,reqR,pf,edge,sigma,probNeg,streak10,streak5,maxStreak,dd10,recovery,g,kelly,halfKelly,quality,nmin,p50,p5,p95,grade};
+  }
+  function gradeOf(m){
+    if(m.e<=0) return {label:"Negative",tone:"bad",why:"E_net ≤ 0R"};
+    if(m.g<=0) return {label:"Fragile",tone:"warn",why:"g ≤ 0"};
+    if(m.pf<1.30 || m.edge<.05) return {label:"Fragile",tone:"warn",why:"PF < 1.30 veya Edge Buffer < 5pp"};
+    if(m.pf>=1.80 && m.edge>=.15 && m.streak10<.15) return {label:"Institutional",tone:"good",why:"PF ≥ 1.80, Edge ≥ 15pp, P10-streak < 15%"};
+    if(m.streak10>=.25) return {label:"Aggressive",tone:"warn",why:"Pozitif edge ama P(10 kayıp) ≥ 25%"};
+    return {label:"Balanced",tone:"good",why:"g > 0, PF ≥ 1.30, Edge ≥ 5pp"};
+  }
+  function enabled(){return systems.map((s,i)=>({s,i,m:calc(s)})).filter(x=>x.s.on);}
+  function selectedPack(){return {s:systems[selected],m:calc(systems[selected]),i:selected};}
+  function renderCards(){
+    const host=$("mathSystemCards"); if(!host) return;
+    host.innerHTML=systems.map((s,i)=>{const m=calc(s);return `
+      <button class="math-system-card ${i===selected?"active":""} ${s.on?"":"disabled"}" type="button" data-sys="${i}">
+        <span class="math-sys-top"><strong>${s.name}</strong><em>${s.on?"Aktif":"Kapalı"}</em></span>
+        <span class="math-sys-line mono">${s.wr}% WR · ${s.R}R · ${s.risk}% risk</span>
+        <span class="math-sys-edge ${m.e>=0?"good":"bad"} mono">${fmtR(m.e)} / trade</span>
+        <span class="math-sys-grade ${m.grade.tone}">${m.grade.label}</span>
+      </button>`;}).join("");
+    qsa("[data-sys]",host).forEach(btn=>btn.addEventListener("click",()=>{selected=+btn.dataset.sys; mcCache=null; schedule();}));
+  }
+  function renderEditor(){
+    const s=systems[selected], m=calc(s);
+    const title=$("mathEditorTitle"); if(title) title.textContent=s.name;
+    const chip=$("mathGradeChip"); if(chip){chip.className="math-grade-chip "+m.grade.tone; chip.textContent=m.grade.label+" · "+m.grade.why;}
+    const host=$("mathEditorControls"); if(!host) return;
+    host.innerHTML=ranges.map(r=>{const raw=s[r.key], display=(r.prefix||"")+raw+(r.suffix||""); const fill=(raw-r.min)/(r.max-r.min)*100; return `
+      <label class="math-slider-card">
+        <span class="math-slider-top"><b>${r.label}</b><em class="mono">${display}</em></span>
+        <input class="range math-range" data-key="${r.key}" type="range" min="${r.min}" max="${r.max}" step="${r.step}" value="${raw}" style="--fill:${fill}%">
+        <input class="field small mono math-number" data-key="${r.key}" type="number" min="${r.min}" max="${r.max}" step="${r.step}" value="${raw}">
+      </label>`;}).join("")+`
+      <label class="math-slider-card math-toggle-card">
+        <span class="math-slider-top"><b>Sistem Durumu</b><em>${s.on?"Aktif":"Kapalı"}</em></span>
+        <button class="btn ${s.on?"olive":"ruby"}" id="mathToggleSystem" type="button">${s.on?"Kıyaslamadan çıkar":"Kıyaslamaya al"}</button>
+      </label>`;
+    qsa("[data-key]",host).forEach(el=>{
+      el.addEventListener("input",()=>{
+        const key=el.dataset.key; const cfg=ranges.find(x=>x.key===key);
+        let v=parseFloat(el.value); if(!Number.isFinite(v)) return;
+        v=clamp(v,cfg.min,cfg.max); systems[selected][key]=v;
+        const pair=qsa(`[data-key="${key}"]`,host);
+        pair.forEach(p=>{if(p!==el) p.value=v; if(p.type==="range") p.style.setProperty("--fill",((v-cfg.min)/(cfg.max-cfg.min)*100)+"%");});
+        mcCache=null; schedule();
+      });
+    });
+    const toggle=$("mathToggleSystem");
+    if(toggle) toggle.addEventListener("click",()=>{s.on=!s.on; mcCache=null; schedule();});
+  }
+  function cellClass(metric,val,m){
+    if(metric==="e") return val>0?"good":"bad";
+    if(metric==="pf") return val>=1.8?"good":val>=1.3?"watch":"bad";
+    if(metric==="edge") return val>=.15?"good":val>=.05?"watch":"bad";
+    if(metric==="g") return val>0?"good":"bad";
+    if(metric==="probNeg") return val<.05?"good":val<.20?"watch":"bad";
+    if(metric==="nmin") return val<=30?"good":val<=150?"watch":"bad";
+    if(metric==="streak10") return val<.15?"good":val<.35?"watch":"bad";
+    if(metric==="dd10") return val<.12?"good":val<.25?"watch":"bad";
+    return "";
+  }
+  function renderMatrix(){
+    const host=$("mathMatrixSections"); if(!host) return;
+    const rows=[
+      {title:"Matematiksel Kenar",items:[
+        ["Net Beklenen Değer (E_net)","e",x=>fmtR(x.e)],
+        ["Kâr Faktörü (Net PF)","pf",x=>Number.isFinite(x.pf)?rFmt.format(x.pf):"∞"],
+        ["Edge Buffer (WR Fazlası)","edge",x=>fmtPP(x.edge)]
+      ]},
+      {title:"İstatistiksel & Büyüme",items:[
+        ["Risk-Adjusted Büyüme (g)","g",x=>fmtPct(x.g)],
+        ["Optimal Kelly (f*)","kelly",x=>fmtPct(x.kelly)+" / Half: "+fmtPct(x.halfKelly)],
+        ["P(Negatif Final | N)","probNeg",x=>fmtPct(x.probNeg)],
+        ["Gereken Min. Trade (N_min)","nmin",x=>Number.isFinite(x.nmin)?x.nmin:"—"]
+      ]},
+      {title:"Psikolojik Taşıma Yükü",items:[
+        ["P(10-Ardışık Kayıp)","streak10",x=>fmtPct(x.streak10)],
+        ["Beklenen Max Streak","maxStreak",x=>Math.round(x.maxStreak)+" trade"],
+        ["DD @ 10-Kayıp","dd10",x=>fmtPct(x.dd10)],
+        ["Recovery Yükü (@ 10 DD)","recovery",x=>fmtPct(x.recovery)]
+      ]},
+      {title:"Monte Carlo P50/P5 Bandı",items:[
+        ["Medyan Final (P50)","p50",x=>moneyFmt.format(x.p50)],
+        ["Kötü Senaryo (P5)","p5",x=>moneyFmt.format(x.p5)],
+        ["İyi Senaryo (P95)","p95",x=>moneyFmt.format(x.p95)]
+      ]}
+    ];
+    const packs=enabled();
+    host.innerHTML=rows.map(section=>`
+      <section class="math-matrix-block">
+        <h3>${section.title}</h3>
+        <div class="math-matrix-wrap">
+          <table class="math-matrix">
+            <thead><tr><th>Kritik Metrikler</th>${packs.map(p=>`<th>${p.s.name}</th>`).join("")}</tr></thead>
+            <tbody>${section.items.map(([label,key,fmt])=>`<tr><td>${label}</td>${packs.map(p=>`<td class="${cellClass(key,p.m[key],p.m)} mono">${fmt(p.m)}</td>`).join("")}</tr>`).join("")}</tbody>
+          </table>
+        </div>
+      </section>`).join("");
+  }
+  function showPane(view){
+    activeView=view;
+    qsa(".math-result-tab").forEach(b=>b.classList.toggle("active",b.dataset.mathView===view));
+    qsa(".math-result-pane").forEach(p=>p.classList.toggle("active",p.dataset.mathPane===view));
+    renderActiveChart();
+  }
+  function destroyChart(id){if(charts[id]){charts[id].destroy(); delete charts[id];}}
+  function baseChart(id,type,data,opts){
+    const el=$(id); if(!el || typeof Chart==="undefined") return;
+    destroyChart(id);
+    charts[id]=new Chart(el,{type,data,options:Object.assign({responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:10,usePointStyle:true}}},animation:false},opts||{})});
+  }
+  function renderGrowth(){
+    const {s,m}=selectedPack(); const labels=[], vals=[]; for(let r=.1;r<=5.001;r+=.1){const x=Object.assign({},s,{risk:+r.toFixed(1)}); labels.push(r.toFixed(1)+"%"); vals.push(calc(x).g*100);}
+    baseChart("mathGrowthChart","line",{labels,datasets:[{label:s.name+" g%",data:vals,borderColor:colors[selected],borderWidth:2,pointRadius:0},{label:"Mevcut risk",data:labels.map((_,i)=>Math.abs((i+1)/10-s.risk)<.051?m.g*100:null),borderColor:"#7f2737",pointRadius:4,showLine:false}]},{scales:{y:{ticks:{callback:v=>v+"%"}}}});
+  }
+  function renderBurden(){
+    const packs=enabled(); const labels=Array.from({length:14},(_,i)=>String(i+2));
+    baseChart("mathStreakChart","line",{labels,datasets:packs.map(p=>({label:p.s.name,data:labels.map(k=>{const kk=+k;return (1-Math.exp(-p.s.N*(p.s.wr/100)*Math.pow(1-p.s.wr/100,kk)))*100;}),borderColor:colors[p.i],borderWidth:2,pointRadius:0}))},{scales:{y:{ticks:{callback:v=>v+"%"}}}});
+    const dds=[.05,.1,.15,.2,.3,.4,.5,.6,.7]; baseChart("mathRecoveryChart","line",{labels:dds.map(d=>Math.round(d*100)+"%"),datasets:[{label:"Geri dönüş gereksinimi",data:dds.map(d=>d/(1-d)*100),borderColor:"#a88442",borderWidth:2,pointRadius:3}]},{scales:{y:{ticks:{callback:v=>v+"%"}}}});
+  }
+  function runMonteCarlo(){
+    const {s}=selectedPack(); const paths=[]; const finals=[]; const N=Math.min(800,Math.max(20,Math.round(s.N))); const its=360; const p=s.wr/100;
+    seed=(seed+104729)%2147483647;
+    for(let i=0;i<its;i++){
+      let eq=s.capital; const path=[eq];
+      for(let t=0;t<N;t++){
+        const riskAmt=eq*(s.risk/100);
+        if(rng()<p) eq+=riskAmt*(s.R-s.cost); else eq-=riskAmt*(s.L+s.cost);
+        if(t%Math.max(1,Math.floor(N/90))===0 || t===N-1) path.push(Math.max(0,eq));
+      }
+      finals.push(eq); paths.push(path);
+    }
+    const len=paths[0].length; const pct=(arr,p)=>{const a=arr.slice().sort((x,y)=>x-y); return a[Math.max(0,Math.min(a.length-1,Math.floor((a.length-1)*p)))]};
+    const series={p5:[],p50:[],p95:[]};
+    for(let j=0;j<len;j++){const col=paths.map(p=>p[j]); series.p5.push(pct(col,.05)); series.p50.push(pct(col,.5)); series.p95.push(pct(col,.95));}
+    mcCache={labels:series.p50.map((_,i)=>String(i)),series,paths:paths.slice(0,8),finals};
+  }
+  function renderMC(){
+    if(!mcCache) runMonteCarlo();
+    const {s}=selectedPack(); const ds=[
+      {label:"P5",data:mcCache.series.p5,borderColor:"#7f2737",borderWidth:1.5,pointRadius:0},
+      {label:"P50",data:mcCache.series.p50,borderColor:colors[selected],borderWidth:2.5,pointRadius:0},
+      {label:"P95",data:mcCache.series.p95,borderColor:"#647049",borderWidth:1.5,pointRadius:0}
+    ];
+    mcCache.paths.forEach((p,i)=>ds.push({label:"Yol "+(i+1),data:p,borderColor:"rgba(113,106,96,.22)",borderWidth:1,pointRadius:0}));
+    baseChart("mathEquityChart","line",{labels:mcCache.labels,datasets:ds},{scales:{y:{ticks:{callback:v=>moneyFmt.format(v)}}}});
+  }
+  function renderSurface(){
+    const {s}=selectedPack(); const host=$("mathHeatmapTable"); if(host){const wrs=[20,30,40,50,60,70,80], rs=[1,1.5,2,3,4,6,8]; host.innerHTML=`<table><thead><tr><th>WR \\ R</th>${rs.map(r=>`<th>${r}R</th>`).join("")}</tr></thead><tbody>${wrs.map(w=>`<tr><th>${w}%</th>${rs.map(R=>{const e=calc(Object.assign({},s,{wr:w,R})).e; const cls=e>0.6?"hm-good":e>0?"hm-watch":"hm-bad"; return `<td class="${cls} mono">${fmtR(e)}</td>`;}).join("")}</tr>`).join("")}</tbody></table>`;}
+    const labels=[], be=[]; for(let r=.5;r<=10.001;r+=.25){labels.push(r.toFixed(2)); be.push(((s.L+s.cost)/(r+s.L))*100);}
+    baseChart("mathBreakEvenChart","line",{labels,datasets:[{label:"Break-even WR",data:be,borderColor:"#c65b36",borderWidth:2,pointRadius:0},{label:s.name,data:[{x:String(s.R),y:calc(s).be*100}],type:"scatter",backgroundColor:"#171411",pointRadius:5}]},{scales:{y:{ticks:{callback:v=>v+"%"}}}});
+  }
+  function renderCost(){
+    const {s,m}=selectedPack();
+    baseChart("mathCostChart","bar",{labels:["Gross E","Cost","Net E"],datasets:[{label:"R",data:[m.gross,-s.cost,m.e],backgroundColor:["#647049","#7f2737","#c65b36"]}]},{plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>v+"R"}}}});
+  }
+  function renderActiveChart(){
+    if(activeView==="growth") renderGrowth();
+    if(activeView==="burden") renderBurden();
+    if(activeView==="montecarlo") renderMC();
+    if(activeView==="surface") renderSurface();
+    if(activeView==="cost") renderCost();
+  }
+  function renderAll(){
+    renderCards(); renderEditor(); renderMatrix(); renderActiveChart();
+  }
+  function schedule(){
+    cancelAnimationFrame(raf);
+    raf=requestAnimationFrame(renderAll);
+  }
+  function boot(){
+    if(!$("mathlab")) return;
+    qsa(".math-result-tab").forEach(btn=>btn.addEventListener("click",()=>showPane(btn.dataset.mathView)));
+    ["mathMcRun","mathMcRunLocal"].forEach(id=>{const b=$(id); if(b) b.addEventListener("click",()=>{mcCache=null; showPane("montecarlo");});});
+    renderAll();
+  }
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",boot); else boot();
+})();
+</script>
+
 
 </body>
 </html>
