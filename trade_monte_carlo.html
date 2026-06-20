@@ -15880,5 +15880,379 @@ canvas{
   else boot();
 })();
 </script>
+
+<style id="p31-math-card-fit-fix">
+/* P31 — Math Model card fit repair.
+   Scope is limited to #mathlab so the approved index-style cards elsewhere remain unchanged. */
+#mathlab,
+#mathlab *{
+  box-sizing:border-box !important;
+}
+
+#mathlab{
+  overflow:visible !important;
+}
+
+#mathlab .math-clean-panel,
+#mathlab .math-output-panel,
+#mathlab .math-editor-board,
+#mathlab .math-matrix-block,
+#mathlab .chart-shell{
+  overflow:visible !important;
+}
+
+/* Keep the approved index ledger look, but stop clipping content. */
+#mathlab .math-system-card,
+#mathlab .math-slider-card,
+#mathlab .math-threshold-card,
+#mathlab .math-formula-card,
+#mathlab .math-grade-chip,
+#mathlab .model-compact-metric,
+#mathlab .math-matrix-block,
+#mathlab .math-matrix-wrap,
+#mathlab .chart-shell{
+  background:#fffdf8 !important;
+  border:1px solid rgba(222,212,196,.92) !important;
+  color:var(--ink) !important;
+  min-width:0 !important;
+  max-width:100% !important;
+  height:auto !important;
+}
+
+/* Only content containers can grow; table/chart wrappers keep their own scrolling. */
+#mathlab .math-system-card,
+#mathlab .math-slider-card,
+#mathlab .math-threshold-card,
+#mathlab .math-formula-card,
+#mathlab .math-grade-chip{
+  overflow:visible !important;
+  white-space:normal !important;
+  overflow-wrap:anywhere !important;
+  word-break:normal !important;
+  hyphens:auto !important;
+}
+
+/* System list: more room for copy, less forced clipping. */
+#mathlab .math-workbench{
+  grid-template-columns:minmax(280px,.32fr) minmax(0,1fr) !important;
+  gap:16px !important;
+}
+
+#mathlab .math-system-row{
+  gap:10px !important;
+  min-width:0 !important;
+}
+
+#mathlab .math-system-card{
+  display:grid !important;
+  gap:8px !important;
+  align-content:start !important;
+  padding:13px 14px !important;
+  box-shadow:0 7px 16px rgba(32,27,21,.022) !important;
+}
+
+#mathlab .math-sys-top{
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) auto !important;
+  gap:8px !important;
+  align-items:start !important;
+  min-width:0 !important;
+  font-size:8.2px !important;
+  letter-spacing:.085em !important;
+  line-height:1.22 !important;
+}
+
+#mathlab .math-sys-top b,
+#mathlab .math-sys-top em{
+  min-width:0 !important;
+  max-width:100% !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  white-space:nowrap !important;
+}
+
+#mathlab .math-sys-line{
+  color:var(--stone) !important;
+  font-size:10.7px !important;
+  line-height:1.42 !important;
+  white-space:normal !important;
+  overflow:visible !important;
+  overflow-wrap:anywhere !important;
+}
+
+#mathlab .math-sys-edge{
+  font-family:"Cormorant Garamond",Georgia,serif !important;
+  font-size:clamp(20px,1.65vw,27px) !important;
+  line-height:1 !important;
+  font-weight:600 !important;
+  white-space:normal !important;
+  overflow:visible !important;
+}
+
+#mathlab .math-sys-grade{
+  justify-self:start !important;
+  max-width:100% !important;
+  border-radius:4px !important;
+  padding:5px 7px !important;
+  font-size:8.2px !important;
+  letter-spacing:.07em !important;
+  line-height:1.22 !important;
+  white-space:normal !important;
+  overflow:visible !important;
+  overflow-wrap:anywhere !important;
+}
+
+/* Editor header: the grade explanation is allowed to wrap instead of squeezing the title. */
+#mathlab .math-editor-title{
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) minmax(260px,420px) !important;
+  gap:14px !important;
+  align-items:start !important;
+}
+
+#mathlab .math-editor-title h3{
+  max-width:100% !important;
+  font-size:clamp(30px,3vw,40px) !important;
+  line-height:.98 !important;
+  overflow-wrap:anywhere !important;
+}
+
+#mathlab .math-grade-chip{
+  width:100% !important;
+  max-width:none !important;
+  border-radius:4px !important;
+  padding:9px 10px !important;
+  text-align:left !important;
+  font-size:10.2px !important;
+  line-height:1.38 !important;
+}
+
+/* Slider cards: auto-fit prevents four cramped columns on medium screens. */
+#mathlab .math-slider-grid{
+  display:grid !important;
+  grid-template-columns:repeat(auto-fit,minmax(215px,1fr)) !important;
+  gap:11px !important;
+  align-items:stretch !important;
+}
+
+#mathlab .math-slider-card{
+  display:grid !important;
+  grid-template-rows:auto auto auto !important;
+  gap:9px !important;
+  align-content:start !important;
+  padding:13px !important;
+  min-height:126px !important;
+  box-shadow:0 7px 16px rgba(32,27,21,.018) !important;
+}
+
+#mathlab .math-slider-top{
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) auto !important;
+  gap:8px !important;
+  align-items:start !important;
+  min-width:0 !important;
+  color:var(--stone) !important;
+  font-size:8.4px !important;
+  letter-spacing:.085em !important;
+  line-height:1.2 !important;
+}
+
+#mathlab .math-slider-top b{
+  min-width:0 !important;
+  white-space:normal !important;
+  overflow:visible !important;
+  overflow-wrap:anywhere !important;
+}
+
+#mathlab .math-slider-top em{
+  justify-self:end !important;
+  max-width:94px !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  white-space:nowrap !important;
+  color:var(--terra) !important;
+  font-size:10.5px !important;
+}
+
+#mathlab .math-range{
+  width:100% !important;
+  min-width:0 !important;
+}
+
+#mathlab .math-number{
+  width:100% !important;
+  min-width:0 !important;
+  max-width:100% !important;
+  text-align:right !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+
+/* Grade thresholds and formulas: no clipping, readable line length. */
+#mathlab .math-thresholds{
+  display:grid !important;
+  grid-template-columns:repeat(auto-fit,minmax(300px,1fr)) !important;
+  gap:12px !important;
+  align-items:stretch !important;
+}
+
+#mathlab .math-threshold-card{
+  padding:14px 15px !important;
+  font-size:clamp(11.2px,1.05vw,13px) !important;
+  line-height:1.62 !important;
+  box-shadow:0 7px 16px rgba(32,27,21,.018) !important;
+}
+
+#mathlab .math-threshold-card span{
+  display:block !important;
+  margin-bottom:7px !important;
+  font-size:8.4px !important;
+  letter-spacing:.105em !important;
+  line-height:1.2 !important;
+  white-space:normal !important;
+}
+
+#mathlab .math-threshold-card p{
+  margin:0 !important;
+  max-width:72ch !important;
+  color:var(--stone) !important;
+  white-space:normal !important;
+  overflow:visible !important;
+  overflow-wrap:anywhere !important;
+}
+
+#mathlab .math-threshold-card strong{
+  color:var(--ink) !important;
+  font-weight:850 !important;
+}
+
+/* Result tabs: keep as a strip on mobile/tablet instead of tall squeezed blocks. */
+#mathlab .math-result-tabs{
+  display:flex !important;
+  gap:6px !important;
+  overflow-x:auto !important;
+  overflow-y:hidden !important;
+  -webkit-overflow-scrolling:touch !important;
+  scroll-snap-type:x proximity !important;
+  padding:6px !important;
+}
+
+#mathlab .math-result-tab{
+  flex:1 0 126px !important;
+  min-width:126px !important;
+  white-space:nowrap !important;
+  padding:0 10px !important;
+}
+
+/* Matrix table: keep horizontal scroll and prevent cell text from being clipped by inherited card overflow. */
+#mathlab .math-matrix-wrap,
+#mathlab .math-heatmap-table,
+#mathlab .table-wrap{
+  overflow:auto !important;
+  -webkit-overflow-scrolling:touch !important;
+  max-width:100% !important;
+}
+
+#mathlab .math-matrix{
+  min-width:760px !important;
+  table-layout:auto !important;
+}
+
+#mathlab .math-matrix th,
+#mathlab .math-matrix td{
+  max-width:220px !important;
+  vertical-align:top !important;
+  line-height:1.35 !important;
+}
+
+#mathlab .math-matrix th:first-child,
+#mathlab .math-matrix td:first-child{
+  min-width:210px !important;
+  white-space:normal !important;
+  overflow-wrap:anywhere !important;
+}
+
+#mathlab .math-matrix td:not(:first-child),
+#mathlab .math-matrix th:not(:first-child){
+  white-space:nowrap !important;
+}
+
+/* Mobile-specific fit: cards get one column and no clipped content. */
+@media(max-width:1180px){
+  #mathlab .math-workbench{
+    grid-template-columns:1fr !important;
+  }
+
+  #mathlab .math-system-row{
+    display:grid !important;
+    grid-template-columns:repeat(auto-fit,minmax(210px,1fr)) !important;
+  }
+
+  #mathlab .math-editor-title{
+    grid-template-columns:1fr !important;
+  }
+}
+
+@media(max-width:760px){
+  #mathlab .math-clean-panel,
+  #mathlab .math-output-panel{
+    padding:14px !important;
+  }
+
+  #mathlab .math-system-row{
+    display:flex !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    gap:9px !important;
+    padding-bottom:4px !important;
+    scroll-snap-type:x proximity !important;
+  }
+
+  #mathlab .math-system-card{
+    flex:0 0 218px !important;
+    scroll-snap-align:start !important;
+  }
+
+  #mathlab .math-slider-grid,
+  #mathlab .math-thresholds{
+    grid-template-columns:1fr !important;
+  }
+
+  #mathlab .math-slider-card{
+    min-height:auto !important;
+  }
+
+  #mathlab .math-slider-top{
+    grid-template-columns:minmax(0,1fr) minmax(64px,auto) !important;
+  }
+
+  #mathlab .math-editor-title h3{
+    font-size:31px !important;
+  }
+
+  #mathlab .math-matrix{
+    min-width:640px !important;
+  }
+}
+
+@media(max-width:430px){
+  #mathlab .math-system-card{
+    flex-basis:202px !important;
+  }
+
+  #mathlab .math-result-tab{
+    flex-basis:112px !important;
+    min-width:112px !important;
+    font-size:8.3px !important;
+    letter-spacing:.07em !important;
+  }
+
+  #mathlab .math-threshold-card{
+    padding:13px !important;
+    font-size:11.2px !important;
+  }
+}
+</style>
+
 </body>
 </html>
