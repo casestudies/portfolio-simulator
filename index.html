@@ -4803,41 +4803,42 @@ display:inline-flex;
    Nakit akışı varken: sol kenarda turuncu/yeşil nabız
    ════════════════════════════════════════════════════════════ */
 
-@keyframes cagrLeftPulse{
-  0%,100%{border-left-color:rgba(198,91,54,0)}
-  40%,60%{border-left-color:rgba(198,91,54,.95)}
-}
-@keyframes xirrLeftPulse{
-  0%,100%{border-left-color:rgba(100,112,73,0)}
-  40%,60%{border-left-color:rgba(100,112,73,.96)}
-}
+
+
 
 /* Active: pulse the left border color
    Split shorthand → animation owns border-left-color freely */
-#cagr-card.cagr-attention{
-  border-left-width:3px!important;
-  border-left-style:solid!important;
-  animation:cagrLeftPulse 5s ease-in-out infinite;
-}
-.xirr-flows-active{
-  border-left-width:3px!important;
-  border-left-style:solid!important;
-  outline:none!important;
-  animation:xirrLeftPulse 5s ease-in-out 0.4s infinite;
-}
+#cagr-card.cagr-attention{/* JS-driven pulse */}
+.xirr-flows-active{/* JS-driven pulse */}
 .xirr-flows-active .metric-label-main{color:var(--olive)!important}
 
 /* reduced-motion: animation off, static color stays */
 @media(prefers-reduced-motion:reduce){
-  #cagr-card.cagr-attention{
-    animation:none!important;
-    border-left-color:rgba(198,91,54,.88)!important;
-  }
+  #cagr-card.cagr-attention{/* JS-driven pulse */}
   .xirr-flows-active{
     animation:none!important;
     border-left-color:rgba(100,112,73,.90)!important;
   }
   #dock-cagr-card.cashflow-active,#dock-xirr-card.cashflow-active{animation:none!important}
+}
+
+/* ── Cash-flow pulse strip — injected child div, immune to parent !important ── */
+.cf-strip{
+  position:absolute;left:0;top:0;bottom:0;width:3px;
+  border-radius:2px 0 0 2px;pointer-events:none;z-index:10;
+  opacity:0;
+}
+.cf-strip-amber{
+  background:rgba(198,91,54,.96);
+  animation:cfStripPulse 4.5s ease-in-out infinite;
+}
+.cf-strip-olive{
+  background:rgba(100,112,73,.96);
+  animation:cfStripPulse 4.5s ease-in-out 0.6s infinite;
+}
+@keyframes cfStripPulse{
+  0%,100%{opacity:0}
+  35%,65%{opacity:.92}
 }
 
 </style>
@@ -6952,6 +6953,7 @@ function updateHUD(res){
     cagrFlag.setAttribute('aria-hidden', hasFlows ? 'false' : 'true');
     const xirrCard = $('xirr-card');
     if(xirrCard) xirrCard.classList.toggle('xirr-flows-active', hasFlows);
+    if(typeof window.setCashflowSignal==='function') window.setCashflowSignal(hasFlows);
 
   }
 
@@ -8810,6 +8812,25 @@ function syncMetricDock(res){
   window.reinitTooltips = init;
 })();
 
+
+
+
+/* ── Cash-flow strip signal (child div, CSS-only animation, no rAF needed) ── */
+window.setCashflowSignal = function(hasFlows){
+  const cagrCard = document.getElementById('cagr-card');
+  const xirrCard = document.getElementById('xirr-card');
+  ['cagr-card','xirr-card'].forEach(function(id){
+    const card = document.getElementById(id);
+    if(!card) return;
+    // remove existing strip
+    const existing = card.querySelector('.cf-strip');
+    if(existing) existing.remove();
+    if(!hasFlows) return;
+    const strip = document.createElement('div');
+    strip.className = 'cf-strip ' + (id==='cagr-card' ? 'cf-strip-amber' : 'cf-strip-olive');
+    card.appendChild(strip);
+  });
+};
 </script>
 
 </body>
