@@ -11228,7 +11228,10 @@ function renderCharts(result){
         v=clamp(v,cfg.min,cfg.max); systems[selected][key]=v;
         const pair=qsa(`[data-key="${key}"]`,host);
         pair.forEach(p=>{if(p!==el) p.value=v; if(p.type==="range") p.style.setProperty("--fill",((v-cfg.min)/(cfg.max-cfg.min)*100)+"%");});
-        mcCache=null; schedule();
+        // Keep sliders lightweight: update cards/table immediately, but do not re-run Monte Carlo while the Monte Carlo pane is open.
+        // The user refreshes those paths explicitly with "Monte Carlo Güncelle".
+        if(activeView !== "montecarlo") mcCache=null;
+        schedule();
       });
     });
     const toggle=$("mathToggleSystem");
@@ -11364,6 +11367,450 @@ function renderCharts(result){
 })();
 </script>
 
+
+
+<style id="p19-performance-layout-fix">
+/* P19 hard repair: scroll performance, HUD contrast, panorama layout, overflow control */
+html,body{
+  background:var(--paper) !important;
+  overscroll-behavior-y:auto !important;
+}
+*{
+  -webkit-tap-highlight-color:transparent;
+}
+.app{
+  contain:none !important;
+}
+
+/* Remove costly translucent layers that caused scroll jank on iPad/tablet */
+.result-strip,
+.metric-dock,
+.legacy-mode-tabs,
+.mode-tabs,
+.panel,
+.chart-shell,
+.results-panorama,
+.panorama-block,
+.final-board-main,
+.final-board-scale,
+.table-wrap{
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+  filter:none !important;
+}
+.metric-dock{
+  display:none !important;
+}
+
+/* Keep only one sticky HUD. Stronger, non-washed colors; index-like card treatment */
+.result-strip{
+  position:sticky !important;
+  top:0 !important;
+  z-index:80 !important;
+  display:grid !important;
+  grid-template-columns:repeat(8,minmax(0,1fr)) !important;
+  gap:6px !important;
+  padding:7px 0 8px !important;
+  margin:0 !important;
+  background:var(--paper) !important;
+  border:0 !important;
+  border-bottom:1px solid rgba(216,205,189,.92) !important;
+  box-shadow:0 8px 16px rgba(32,27,21,.055) !important;
+  overflow:visible !important;
+  transform:translateZ(0);
+}
+.result-strip .metric{
+  min-width:0 !important;
+  min-height:66px !important;
+  padding:8px 9px !important;
+  border-radius:10px !important;
+  background:#fffdf8 !important;
+  border:1px solid rgba(216,205,189,.86) !important;
+  box-shadow:none !important;
+  overflow:hidden !important;
+}
+.result-strip .metric.hero-metric{
+  border-left:4px solid var(--terra) !important;
+}
+.result-strip .metric.good{
+  border-left:4px solid var(--olive) !important;
+}
+.result-strip .metric.bad{
+  border-left:4px solid var(--ruby) !important;
+}
+.result-strip .metric-label{
+  color:#50483f !important;
+  opacity:1 !important;
+  font-size:7.6px !important;
+  letter-spacing:.10em !important;
+  line-height:1.1 !important;
+  font-weight:850 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+.result-strip .metric-value{
+  display:block !important;
+  margin-top:5px !important;
+  font-family:"Cormorant Garamond",Georgia,serif !important;
+  color:var(--ink) !important;
+  opacity:1 !important;
+  font-size:clamp(18px,1.45vw,24px) !important;
+  line-height:.95 !important;
+  letter-spacing:-.025em !important;
+  font-weight:600 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  max-width:100% !important;
+}
+.result-strip .metric.hero-metric .metric-value{
+  color:var(--terra) !important;
+  font-size:clamp(21px,1.85vw,30px) !important;
+}
+.result-strip .metric.bad .metric-value{
+  color:var(--ruby) !important;
+}
+.result-strip .metric.good .metric-value{
+  color:var(--olive) !important;
+}
+.result-strip .metric-sub{
+  margin-top:4px !important;
+  color:#6d645a !important;
+  opacity:1 !important;
+  font-size:8px !important;
+  line-height:1.12 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+
+/* Single-row nav; no wrap on desktop */
+.mode-tabs,
+.legacy-mode-tabs{
+  position:relative !important;
+  top:auto !important;
+  z-index:30 !important;
+  display:grid !important;
+  grid-template-columns:repeat(5,minmax(0,1fr)) !important;
+  gap:5px !important;
+  padding:6px !important;
+  border-radius:12px !important;
+  background:#fffdf8 !important;
+  border:1px solid var(--line) !important;
+  box-shadow:none !important;
+  overflow:visible !important;
+}
+.mode-btn,
+.legacy-mode-btn{
+  min-width:0 !important;
+  min-height:42px !important;
+  padding:8px 8px !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  border-radius:9px !important;
+  box-shadow:none !important;
+}
+
+/* Make hidden modes and shared output truly absent from layout */
+.mode-panel:not(.active){
+  display:none !important;
+}
+body:not([data-active-mode="basic"]) .simulation-output{
+  display:none !important;
+}
+body[data-active-mode="basic"] .simulation-output{
+  display:block !important;
+}
+
+/* Result panorama reset: no empty left column, no decorative board overload */
+.results-panorama{
+  overflow:visible !important;
+  padding:18px !important;
+  background:#fffdf8 !important;
+  border:1px solid var(--line) !important;
+  box-shadow:none !important;
+}
+.results-panorama .panel-head{
+  margin-bottom:14px !important;
+  padding-bottom:12px !important;
+  border-bottom:1px solid var(--line) !important;
+}
+.panorama-grid{
+  display:grid !important;
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  gap:12px !important;
+  align-items:start !important;
+}
+.panorama-block,
+.final-band-board,
+.comfort-block,
+.edge-block{
+  min-width:0 !important;
+  min-height:0 !important;
+  background:#fffdf8 !important;
+  border:1px solid var(--line) !important;
+  border-radius:12px !important;
+  box-shadow:none !important;
+  padding:14px !important;
+  overflow:hidden !important;
+}
+.final-band-board{
+  grid-column:1 / -1 !important;
+  grid-row:auto !important;
+  display:grid !important;
+  grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr) !important;
+  gap:12px !important;
+  border-left:4px solid var(--terra) !important;
+}
+.comfort-block{
+  border-left:4px solid var(--ruby) !important;
+}
+.edge-block{
+  border-left:4px solid var(--olive) !important;
+}
+.final-board-main,
+.final-board-scale{
+  min-width:0 !important;
+  background:transparent !important;
+  border:0 !important;
+  border-radius:0 !important;
+  box-shadow:none !important;
+  padding:0 !important;
+}
+.final-board-main{
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) minmax(180px,.72fr) !important;
+  gap:10px !important;
+  align-items:stretch !important;
+}
+.final-board-title{
+  min-width:0 !important;
+  grid-column:1 / -1 !important;
+  padding-bottom:8px !important;
+  border-bottom:1px solid var(--line) !important;
+}
+.final-board-title h3,
+.panorama-head h3{
+  color:var(--ink) !important;
+  font-family:"Cormorant Garamond",Georgia,serif !important;
+  font-size:clamp(24px,2.05vw,32px) !important;
+  line-height:1 !important;
+  font-weight:600 !important;
+  letter-spacing:-.025em !important;
+  white-space:normal !important;
+  overflow:visible !important;
+}
+.final-board-title p,
+.panel-copy,
+.chart-copy{
+  color:var(--stone) !important;
+  font-size:12px !important;
+  line-height:1.45 !important;
+  max-width:100% !important;
+}
+.final-board-hero,
+.tail-ledger>div,
+.final-ledger-cell,
+.metric-line{
+  min-width:0 !important;
+  background:#fffdf8 !important;
+  border:1px solid var(--line) !important;
+  border-radius:10px !important;
+  box-shadow:none !important;
+  padding:10px 11px !important;
+  overflow:hidden !important;
+}
+.final-board-hero{
+  grid-column:auto !important;
+  margin:0 !important;
+  padding-top:10px !important;
+}
+.tail-ledger{
+  display:grid !important;
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  gap:8px !important;
+}
+.final-ledger-grid{
+  display:grid !important;
+  grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  gap:8px !important;
+}
+.final-ribbon{
+  display:none !important;
+}
+.final-board-hero strong,
+.tail-ledger strong,
+.final-ledger-cell strong,
+.metric-line strong,
+.panorama-anchor strong{
+  font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace !important;
+  color:var(--ink) !important;
+  font-size:clamp(13px,1.15vw,17px) !important;
+  font-weight:700 !important;
+  letter-spacing:-.02em !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  max-width:100% !important;
+}
+.final-board-hero strong{
+  font-family:"Cormorant Garamond",Georgia,serif !important;
+  font-size:clamp(24px,2.4vw,38px) !important;
+  font-weight:600 !important;
+}
+.final-board-hero span,
+.tail-ledger span,
+.final-ledger-cell span,
+.metric-line span,
+.panorama-kicker{
+  color:#5d554c !important;
+  font-size:8px !important;
+  letter-spacing:.105em !important;
+  line-height:1.12 !important;
+  font-weight:850 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+.final-board-hero em,
+.tail-ledger em,
+.final-ledger-cell em{
+  color:#70675d !important;
+  font-size:9px !important;
+  line-height:1.18 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+
+/* Generic overflow guard for cards/tables */
+.metric,
+.stat-card,
+.compare-card,
+.mc-sensitivity-card,
+.math-system-card,
+.math-matrix td,
+.math-matrix th,
+.fin-table td,
+.fin-table th{
+  min-width:0 !important;
+}
+.stat-value,
+.r-value,
+.compare-card .mono,
+.mc-sensitivity-card .mono,
+.math-matrix td,
+.fin-table td{
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+
+/* Avoid expensive work while scrolling: smaller active canvases on tablets */
+.canvas-wrap.priority{height:360px !important}
+.canvas-wrap.priority-sensitivity{height:300px !important}
+
+/* Responsive: iPad/tablet should scroll smoothly with horizontal HUD, no text blowout */
+@media (max-width:1120px){
+  body{overflow-x:hidden !important}
+  .result-strip{
+    display:flex !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    gap:7px !important;
+    padding:7px 0 8px !important;
+    scroll-snap-type:x proximity !important;
+    -webkit-overflow-scrolling:touch !important;
+  }
+  .result-strip .metric{
+    flex:0 0 150px !important;
+    scroll-snap-align:start !important;
+  }
+  .result-strip .metric.hero-metric{
+    flex-basis:210px !important;
+  }
+  .mode-tabs,
+  .legacy-mode-tabs{
+    display:flex !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    -webkit-overflow-scrolling:touch !important;
+    scroll-snap-type:x proximity !important;
+  }
+  .mode-btn,
+  .legacy-mode-btn{
+    flex:0 0 136px !important;
+    scroll-snap-align:start !important;
+  }
+  .panorama-grid{
+    grid-template-columns:1fr !important;
+  }
+  .final-band-board{
+    grid-template-columns:1fr !important;
+  }
+  .final-board-main{
+    grid-template-columns:1fr !important;
+  }
+  .final-ledger-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  }
+}
+@media (max-width:640px){
+  .result-strip .metric{flex-basis:142px !important}
+  .result-strip .metric.hero-metric{flex-basis:194px !important}
+  .metric-value{font-size:18px !important}
+  .final-ledger-grid,
+  .tail-ledger{
+    grid-template-columns:1fr !important;
+  }
+  .panel,
+  .chart-shell,
+  .results-panorama{
+    padding:14px !important;
+  }
+}
+
+/* Motion/accessibility: no decorative sheen or infinite animations */
+*,*::before,*::after{
+  animation-duration:0s !important;
+  animation-iteration-count:1 !important;
+  transition-duration:.08s !important;
+}
+</style>
+<script id="p19-performance-layout-fix-js">
+(function(){
+  "use strict";
+  function harden(){
+    document.body.dataset.activeMode = document.body.dataset.activeMode || "basic";
+    var dock = document.getElementById("metricDock");
+    if(dock) dock.remove();
+
+    // Ensure shared simulation output is only visible in Strateji mode.
+    document.querySelectorAll(".mode-btn").forEach(function(btn){
+      btn.addEventListener("click", function(){
+        document.body.dataset.activeMode = btn.dataset.mode || "basic";
+      }, {passive:true});
+    });
+
+    // Mark chart canvases as non-interactive during scroll to reduce pointer work on tablets.
+    var scrollTimer = 0;
+    window.addEventListener("scroll", function(){
+      document.body.classList.add("is-scrolling");
+      clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(function(){ document.body.classList.remove("is-scrolling"); }, 120);
+    }, {passive:true});
+
+    // Prevent oversized labels in the top HUD from forcing expensive reflow.
+    document.querySelectorAll(".result-strip .metric-sub, .result-strip .metric-label").forEach(function(el){
+      el.title = el.textContent.trim();
+    });
+  }
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", harden, {once:true});
+  else harden();
+})();
+</script>
 
 </body>
 </html>
