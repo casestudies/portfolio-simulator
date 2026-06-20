@@ -11069,49 +11069,7 @@ function renderCharts(result){
 </script>
 
 
-<script>
-(function(){
-  const sourceIds = ["hudP5","hudTailAvg","hudMedian","hudTarget","hudProfit","hudRuin","hudER","hudHealth","hudP5Sub","hudTailAvgSub","hudMedianSub","hudERSub"];
-  let ticking = false;
-  function copyDockMetric(){
-    document.querySelectorAll("[data-dock-value]").forEach(el => {
-      const src = document.getElementById(el.getAttribute("data-dock-value"));
-      if(src) el.textContent = src.textContent || "—";
-    });
-    document.querySelectorAll("[data-dock-sub]").forEach(el => {
-      const src = document.getElementById(el.getAttribute("data-dock-sub"));
-      if(src) el.textContent = src.textContent || "";
-    });
-  }
-  function updateDockVisibility(){
-    ticking = false;
-    const strip = document.querySelector(".result-strip");
-    const dock = document.getElementById("metricDock");
-    if(!strip || !dock) return;
-    const rect = strip.getBoundingClientRect();
-    const shouldShow = rect.bottom <= 2;
-    document.body.classList.toggle("show-metric-dock", shouldShow);
-    copyDockMetric();
-  }
-  function requestUpdate(){
-    if(ticking) return;
-    ticking = true;
-    requestAnimationFrame(updateDockVisibility);
-  }
-  window.addEventListener("scroll", requestUpdate, {passive:true});
-  window.addEventListener("resize", requestUpdate, {passive:true});
-  document.addEventListener("DOMContentLoaded", () => {
-    copyDockMetric();
-    requestUpdate();
-    const strip = document.querySelector(".result-strip");
-    if(window.MutationObserver && strip){
-      const obs = new MutationObserver(copyDockMetric);
-      obs.observe(strip, {childList:true, subtree:true, characterData:true});
-    }
-  });
-  window.addEventListener("load", requestUpdate, {passive:true});
-})();
-</script>
+<script id="p21-no-dock-scroll-listener">(function(){/* metric dock removed: no scroll listener */})();</script>
 
 
 
@@ -11779,38 +11737,562 @@ body[data-active-mode="basic"] .simulation-output{
   transition-duration:.08s !important;
 }
 </style>
-<script id="p19-performance-layout-fix-js">
+
+<style id="p21-mobile-scroll-and-theme-surgery">
+/* P21 deploy repair: prioritize scroll smoothness, mobile usability, sticky HUD, and index-style card language. */
+:root{
+  --p21-card:#fffdf8;
+  --p21-line:rgba(216,205,189,.78);
+  --p21-line-soft:rgba(226,216,201,.72);
+  --p21-ink:#171411;
+  --p21-stone:#716a60;
+}
+
+/* 1) Scroll performance: remove expensive paint effects and layout animations from visible shells. */
+html,body{
+  background:var(--paper) !important;
+  overflow-x:hidden !important;
+  scroll-behavior:auto !important;
+}
+.app,
+.mode-panel,
+.panel,
+.chart-shell,
+.results-panorama,
+.panorama-block,
+.math-clean-panel,
+.math-output-panel,
+.opt-panel,
+.opt-card,
+.opt-output-card,
+.opt-best-card,
+.table-wrap,
+.result-strip,
+.mode-tabs,
+.legacy-mode-tabs{
+  contain:layout paint style;
+}
+.hero,
+.result-strip,
+.mode-tabs,
+.legacy-mode-tabs,
+.panel,
+.chart-shell,
+.results-panorama,
+.panorama-block,
+.final-band-board,
+.math-clean-panel,
+.math-output-panel,
+.opt-panel,
+.opt-card,
+.opt-output-card,
+.opt-best-card,
+.table-wrap,
+.stat-card,
+.metric,
+.math-system-card,
+.math-slider-card,
+.math-matrix-block{
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+  filter:none !important;
+  box-shadow:none !important;
+}
+canvas{
+  touch-action:pan-y !important;
+}
+.chart-shell,
+.panel,
+.results-panorama{
+  content-visibility:auto;
+  contain-intrinsic-size:720px;
+}
+
+/* 2) Sticky HUD: one sticky header, visible on scroll, not pale. No fixed duplicate, no dock. */
+.metric-dock,
+#metricDock{
+  display:none !important;
+}
+.result-strip{
+  position:sticky !important;
+  top:0 !important;
+  z-index:950 !important;
+  display:grid !important;
+  grid-template-columns:repeat(8,minmax(0,1fr)) !important;
+  gap:6px !important;
+  padding:8px 0 9px !important;
+  margin:0 !important;
+  background:var(--paper) !important;
+  border:0 !important;
+  border-bottom:1px solid rgba(178,160,137,.86) !important;
+  overflow:visible !important;
+  transform:none !important;
+  will-change:auto !important;
+}
+.result-strip .metric{
+  min-width:0 !important;
+  min-height:68px !important;
+  padding:8px 9px !important;
+  border-radius:10px !important;
+  background:var(--p21-card) !important;
+  border:1px solid rgba(198,183,162,.88) !important;
+  color:var(--p21-ink) !important;
+  overflow:hidden !important;
+}
+.result-strip .metric.hero-metric{border-left:4px solid var(--terra) !important;}
+.result-strip .metric.good{border-left:4px solid var(--olive) !important;}
+.result-strip .metric.bad{border-left:4px solid var(--ruby) !important;}
+.result-strip .metric-label{
+  color:#332b24 !important;
+  opacity:1 !important;
+  font-size:7.7px !important;
+  line-height:1.08 !important;
+  letter-spacing:.10em !important;
+  font-weight:900 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+.result-strip .metric-value{
+  display:block !important;
+  margin-top:5px !important;
+  color:var(--p21-ink) !important;
+  opacity:1 !important;
+  font-family:"Cormorant Garamond",Georgia,serif !important;
+  font-size:clamp(18px,1.45vw,24px) !important;
+  font-weight:650 !important;
+  line-height:.96 !important;
+  letter-spacing:-.025em !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+.result-strip .hero-metric .metric-value{
+  color:var(--terra) !important;
+  font-size:clamp(22px,1.9vw,31px) !important;
+}
+.result-strip .bad .metric-value{color:var(--ruby) !important;}
+.result-strip .good .metric-value{color:var(--olive) !important;}
+.result-strip .metric-sub{
+  margin-top:4px !important;
+  color:#4e463e !important;
+  opacity:1 !important;
+  font-size:8.1px !important;
+  line-height:1.12 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+
+/* 3) Navigation stays one strip. On tablet/mobile, horizontal scroll instead of wrapping. */
+.mode-tabs,
+.legacy-mode-tabs{
+  position:sticky !important;
+  top:calc(var(--hud-height, 82px)) !important;
+  z-index:760 !important;
+  display:grid !important;
+  grid-template-columns:repeat(5,minmax(0,1fr)) !important;
+  gap:5px !important;
+  padding:6px !important;
+  background:var(--p21-card) !important;
+  border:1px solid var(--line) !important;
+  border-radius:10px !important;
+  overflow:visible !important;
+}
+.mode-btn,
+.legacy-mode-btn{
+  min-width:0 !important;
+  min-height:42px !important;
+  padding:8px 9px !important;
+  border-radius:8px !important;
+  color:var(--p21-stone) !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+.mode-btn.active,
+.legacy-mode-btn.active{
+  color:var(--p21-ink) !important;
+  background:#f6efe4 !important;
+  border-color:var(--line-strong) !important;
+}
+
+/* 4) Index-style cards: no loud colored fills, no pill over-rounding. */
+.metric,
+.stat-card,
+.r-box,
+.compare-card,
+.mc-sensitivity-card,
+.opt-card,
+.opt-output-card,
+.opt-best-card,
+.math-clean-panel,
+.math-output-panel,
+.math-editor-board,
+.math-system-card,
+.math-slider-card,
+.math-matrix-block,
+.math-threshold-card,
+.panorama-block,
+.final-band-board,
+.table-wrap,
+.chart-shell,
+.panel{
+  background:var(--p21-card) !important;
+  border:1px solid var(--p21-line-soft) !important;
+  border-radius:10px !important;
+  box-shadow:none !important;
+}
+.badge,
+.pill,
+.math-sys-grade,
+.math-grade-chip,
+.opt-toggle,
+.opt-option,
+.segmented-option,
+.math-result-tab,
+.mini-tab,
+.btn{
+  border-radius:7px !important;
+  box-shadow:none !important;
+}
+.math-matrix td.good,
+.math-matrix td.watch,
+.math-matrix td.bad{
+  background:transparent !important;
+  font-weight:900 !important;
+}
+.math-matrix td.good{color:var(--olive) !important;}
+.math-matrix td.watch{color:var(--terra) !important;}
+.math-matrix td.bad{color:var(--ruby) !important;}
+.hm-good{background:rgba(100,112,73,.10) !important;}
+.hm-watch{background:rgba(168,132,66,.10) !important;}
+.hm-bad{background:rgba(127,39,55,.08) !important;}
+
+/* 5) Overflow discipline: numbers and explanations must not spill out of boxes. */
+.panel,
+.chart-shell,
+.results-panorama,
+.panorama-block,
+.final-band-board,
+.math-editor-board,
+.math-clean-panel,
+.math-output-panel,
+.opt-panel,
+.opt-card,
+.opt-output-card,
+.opt-best-card,
+.stat-card,
+.metric,
+.math-system-card,
+.math-slider-card,
+.math-matrix-block,
+.table-wrap{
+  min-width:0 !important;
+  max-width:100% !important;
+}
+.panel-title,
+.panel-copy,
+.chart-copy,
+.opt-muted,
+.opt-narrative,
+.opt-current-compare,
+.math-threshold-card,
+.math-sys-line,
+.math-grade-chip,
+.final-board-title p{
+  overflow-wrap:anywhere !important;
+}
+.metric-value,
+.stat-value,
+.r-value,
+.math-sys-edge,
+.math-matrix td,
+.math-matrix th,
+.fin-table td,
+.fin-table th,
+.final-board-hero strong,
+.tail-ledger strong,
+.final-ledger-cell strong,
+.metric-line strong,
+.opt-best-main,
+.opt-best-sub{
+  min-width:0 !important;
+  max-width:100% !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+.final-board-hero strong,
+.tail-ledger strong,
+.final-ledger-cell strong,
+.metric-line strong{
+  white-space:nowrap !important;
+}
+
+/* 6) Result panorama: no empty left gap; all primary output uses available width. */
+.panorama-grid{
+  display:grid !important;
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  gap:12px !important;
+  align-items:start !important;
+}
+.final-band-board{
+  grid-column:1 / -1 !important;
+  display:grid !important;
+  grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr) !important;
+  gap:12px !important;
+  border-left:4px solid var(--terra) !important;
+}
+.final-board-main,
+.final-board-scale{
+  min-width:0 !important;
+  background:transparent !important;
+  border:0 !important;
+  padding:0 !important;
+}
+.final-board-main{
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) minmax(180px,.65fr) !important;
+  gap:10px !important;
+}
+.final-board-title{grid-column:1 / -1 !important;}
+.tail-ledger,
+.final-ledger-grid,
+.compact-final-ledger{
+  display:grid !important;
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  gap:8px !important;
+}
+
+/* 7) Optimization mobile/tablet: usable without side compression. */
+.opt-layout,
+.opt-output-grid{
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) !important;
+  gap:12px !important;
+}
+.opt-goal-block,
+.opt-card,
+.opt-output-card,
+.opt-best-card{
+  min-width:0 !important;
+  overflow:hidden !important;
+}
+.opt-goals{
+  display:flex !important;
+  overflow-x:auto !important;
+  overflow-y:hidden !important;
+  -webkit-overflow-scrolling:touch !important;
+  gap:6px !important;
+  padding:5px !important;
+}
+.opt-goals .opt-option{
+  flex:0 0 auto !important;
+  min-width:116px !important;
+}
+.opt-param-grid{
+  display:grid !important;
+  grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  gap:9px !important;
+}
+.opt-constraint{
+  grid-template-columns:minmax(0,1fr) minmax(120px,150px) !important;
+}
+.opt-best-card{
+  grid-template-columns:minmax(0,1fr) !important;
+}
+.opt-best-main{
+  white-space:normal !important;
+  line-height:1.15 !important;
+}
+.opt-heatmap,
+.opt-table-wrap,
+.math-matrix-wrap,
+.math-heatmap-table,
+.table-wrap{
+  overflow:auto !important;
+  -webkit-overflow-scrolling:touch !important;
+}
+
+/* 8) Math model mobile/tablet: systems and result tabs become smooth horizontal strips, editor remains full width. */
+.math-workbench{
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) !important;
+  gap:12px !important;
+}
+.math-system-row{
+  display:flex !important;
+  overflow-x:auto !important;
+  overflow-y:hidden !important;
+  -webkit-overflow-scrolling:touch !important;
+  gap:8px !important;
+  padding-bottom:4px !important;
+}
+.math-system-card{
+  flex:0 0 184px !important;
+}
+.math-slider-grid{
+  display:grid !important;
+  grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+  gap:9px !important;
+}
+.math-result-tabs{
+  display:flex !important;
+  overflow-x:auto !important;
+  overflow-y:hidden !important;
+  -webkit-overflow-scrolling:touch !important;
+  gap:6px !important;
+  padding:6px !important;
+}
+.math-result-tab{
+  flex:0 0 auto !important;
+  min-width:112px !important;
+  white-space:nowrap !important;
+}
+.math-result-pane:not(.active){display:none !important;}
+.math-result-pane.active{display:block !important;}
+
+/* 9) Responsive breakpoints tuned for tablet/mobile. */
+@media (max-width:1180px){
+  .result-strip{
+    display:flex !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    gap:7px !important;
+    padding:7px 0 8px !important;
+    -webkit-overflow-scrolling:touch !important;
+    scrollbar-width:none !important;
+  }
+  .result-strip::-webkit-scrollbar{display:none !important;}
+  .result-strip .metric{
+    flex:0 0 150px !important;
+    scroll-snap-align:none !important;
+  }
+  .result-strip .hero-metric{flex-basis:214px !important;}
+  .mode-tabs,
+  .legacy-mode-tabs{
+    top:0 !important;
+    display:flex !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    -webkit-overflow-scrolling:touch !important;
+    scrollbar-width:none !important;
+  }
+  .mode-tabs::-webkit-scrollbar,
+  .legacy-mode-tabs::-webkit-scrollbar{display:none !important;}
+  .mode-btn,
+  .legacy-mode-btn{
+    flex:0 0 auto !important;
+    min-width:126px !important;
+  }
+  .final-band-board{
+    grid-template-columns:1fr !important;
+  }
+  .panorama-grid{
+    grid-template-columns:1fr !important;
+  }
+  .math-slider-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  }
+  .opt-param-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  }
+}
+@media (max-width:720px){
+  body{padding:10px !important;}
+  .hero,
+  .panel,
+  .chart-shell,
+  .results-panorama,
+  .math-clean-panel,
+  .math-output-panel,
+  .opt-panel{
+    padding:13px !important;
+    border-radius:10px !important;
+  }
+  .result-strip .metric{flex-basis:138px !important; min-height:66px !important;}
+  .result-strip .hero-metric{flex-basis:190px !important;}
+  .metric-value{font-size:18px !important;}
+  .math-editor-title,
+  .panel-head,
+  .chart-head,
+  .preset-head{
+    display:grid !important;
+    gap:10px !important;
+  }
+  .math-grade-chip{text-align:left !important; max-width:none !important;}
+  .math-slider-grid,
+  .opt-param-grid,
+  .form-grid,
+  .form-grid.three,
+  .form-grid.four,
+  .control-grid,
+  .results-grid,
+  .tail-ledger,
+  .final-ledger-grid,
+  .compact-final-ledger{
+    grid-template-columns:1fr !important;
+  }
+  .math-system-card{flex-basis:172px !important;}
+  .canvas-wrap,
+  .canvas-wrap.small,
+  .canvas-wrap.priority,
+  .canvas-wrap.priority-sensitivity{
+    height:280px !important;
+  }
+  .fin-table,
+  .math-matrix,
+  .opt-table{
+    min-width:640px !important;
+  }
+}
+
+/* 10) Reduce pointer hit-testing while native scroll is in progress without class toggles. */
+@media (pointer:coarse){
+  .chart-shell canvas{pointer-events:none !important;}
+}
+</style>
+
+
+<style id="p21-sticky-safety-override">
+/* Sticky elements must not be paint-contained; this keeps HUD/navigation attached during scroll on iPad Safari. */
+.result-strip,
+.mode-tabs,
+.legacy-mode-tabs{
+  contain:none !important;
+}
+</style>
+
+<script id="p21-stable-interaction-js">
 (function(){
   "use strict";
-  function harden(){
+  function boot(){
     document.body.dataset.activeMode = document.body.dataset.activeMode || "basic";
-    var dock = document.getElementById("metricDock");
-    if(dock) dock.remove();
 
-    // Ensure shared simulation output is only visible in Strateji mode.
+    // Keep mode state consistent without adding scroll listeners.
     document.querySelectorAll(".mode-btn").forEach(function(btn){
       btn.addEventListener("click", function(){
         document.body.dataset.activeMode = btn.dataset.mode || "basic";
       }, {passive:true});
     });
 
-    // Mark chart canvases as non-interactive during scroll to reduce pointer work on tablets.
-    var scrollTimer = 0;
-    window.addEventListener("scroll", function(){
-      document.body.classList.add("is-scrolling");
-      clearTimeout(scrollTimer);
-      scrollTimer = setTimeout(function(){ document.body.classList.remove("is-scrolling"); }, 120);
-    }, {passive:true});
+    // Chart.js global performance defaults. Heavy MC is still button-driven in the math tab.
+    if(window.Chart){
+      Chart.defaults.animation = false;
+      Chart.defaults.transitions.active.animation.duration = 0;
+      Chart.defaults.transitions.resize.animation.duration = 0;
+      Chart.defaults.responsive = true;
+      Chart.defaults.plugins.tooltip.animation = false;
+    }
 
-    // Prevent oversized labels in the top HUD from forcing expensive reflow.
-    document.querySelectorAll(".result-strip .metric-sub, .result-strip .metric-label").forEach(function(el){
-      el.title = el.textContent.trim();
+    // Preserve full text access without letting labels force layout expansion.
+    document.querySelectorAll(".metric-label,.metric-sub,.math-matrix td,.math-matrix th,.fin-table td,.fin-table th").forEach(function(el){
+      if(!el.title) el.title = (el.textContent || "").trim();
     });
   }
-  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", harden, {once:true});
-  else harden();
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot, {once:true});
+  else boot();
 })();
 </script>
-
 </body>
 </html>
