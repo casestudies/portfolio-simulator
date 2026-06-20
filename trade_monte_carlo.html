@@ -6488,6 +6488,636 @@ body[data-active-mode]:not([data-active-mode="basic"]) .simulation-output{displa
   }
 }
 
+
+
+/* === P23 deploy repair: mobile + scroll + index-style visual language === */
+html{scroll-behavior:auto !important;}
+body{
+  background:var(--paper) !important;
+  overflow-x:hidden !important;
+  overscroll-behavior-y:auto !important;
+}
+*,*::before,*::after{
+  box-shadow:none !important;
+  transition:none !important;
+  animation:none !important;
+}
+body *{
+  -webkit-tap-highlight-color:rgba(198,91,54,.10);
+}
+.app,.main,.mode-panel,.panel,.chart-shell,.table-wrap,.control-card,.choice-card,.opt-card,.opt-goal-block,.opt-output-card,.math-output-panel,.math-editor-board,.math-slider-card,.math-system-card{
+  contain:initial !important;
+  min-width:0 !important;
+}
+[style*="backdrop-filter"],.result-strip,.metric,.panel,.chart-shell,.mode-tabs,.legacy-mode-tabs,.metric-dock,.sim-progress,.sidebar,.hero{
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+}
+.metric-dock{display:none !important;}
+
+/* Index-like sticky HUD: one layer, clear contrast, no translucent blur */
+.result-strip{
+  position:sticky !important;
+  top:0 !important;
+  z-index:120 !important;
+  display:grid !important;
+  grid-template-columns:minmax(190px,1.25fr) repeat(6,minmax(104px,.75fr)) !important;
+  gap:7px !important;
+  padding:7px 0 10px !important;
+  margin:0 !important;
+  background:var(--paper) !important;
+  border:0 !important;
+  border-bottom:1px solid rgba(222,212,196,.86) !important;
+  overflow:visible !important;
+}
+.result-strip .metric{
+  min-width:0 !important;
+  min-height:66px !important;
+  padding:9px 10px !important;
+  border-radius:10px !important;
+  background:#fffdf8 !important;
+  border:1px solid rgba(222,212,196,.95) !important;
+  display:flex !important;
+  flex-direction:column !important;
+  justify-content:center !important;
+  overflow:hidden !important;
+}
+.result-strip .metric.hero-metric{border-left:4px solid var(--terra) !important;}
+.result-strip .metric.good{border-left:4px solid var(--olive) !important;}
+.result-strip .metric.bad{border-left:4px solid var(--ruby) !important;}
+.result-strip .metric-label{
+  color:#625b53 !important;
+  font-size:7.8px !important;
+  letter-spacing:.10em !important;
+  font-weight:800 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+.result-strip .metric-value{
+  color:var(--ink) !important;
+  font-family:"Cormorant Garamond",Georgia,serif !important;
+  font-size:clamp(21px,2vw,30px) !important;
+  line-height:.98 !important;
+  margin-top:5px !important;
+  font-weight:560 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+.result-strip .metric-sub{
+  color:#847b70 !important;
+  font-size:8.4px !important;
+  margin-top:5px !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+
+/* Plain index-style cards: no candy fills, no oversized radius */
+.panel,.chart-shell,.table-wrap,.control-card,.choice-card,.form-card,.stat-card,.compare-card,.mc-sensitivity-card,
+.opt-card,.opt-goal-block,.opt-output-card,.opt-best-card,.opt-narrative,.opt-current-compare,
+.math-editor-board,.math-output-panel,.math-slider-card,.math-system-card,.math-matrix-section,.math-threshold-card{
+  background:#fffdf8 !important;
+  border:1px solid var(--line) !important;
+  border-radius:10px !important;
+  color:var(--ink) !important;
+}
+.control-card::after,.choice-card::after,.preset-card::after,.concept-card::after,.math-system-card::after,.math-slider-card::after{
+  display:none !important;
+}
+.btn,.quick,.mini-tab,.mode-btn,.legacy-mode-btn,.segmented-option,.opt-option,.opt-toggle,.math-result-tab,.mathlab-play{
+  border-radius:7px !important;
+  background:#fffdf8 !important;
+  color:var(--ink) !important;
+  border:1px solid var(--line-strong) !important;
+}
+.btn.primary,.run-sim.btn.primary{
+  background:linear-gradient(135deg,#d3643d 0%,var(--terra) 58%,#b94e2d 100%) !important;
+  border-color:var(--terra) !important;
+  color:#fffdf8 !important;
+}
+.mode-tabs{
+  position:sticky !important;
+  top:76px !important;
+  z-index:110 !important;
+  display:grid !important;
+  grid-template-columns:repeat(5,minmax(0,1fr)) !important;
+  gap:6px !important;
+  padding:6px !important;
+  background:#fffdf8 !important;
+  border:1px solid var(--line) !important;
+  border-radius:10px !important;
+  overflow:visible !important;
+}
+.mode-btn{
+  min-height:42px !important;
+  min-width:0 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+.mode-btn.active{
+  background:linear-gradient(180deg,#fffdf8,#f5ede2) !important;
+  border-color:var(--line-strong) !important;
+  color:var(--ink) !important;
+}
+
+/* Slider parity with Strategy tab */
+.math-slider-card{
+  padding:15px !important;
+}
+.math-slider-top{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:12px !important;
+  margin-bottom:10px !important;
+  color:var(--stone) !important;
+  font-size:10px !important;
+  letter-spacing:.12em !important;
+  text-transform:uppercase !important;
+  font-weight:850 !important;
+}
+.math-slider-top b{color:var(--ink) !important;}
+.math-slider-top em{color:var(--ink) !important;font-style:normal !important;}
+.range,.math-range,input[type="range"].math-range{
+  width:100% !important;
+  -webkit-appearance:none !important;
+  appearance:none !important;
+  height:44px !important;
+  background:transparent !important;
+  cursor:pointer !important;
+  touch-action:pan-y !important;
+}
+.range::-webkit-slider-runnable-track,
+.math-range::-webkit-slider-runnable-track{
+  height:6px !important;
+  border-radius:999px !important;
+  background:linear-gradient(90deg,var(--terra) 0 var(--fill,50%),#e9dfd2 var(--fill,50%) 100%) !important;
+  border:1px solid rgba(205,191,174,.58) !important;
+}
+.range::-webkit-slider-thumb,
+.math-range::-webkit-slider-thumb{
+  -webkit-appearance:none !important;
+  width:24px !important;
+  height:24px !important;
+  margin-top:-10px !important;
+  border-radius:50% !important;
+  background:var(--terra) !important;
+  border:2px solid #fffdf8 !important;
+}
+.range::-moz-range-track,
+.math-range::-moz-range-track{
+  height:6px !important;
+  border-radius:999px !important;
+  background:#e9dfd2 !important;
+  border:1px solid rgba(205,191,174,.58) !important;
+}
+.range::-moz-range-progress,
+.math-range::-moz-range-progress{
+  height:6px !important;
+  border-radius:999px !important;
+  background:var(--terra) !important;
+}
+.range::-moz-range-thumb,
+.math-range::-moz-range-thumb{
+  width:24px !important;
+  height:24px !important;
+  border-radius:50% !important;
+  background:var(--terra) !important;
+  border:2px solid #fffdf8 !important;
+}
+.math-slider-card input[type="number"]{
+  border-radius:10px !important;
+  border:1px solid var(--line) !important;
+  background:#fffdf8 !important;
+  min-height:40px !important;
+}
+
+/* Text/rakam taşma guard */
+.metric,.stat-card,.hud-card,.mathlab-metric,.math-matrix-value,.math-system-card,.math-slider-card,.opt-best-card,.opt-output-card,.panel{
+  min-width:0 !important;
+}
+.metric-value,.stat-value,.r-value,.math-matrix-value,.math-system-card *,.opt-best-main,.opt-best-sub,.panel-copy,.chart-copy,.control-help,.math-threshold-card p{
+  overflow-wrap:anywhere !important;
+}
+.mono,.num{
+  font-variant-numeric:tabular-nums !important;
+}
+
+/* Result panorama: no empty left column on any viewport */
+.results-panorama,.panorama-grid,.final-band-board,.final-band-v2,.final-board-main,.final-board-scale{
+  min-width:0 !important;
+}
+.panorama-grid,.final-band-board,.final-band-v2{
+  display:grid !important;
+  grid-template-columns:1fr !important;
+  gap:14px !important;
+}
+.final-band-v2,.final-board-main,.final-board-scale{
+  background:#fffdf8 !important;
+  border:1px solid var(--line) !important;
+  border-radius:10px !important;
+  padding:15px !important;
+}
+.final-band-v2{border-left:4px solid var(--terra) !important;}
+.final-board-hero strong,.final-band-main strong{
+  font-family:"Cormorant Garamond",Georgia,serif !important;
+  color:var(--ink) !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+
+/* Mobile/tablet repair for every tab */
+@media (max-width:1120px){
+  body{padding:12px !important;}
+  .app{max-width:100% !important;gap:12px !important;}
+  .hero,.panel,.chart-shell{padding:14px !important;border-radius:10px !important;}
+  .result-strip{
+    display:flex !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    gap:7px !important;
+    padding:7px 0 9px !important;
+    -webkit-overflow-scrolling:touch !important;
+    scroll-snap-type:x proximity !important;
+  }
+  .result-strip .metric{
+    flex:0 0 150px !important;
+    min-height:66px !important;
+    scroll-snap-align:start !important;
+  }
+  .result-strip .metric:first-child{
+    flex-basis:190px !important;
+  }
+  .mode-tabs{
+    top:84px !important;
+    display:flex !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    -webkit-overflow-scrolling:touch !important;
+    scroll-snap-type:x proximity !important;
+    grid-template-columns:none !important;
+    gap:6px !important;
+  }
+  .mode-btn{
+    flex:0 0 auto !important;
+    min-width:132px !important;
+    scroll-snap-align:start !important;
+  }
+  .control-grid,.control-grid.three,.control-grid.four,.choice-grid,.results-grid,.chart-grid,.chart-grid.equal,.interpretation,.rcalc-grid,
+  .opt-layout,.opt-output-grid,.opt-param-grid,.comparison-grid,.mc-sensitivity-grid,.scenario-grid,.concept-grid,
+  .math-workbench,.mathlab-grid,.mathlab-lower,.math-slider-grid,.math-thresholds{
+    grid-template-columns:1fr !important;
+  }
+  .opt-goals,.opt-third-options,.math-result-tabs{
+    display:flex !important;
+    overflow-x:auto !important;
+    gap:6px !important;
+    -webkit-overflow-scrolling:touch !important;
+  }
+  .opt-option,.math-result-tab{
+    flex:0 0 auto !important;
+    min-width:118px !important;
+    min-height:40px !important;
+  }
+  .math-system-row{
+    display:flex !important;
+    overflow-x:auto !important;
+    gap:10px !important;
+    -webkit-overflow-scrolling:touch !important;
+    scroll-snap-type:x proximity !important;
+  }
+  .math-system-card{
+    flex:0 0 220px !important;
+    scroll-snap-align:start !important;
+  }
+  .canvas-wrap,.canvas-wrap.small,.canvas-wrap.priority,.mathlab-equity-wrap{
+    height:300px !important;
+  }
+  .fin-table,.opt-table,.math-comparison-table,.math-heatmap{
+    min-width:760px !important;
+  }
+}
+@media (max-width:640px){
+  body{padding:10px !important;}
+  .result-strip .metric{flex-basis:142px !important;}
+  .result-strip .metric:first-child{flex-basis:178px !important;}
+  .mode-tabs{top:82px !important;}
+  .mode-btn{min-width:122px !important;font-size:9px !important;}
+  .panel-head,.chart-head,.preset-head,.math-clean-head{
+    display:grid !important;
+    gap:10px !important;
+  }
+  .math-editor-title{
+    display:grid !important;
+    gap:8px !important;
+  }
+  .math-slider-card{
+    padding:13px !important;
+  }
+  .math-slider-card input[type="number"],.field,.num-input,select.field{
+    font-size:16px !important;
+  }
+  .range::-webkit-slider-thumb,.math-range::-webkit-slider-thumb{
+    width:28px !important;
+    height:28px !important;
+    margin-top:-12px !important;
+  }
+  .range::-moz-range-thumb,.math-range::-moz-range-thumb{
+    width:28px !important;
+    height:28px !important;
+  }
+  .canvas-wrap,.canvas-wrap.small,.canvas-wrap.priority,.mathlab-equity-wrap{
+    height:270px !important;
+  }
+}
+
+/* Prevent hidden/global output from affecting non-strategy tabs */
+body[data-active-mode]:not([data-active-mode="basic"]) .simulation-output{
+  display:none !important;
+  visibility:hidden !important;
+  height:0 !important;
+  overflow:hidden !important;
+  pointer-events:none !important;
+}
+body[data-active-mode="basic"] .simulation-output{
+  visibility:visible !important;
+  height:auto !important;
+  overflow:visible !important;
+}
+
+
+/* === P24: metric cards rebuilt to match index.html ledger language === */
+/* Global metric surface: paper-white, thin ledger borders, serif numbers, no candy fills */
+.metric,
+.stat-card,
+.r-box,
+.compare-card,
+.mc-sensitivity-card,
+.model-compact-metric,
+.math-threshold-card,
+.math-system-card,
+.math-slider-card,
+.math-matrix-section,
+.opt-best-card,
+.opt-output-card,
+.opt-current-compare,
+.opt-narrative{
+  background:#fffdf8 !important;
+  border:1px solid rgba(222,212,196,.88) !important;
+  border-radius:10px !important;
+  box-shadow:0 10px 28px rgba(56,42,25,.045) !important;
+  overflow:hidden !important;
+  min-width:0 !important;
+}
+
+/* Sticky metric HUD — index ledger style: clean strip, no tinted container, no translucent cards */
+.result-strip{
+  position:sticky !important;
+  top:0 !important;
+  z-index:160 !important;
+  display:grid !important;
+  grid-template-columns:minmax(250px,1.35fr) repeat(6,minmax(126px,1fr)) !important;
+  gap:8px !important;
+  padding:8px 0 10px !important;
+  margin:0 !important;
+  background:var(--paper) !important;
+  border:0 !important;
+  border-bottom:1px solid rgba(222,212,196,.72) !important;
+  border-radius:0 !important;
+  box-shadow:none !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+}
+.result-strip .metric{
+  min-height:72px !important;
+  padding:10px 11px !important;
+  background:#fffefb !important;
+  border:1px solid rgba(224,216,203,.78) !important;
+  border-radius:0 !important;
+  box-shadow:0 7px 16px rgba(32,27,21,.026) !important;
+  display:flex !important;
+  flex-direction:column !important;
+  justify-content:center !important;
+  gap:0 !important;
+  position:relative !important;
+}
+.result-strip .metric::before,
+.result-strip .metric::after{
+  display:none !important;
+}
+.result-strip .metric.hero-metric{
+  border-left:4px solid var(--terra) !important;
+  border-color:rgba(216,205,189,.86) !important;
+}
+.result-strip .metric.good{
+  border-left:4px solid var(--olive) !important;
+}
+.result-strip .metric.bad{
+  border-left:4px solid var(--ruby) !important;
+}
+
+/* HUD text hierarchy exactly like index cards */
+.metric-label,
+.stat-label,
+.r-label,
+.model-compact-label,
+.math-matrix-label,
+.math-threshold-kicker{
+  color:#716a60 !important;
+  font-size:8.4px !important;
+  letter-spacing:.11em !important;
+  text-transform:uppercase !important;
+  font-weight:700 !important;
+  line-height:1.18 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+.result-strip .metric-label{
+  color:#6d665e !important;
+  font-size:8.1px !important;
+  letter-spacing:.105em !important;
+  font-weight:700 !important;
+}
+.metric-value,
+.stat-value,
+.r-value,
+.model-compact-value,
+.math-matrix-value{
+  color:var(--ink) !important;
+  font-family:"Cormorant Garamond",Georgia,serif !important;
+  font-weight:500 !important;
+  letter-spacing:-.024em !important;
+  line-height:.98 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+.result-strip .metric-value{
+  font-size:clamp(20px,1.72vw,28px) !important;
+  margin-top:6px !important;
+}
+.result-strip .hero-metric .metric-value{
+  font-size:clamp(26px,2.35vw,38px) !important;
+}
+.metric-sub,
+.stat-note,
+.model-compact-note,
+.math-threshold-card p{
+  color:#766f66 !important;
+  font-size:8.7px !important;
+  line-height:1.2 !important;
+  margin-top:5px !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+
+/* Regular metric/stat cards: same product language as index panels */
+.stat-card,
+.r-box,
+.compare-card,
+.mc-sensitivity-card,
+.model-compact-metric{
+  padding:14px 15px !important;
+  min-height:92px !important;
+}
+.stat-value,
+.r-value,
+.model-compact-value{
+  font-size:clamp(24px,2vw,31px) !important;
+  margin-top:8px !important;
+}
+.compare-card strong,
+.mc-sensitivity-card strong,
+.math-threshold-title{
+  color:var(--ink) !important;
+  font-size:10px !important;
+  letter-spacing:.10em !important;
+  text-transform:uppercase !important;
+  font-weight:800 !important;
+  line-height:1.22 !important;
+}
+.compare-card .mono,
+.mc-sensitivity-card .mono{
+  color:var(--ink) !important;
+  font-family:"Cormorant Garamond",Georgia,serif !important;
+  font-size:24px !important;
+  font-weight:500 !important;
+  letter-spacing:-.02em !important;
+}
+.compare-card span,
+.mc-sensitivity-card span{
+  color:#766f66 !important;
+  font-size:10px !important;
+  line-height:1.35 !important;
+}
+
+/* Remove previous color-fill badges/metric pills; use border accents only */
+.metric.good,
+.stat-card.good,
+.compare-card.good,
+.mc-sensitivity-card.good,
+.model-compact-metric.good{
+  border-left:4px solid var(--olive) !important;
+  background:#fffdf8 !important;
+}
+.metric.bad,
+.stat-card.bad,
+.compare-card.bad,
+.mc-sensitivity-card.bad,
+.model-compact-metric.bad{
+  border-left:4px solid var(--ruby) !important;
+  background:#fffdf8 !important;
+}
+.metric.hero-metric,
+.stat-card.hero,
+.model-compact-metric.hero{
+  border-left:4px solid var(--terra) !important;
+  background:#fffdf8 !important;
+}
+
+/* Matrix cells should read like financial ledger, not colored capsules */
+.math-matrix-section{
+  padding:0 !important;
+}
+.math-matrix-section h3,
+.math-matrix-section .math-matrix-title{
+  background:#f6efe4 !important;
+  border-bottom:1px solid var(--line) !important;
+  color:#716a60 !important;
+  font-size:9px !important;
+  letter-spacing:.12em !important;
+  text-transform:uppercase !important;
+  font-weight:800 !important;
+  padding:11px 13px !important;
+  margin:0 !important;
+}
+.math-matrix-value{
+  background:transparent !important;
+  border-radius:0 !important;
+  color:var(--ink) !important;
+  font-size:18px !important;
+}
+.math-matrix-value.good{color:var(--olive) !important;}
+.math-matrix-value.warn{color:var(--terra) !important;}
+.math-matrix-value.bad{color:var(--ruby) !important;}
+
+/* Mobile: sticky HUD remains index-like and scrollable, with no rounded colored chips */
+@media (max-width:1120px){
+  .result-strip{
+    display:flex !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    gap:8px !important;
+    padding:0 0 9px !important;
+    background:var(--paper) !important;
+    scroll-snap-type:x proximity !important;
+    -webkit-overflow-scrolling:touch !important;
+  }
+  .result-strip .metric{
+    flex:0 0 152px !important;
+    min-height:74px !important;
+    scroll-snap-align:start !important;
+  }
+  .result-strip .metric:first-child,
+  .result-strip .metric.hero-metric{
+    flex-basis:230px !important;
+  }
+  .result-strip .metric-value{
+    font-size:22px !important;
+  }
+  .result-strip .hero-metric .metric-value{
+    font-size:30px !important;
+  }
+}
+@media (max-width:640px){
+  .result-strip{
+    top:0 !important;
+    padding-bottom:8px !important;
+  }
+  .result-strip .metric{
+    flex-basis:146px !important;
+    min-height:70px !important;
+    padding:9px 10px !important;
+  }
+  .result-strip .metric:first-child,
+  .result-strip .metric.hero-metric{
+    flex-basis:218px !important;
+  }
+  .metric-label,
+  .result-strip .metric-label{
+    font-size:7.8px !important;
+  }
+  .metric-sub{
+    font-size:8px !important;
+  }
+}
+
 </style>
 </head>
 <body data-active-mode="basic">
@@ -11101,6 +11731,9 @@ function renderCharts(result){
   let charts = {};
   let mcCache = null;
   let raf = 0;
+  let skipChartOnce = false;
+  let skipEditorOnce = false;
+  let chartDebounce = 0;
   let seed = 9973;
   function $(id){return document.getElementById(id);}
   function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel));}
@@ -11186,10 +11819,14 @@ function renderCharts(result){
         v=clamp(v,cfg.min,cfg.max); systems[selected][key]=v;
         const pair=qsa(`[data-key="${key}"]`,host);
         pair.forEach(p=>{if(p!==el) p.value=v; if(p.type==="range") p.style.setProperty("--fill",((v-cfg.min)/(cfg.max-cfg.min)*100)+"%");});
-        // Keep sliders lightweight: update cards/table immediately, but do not re-run Monte Carlo while the Monte Carlo pane is open.
-        // The user refreshes those paths explicitly with "Monte Carlo Güncelle".
+        // Lightweight slider path: do not rebuild the editor DOM while the thumb is moving.
+        // Cards/table update on the next animation frame; charts update only after the user pauses.
         if(activeView !== "montecarlo") mcCache=null;
-        schedule();
+        schedule({skipChart:true, skipEditor:true});
+        window.clearTimeout(chartDebounce);
+        chartDebounce = window.setTimeout(()=>{
+          if(activeView !== "montecarlo") renderActiveChart();
+        }, 180);
       });
     });
     const toggle=$("mathToggleSystem");
@@ -11309,9 +11946,16 @@ function renderCharts(result){
     if(activeView==="cost") renderCost();
   }
   function renderAll(){
-    renderCards(); renderEditor(); renderMatrix(); renderActiveChart();
+    renderCards();
+    if(!skipEditorOnce) renderEditor();
+    renderMatrix();
+    if(!skipChartOnce) renderActiveChart();
+    skipChartOnce = false;
+    skipEditorOnce = false;
   }
-  function schedule(){
+  function schedule(opts){
+    if(opts && opts.skipChart) skipChartOnce = true;
+    if(opts && opts.skipEditor) skipEditorOnce = true;
     cancelAnimationFrame(raf);
     raf=requestAnimationFrame(renderAll);
   }
@@ -11736,6 +12380,367 @@ body[data-active-mode="basic"] .simulation-output{
   animation-iteration-count:1 !important;
   transition-duration:.08s !important;
 }
+
+
+/* === P23 deploy repair: mobile + scroll + index-style visual language === */
+html{scroll-behavior:auto !important;}
+body{
+  background:var(--paper) !important;
+  overflow-x:hidden !important;
+  overscroll-behavior-y:auto !important;
+}
+*,*::before,*::after{
+  box-shadow:none !important;
+  transition:none !important;
+  animation:none !important;
+}
+body *{
+  -webkit-tap-highlight-color:rgba(198,91,54,.10);
+}
+.app,.main,.mode-panel,.panel,.chart-shell,.table-wrap,.control-card,.choice-card,.opt-card,.opt-goal-block,.opt-output-card,.math-output-panel,.math-editor-board,.math-slider-card,.math-system-card{
+  contain:initial !important;
+  min-width:0 !important;
+}
+[style*="backdrop-filter"],.result-strip,.metric,.panel,.chart-shell,.mode-tabs,.legacy-mode-tabs,.metric-dock,.sim-progress,.sidebar,.hero{
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+}
+.metric-dock{display:none !important;}
+
+/* Index-like sticky HUD: one layer, clear contrast, no translucent blur */
+.result-strip{
+  position:sticky !important;
+  top:0 !important;
+  z-index:120 !important;
+  display:grid !important;
+  grid-template-columns:minmax(190px,1.25fr) repeat(6,minmax(104px,.75fr)) !important;
+  gap:7px !important;
+  padding:7px 0 10px !important;
+  margin:0 !important;
+  background:var(--paper) !important;
+  border:0 !important;
+  border-bottom:1px solid rgba(222,212,196,.86) !important;
+  overflow:visible !important;
+}
+.result-strip .metric{
+  min-width:0 !important;
+  min-height:66px !important;
+  padding:9px 10px !important;
+  border-radius:10px !important;
+  background:#fffdf8 !important;
+  border:1px solid rgba(222,212,196,.95) !important;
+  display:flex !important;
+  flex-direction:column !important;
+  justify-content:center !important;
+  overflow:hidden !important;
+}
+.result-strip .metric.hero-metric{border-left:4px solid var(--terra) !important;}
+.result-strip .metric.good{border-left:4px solid var(--olive) !important;}
+.result-strip .metric.bad{border-left:4px solid var(--ruby) !important;}
+.result-strip .metric-label{
+  color:#625b53 !important;
+  font-size:7.8px !important;
+  letter-spacing:.10em !important;
+  font-weight:800 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+.result-strip .metric-value{
+  color:var(--ink) !important;
+  font-family:"Cormorant Garamond",Georgia,serif !important;
+  font-size:clamp(21px,2vw,30px) !important;
+  line-height:.98 !important;
+  margin-top:5px !important;
+  font-weight:560 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+.result-strip .metric-sub{
+  color:#847b70 !important;
+  font-size:8.4px !important;
+  margin-top:5px !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+
+/* Plain index-style cards: no candy fills, no oversized radius */
+.panel,.chart-shell,.table-wrap,.control-card,.choice-card,.form-card,.stat-card,.compare-card,.mc-sensitivity-card,
+.opt-card,.opt-goal-block,.opt-output-card,.opt-best-card,.opt-narrative,.opt-current-compare,
+.math-editor-board,.math-output-panel,.math-slider-card,.math-system-card,.math-matrix-section,.math-threshold-card{
+  background:#fffdf8 !important;
+  border:1px solid var(--line) !important;
+  border-radius:10px !important;
+  color:var(--ink) !important;
+}
+.control-card::after,.choice-card::after,.preset-card::after,.concept-card::after,.math-system-card::after,.math-slider-card::after{
+  display:none !important;
+}
+.btn,.quick,.mini-tab,.mode-btn,.legacy-mode-btn,.segmented-option,.opt-option,.opt-toggle,.math-result-tab,.mathlab-play{
+  border-radius:7px !important;
+  background:#fffdf8 !important;
+  color:var(--ink) !important;
+  border:1px solid var(--line-strong) !important;
+}
+.btn.primary,.run-sim.btn.primary{
+  background:linear-gradient(135deg,#d3643d 0%,var(--terra) 58%,#b94e2d 100%) !important;
+  border-color:var(--terra) !important;
+  color:#fffdf8 !important;
+}
+.mode-tabs{
+  position:sticky !important;
+  top:76px !important;
+  z-index:110 !important;
+  display:grid !important;
+  grid-template-columns:repeat(5,minmax(0,1fr)) !important;
+  gap:6px !important;
+  padding:6px !important;
+  background:#fffdf8 !important;
+  border:1px solid var(--line) !important;
+  border-radius:10px !important;
+  overflow:visible !important;
+}
+.mode-btn{
+  min-height:42px !important;
+  min-width:0 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+.mode-btn.active{
+  background:linear-gradient(180deg,#fffdf8,#f5ede2) !important;
+  border-color:var(--line-strong) !important;
+  color:var(--ink) !important;
+}
+
+/* Slider parity with Strategy tab */
+.math-slider-card{
+  padding:15px !important;
+}
+.math-slider-top{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:12px !important;
+  margin-bottom:10px !important;
+  color:var(--stone) !important;
+  font-size:10px !important;
+  letter-spacing:.12em !important;
+  text-transform:uppercase !important;
+  font-weight:850 !important;
+}
+.math-slider-top b{color:var(--ink) !important;}
+.math-slider-top em{color:var(--ink) !important;font-style:normal !important;}
+.range,.math-range,input[type="range"].math-range{
+  width:100% !important;
+  -webkit-appearance:none !important;
+  appearance:none !important;
+  height:44px !important;
+  background:transparent !important;
+  cursor:pointer !important;
+  touch-action:pan-y !important;
+}
+.range::-webkit-slider-runnable-track,
+.math-range::-webkit-slider-runnable-track{
+  height:6px !important;
+  border-radius:999px !important;
+  background:linear-gradient(90deg,var(--terra) 0 var(--fill,50%),#e9dfd2 var(--fill,50%) 100%) !important;
+  border:1px solid rgba(205,191,174,.58) !important;
+}
+.range::-webkit-slider-thumb,
+.math-range::-webkit-slider-thumb{
+  -webkit-appearance:none !important;
+  width:24px !important;
+  height:24px !important;
+  margin-top:-10px !important;
+  border-radius:50% !important;
+  background:var(--terra) !important;
+  border:2px solid #fffdf8 !important;
+}
+.range::-moz-range-track,
+.math-range::-moz-range-track{
+  height:6px !important;
+  border-radius:999px !important;
+  background:#e9dfd2 !important;
+  border:1px solid rgba(205,191,174,.58) !important;
+}
+.range::-moz-range-progress,
+.math-range::-moz-range-progress{
+  height:6px !important;
+  border-radius:999px !important;
+  background:var(--terra) !important;
+}
+.range::-moz-range-thumb,
+.math-range::-moz-range-thumb{
+  width:24px !important;
+  height:24px !important;
+  border-radius:50% !important;
+  background:var(--terra) !important;
+  border:2px solid #fffdf8 !important;
+}
+.math-slider-card input[type="number"]{
+  border-radius:10px !important;
+  border:1px solid var(--line) !important;
+  background:#fffdf8 !important;
+  min-height:40px !important;
+}
+
+/* Text/rakam taşma guard */
+.metric,.stat-card,.hud-card,.mathlab-metric,.math-matrix-value,.math-system-card,.math-slider-card,.opt-best-card,.opt-output-card,.panel{
+  min-width:0 !important;
+}
+.metric-value,.stat-value,.r-value,.math-matrix-value,.math-system-card *,.opt-best-main,.opt-best-sub,.panel-copy,.chart-copy,.control-help,.math-threshold-card p{
+  overflow-wrap:anywhere !important;
+}
+.mono,.num{
+  font-variant-numeric:tabular-nums !important;
+}
+
+/* Result panorama: no empty left column on any viewport */
+.results-panorama,.panorama-grid,.final-band-board,.final-band-v2,.final-board-main,.final-board-scale{
+  min-width:0 !important;
+}
+.panorama-grid,.final-band-board,.final-band-v2{
+  display:grid !important;
+  grid-template-columns:1fr !important;
+  gap:14px !important;
+}
+.final-band-v2,.final-board-main,.final-board-scale{
+  background:#fffdf8 !important;
+  border:1px solid var(--line) !important;
+  border-radius:10px !important;
+  padding:15px !important;
+}
+.final-band-v2{border-left:4px solid var(--terra) !important;}
+.final-board-hero strong,.final-band-main strong{
+  font-family:"Cormorant Garamond",Georgia,serif !important;
+  color:var(--ink) !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+
+/* Mobile/tablet repair for every tab */
+@media (max-width:1120px){
+  body{padding:12px !important;}
+  .app{max-width:100% !important;gap:12px !important;}
+  .hero,.panel,.chart-shell{padding:14px !important;border-radius:10px !important;}
+  .result-strip{
+    display:flex !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    gap:7px !important;
+    padding:7px 0 9px !important;
+    -webkit-overflow-scrolling:touch !important;
+    scroll-snap-type:x proximity !important;
+  }
+  .result-strip .metric{
+    flex:0 0 150px !important;
+    min-height:66px !important;
+    scroll-snap-align:start !important;
+  }
+  .result-strip .metric:first-child{
+    flex-basis:190px !important;
+  }
+  .mode-tabs{
+    top:84px !important;
+    display:flex !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    -webkit-overflow-scrolling:touch !important;
+    scroll-snap-type:x proximity !important;
+    grid-template-columns:none !important;
+    gap:6px !important;
+  }
+  .mode-btn{
+    flex:0 0 auto !important;
+    min-width:132px !important;
+    scroll-snap-align:start !important;
+  }
+  .control-grid,.control-grid.three,.control-grid.four,.choice-grid,.results-grid,.chart-grid,.chart-grid.equal,.interpretation,.rcalc-grid,
+  .opt-layout,.opt-output-grid,.opt-param-grid,.comparison-grid,.mc-sensitivity-grid,.scenario-grid,.concept-grid,
+  .math-workbench,.mathlab-grid,.mathlab-lower,.math-slider-grid,.math-thresholds{
+    grid-template-columns:1fr !important;
+  }
+  .opt-goals,.opt-third-options,.math-result-tabs{
+    display:flex !important;
+    overflow-x:auto !important;
+    gap:6px !important;
+    -webkit-overflow-scrolling:touch !important;
+  }
+  .opt-option,.math-result-tab{
+    flex:0 0 auto !important;
+    min-width:118px !important;
+    min-height:40px !important;
+  }
+  .math-system-row{
+    display:flex !important;
+    overflow-x:auto !important;
+    gap:10px !important;
+    -webkit-overflow-scrolling:touch !important;
+    scroll-snap-type:x proximity !important;
+  }
+  .math-system-card{
+    flex:0 0 220px !important;
+    scroll-snap-align:start !important;
+  }
+  .canvas-wrap,.canvas-wrap.small,.canvas-wrap.priority,.mathlab-equity-wrap{
+    height:300px !important;
+  }
+  .fin-table,.opt-table,.math-comparison-table,.math-heatmap{
+    min-width:760px !important;
+  }
+}
+@media (max-width:640px){
+  body{padding:10px !important;}
+  .result-strip .metric{flex-basis:142px !important;}
+  .result-strip .metric:first-child{flex-basis:178px !important;}
+  .mode-tabs{top:82px !important;}
+  .mode-btn{min-width:122px !important;font-size:9px !important;}
+  .panel-head,.chart-head,.preset-head,.math-clean-head{
+    display:grid !important;
+    gap:10px !important;
+  }
+  .math-editor-title{
+    display:grid !important;
+    gap:8px !important;
+  }
+  .math-slider-card{
+    padding:13px !important;
+  }
+  .math-slider-card input[type="number"],.field,.num-input,select.field{
+    font-size:16px !important;
+  }
+  .range::-webkit-slider-thumb,.math-range::-webkit-slider-thumb{
+    width:28px !important;
+    height:28px !important;
+    margin-top:-12px !important;
+  }
+  .range::-moz-range-thumb,.math-range::-moz-range-thumb{
+    width:28px !important;
+    height:28px !important;
+  }
+  .canvas-wrap,.canvas-wrap.small,.canvas-wrap.priority,.mathlab-equity-wrap{
+    height:270px !important;
+  }
+}
+
+/* Prevent hidden/global output from affecting non-strategy tabs */
+body[data-active-mode]:not([data-active-mode="basic"]) .simulation-output{
+  display:none !important;
+  visibility:hidden !important;
+  height:0 !important;
+  overflow:hidden !important;
+  pointer-events:none !important;
+}
+body[data-active-mode="basic"] .simulation-output{
+  visibility:visible !important;
+  height:auto !important;
+  overflow:visible !important;
+}
+
 </style>
 
 <style id="p21-mobile-scroll-and-theme-surgery">
@@ -12251,16 +13256,367 @@ canvas{
 @media (pointer:coarse){
   .chart-shell canvas{pointer-events:none !important;}
 }
-</style>
 
 
-<style id="p21-sticky-safety-override">
-/* Sticky elements must not be paint-contained; this keeps HUD/navigation attached during scroll on iPad Safari. */
-.result-strip,
-.mode-tabs,
-.legacy-mode-tabs{
-  contain:none !important;
+/* === P23 deploy repair: mobile + scroll + index-style visual language === */
+html{scroll-behavior:auto !important;}
+body{
+  background:var(--paper) !important;
+  overflow-x:hidden !important;
+  overscroll-behavior-y:auto !important;
 }
+*,*::before,*::after{
+  box-shadow:none !important;
+  transition:none !important;
+  animation:none !important;
+}
+body *{
+  -webkit-tap-highlight-color:rgba(198,91,54,.10);
+}
+.app,.main,.mode-panel,.panel,.chart-shell,.table-wrap,.control-card,.choice-card,.opt-card,.opt-goal-block,.opt-output-card,.math-output-panel,.math-editor-board,.math-slider-card,.math-system-card{
+  contain:initial !important;
+  min-width:0 !important;
+}
+[style*="backdrop-filter"],.result-strip,.metric,.panel,.chart-shell,.mode-tabs,.legacy-mode-tabs,.metric-dock,.sim-progress,.sidebar,.hero{
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+}
+.metric-dock{display:none !important;}
+
+/* Index-like sticky HUD: one layer, clear contrast, no translucent blur */
+.result-strip{
+  position:sticky !important;
+  top:0 !important;
+  z-index:120 !important;
+  display:grid !important;
+  grid-template-columns:minmax(190px,1.25fr) repeat(6,minmax(104px,.75fr)) !important;
+  gap:7px !important;
+  padding:7px 0 10px !important;
+  margin:0 !important;
+  background:var(--paper) !important;
+  border:0 !important;
+  border-bottom:1px solid rgba(222,212,196,.86) !important;
+  overflow:visible !important;
+}
+.result-strip .metric{
+  min-width:0 !important;
+  min-height:66px !important;
+  padding:9px 10px !important;
+  border-radius:10px !important;
+  background:#fffdf8 !important;
+  border:1px solid rgba(222,212,196,.95) !important;
+  display:flex !important;
+  flex-direction:column !important;
+  justify-content:center !important;
+  overflow:hidden !important;
+}
+.result-strip .metric.hero-metric{border-left:4px solid var(--terra) !important;}
+.result-strip .metric.good{border-left:4px solid var(--olive) !important;}
+.result-strip .metric.bad{border-left:4px solid var(--ruby) !important;}
+.result-strip .metric-label{
+  color:#625b53 !important;
+  font-size:7.8px !important;
+  letter-spacing:.10em !important;
+  font-weight:800 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+.result-strip .metric-value{
+  color:var(--ink) !important;
+  font-family:"Cormorant Garamond",Georgia,serif !important;
+  font-size:clamp(21px,2vw,30px) !important;
+  line-height:.98 !important;
+  margin-top:5px !important;
+  font-weight:560 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+.result-strip .metric-sub{
+  color:#847b70 !important;
+  font-size:8.4px !important;
+  margin-top:5px !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+
+/* Plain index-style cards: no candy fills, no oversized radius */
+.panel,.chart-shell,.table-wrap,.control-card,.choice-card,.form-card,.stat-card,.compare-card,.mc-sensitivity-card,
+.opt-card,.opt-goal-block,.opt-output-card,.opt-best-card,.opt-narrative,.opt-current-compare,
+.math-editor-board,.math-output-panel,.math-slider-card,.math-system-card,.math-matrix-section,.math-threshold-card{
+  background:#fffdf8 !important;
+  border:1px solid var(--line) !important;
+  border-radius:10px !important;
+  color:var(--ink) !important;
+}
+.control-card::after,.choice-card::after,.preset-card::after,.concept-card::after,.math-system-card::after,.math-slider-card::after{
+  display:none !important;
+}
+.btn,.quick,.mini-tab,.mode-btn,.legacy-mode-btn,.segmented-option,.opt-option,.opt-toggle,.math-result-tab,.mathlab-play{
+  border-radius:7px !important;
+  background:#fffdf8 !important;
+  color:var(--ink) !important;
+  border:1px solid var(--line-strong) !important;
+}
+.btn.primary,.run-sim.btn.primary{
+  background:linear-gradient(135deg,#d3643d 0%,var(--terra) 58%,#b94e2d 100%) !important;
+  border-color:var(--terra) !important;
+  color:#fffdf8 !important;
+}
+.mode-tabs{
+  position:sticky !important;
+  top:76px !important;
+  z-index:110 !important;
+  display:grid !important;
+  grid-template-columns:repeat(5,minmax(0,1fr)) !important;
+  gap:6px !important;
+  padding:6px !important;
+  background:#fffdf8 !important;
+  border:1px solid var(--line) !important;
+  border-radius:10px !important;
+  overflow:visible !important;
+}
+.mode-btn{
+  min-height:42px !important;
+  min-width:0 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+.mode-btn.active{
+  background:linear-gradient(180deg,#fffdf8,#f5ede2) !important;
+  border-color:var(--line-strong) !important;
+  color:var(--ink) !important;
+}
+
+/* Slider parity with Strategy tab */
+.math-slider-card{
+  padding:15px !important;
+}
+.math-slider-top{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:12px !important;
+  margin-bottom:10px !important;
+  color:var(--stone) !important;
+  font-size:10px !important;
+  letter-spacing:.12em !important;
+  text-transform:uppercase !important;
+  font-weight:850 !important;
+}
+.math-slider-top b{color:var(--ink) !important;}
+.math-slider-top em{color:var(--ink) !important;font-style:normal !important;}
+.range,.math-range,input[type="range"].math-range{
+  width:100% !important;
+  -webkit-appearance:none !important;
+  appearance:none !important;
+  height:44px !important;
+  background:transparent !important;
+  cursor:pointer !important;
+  touch-action:pan-y !important;
+}
+.range::-webkit-slider-runnable-track,
+.math-range::-webkit-slider-runnable-track{
+  height:6px !important;
+  border-radius:999px !important;
+  background:linear-gradient(90deg,var(--terra) 0 var(--fill,50%),#e9dfd2 var(--fill,50%) 100%) !important;
+  border:1px solid rgba(205,191,174,.58) !important;
+}
+.range::-webkit-slider-thumb,
+.math-range::-webkit-slider-thumb{
+  -webkit-appearance:none !important;
+  width:24px !important;
+  height:24px !important;
+  margin-top:-10px !important;
+  border-radius:50% !important;
+  background:var(--terra) !important;
+  border:2px solid #fffdf8 !important;
+}
+.range::-moz-range-track,
+.math-range::-moz-range-track{
+  height:6px !important;
+  border-radius:999px !important;
+  background:#e9dfd2 !important;
+  border:1px solid rgba(205,191,174,.58) !important;
+}
+.range::-moz-range-progress,
+.math-range::-moz-range-progress{
+  height:6px !important;
+  border-radius:999px !important;
+  background:var(--terra) !important;
+}
+.range::-moz-range-thumb,
+.math-range::-moz-range-thumb{
+  width:24px !important;
+  height:24px !important;
+  border-radius:50% !important;
+  background:var(--terra) !important;
+  border:2px solid #fffdf8 !important;
+}
+.math-slider-card input[type="number"]{
+  border-radius:10px !important;
+  border:1px solid var(--line) !important;
+  background:#fffdf8 !important;
+  min-height:40px !important;
+}
+
+/* Text/rakam taşma guard */
+.metric,.stat-card,.hud-card,.mathlab-metric,.math-matrix-value,.math-system-card,.math-slider-card,.opt-best-card,.opt-output-card,.panel{
+  min-width:0 !important;
+}
+.metric-value,.stat-value,.r-value,.math-matrix-value,.math-system-card *,.opt-best-main,.opt-best-sub,.panel-copy,.chart-copy,.control-help,.math-threshold-card p{
+  overflow-wrap:anywhere !important;
+}
+.mono,.num{
+  font-variant-numeric:tabular-nums !important;
+}
+
+/* Result panorama: no empty left column on any viewport */
+.results-panorama,.panorama-grid,.final-band-board,.final-band-v2,.final-board-main,.final-board-scale{
+  min-width:0 !important;
+}
+.panorama-grid,.final-band-board,.final-band-v2{
+  display:grid !important;
+  grid-template-columns:1fr !important;
+  gap:14px !important;
+}
+.final-band-v2,.final-board-main,.final-board-scale{
+  background:#fffdf8 !important;
+  border:1px solid var(--line) !important;
+  border-radius:10px !important;
+  padding:15px !important;
+}
+.final-band-v2{border-left:4px solid var(--terra) !important;}
+.final-board-hero strong,.final-band-main strong{
+  font-family:"Cormorant Garamond",Georgia,serif !important;
+  color:var(--ink) !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+
+/* Mobile/tablet repair for every tab */
+@media (max-width:1120px){
+  body{padding:12px !important;}
+  .app{max-width:100% !important;gap:12px !important;}
+  .hero,.panel,.chart-shell{padding:14px !important;border-radius:10px !important;}
+  .result-strip{
+    display:flex !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    gap:7px !important;
+    padding:7px 0 9px !important;
+    -webkit-overflow-scrolling:touch !important;
+    scroll-snap-type:x proximity !important;
+  }
+  .result-strip .metric{
+    flex:0 0 150px !important;
+    min-height:66px !important;
+    scroll-snap-align:start !important;
+  }
+  .result-strip .metric:first-child{
+    flex-basis:190px !important;
+  }
+  .mode-tabs{
+    top:84px !important;
+    display:flex !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    -webkit-overflow-scrolling:touch !important;
+    scroll-snap-type:x proximity !important;
+    grid-template-columns:none !important;
+    gap:6px !important;
+  }
+  .mode-btn{
+    flex:0 0 auto !important;
+    min-width:132px !important;
+    scroll-snap-align:start !important;
+  }
+  .control-grid,.control-grid.three,.control-grid.four,.choice-grid,.results-grid,.chart-grid,.chart-grid.equal,.interpretation,.rcalc-grid,
+  .opt-layout,.opt-output-grid,.opt-param-grid,.comparison-grid,.mc-sensitivity-grid,.scenario-grid,.concept-grid,
+  .math-workbench,.mathlab-grid,.mathlab-lower,.math-slider-grid,.math-thresholds{
+    grid-template-columns:1fr !important;
+  }
+  .opt-goals,.opt-third-options,.math-result-tabs{
+    display:flex !important;
+    overflow-x:auto !important;
+    gap:6px !important;
+    -webkit-overflow-scrolling:touch !important;
+  }
+  .opt-option,.math-result-tab{
+    flex:0 0 auto !important;
+    min-width:118px !important;
+    min-height:40px !important;
+  }
+  .math-system-row{
+    display:flex !important;
+    overflow-x:auto !important;
+    gap:10px !important;
+    -webkit-overflow-scrolling:touch !important;
+    scroll-snap-type:x proximity !important;
+  }
+  .math-system-card{
+    flex:0 0 220px !important;
+    scroll-snap-align:start !important;
+  }
+  .canvas-wrap,.canvas-wrap.small,.canvas-wrap.priority,.mathlab-equity-wrap{
+    height:300px !important;
+  }
+  .fin-table,.opt-table,.math-comparison-table,.math-heatmap{
+    min-width:760px !important;
+  }
+}
+@media (max-width:640px){
+  body{padding:10px !important;}
+  .result-strip .metric{flex-basis:142px !important;}
+  .result-strip .metric:first-child{flex-basis:178px !important;}
+  .mode-tabs{top:82px !important;}
+  .mode-btn{min-width:122px !important;font-size:9px !important;}
+  .panel-head,.chart-head,.preset-head,.math-clean-head{
+    display:grid !important;
+    gap:10px !important;
+  }
+  .math-editor-title{
+    display:grid !important;
+    gap:8px !important;
+  }
+  .math-slider-card{
+    padding:13px !important;
+  }
+  .math-slider-card input[type="number"],.field,.num-input,select.field{
+    font-size:16px !important;
+  }
+  .range::-webkit-slider-thumb,.math-range::-webkit-slider-thumb{
+    width:28px !important;
+    height:28px !important;
+    margin-top:-12px !important;
+  }
+  .range::-moz-range-thumb,.math-range::-moz-range-thumb{
+    width:28px !important;
+    height:28px !important;
+  }
+  .canvas-wrap,.canvas-wrap.small,.canvas-wrap.priority,.mathlab-equity-wrap{
+    height:270px !important;
+  }
+}
+
+/* Prevent hidden/global output from affecting non-strategy tabs */
+body[data-active-mode]:not([data-active-mode="basic"]) .simulation-output{
+  display:none !important;
+  visibility:hidden !important;
+  height:0 !important;
+  overflow:hidden !important;
+  pointer-events:none !important;
+}
+body[data-active-mode="basic"] .simulation-output{
+  visibility:visible !important;
+  height:auto !important;
+  overflow:visible !important;
+}
+
 </style>
 
 <script id="p21-stable-interaction-js">
