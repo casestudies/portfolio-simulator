@@ -16408,5 +16408,634 @@ canvas{
 })();
 </script>
 
+
+<style id="p33-print-blank-page-repair">
+/* P33 — PDF report repair: remove blank pages caused by legacy print rules and oversized avoid-break blocks. */
+@page{
+  size:A4 portrait;
+  margin:10mm 9mm;
+}
+@media print{
+  html,body{
+    width:auto !important;
+    height:auto !important;
+    min-height:0 !important;
+    margin:0 !important;
+    padding:0 !important;
+    overflow:visible !important;
+    background:#fff !important;
+    color:#111 !important;
+    -webkit-print-color-adjust:exact !important;
+    print-color-adjust:exact !important;
+  }
+
+  *,*::before,*::after{
+    animation:none !important;
+    transition:none !important;
+    transform:none !important;
+    filter:none !important;
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+    box-shadow:none !important;
+  }
+
+  .hero-actions,
+  .legacy-mode-tabs,
+  .mode-tabs,
+  .math-result-tabs,
+  .footer-actions,
+  .btn,
+  .run-sim,
+  .sim-progress,
+  .preset-panel,
+  .chart-actions,
+  .chart-utility,
+  .mini-tab,
+  .segmented-selector,
+  .opt-actions,
+  .opt-progress,
+  .mathlab-play,
+  .math-toggle-card,
+  .error-box{
+    display:none !important;
+  }
+
+  .app,.main,.hero,.result-strip,.print-params,
+  .mode-panel.active,.mode-panel.active > *,
+  .panel,.chart-shell,.table-wrap,.math-matrix-block,.math-output-panel,.math-clean-panel{
+    position:static !important;
+    top:auto !important;
+    left:auto !important;
+    right:auto !important;
+    bottom:auto !important;
+    width:100% !important;
+    max-width:100% !important;
+    min-width:0 !important;
+    height:auto !important;
+    min-height:0 !important;
+    max-height:none !important;
+    overflow:visible !important;
+  }
+
+  .app,.main{
+    display:block !important;
+    gap:0 !important;
+  }
+
+  /* Hard override old print rules like "#basic{display:none!important}". */
+  body #basic.mode-panel,
+  body #optimization.mode-panel,
+  body #mathlab.mode-panel,
+  body #concepts.mode-panel,
+  body #diagnostics.mode-panel{
+    display:none !important;
+    visibility:hidden !important;
+    height:0 !important;
+    min-height:0 !important;
+    max-height:0 !important;
+    overflow:hidden !important;
+    margin:0 !important;
+    padding:0 !important;
+    border:0 !important;
+    break-before:auto !important;
+    break-after:auto !important;
+    page-break-before:auto !important;
+    page-break-after:auto !important;
+  }
+  body #basic.mode-panel.active,
+  body #optimization.mode-panel.active,
+  body #mathlab.mode-panel.active,
+  body #concepts.mode-panel.active,
+  body #diagnostics.mode-panel.active{
+    display:block !important;
+    visibility:visible !important;
+    height:auto !important;
+    min-height:0 !important;
+    max-height:none !important;
+    overflow:visible !important;
+    margin:0 !important;
+    padding:0 !important;
+    border:0 !important;
+  }
+
+  body #mathlab .math-result-pane{
+    display:none !important;
+    visibility:hidden !important;
+    height:0 !important;
+    overflow:hidden !important;
+    margin:0 !important;
+    padding:0 !important;
+    break-before:auto !important;
+    break-after:auto !important;
+    page-break-before:auto !important;
+    page-break-after:auto !important;
+  }
+  body #mathlab .math-result-pane.active{
+    display:block !important;
+    visibility:visible !important;
+    height:auto !important;
+    overflow:visible !important;
+    margin:0 !important;
+    padding:0 !important;
+  }
+
+  /* Remove the main cause of empty pages: avoid-breaking huge panels/charts. */
+  .hero,
+  .result-strip,
+  .print-params,
+  .mode-panel,
+  .panel,
+  .panel-head,
+  .chart-shell,
+  .chart-head,
+  .table-wrap,
+  .math-output-panel,
+  .math-clean-panel,
+  .math-matrix-section,
+  .math-matrix-block,
+  .interpretation,
+  .chart-grid,
+  .results-grid{
+    break-before:auto !important;
+    break-after:auto !important;
+    break-inside:auto !important;
+    page-break-before:auto !important;
+    page-break-after:auto !important;
+    page-break-inside:auto !important;
+  }
+
+  /* Small ledger cards may stay together; large containers must not reserve whole blank pages. */
+  .metric,
+  .stat-card,
+  .r-box,
+  .compare-card,
+  .mc-sensitivity-card,
+  .math-threshold-card,
+  .math-formula-card,
+  .model-compact-metric,
+  .model-summary-metric,
+  .final-ledger-cell{
+    break-inside:avoid !important;
+    page-break-inside:avoid !important;
+    background:#fff !important;
+    border:1px solid #d8d0c4 !important;
+    border-radius:0 !important;
+  }
+
+  .hero{
+    padding:0 0 5mm !important;
+    margin:0 0 5mm !important;
+    border:0 !important;
+    border-bottom:1px solid #d8d0c4 !important;
+    background:#fff !important;
+  }
+  .hero h1{
+    font-size:25pt !important;
+    line-height:1 !important;
+    margin:0 !important;
+  }
+  .hero-copy{
+    max-width:none !important;
+    font-size:8.5pt !important;
+    line-height:1.35 !important;
+    margin-top:2mm !important;
+  }
+
+  .result-strip{
+    display:grid !important;
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+    gap:3mm !important;
+    padding:0 !important;
+    margin:0 0 5mm !important;
+    border:0 !important;
+    background:#fff !important;
+  }
+  .metric{
+    padding:3mm !important;
+    min-height:0 !important;
+  }
+  .metric-label{
+    font-size:6.8pt !important;
+    letter-spacing:.08em !important;
+    line-height:1.12 !important;
+  }
+  .metric-value{
+    font-size:17pt !important;
+    line-height:1 !important;
+    margin-top:1.5mm !important;
+  }
+  .metric-sub{
+    font-size:7pt !important;
+    line-height:1.2 !important;
+    margin-top:1mm !important;
+  }
+
+  .print-params{
+    display:block !important;
+    padding:0 0 4mm !important;
+    margin:0 0 5mm !important;
+    border:0 !important;
+    border-bottom:1px solid #ddd !important;
+    background:#fff !important;
+  }
+  .print-param-grid{
+    display:grid !important;
+    grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+    gap:2mm !important;
+  }
+  .print-param{
+    padding:2mm !important;
+    border:1px solid #ddd !important;
+    border-radius:0 !important;
+    background:#fff !important;
+  }
+
+  .panel,.chart-shell{
+    padding:0 !important;
+    margin:0 0 5mm !important;
+    border:0 !important;
+    background:#fff !important;
+  }
+  .panel-head,.chart-head{
+    display:block !important;
+    padding:0 0 2mm !important;
+    margin:0 0 3mm !important;
+    border-bottom:1px solid #ddd !important;
+  }
+  .panel-title,.chart-title{
+    font-size:8.5pt !important;
+    letter-spacing:.08em !important;
+  }
+  .panel-copy,.chart-copy{
+    font-size:7.5pt !important;
+    line-height:1.35 !important;
+  }
+
+  .control-grid,
+  .choice-grid,
+  .results-grid,
+  .chart-grid,
+  .chart-grid.equal,
+  .interpretation,
+  .rcalc-grid,
+  .opt-layout,
+  .opt-output-grid,
+  .math-workbench,
+  .math-editor-grid,
+  .math-slider-grid,
+  .math-threshold-grid,
+  .math-formula-grid{
+    display:block !important;
+  }
+
+  .canvas-wrap,
+  .canvas-wrap.small,
+  .canvas-wrap.priority,
+  .canvas-wrap.priority-sensitivity,
+  .mathlab-equity-wrap{
+    height:55mm !important;
+    max-height:55mm !important;
+    min-height:0 !important;
+    margin:0 0 4mm !important;
+    overflow:hidden !important;
+    break-inside:avoid !important;
+    page-break-inside:avoid !important;
+  }
+  canvas{
+    max-width:100% !important;
+    max-height:55mm !important;
+  }
+
+  .table-wrap,
+  .math-matrix-wrap,
+  .opt-heatmap{
+    display:block !important;
+    overflow:visible !important;
+    border:0 !important;
+    margin:0 0 4mm !important;
+  }
+  .fin-table,
+  .math-matrix,
+  .opt-table,
+  table{
+    min-width:0 !important;
+    width:100% !important;
+    font-size:6.8pt !important;
+    table-layout:auto !important;
+  }
+  th,td{
+    padding:1.6mm !important;
+    white-space:normal !important;
+    overflow:visible !important;
+    text-overflow:clip !important;
+    word-break:normal !important;
+    overflow-wrap:anywhere !important;
+  }
+  tr{
+    break-inside:avoid !important;
+    page-break-inside:avoid !important;
+  }
+
+  /* Never allow hidden/offscreen UI to reserve blank pages. */
+  [hidden],
+  .is-hidden,
+  .hidden,
+  [aria-hidden="true"]{
+    display:none !important;
+    height:0 !important;
+    margin:0 !important;
+    padding:0 !important;
+    overflow:hidden !important;
+  }
+}
+</style>
+<script id="p33-print-active-panel-guard">
+(function(){
+  "use strict";
+  function currentMode(){
+    const active = document.querySelector(".mode-panel.active");
+    return active ? active.id : (document.body.dataset.activeMode || "basic");
+  }
+  function beforePrint(){
+    document.documentElement.classList.add("is-printing");
+    const mode = currentMode();
+    document.body.dataset.printMode = mode;
+    document.querySelectorAll(".mode-panel").forEach(function(panel){
+      panel.dataset.printHidden = panel.id === mode ? "0" : "1";
+      if(panel.id !== mode){
+        panel.setAttribute("aria-hidden","true");
+      }
+    });
+    document.querySelectorAll("#mathlab .math-result-pane").forEach(function(pane){
+      if(!pane.classList.contains("active")) pane.setAttribute("aria-hidden","true");
+    });
+  }
+  function afterPrint(){
+    document.documentElement.classList.remove("is-printing");
+    document.querySelectorAll(".mode-panel").forEach(function(panel){
+      if(panel.dataset.printHidden === "1") panel.removeAttribute("aria-hidden");
+      delete panel.dataset.printHidden;
+    });
+    document.querySelectorAll("#mathlab .math-result-pane[aria-hidden='true']").forEach(function(pane){
+      pane.removeAttribute("aria-hidden");
+    });
+  }
+  if(window.matchMedia){
+    const media = window.matchMedia("print");
+    if(media.addEventListener){
+      media.addEventListener("change", function(e){ e.matches ? beforePrint() : afterPrint(); });
+    }
+  }
+  window.addEventListener("beforeprint", beforePrint);
+  window.addEventListener("afterprint", afterPrint);
+})();
+</script>
+
+
+<style id="p34-panorama-no-gap">
+/* P34 — Sonuç Panoraması: iki kolon hatasını tamamen kapat. 
+   Boş sol alan oluşmaması için panorama içeriği tek akışta tam genişlik kullanır. */
+.results-panorama{
+  overflow:visible !important;
+}
+.results-panorama .panel-head{
+  width:100% !important;
+}
+.panorama-grid{
+  display:block !important;
+  width:100% !important;
+  max-width:100% !important;
+  min-width:0 !important;
+}
+.panorama-grid > article,
+.panorama-grid > .panorama-block,
+.panorama-grid > .final-band,
+.panorama-grid > .comfort-block,
+.panorama-grid > .edge-block{
+  display:block !important;
+  width:100% !important;
+  max-width:100% !important;
+  min-width:0 !important;
+  grid-column:1 / -1 !important;
+  grid-row:auto !important;
+  margin:0 0 14px 0 !important;
+}
+.panorama-grid > article:last-child{
+  margin-bottom:0 !important;
+}
+.final-band-board{
+  width:100% !important;
+  max-width:100% !important;
+  min-width:0 !important;
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important;
+  gap:14px !important;
+}
+.final-board-main,
+.final-board-scale,
+.comfort-block,
+.edge-block{
+  width:100% !important;
+  max-width:100% !important;
+  min-width:0 !important;
+}
+.metric-ledger{
+  width:100% !important;
+  max-width:100% !important;
+}
+@media (max-width:980px){
+  .final-band-board{
+    grid-template-columns:1fr !important;
+  }
+}
+@media print{
+  .panorama-grid{
+    display:block !important;
+  }
+  .panorama-grid > article,
+  .panorama-grid > .panorama-block{
+    display:block !important;
+    width:100% !important;
+    margin:0 0 5mm 0 !important;
+  }
+  .final-band-board{
+    display:block !important;
+  }
+  .final-board-main,
+  .final-board-scale{
+    margin:0 0 4mm 0 !important;
+  }
+}
+</style>
+
+<script id="p34-smooth-legend-fade-toggle">
+(function(){
+  "use strict";
+
+  function eachChart(cb){
+    if(!window.Chart || !Chart.instances) return;
+    const instances = Chart.instances;
+    if(typeof instances.forEach === "function"){
+      instances.forEach(cb);
+      return;
+    }
+    Object.keys(instances).forEach(function(k){ cb(instances[k]); });
+  }
+
+  function colorWithAlpha(color, alpha){
+    if(Array.isArray(color)) return color.map(function(c){ return colorWithAlpha(c, alpha); });
+    if(!color || typeof color !== "string") return color;
+
+    const a = Math.max(0, Math.min(1, alpha));
+    const c = color.trim();
+
+    if(c[0] === "#"){
+      let hex = c.slice(1);
+      if(hex.length === 3) hex = hex.split("").map(function(x){ return x + x; }).join("");
+      if(hex.length === 6 || hex.length === 8){
+        const r = parseInt(hex.slice(0,2),16);
+        const g = parseInt(hex.slice(2,4),16);
+        const b = parseInt(hex.slice(4,6),16);
+        const originalA = hex.length === 8 ? parseInt(hex.slice(6,8),16) / 255 : 1;
+        return "rgba(" + r + "," + g + "," + b + "," + (originalA * a).toFixed(3) + ")";
+      }
+      return color;
+    }
+
+    const rgba = c.match(/^rgba?\(([^)]+)\)$/i);
+    if(rgba){
+      const parts = rgba[1].split(",").map(function(x){ return x.trim(); });
+      const r = parts[0], g = parts[1], b = parts[2];
+      const originalA = parts.length > 3 ? parseFloat(parts[3]) : 1;
+      return "rgba(" + r + "," + g + "," + b + "," + (originalA * a).toFixed(3) + ")";
+    }
+
+    // Named colors are rare in this app; keep them instead of risking invalid CSS.
+    return color;
+  }
+
+  function storeBase(ds){
+    if(ds.__legendFadeBase) return;
+    ds.__legendFadeBase = {
+      borderColor: ds.borderColor,
+      backgroundColor: ds.backgroundColor,
+      pointBackgroundColor: ds.pointBackgroundColor,
+      pointBorderColor: ds.pointBorderColor,
+      pointRadius: ds.pointRadius,
+      pointHoverRadius: ds.pointHoverRadius
+    };
+  }
+
+  function applyFade(ds, alpha){
+    storeBase(ds);
+    const b = ds.__legendFadeBase;
+    ds.borderColor = colorWithAlpha(b.borderColor, alpha);
+    ds.backgroundColor = colorWithAlpha(b.backgroundColor, Math.max(alpha * .55, 0));
+    ds.pointBackgroundColor = colorWithAlpha(b.pointBackgroundColor || b.backgroundColor || b.borderColor, alpha);
+    ds.pointBorderColor = colorWithAlpha(b.pointBorderColor || b.borderColor, alpha);
+    if(typeof b.pointRadius === "number") ds.pointRadius = Math.max(0, b.pointRadius * alpha);
+    if(Array.isArray(b.pointRadius)) ds.pointRadius = b.pointRadius.map(function(v){ return Math.max(0, v * alpha); });
+    if(typeof b.pointHoverRadius === "number") ds.pointHoverRadius = Math.max(0, b.pointHoverRadius * alpha);
+  }
+
+  function restore(ds){
+    if(!ds.__legendFadeBase) return;
+    const b = ds.__legendFadeBase;
+    ds.borderColor = b.borderColor;
+    ds.backgroundColor = b.backgroundColor;
+    ds.pointBackgroundColor = b.pointBackgroundColor;
+    ds.pointBorderColor = b.pointBorderColor;
+    ds.pointRadius = b.pointRadius;
+    ds.pointHoverRadius = b.pointHoverRadius;
+  }
+
+  function animate(chart, duration, step, done){
+    const start = performance.now();
+    function frame(now){
+      const t = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - t, 3);
+      step(eased);
+      try { chart.update("none"); } catch(e) {}
+      if(t < 1) requestAnimationFrame(frame);
+      else if(done) done();
+    }
+    requestAnimationFrame(frame);
+  }
+
+  function smoothLegendClick(e, legendItem, legend){
+    const chart = legend && legend.chart;
+    const index = legendItem && legendItem.datasetIndex;
+    if(index == null || !chart || !chart.data || !chart.data.datasets || !chart.data.datasets[index]) return;
+
+    const ds = chart.data.datasets[index];
+    const meta = chart.getDatasetMeta(index);
+    const hidden = meta.hidden === null ? !!ds.hidden : !!meta.hidden;
+    const duration = 520;
+
+    if(!hidden){
+      // Fade to zero first, then actually hide the dataset.
+      animate(chart, duration, function(t){
+        applyFade(ds, 1 - t);
+      }, function(){
+        meta.hidden = true;
+        restore(ds);
+        try { chart.update("none"); } catch(e) {}
+      });
+    }else{
+      // Make dataset visible at zero opacity, then fade it in.
+      storeBase(ds);
+      meta.hidden = false;
+      applyFade(ds, 0);
+      try { chart.update("none"); } catch(e) {}
+      animate(chart, duration, function(t){
+        applyFade(ds, t);
+      }, function(){
+        restore(ds);
+        try { chart.update("none"); } catch(e) {}
+      });
+    }
+  }
+
+  function patchChart(chart){
+    if(!chart || !chart.options) return;
+    chart.options.plugins = chart.options.plugins || {};
+    chart.options.plugins.legend = chart.options.plugins.legend || {};
+    chart.options.plugins.legend.onClick = smoothLegendClick;
+    chart.options.plugins.tooltip = chart.options.plugins.tooltip || {};
+    chart.options.plugins.tooltip.enabled = true;
+    chart.options.events = chart.options.events || ["mousemove","mouseout","click","touchstart","touchmove"];
+  }
+
+  function apply(){
+    if(!window.Chart) return;
+    Chart.defaults.plugins.legend.onClick = smoothLegendClick;
+    Chart.defaults.plugins.tooltip.enabled = true;
+    Chart.defaults.plugins.tooltip.animation = {duration:120};
+    eachChart(patchChart);
+  }
+
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", function(){
+      apply();
+      setTimeout(apply, 150);
+      setTimeout(apply, 600);
+      setTimeout(apply, 1200);
+    }, {once:true});
+  }else{
+    apply();
+    setTimeout(apply, 150);
+    setTimeout(apply, 600);
+    setTimeout(apply, 1200);
+  }
+
+  document.addEventListener("click", function(ev){
+    if(ev.target && (ev.target.closest(".mini-tab") || ev.target.closest(".math-result-tab") || ev.target.closest(".legacy-mode-btn") || ev.target.closest(".mode-btn"))){
+      setTimeout(apply, 80);
+      setTimeout(apply, 250);
+    }
+  }, true);
+})();
+</script>
+
 </body>
 </html>
