@@ -6727,6 +6727,154 @@ body[data-active-mode="basic"] .simulation-output{
 }
 
 </style>
+
+<style id="p42-restore-mobile-tabs-and-scenario-rail">
+/* p42 restore: mobile tab rail + scenario cards rail, without changing calculation engine */
+.legacy-mode-tabs{
+  position:relative;
+  display:grid !important;
+  grid-template-columns:repeat(5,minmax(0,1fr)) !important;
+  gap:6px !important;
+  flex-wrap:nowrap !important;
+  overflow:visible !important;
+  padding:6px !important;
+  border-radius:14px !important;
+}
+.legacy-mode-btn{
+  min-width:0 !important;
+  flex:0 1 auto !important;
+  white-space:nowrap !important;
+  min-height:50px !important;
+  padding:9px 10px !important;
+}
+.legacy-mode-btn svg{
+  flex:0 0 auto !important;
+}
+@media (max-width:980px){
+  .legacy-mode-tabs{
+    display:flex !important;
+    grid-template-columns:none !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    flex-wrap:nowrap !important;
+    scroll-snap-type:x proximity !important;
+    -webkit-overflow-scrolling:touch !important;
+    scrollbar-width:none !important;
+    padding:6px !important;
+    gap:6px !important;
+    border-radius:14px !important;
+  }
+  .legacy-mode-tabs::-webkit-scrollbar{display:none !important;}
+  .legacy-mode-btn{
+    flex:0 0 auto !important;
+    min-width:158px !important;
+    scroll-snap-align:start !important;
+    justify-content:center !important;
+  }
+}
+@media (max-width:620px){
+  .legacy-mode-tabs{
+    margin-left:-2px !important;
+    margin-right:-2px !important;
+    padding:5px !important;
+  }
+  .legacy-mode-btn{
+    min-width:146px !important;
+    min-height:46px !important;
+    font-size:9px !important;
+    gap:7px !important;
+  }
+}
+
+/* p42 restore: math result tabs should behave like a compact mobile rail */
+.math-result-tabs{
+  display:flex !important;
+  flex-wrap:nowrap !important;
+  overflow-x:auto !important;
+  overflow-y:hidden !important;
+  gap:6px !important;
+  -webkit-overflow-scrolling:touch !important;
+  scroll-snap-type:x proximity !important;
+  scrollbar-width:none !important;
+}
+.math-result-tabs::-webkit-scrollbar{display:none !important;}
+.math-result-tab{
+  flex:0 0 auto !important;
+  min-width:132px !important;
+  scroll-snap-align:start !important;
+  white-space:nowrap !important;
+}
+@media (min-width:1120px){
+  .math-result-tabs{
+    display:grid !important;
+    grid-template-columns:repeat(6,minmax(0,1fr)) !important;
+    overflow:visible !important;
+  }
+  .math-result-tab{
+    min-width:0 !important;
+    width:100% !important;
+  }
+}
+
+/* p42 restore: ready scenarios are a swipeable editorial card rail, not a cramped side/stack list */
+.preset-panel{
+  overflow:hidden !important;
+}
+.preset-body{
+  padding-left:14px !important;
+  padding-right:14px !important;
+}
+.preset-grid{
+  display:flex !important;
+  grid-template-columns:none !important;
+  gap:10px !important;
+  overflow-x:auto !important;
+  overflow-y:hidden !important;
+  scroll-snap-type:x proximity !important;
+  -webkit-overflow-scrolling:touch !important;
+  scrollbar-width:thin !important;
+  padding:2px 2px 10px !important;
+}
+.preset-card{
+  flex:0 0 clamp(235px,31vw,340px) !important;
+  min-height:132px !important;
+  scroll-snap-align:start !important;
+}
+@media (max-width:760px){
+  .preset-head{
+    display:flex !important;
+    align-items:flex-start !important;
+    justify-content:space-between !important;
+  }
+  .preset-summary::after{
+    justify-self:auto !important;
+  }
+  .preset-card{
+    flex-basis:min(82vw,330px) !important;
+  }
+}
+
+/* p42 restore: scenario comparison cards are also easy to swipe on small screens */
+@media (max-width:900px){
+  .comparison-grid,
+  .mc-sensitivity-grid{
+    display:flex !important;
+    grid-template-columns:none !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    gap:9px !important;
+    scroll-snap-type:x proximity !important;
+    -webkit-overflow-scrolling:touch !important;
+    padding-bottom:8px !important;
+  }
+  .compare-card,
+  .mc-sensitivity-card{
+    flex:0 0 min(82vw,310px) !important;
+    scroll-snap-align:start !important;
+  }
+}
+</style>
+
 </head>
 <body data-active-mode="basic">
 <div class="app">
@@ -11716,26 +11864,6 @@ function renderCharts(result){
       return;
     }
     drawMCChart();
-  }
-
-  function renderSurface(){
-    const {s}=selectedPack(); const packs=enabled(); const host=$("mathHeatmapTable");
-    if(host){
-      const wrs=[5,10,15,20,30,40,50,60,70,80,90,95], rs=[.5,1,1.5,2,3,4,6,8,10,12,15];
-      const nearest=(arr,v)=>arr.reduce((a,b)=>Math.abs(b-v)<Math.abs(a-v)?b:a,arr[0]);
-      host.innerHTML=`<table class="math-heatmap"><thead><tr><th>WR \\ R</th>${rs.map(r=>`<th>${r}R</th>`).join("")}</tr></thead><tbody>${wrs.map(w=>`<tr><th>${w}%</th>${rs.map(R=>{
-        const e=calc(Object.assign({},s,{wr:w,R})).e; const cls=e>0.6?"hm-good":e>0?"hm-watch":"hm-bad";
-        const markers=packs.filter(p=>nearest(wrs,p.s.wr)===w && nearest(rs,p.s.R)===R).map(p=>`<span class="math-heatmap-marker" style="color:${colors[p.i]}">${p.s.name.replace(/^Sys /,"")}</span>`).join("");
-        return `<td class="${cls} mono">${fmtR(e)}${markers?`<div class="math-heatmap-markers">${markers}</div>`:""}</td>`;
-      }).join("")}</tr>`).join("")}</tbody></table>`;
-    }
-    const beData=[]; for(let r=.5;r<=15.001;r+=.25){beData.push({x:+r.toFixed(2),y:((s.L+s.cost)/(r+s.L))*100});}
-    const datasets=[{label:"Break-even WR",data:beData,borderColor:"#c65b36",borderWidth:2,pointRadius:0}].concat(packs.map(p=>({label:p.s.name,data:[{x:p.s.R,y:p.m.be*100}],type:"scatter",backgroundColor:colors[p.i],borderColor:colors[p.i],pointRadius:5})));
-    baseChart("mathBreakEvenChart","line",{datasets},{scales:{x:{type:"linear",min:.5,max:15,ticks:{callback:v=>v+"R"}},y:{ticks:{callback:v=>v+"%"}}}});
-  }
-  function renderCost(){
-    const datasets=enabled().map(p=>({label:p.s.name,data:[p.m.gross,-p.s.cost,p.m.e],backgroundColor:colors[p.i]}));
-    baseChart("mathCostChart","bar",{labels:["Gross E","Cost","Net E"],datasets},{scales:{y:{ticks:{callback:v=>v+"R"}}}});
   }
   function renderActiveChart(){
     if(activeView==="growth") renderGrowth();
