@@ -17905,5 +17905,523 @@ canvas{
 }
 </style>
 
+
+<style id="p38-panorama-and-active-selection-fix">
+/* p38 — Panorama gerçek mobil/tablet akışı + seçili kontrollerin net görünmesi */
+
+/* Sonuç Panoraması: önceki iki kolonlu final-band yapısını tamamen kapat.
+   final-board-main ve final-board-scale kardeş elemanlar; bu nedenle akış parent'ta çözülmeli. */
+.results-panorama .panorama-grid{
+  display:grid !important;
+  grid-template-columns:1fr !important;
+  gap:18px !important;
+  width:100% !important;
+}
+.results-panorama .panorama-block,
+.results-panorama .final-band-board,
+.results-panorama .comfort-block,
+.results-panorama .edge-block{
+  grid-column:1 / -1 !important;
+  width:100% !important;
+  max-width:100% !important;
+  min-width:0 !important;
+}
+.results-panorama .final-band-board{
+  display:grid !important;
+  grid-template-columns:1fr !important;
+  gap:14px !important;
+  align-items:stretch !important;
+  padding:0 !important;
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+  overflow:visible !important;
+}
+
+/* Sol açıklama/medyan alanı artık tek kolon: boş sol/sağ kolon üretmez. */
+.results-panorama .final-board-main,
+.results-panorama .final-board-scale{
+  width:100% !important;
+  max-width:100% !important;
+  min-width:0 !important;
+  margin:0 !important;
+  box-sizing:border-box !important;
+}
+.results-panorama .final-board-main{
+  display:grid !important;
+  grid-template-columns:1fr !important;
+  grid-template-areas:
+    "title"
+    "hero"
+    "tail" !important;
+  gap:12px !important;
+  align-items:stretch !important;
+  padding:16px !important;
+}
+.results-panorama .final-board-title{grid-area:title !important; min-width:0 !important}
+.results-panorama .final-board-hero{grid-area:hero !important; min-width:0 !important}
+.results-panorama .tail-ledger{grid-area:tail !important; min-width:0 !important}
+
+/* Büyük tutarların tamamı okunur; ellipsis yok. */
+.results-panorama .final-board-hero,
+.results-panorama .tail-ledger > div,
+.results-panorama .final-ledger-cell{
+  overflow:visible !important;
+}
+.results-panorama .final-board-hero strong,
+.results-panorama .tail-ledger strong,
+.results-panorama .final-ledger-cell strong{
+  white-space:normal !important;
+  overflow:visible !important;
+  text-overflow:clip !important;
+  word-break:normal !important;
+  overflow-wrap:anywhere !important;
+  max-width:100% !important;
+}
+.results-panorama .final-board-hero strong{
+  font-family:"Cormorant Garamond",Georgia,serif !important;
+  font-size:clamp(34px,5.2vw,56px) !important;
+  line-height:.95 !important;
+}
+.results-panorama .tail-ledger{
+  display:grid !important;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr)) !important;
+  gap:10px !important;
+}
+.results-panorama .tail-ledger > div{
+  min-height:94px !important;
+  padding:14px 16px !important;
+}
+.results-panorama .tail-ledger strong{
+  font-family:"Cormorant Garamond",Georgia,serif !important;
+  font-size:clamp(24px,3.2vw,34px) !important;
+  line-height:1 !important;
+}
+
+/* P5-P95 dağılım kartları: sıkışık dar kolon değil, okunabilir ledger grid. */
+.results-panorama .final-ribbon{
+  display:none !important;
+}
+.results-panorama .final-ledger-grid{
+  display:grid !important;
+  grid-template-columns:repeat(auto-fit,minmax(230px,1fr)) !important;
+  gap:10px !important;
+  width:100% !important;
+  min-width:0 !important;
+}
+.results-panorama .final-ledger-cell{
+  min-height:112px !important;
+  padding:15px 17px !important;
+  border-radius:10px !important;
+}
+.results-panorama .final-ledger-cell strong{
+  font-family:"Cormorant Garamond",Georgia,serif !important;
+  font-size:clamp(28px,3.6vw,40px) !important;
+  line-height:.98 !important;
+  letter-spacing:-.025em !important;
+}
+.results-panorama .final-ledger-cell span,
+.results-panorama .tail-ledger span,
+.results-panorama .final-board-hero span{
+  white-space:normal !important;
+  line-height:1.18 !important;
+}
+
+/* Tablet ve telefon: tamamı tek akış, iki kolonlu yığılma yok. */
+@media (max-width:900px){
+  .results-panorama .final-band-board,
+  .results-panorama .final-board-main,
+  .results-panorama .final-board-scale{
+    display:grid !important;
+    grid-template-columns:1fr !important;
+  }
+  .results-panorama .tail-ledger,
+  .results-panorama .final-ledger-grid{
+    grid-template-columns:1fr !important;
+  }
+  .results-panorama .final-board-title h3{
+    font-size:32px !important;
+  }
+  .results-panorama .final-board-hero strong{
+    font-size:38px !important;
+  }
+  .results-panorama .tail-ledger strong,
+  .results-panorama .final-ledger-cell strong{
+    font-size:30px !important;
+  }
+}
+
+/* Seçili kontroller: index.html gibi net yüzey + terra çizgi + koyu metin.
+   Renk dolgulu değil, ama aktif olan belirgin. */
+.segmented,
+.direction-selector,
+.opt-segmented,
+.math-view-tabs,
+.legacy-mode-tabs{
+  background:#f4ecdf !important;
+  border:1px solid rgba(216,205,189,.88) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.65) !important;
+}
+.seg,
+.segmented-option,
+.opt-option,
+.opt-toggle,
+.math-view-btn,
+.legacy-mode-btn,
+.mode-btn{
+  position:relative !important;
+  border:1px solid transparent !important;
+  background:transparent !important;
+  color:var(--stone) !important;
+  box-shadow:none !important;
+}
+.seg.active,
+.segmented-option.active,
+.opt-option.active,
+.opt-toggle.active,
+.math-view-btn.active,
+.legacy-mode-btn.active,
+.mode-btn.active{
+  background:#fffdf8 !important;
+  color:var(--ink) !important;
+  border-color:rgba(198,91,54,.46) !important;
+  box-shadow:0 4px 12px rgba(56,42,25,.07), inset 0 0 0 1px rgba(255,255,255,.72) !important;
+}
+.seg.active::before,
+.segmented-option.active::before,
+.opt-option.active::before,
+.opt-toggle.active::before,
+.math-view-btn.active::before,
+.legacy-mode-btn.active::before,
+.mode-btn.active::before{
+  content:"" !important;
+  position:absolute !important;
+  left:8px !important;
+  right:8px !important;
+  bottom:5px !important;
+  height:2px !important;
+  border-radius:999px !important;
+  background:linear-gradient(90deg,var(--terra),var(--gold)) !important;
+  opacity:1 !important;
+}
+.seg[aria-pressed="true"],
+.segmented-option[aria-pressed="true"],
+.opt-option[aria-pressed="true"],
+.opt-toggle[aria-pressed="true"]{
+  background:#fffdf8 !important;
+  color:var(--ink) !important;
+  border-color:rgba(198,91,54,.46) !important;
+}
+
+/* Mobilde seçim alanları taşmasın, aktif çizgi görünür kalsın. */
+@media (max-width:700px){
+  .seg,
+  .segmented-option,
+  .opt-option,
+  .opt-toggle,
+  .math-view-btn,
+  .legacy-mode-btn,
+  .mode-btn{
+    min-height:44px !important;
+    padding-left:12px !important;
+    padding-right:12px !important;
+    white-space:nowrap !important;
+  }
+}
+</style>
+
+
+<style id="p39-final-layout-contract">
+/* p39 — Deployment contract: Result Panorama never splits into empty side columns.
+   This is intentionally stronger than earlier patches and scoped to the Strategy output only. */
+#basic .results-panorama,
+#basic .results-panorama *{
+  box-sizing:border-box !important;
+}
+#basic .results-panorama .panorama-grid{
+  display:block !important;
+  grid-template-columns:none !important;
+  column-count:auto !important;
+  width:100% !important;
+  max-width:100% !important;
+  overflow:visible !important;
+}
+#basic .results-panorama .panorama-block{
+  width:100% !important;
+  max-width:100% !important;
+  min-width:0 !important;
+  margin:0 0 18px !important;
+}
+#basic .results-panorama .final-band-board{
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:stretch !important;
+  gap:14px !important;
+  grid-template-columns:none !important;
+  grid-auto-flow:row !important;
+  width:100% !important;
+  max-width:100% !important;
+  min-width:0 !important;
+  padding:16px !important;
+  border:1px solid rgba(222,212,196,.92) !important;
+  border-left:4px solid var(--terra) !important;
+  background:#fffdf8 !important;
+  box-shadow:0 10px 24px rgba(56,42,25,.035) !important;
+}
+#basic .results-panorama .final-board-main,
+#basic .results-panorama .final-board-scale{
+  display:block !important;
+  position:static !important;
+  float:none !important;
+  clear:both !important;
+  width:100% !important;
+  max-width:100% !important;
+  min-width:0 !important;
+  margin:0 !important;
+  grid-column:auto !important;
+  grid-row:auto !important;
+  grid-area:auto !important;
+}
+#basic .results-panorama .final-board-main{
+  border-left:0 !important;
+  padding:14px 14px 10px !important;
+}
+#basic .results-panorama .final-board-scale{
+  padding:0 14px 14px !important;
+}
+#basic .results-panorama .final-board-title h3{
+  font-size:clamp(30px,3vw,44px) !important;
+  line-height:.98 !important;
+  margin:5px 0 6px !important;
+}
+#basic .results-panorama .final-board-title p{
+  max-width:58ch !important;
+  font-size:13px !important;
+  line-height:1.5 !important;
+}
+#basic .results-panorama .final-board-hero{
+  margin:14px 0 0 !important;
+  min-height:unset !important;
+  padding:16px 18px !important;
+}
+#basic .results-panorama .tail-ledger{
+  display:grid !important;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr)) !important;
+  gap:10px !important;
+  margin-top:10px !important;
+  width:100% !important;
+}
+#basic .results-panorama .final-ledger-grid{
+  display:grid !important;
+  grid-template-columns:repeat(auto-fit,minmax(245px,1fr)) !important;
+  gap:10px !important;
+  width:100% !important;
+  max-width:100% !important;
+  min-width:0 !important;
+}
+#basic .results-panorama .tail-ledger > div,
+#basic .results-panorama .final-ledger-cell{
+  min-width:0 !important;
+  width:auto !important;
+  min-height:104px !important;
+  padding:15px 17px !important;
+  overflow:visible !important;
+  background:#fffdf8 !important;
+  border:1px solid rgba(224,216,203,.78) !important;
+  border-radius:10px !important;
+}
+#basic .results-panorama .final-board-hero strong,
+#basic .results-panorama .tail-ledger strong,
+#basic .results-panorama .final-ledger-cell strong{
+  font-family:"Cormorant Garamond",Georgia,serif !important;
+  display:block !important;
+  white-space:normal !important;
+  overflow:visible !important;
+  text-overflow:clip !important;
+  overflow-wrap:anywhere !important;
+  word-break:normal !important;
+  max-width:100% !important;
+}
+#basic .results-panorama .final-board-hero strong{
+  font-size:clamp(34px,4.4vw,56px) !important;
+  line-height:.95 !important;
+}
+#basic .results-panorama .tail-ledger strong{
+  font-size:clamp(24px,2.8vw,36px) !important;
+  line-height:1 !important;
+}
+#basic .results-panorama .final-ledger-cell strong{
+  font-size:clamp(27px,2.7vw,40px) !important;
+  line-height:.98 !important;
+}
+#basic .results-panorama .final-board-hero span,
+#basic .results-panorama .tail-ledger span,
+#basic .results-panorama .final-ledger-cell span{
+  white-space:normal !important;
+  line-height:1.2 !important;
+}
+#basic .results-panorama .final-ribbon{
+  display:none !important;
+}
+@media (max-width:1050px){
+  #basic .results-panorama .tail-ledger,
+  #basic .results-panorama .final-ledger-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  }
+}
+@media (max-width:620px){
+  #basic .results-panorama .final-band-board{
+    padding:12px !important;
+  }
+  #basic .results-panorama .final-board-main,
+  #basic .results-panorama .final-board-scale{
+    padding-left:0 !important;
+    padding-right:0 !important;
+  }
+  #basic .results-panorama .tail-ledger,
+  #basic .results-panorama .final-ledger-grid{
+    grid-template-columns:1fr !important;
+  }
+}
+
+/* p39 — Active selection state: index-style, clear, non-candy. */
+.segmented,
+.direction-selector,
+.segmented-selector,
+.opt-segmented,
+.math-view-tabs,
+.legacy-mode-tabs,
+.mode-tabs{
+  background:#f4ecdf !important;
+  border:1px solid rgba(216,205,189,.95) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.75) !important;
+}
+.segmented button,
+.direction-selector button,
+.segmented-selector button,
+.opt-segmented button,
+.opt-option,
+.opt-toggle,
+.math-view-btn,
+.legacy-mode-btn,
+.mode-btn{
+  position:relative !important;
+  background:transparent !important;
+  border:1px solid transparent !important;
+  color:#6f675d !important;
+  box-shadow:none !important;
+}
+.segmented button.active,
+.direction-selector button.active,
+.segmented-selector button.active,
+.opt-segmented button.active,
+.opt-option.active,
+.opt-toggle.active,
+.math-view-btn.active,
+.legacy-mode-btn.active,
+.mode-btn.active,
+.segmented button[aria-pressed="true"],
+.direction-selector button[aria-pressed="true"],
+.segmented-selector button[aria-pressed="true"],
+.opt-segmented button[aria-pressed="true"],
+.opt-option[aria-pressed="true"],
+.opt-toggle[aria-pressed="true"],
+.math-view-btn[aria-pressed="true"],
+.legacy-mode-btn[aria-pressed="true"],
+.mode-btn[aria-pressed="true"]{
+  background:#fffdf8 !important;
+  border-color:rgba(206,90,55,.70) !important;
+  color:var(--ink) !important;
+  box-shadow:0 5px 14px rgba(56,42,25,.075), inset 0 0 0 1px rgba(255,255,255,.78) !important;
+  font-weight:850 !important;
+}
+.segmented button.active::after,
+.direction-selector button.active::after,
+.segmented-selector button.active::after,
+.opt-segmented button.active::after,
+.opt-option.active::after,
+.opt-toggle.active::after,
+.math-view-btn.active::after,
+.legacy-mode-btn.active::after,
+.mode-btn.active::after,
+.segmented button[aria-pressed="true"]::after,
+.direction-selector button[aria-pressed="true"]::after,
+.segmented-selector button[aria-pressed="true"]::after,
+.opt-segmented button[aria-pressed="true"]::after,
+.opt-option[aria-pressed="true"]::after,
+.opt-toggle[aria-pressed="true"]::after,
+.math-view-btn[aria-pressed="true"]::after,
+.legacy-mode-btn[aria-pressed="true"]::after,
+.mode-btn[aria-pressed="true"]::after{
+  content:"" !important;
+  position:absolute !important;
+  left:10px !important;
+  right:10px !important;
+  bottom:5px !important;
+  height:2px !important;
+  border-radius:999px !important;
+  background:linear-gradient(90deg,var(--terra),var(--gold)) !important;
+  opacity:1 !important;
+}
+
+/* p39 — prevent hidden horizontal page drag caused by any old patched grid. */
+html,body{
+  max-width:100% !important;
+}
+body{
+  overflow-x:hidden !important;
+}
+.app,.app *{
+  max-width:100%;
+}
+</style>
+<script id="p39-runtime-layout-guard">
+(function(){
+  function important(el, prop, val){ if(el) el.style.setProperty(prop,val,'important'); }
+  function enforcePanorama(){
+    const root = document.querySelector('#basic .results-panorama');
+    if(!root) return;
+    const grid = root.querySelector('.panorama-grid');
+    const final = root.querySelector('.final-band-board');
+    const main = root.querySelector('.final-board-main');
+    const scale = root.querySelector('.final-board-scale');
+    const ledger = root.querySelector('.final-ledger-grid');
+    const tail = root.querySelector('.tail-ledger');
+    important(grid,'display','block');
+    important(grid,'grid-template-columns','none');
+    important(grid,'width','100%');
+    important(final,'display','flex');
+    important(final,'flex-direction','column');
+    important(final,'grid-template-columns','none');
+    important(final,'width','100%');
+    important(main,'display','block');
+    important(main,'width','100%');
+    important(main,'grid-area','auto');
+    important(scale,'display','block');
+    important(scale,'width','100%');
+    important(scale,'grid-area','auto');
+    important(ledger,'display','grid');
+    important(ledger,'width','100%');
+    important(tail,'display','grid');
+    important(tail,'width','100%');
+  }
+  function syncSelectionState(){
+    document.querySelectorAll('.segmented button,.direction-selector button,.segmented-selector button,.opt-segmented button,.opt-option,.opt-toggle,.math-view-btn,.legacy-mode-btn,.mode-btn').forEach(function(btn){
+      const on = btn.classList.contains('active') || btn.getAttribute('aria-pressed') === 'true';
+      btn.classList.toggle('is-visually-active', !!on);
+    });
+  }
+  document.addEventListener('DOMContentLoaded', function(){
+    enforcePanorama();
+    syncSelectionState();
+    setTimeout(enforcePanorama, 0);
+    setTimeout(enforcePanorama, 250);
+  });
+  window.addEventListener('load', function(){ enforcePanorama(); syncSelectionState(); }, {once:true});
+  window.addEventListener('resize', function(){ clearTimeout(window.__p39ResizeT); window.__p39ResizeT=setTimeout(enforcePanorama,120); }, {passive:true});
+  document.addEventListener('click', function(){ setTimeout(function(){ enforcePanorama(); syncSelectionState(); }, 0); }, true);
+})();
+</script>
+
 </body>
 </html>
