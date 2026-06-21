@@ -9,6 +9,132 @@
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&amp;family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+<script id="ca-chart-fallback">
+(function(){
+  "use strict";
+  if(window.Chart) return;
+  function toNum(v){
+    if(v && typeof v === "object"){
+      if(Number.isFinite(+v.y)) return +v.y;
+      if(Number.isFinite(+v.x)) return +v.x;
+      return NaN;
+    }
+    return Number.isFinite(+v) ? +v : NaN;
+  }
+  function getX(v, i){
+    if(v && typeof v === "object" && Number.isFinite(+v.x)) return +v.x;
+    return i;
+  }
+  function colorOf(v, i, fallback){
+    if(Array.isArray(v)) return v[i % v.length] || fallback;
+    return v || fallback;
+  }
+  function drawFallback(canvas, cfg){
+    var ctx = canvas.getContext && canvas.getContext("2d");
+    if(!ctx) return;
+    var dpr = window.devicePixelRatio || 1;
+    var rect = canvas.getBoundingClientRect();
+    var w = Math.max(320, Math.floor(rect.width || canvas.parentElement?.clientWidth || 720));
+    var h = Math.max(240, Math.floor(rect.height || canvas.parentElement?.clientHeight || 340));
+    if(canvas.width !== Math.floor(w*dpr) || canvas.height !== Math.floor(h*dpr)){
+      canvas.width = Math.floor(w*dpr);
+      canvas.height = Math.floor(h*dpr);
+      canvas.style.width = w + "px";
+      canvas.style.height = h + "px";
+    }
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    ctx.clearRect(0,0,w,h);
+    ctx.fillStyle = "#fffdf8";
+    ctx.fillRect(0,0,w,h);
+    var padL = 48, padR = 18, padT = 28, padB = 38;
+    var datasets = (cfg && cfg.data && cfg.data.datasets) ? cfg.data.datasets : [];
+    var all = [];
+    datasets.forEach(function(ds){
+      (ds.data || []).forEach(function(p,i){
+        var y = toNum(p), x = getX(p,i);
+        if(Number.isFinite(x) && Number.isFinite(y)) all.push({x:x,y:y});
+      });
+    });
+    ctx.strokeStyle = "#e2d8c9";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(padL,padT); ctx.lineTo(padL,h-padB); ctx.lineTo(w-padR,h-padB); ctx.stroke();
+    if(!all.length){
+      ctx.fillStyle = "#6f675d";
+      ctx.font = "12px Inter, sans-serif";
+      ctx.fillText("Grafik verisi hazırlanıyor…", padL+8, padT+24);
+      return;
+    }
+    var xMin = Math.min.apply(null, all.map(function(p){return p.x;}));
+    var xMax = Math.max.apply(null, all.map(function(p){return p.x;}));
+    var yMin = Math.min.apply(null, all.map(function(p){return p.y;}));
+    var yMax = Math.max.apply(null, all.map(function(p){return p.y;}));
+    if(xMin === xMax){ xMin -= 1; xMax += 1; }
+    if(yMin === yMax){ yMin -= 1; yMax += 1; }
+    var yPad = Math.max(1e-9, (yMax-yMin)*0.08); yMin -= yPad; yMax += yPad;
+    function px(x){ return padL + (x-xMin)/(xMax-xMin)*(w-padL-padR); }
+    function py(y){ return h-padB - (y-yMin)/(yMax-yMin)*(h-padT-padB); }
+    ctx.strokeStyle = "rgba(226,216,201,.72)";
+    ctx.fillStyle = "#9b9287";
+    ctx.font = "10px Inter, sans-serif";
+    for(var gy=0; gy<=4; gy++){
+      var y = padT + gy*(h-padT-padB)/4;
+      ctx.beginPath(); ctx.moveTo(padL,y); ctx.lineTo(w-padR,y); ctx.stroke();
+    }
+    datasets.forEach(function(ds,di){
+      var data = (ds.data || []).map(function(p,i){ return {x:getX(p,i), y:toNum(p)}; }).filter(function(p){ return Number.isFinite(p.x) && Number.isFinite(p.y); });
+      if(!data.length) return;
+      var type = ds.type || cfg.type || "line";
+      var stroke = colorOf(ds.borderColor, di, ["#c65b36","#647049","#7f2737","#a88442"][di%4]);
+      var fill = colorOf(ds.backgroundColor, di, stroke);
+      if(type === "scatter" || ds.showLine === false){
+        ctx.fillStyle = fill;
+        data.forEach(function(p){
+          ctx.beginPath(); ctx.arc(px(p.x), py(p.y), ds.pointRadius || 3.5, 0, Math.PI*2); ctx.fill();
+        });
+        return;
+      }
+      ctx.strokeStyle = stroke;
+      ctx.lineWidth = ds.borderWidth || 2;
+      if(ds.borderDash) ctx.setLineDash(ds.borderDash); else ctx.setLineDash([]);
+      ctx.beginPath();
+      data.forEach(function(p,i){ var x=px(p.x), y=py(p.y); if(i) ctx.lineTo(x,y); else ctx.moveTo(x,y); });
+      ctx.stroke();
+      ctx.setLineDash([]);
+    });
+    var legendX = padL, legendY = 13;
+    datasets.slice(0,5).forEach(function(ds,di){
+      var c = colorOf(ds.borderColor || ds.backgroundColor, di, ["#c65b36","#647049","#7f2737","#a88442"][di%4]);
+      ctx.fillStyle = c; ctx.fillRect(legendX, legendY-7, 8, 8);
+      ctx.fillStyle = "#6f675d"; ctx.font = "10px Inter, sans-serif";
+      var label = String(ds.label || ("Seri "+(di+1))).slice(0,22);
+      ctx.fillText(label, legendX+12, legendY);
+      legendX += Math.min(150, 20 + label.length*6);
+    });
+  }
+  function FallbackChart(el, cfg){
+    this.canvas = (typeof el === "string") ? document.getElementById(el) : el;
+    this.config = cfg || {};
+    this.data = this.config.data || {};
+    this.options = this.config.options || {};
+    this.id = this.canvas && this.canvas.id;
+    FallbackChart.instances.push(this);
+    this.update();
+  }
+  FallbackChart.instances = [];
+  FallbackChart.defaults = {font:{family:"Inter"}, color:"#6f675d", plugins:{legend:{onClick:function(){}}}};
+  FallbackChart.register = function(){};
+  FallbackChart.prototype.update = function(){ if(this.canvas) drawFallback(this.canvas, this.config); };
+  FallbackChart.prototype.resize = function(){ this.update(); };
+  FallbackChart.prototype.destroy = function(){
+    FallbackChart.instances = FallbackChart.instances.filter((x)=>x!==this);
+  };
+  window.Chart = FallbackChart;
+  window.__CA_CHART_FALLBACK__ = true;
+})();
+</script>
+
 <style>
 :root{
   --paper:#f7f3eb;
@@ -12789,12 +12915,13 @@ function renderCharts(result){
     return {p,q,R,L,c,f,N,gross,e,be,reqR,pf,edge,sigma,probNeg,streak10,streak5,maxStreak,dd10,recovery,g,kelly,halfKelly,quality,nmin,p50,p5,p95,grade};
   }
   function gradeOf(m){
-    if(m.e<=0) return {label:"Negative",tone:"bad",why:"E_net ≤ 0R"};
-    if(m.e>0 && m.g<=0) return {label:"Over-Risked",tone:"warn",why:"E_net > 0 ama g ≤ 0 — risk geometrik büyümeyi eziyor"};
-    if(m.pf<1.30 || m.edge<.05) return {label:"Fragile",tone:"warn",why:"PF < 1.30 veya Edge Buffer < 5pp"};
-    if(m.pf>=1.80 && m.edge>=.15 && m.streak10<.15) return {label:"Institutional",tone:"good",why:"PF ≥ 1.80, Edge ≥ 15pp, P10-streak < 15%"};
-    if(m.streak10>=.25) return {label:"Aggressive",tone:"warn",why:"Pozitif edge ama P(10 kayıp) ≥ 25%"};
-    return {label:"Balanced",tone:"good",why:"g > 0, PF ≥ 1.30, Edge ≥ 5pp"};
+    if(m.e<=0) return {label:"Negatif Beklenti",tone:"bad",why:"E_net ≤ 0R · Sistem matematiksel olarak para üretmiyor"};
+    if(m.e>0 && m.g<=0) return {label:"Risk Fazla",tone:"warn",why:"E_net pozitif ama geometrik büyüme g ≤ 0 · pozisyon riski edge'i eziyor"};
+    if(m.pf<1.20 || m.edge<.03) return {label:"Kırılgan Edge",tone:"warn",why:"PF < 1.20 veya edge tamponu < 3pp · küçük hata sistemi negatife çekebilir"};
+    if(m.streak10>=.30) return {label:"Agresif Yük",tone:"warn",why:"P(10 ardışık kayıp) ≥ 30% · psikolojik ve sermaye yükü yüksek"};
+    if(m.pf>=1.80 && m.edge>=.15 && m.streak10<.15 && m.g>0) return {label:"Kurumsal Kalite",tone:"good",why:"PF ≥ 1.80 · edge ≥ 15pp · P(10 kayıp) < 15% · g > 0"};
+    if(m.pf>=1.35 && m.edge>=.06 && m.g>0) return {label:"Dengeli",tone:"good",why:"PF ≥ 1.35 · edge ≥ 6pp · geometrik büyüme pozitif"};
+    return {label:"İzleme Gerekir",tone:"warn",why:"Pozitif edge var fakat kurumsal güvenlik eşiği henüz güçlü değil"};
   }
   function enabled(){return systems.map((s,i)=>({s,i,m:calc(s)})).filter(x=>x.s.on);}
   function selectedPack(){return {s:systems[selected],m:calc(systems[selected]),i:selected};}
@@ -18245,6 +18372,394 @@ body.show-metric-dock .metric-dock{
   }else{
     boot();
   }
+})();
+</script>
+
+
+<style id="ca-final-index-metric-parity">
+/* FINAL PARITY LAYER — index.html metrik kutusu standardı */
+:root{
+  --ca-metric-paper:#fffefb;
+  --ca-metric-border:rgba(224,216,203,.62);
+  --ca-metric-border-strong:rgba(216,205,189,.70);
+  --ca-metric-shadow:0 7px 16px rgba(32,27,21,.022);
+  --ca-metric-shadow-strong:0 10px 22px rgba(32,27,21,.030);
+}
+
+/* Sticky HUD: hiçbir breakpoint bunu relative yapamaz */
+.result-strip{
+  position:sticky !important;
+  top:0 !important;
+  z-index:120 !important;
+  display:grid !important;
+  grid-template-columns:repeat(7,minmax(118px,1fr)) !important;
+  gap:8px !important;
+  padding:8px 0 10px !important;
+  margin:0 !important;
+  border:0 !important;
+  border-top:1px solid rgba(230,222,210,.54) !important;
+  border-bottom:1px solid rgba(222,212,196,.52) !important;
+  border-radius:0 !important;
+  background:rgba(247,243,235,.96) !important;
+  backdrop-filter:blur(16px) !important;
+  box-shadow:0 12px 22px rgba(32,27,21,.045) !important;
+  overflow:visible !important;
+}
+
+/* HUD metrik kutuları: index metrik kutusu ile aynı dil */
+.metric,
+.result-strip .metric,
+.stat-card,
+.r-box,
+.compare-card,
+.mc-sensitivity-card,
+.model-summary-metric,
+.math-metric-card,
+.math-output-card{
+  background:var(--ca-metric-paper) !important;
+  border:1px solid var(--ca-metric-border) !important;
+  border-radius:0 !important;
+  box-shadow:var(--ca-metric-shadow) !important;
+  min-width:0 !important;
+}
+.result-strip .metric{
+  min-height:78px !important;
+  padding:10px 11px !important;
+  display:flex !important;
+  flex-direction:column !important;
+  justify-content:flex-start !important;
+  overflow:hidden !important;
+}
+.result-strip .metric.hero-metric{
+  border-left:4px solid var(--terra) !important;
+  border-color:var(--ca-metric-border-strong) !important;
+  box-shadow:var(--ca-metric-shadow-strong) !important;
+}
+.result-strip .metric.good{border-left:4px solid var(--olive) !important;}
+.result-strip .metric.bad{border-left:4px solid var(--ruby) !important;}
+.metric-label,
+.stat-label,
+.r-label,
+.model-summary-metric span{
+  display:block !important;
+  color:#726b62 !important;
+  font-family:Inter,system-ui,sans-serif !important;
+  font-size:8.2px !important;
+  letter-spacing:.105em !important;
+  line-height:1.18 !important;
+  text-transform:uppercase !important;
+  font-weight:700 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+.metric-value,
+.stat-value,
+.r-value,
+.model-summary-metric strong{
+  color:var(--ink) !important;
+  font-family:"Cormorant Garamond",Georgia,serif !important;
+  font-size:clamp(22px,2.1vw,34px) !important;
+  font-weight:500 !important;
+  line-height:.98 !important;
+  letter-spacing:-.022em !important;
+  margin-top:6px !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+.result-strip .metric.hero-metric .metric-value{font-size:clamp(28px,3vw,42px) !important;}
+.metric-sub,
+.stat-note{
+  color:#746d64 !important;
+  font-size:8.6px !important;
+  line-height:1.18 !important;
+  margin-top:auto !important;
+  padding-top:6px !important;
+  border-top:1px solid rgba(230,222,210,.58) !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+
+/* Matematik Modeli sistem kartları: kart ailesi değil, direkt metrik kutusu standardı */
+.math-system-row{
+  display:grid !important;
+  gap:8px !important;
+}
+.math-system-card{
+  position:relative !important;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:stretch !important;
+  text-align:left !important;
+  gap:0 !important;
+  width:100% !important;
+  min-height:132px !important;
+  padding:11px 12px !important;
+  background:var(--ca-metric-paper) !important;
+  border:1px solid var(--ca-metric-border) !important;
+  border-radius:0 !important;
+  box-shadow:var(--ca-metric-shadow) !important;
+  color:var(--ink) !important;
+  cursor:pointer !important;
+  overflow:hidden !important;
+  transition:border-color .16s ease, box-shadow .16s ease, background .16s ease !important;
+}
+.math-system-card::before,
+.math-system-card::after{display:none !important;}
+.math-system-card:hover{
+  border-color:rgba(198,91,54,.38) !important;
+  box-shadow:0 10px 22px rgba(32,27,21,.04) !important;
+}
+.math-system-card.active{
+  border-color:var(--ca-metric-border-strong) !important;
+  border-left:4px solid var(--terra) !important;
+  background:var(--ca-metric-paper) !important;
+  box-shadow:var(--ca-metric-shadow-strong) !important;
+}
+.math-system-card.sys-off,
+.math-system-card.disabled{
+  opacity:.54 !important;
+  filter:saturate(.72) !important;
+}
+.math-sys-top{
+  order:1 !important;
+  display:flex !important;
+  align-items:center !important;
+  gap:7px !important;
+  min-height:auto !important;
+  margin:0 !important;
+  color:#726b62 !important;
+  font-family:Inter,system-ui,sans-serif !important;
+  font-size:8.2px !important;
+  letter-spacing:.105em !important;
+  line-height:1.18 !important;
+  text-transform:uppercase !important;
+  font-weight:700 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+.math-sys-top strong,
+.math-sys-name{
+  font:inherit !important;
+  color:#726b62 !important;
+  min-width:0 !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+.math-sys-dot{
+  width:7px !important;
+  height:7px !important;
+  border-radius:50% !important;
+  display:inline-block !important;
+  box-shadow:0 0 0 2px rgba(255,253,248,.9),0 0 0 3px rgba(224,216,203,.62) !important;
+}
+.math-sys-badge{
+  margin-left:auto !important;
+  border:1px solid rgba(127,39,55,.22) !important;
+  background:rgba(127,39,55,.04) !important;
+  color:var(--ruby) !important;
+  border-radius:0 !important;
+  padding:2px 5px !important;
+  font-size:7.6px !important;
+  letter-spacing:.035em !important;
+  font-weight:700 !important;
+}
+.math-sys-edge{
+  order:2 !important;
+  display:block !important;
+  color:var(--ink) !important;
+  font-family:"Cormorant Garamond",Georgia,serif !important;
+  font-size:clamp(26px,2.6vw,36px) !important;
+  font-weight:500 !important;
+  line-height:.98 !important;
+  letter-spacing:-.022em !important;
+  margin-top:9px !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+.math-sys-edge.good{color:var(--ink) !important;}
+.math-sys-edge.bad{color:var(--ruby) !important;}
+.math-sys-line{
+  order:3 !important;
+  color:#746d64 !important;
+  font-size:9px !important;
+  line-height:1.18 !important;
+  margin-top:7px !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+.math-sys-mini{
+  order:4 !important;
+  display:block !important;
+  color:#746d64 !important;
+  font-size:8.8px !important;
+  line-height:1.18 !important;
+  margin-top:auto !important;
+  padding-top:8px !important;
+  border-top:1px solid rgba(230,222,210,.58) !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+.math-sys-grade{
+  order:5 !important;
+  align-self:flex-start !important;
+  margin-top:7px !important;
+  border-radius:0 !important;
+  padding:3px 7px !important;
+  background:#fffdf8 !important;
+  border:1px solid rgba(224,216,203,.74) !important;
+  color:#746d64 !important;
+  font-size:7.8px !important;
+  letter-spacing:.07em !important;
+  text-transform:uppercase !important;
+  font-weight:700 !important;
+}
+.math-sys-grade.good{color:var(--olive) !important;border-color:rgba(100,112,73,.24) !important;background:rgba(100,112,73,.045) !important;}
+.math-sys-grade.warn{color:var(--terra) !important;border-color:rgba(198,91,54,.24) !important;background:rgba(198,91,54,.045) !important;}
+.math-sys-grade.bad{color:var(--ruby) !important;border-color:rgba(127,39,55,.22) !important;background:rgba(127,39,55,.04) !important;}
+
+/* Seçimler: risk modeli/simülasyon tekrarı aktif state net */
+.segmented-selector,
+.opt-segmented{
+  border-radius:0 !important;
+  background:#f4ecdf !important;
+  border:1px solid var(--line) !important;
+}
+.segmented-option,
+.opt-option,
+.opt-toggle{
+  border-radius:0 !important;
+  position:relative !important;
+}
+.segmented-option.active,
+.opt-option.active,
+.opt-toggle.active{
+  background:#fffdf8 !important;
+  color:var(--ink) !important;
+  box-shadow:inset 0 -2px 0 var(--terra),0 5px 14px rgba(56,42,25,.075) !important;
+}
+.segmented-option.active::before,
+.opt-option.active::before,
+.opt-toggle.active::before{
+  content:"" !important;
+  width:6px !important;
+  height:6px !important;
+  border-radius:50% !important;
+  background:var(--terra) !important;
+  display:inline-block !important;
+  margin-right:2px !important;
+}
+
+/* Grafiklerin boş kalmasını önleme */
+.chart-shell,
+.canvas-wrap{
+  min-width:0 !important;
+}
+.canvas-wrap,
+.canvas-wrap.small,
+.canvas-wrap.priority,
+.canvas-wrap.priority-sensitivity{
+  display:block !important;
+  position:relative !important;
+  min-height:300px !important;
+  height:360px !important;
+  overflow:visible !important;
+}
+.canvas-wrap.small{height:310px !important;min-height:280px !important;}
+.canvas-wrap > canvas,
+canvas{
+  display:block !important;
+  width:100% !important;
+  height:100% !important;
+  min-height:inherit !important;
+  opacity:1 !important;
+  visibility:visible !important;
+}
+
+/* Mobil: sticky ve yatay HUD korunur */
+@media (max-width:1360px){
+  .result-strip{
+    display:flex !important;
+    grid-template-columns:none !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    -webkit-overflow-scrolling:touch !important;
+    scroll-snap-type:x proximity !important;
+    padding:0 0 10px !important;
+    gap:8px !important;
+    position:sticky !important;
+    top:0 !important;
+  }
+  .result-strip .metric{
+    flex:0 0 150px !important;
+    min-height:96px !important;
+    scroll-snap-align:start !important;
+  }
+  .result-strip .metric.hero-metric{
+    flex-basis:260px !important;
+  }
+}
+@media (max-width:620px){
+  .result-strip{
+    position:sticky !important;
+    top:0 !important;
+    margin:0 !important;
+    padding:0 0 8px !important;
+  }
+  .result-strip .metric{flex-basis:148px !important;}
+  .result-strip .metric.hero-metric{flex-basis:252px !important;}
+  .math-system-card{min-height:126px !important;}
+  .canvas-wrap{height:300px !important;min-height:280px !important;}
+  .canvas-wrap.small{height:280px !important;min-height:260px !important;}
+}
+@media print{
+  .result-strip{position:static !important;box-shadow:none !important;background:#fff !important;}
+}
+</style>
+
+<script id="ca-final-render-stability">
+(function(){
+  "use strict";
+  function resizeCharts(){
+    try{
+      if(window.Chart && Array.isArray(window.Chart.instances)){
+        window.Chart.instances.forEach(function(ch){ try{ ch.resize ? ch.resize() : ch.update && ch.update(); }catch(e){} });
+      }
+    }catch(e){}
+    try{
+      window.dispatchEvent(new Event("resize"));
+    }catch(e){}
+  }
+  function ensureSticky(){
+    var hud=document.querySelector(".result-strip");
+    if(!hud) return;
+    hud.style.position="sticky";
+    hud.style.top="0px";
+    hud.style.zIndex="120";
+  }
+  function boot(){
+    ensureSticky();
+    resizeCharts();
+    setTimeout(resizeCharts,150);
+    setTimeout(resizeCharts,600);
+    setTimeout(resizeCharts,1200);
+    document.addEventListener("click",function(ev){
+      if(ev.target.closest(".legacy-mode-btn,.math-result-tab,.tab,.mini-tab,.segmented-option,.opt-option,.opt-toggle")){
+        setTimeout(function(){ ensureSticky(); resizeCharts(); },80);
+        setTimeout(resizeCharts,280);
+      }
+    },true);
+    window.addEventListener("scroll",ensureSticky,{passive:true});
+    window.addEventListener("resize",function(){ ensureSticky(); setTimeout(resizeCharts,50); },{passive:true});
+  }
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",boot,{once:true});
+  else boot();
 })();
 </script>
 
