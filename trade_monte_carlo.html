@@ -17886,5 +17886,192 @@ canvas{
 }
 </style>
 
+
+<style id="p43-targeted-sticky-dock-and-math-systems">
+/* P43 targeted fix — preserve recovered version; only restore scroll dock + widen Math system chooser. */
+
+/* 1) Scroll dock: hidden at page top, visible after original HUD scrolls away. */
+body:not(.show-metric-dock) .metric-dock{
+  transform:translateY(-110%) !important;
+  opacity:0 !important;
+  pointer-events:none !important;
+}
+body.show-metric-dock .metric-dock{
+  transform:translateY(0) !important;
+  opacity:1 !important;
+  pointer-events:auto !important;
+}
+
+/* 2) Matematik Modeli: system choices are a primary desktop row, not a narrow left rail. */
+#mathlab .math-workbench{
+  display:flex !important;
+  flex-direction:column !important;
+  gap:14px !important;
+  align-items:stretch !important;
+}
+#mathlab .math-system-row{
+  width:100% !important;
+  display:grid !important;
+  grid-template-columns:repeat(5,minmax(150px,1fr)) !important;
+  gap:10px !important;
+  align-items:stretch !important;
+  overflow:visible !important;
+  padding:0 !important;
+}
+#mathlab .math-system-card{
+  min-width:0 !important;
+  min-height:116px !important;
+  display:flex !important;
+  flex-direction:column !important;
+  justify-content:space-between !important;
+  padding:13px 14px !important;
+  border-radius:0 !important;
+  border:1px solid var(--line) !important;
+  background:#fffdf8 !important;
+  box-shadow:none !important;
+}
+#mathlab .math-system-card.active{
+  border-color:rgba(198,91,54,.58) !important;
+  box-shadow:inset 0 3px 0 rgba(198,91,54,.78) !important;
+  background:#fffaf3 !important;
+}
+#mathlab .math-sys-edge{
+  font-family:"Cormorant Garamond",Georgia,serif !important;
+  font-size:clamp(22px,1.75vw,32px) !important;
+  font-weight:600 !important;
+  letter-spacing:-.025em !important;
+  line-height:1 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+#mathlab .math-editor-board{
+  width:100% !important;
+}
+#mathlab .math-slider-grid{
+  grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+}
+
+/* Tablet: keep system cards easy to swipe like index-style cards. */
+@media (max-width:1120px){
+  #mathlab .math-system-row{
+    display:flex !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    gap:9px !important;
+    padding-bottom:8px !important;
+    scroll-snap-type:x proximity !important;
+    -webkit-overflow-scrolling:touch !important;
+  }
+  #mathlab .math-system-card{
+    flex:0 0 210px !important;
+    scroll-snap-align:start !important;
+    min-height:112px !important;
+  }
+  #mathlab .math-slider-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  }
+}
+@media (max-width:640px){
+  #mathlab .math-system-card{
+    flex-basis:188px !important;
+    min-height:108px !important;
+    padding:12px !important;
+  }
+  #mathlab .math-slider-grid{
+    grid-template-columns:1fr !important;
+  }
+  #mathlab .math-sys-edge{
+    font-size:24px !important;
+  }
+}
+</style>
+
+<script id="p43-scroll-dock-and-dock-sync">
+(function(){
+  "use strict";
+
+  var body = document.body;
+  var ticking = false;
+
+  function shouldShowDock(){
+    var strip = document.querySelector(".result-strip");
+    if(!strip){
+      return (window.pageYOffset || document.documentElement.scrollTop || 0) > 120;
+    }
+    var rect = strip.getBoundingClientRect();
+    /* Show when the original HUD is mostly above the viewport. */
+    return rect.bottom <= 8;
+  }
+
+  function applyDockState(){
+    ticking = false;
+    if(shouldShowDock()){
+      body.classList.add("show-metric-dock");
+    }else{
+      body.classList.remove("show-metric-dock");
+    }
+    syncDockValues();
+  }
+
+  function requestDockState(){
+    if(ticking) return;
+    ticking = true;
+    requestAnimationFrame(applyDockState);
+  }
+
+  function getText(id){
+    var el = document.getElementById(id);
+    return el ? (el.textContent || "").trim() : "";
+  }
+
+  function syncDockValues(){
+    document.querySelectorAll("[data-dock-value]").forEach(function(node){
+      var value = getText(node.getAttribute("data-dock-value"));
+      if(value) node.textContent = value;
+    });
+    document.querySelectorAll("[data-dock-sub]").forEach(function(node){
+      var value = getText(node.getAttribute("data-dock-sub"));
+      if(value) node.textContent = value;
+    });
+  }
+
+  function observeHud(){
+    var ids = [];
+    document.querySelectorAll("[data-dock-value],[data-dock-sub]").forEach(function(node){
+      var id = node.getAttribute("data-dock-value") || node.getAttribute("data-dock-sub");
+      if(id && ids.indexOf(id) === -1) ids.push(id);
+    });
+    if(!("MutationObserver" in window)) return;
+    var mo = new MutationObserver(syncDockValues);
+    ids.forEach(function(id){
+      var el = document.getElementById(id);
+      if(el) mo.observe(el, {childList:true, characterData:true, subtree:true});
+    });
+  }
+
+  function boot(){
+    body.classList.remove("show-metric-dock");
+    syncDockValues();
+    observeHud();
+    applyDockState();
+    window.addEventListener("scroll", requestDockState, {passive:true});
+    window.addEventListener("resize", requestDockState, {passive:true});
+    document.addEventListener("click", function(){
+      setTimeout(function(){
+        syncDockValues();
+        requestDockState();
+      }, 80);
+    }, true);
+  }
+
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", boot, {once:true});
+  }else{
+    boot();
+  }
+})();
+</script>
+
 </body>
 </html>
