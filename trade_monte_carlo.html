@@ -17037,5 +17037,545 @@ canvas{
 })();
 </script>
 
+
+<style id="p35-hard-panorama-print-and-legend">
+/* P35 — hard fixes: no empty panorama column, deterministic print report, smooth legend toggles. */
+.results-panorama .panorama-grid{
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) !important;
+  grid-template-areas:none !important;
+  gap:14px !important;
+  align-items:stretch !important;
+}
+.results-panorama .panorama-grid > *{
+  grid-column:1 / -1 !important;
+  grid-row:auto !important;
+  width:100% !important;
+  max-width:100% !important;
+  min-width:0 !important;
+  margin-left:0 !important;
+  margin-right:0 !important;
+  float:none !important;
+}
+.results-panorama .final-band-board{
+  display:grid !important;
+  grid-template-columns:minmax(280px,.58fr) minmax(0,1fr) !important;
+  gap:14px !important;
+  align-items:stretch !important;
+}
+.results-panorama .final-board-main,
+.results-panorama .final-board-scale,
+.results-panorama .comfort-block,
+.results-panorama .edge-block{
+  width:100% !important;
+  max-width:100% !important;
+  min-width:0 !important;
+}
+@media (max-width:900px){
+  .results-panorama .final-band-board{
+    grid-template-columns:1fr !important;
+  }
+}
+
+/* Screen: print report is generated only for PDF/print and never occupies layout. */
+#p35PrintReport{
+  display:none !important;
+}
+
+/* Print: hide the whole interactive application and print only the generated report.
+   This removes the blank-page problem caused by legacy page-break rules on nested panels. */
+@page{size:A4 portrait;margin:12mm 10mm;}
+@media print{
+  html,body{
+    margin:0 !important;
+    padding:0 !important;
+    width:auto !important;
+    height:auto !important;
+    min-height:0 !important;
+    overflow:visible !important;
+    background:#fff !important;
+    color:#111 !important;
+    -webkit-print-color-adjust:exact !important;
+    print-color-adjust:exact !important;
+  }
+  body > :not(#p35PrintReport){
+    display:none !important;
+  }
+  #p35PrintReport{
+    display:block !important;
+    position:static !important;
+    width:100% !important;
+    margin:0 !important;
+    padding:0 !important;
+    background:#fff !important;
+    color:#111 !important;
+    font-family:Inter,Arial,sans-serif !important;
+    page-break-before:auto !important;
+    page-break-after:auto !important;
+    break-before:auto !important;
+    break-after:auto !important;
+    overflow:visible !important;
+  }
+  #p35PrintReport *{
+    box-sizing:border-box !important;
+    box-shadow:none !important;
+    text-shadow:none !important;
+    overflow:visible !important;
+  }
+  .p35-print-page{
+    display:block !important;
+    margin:0 0 8mm 0 !important;
+    padding:0 !important;
+    page-break-before:auto !important;
+    page-break-after:auto !important;
+    break-before:auto !important;
+    break-after:auto !important;
+    break-inside:auto !important;
+    page-break-inside:auto !important;
+  }
+  .p35-print-head{
+    border-bottom:1px solid #d8cdbd !important;
+    padding-bottom:5mm !important;
+    margin-bottom:5mm !important;
+  }
+  .p35-print-kicker{
+    font-size:7.5pt !important;
+    letter-spacing:.14em !important;
+    text-transform:uppercase !important;
+    font-weight:700 !important;
+    color:#716a60 !important;
+    margin-bottom:2mm !important;
+  }
+  .p35-print-title{
+    font-family:"Cormorant Garamond",Georgia,serif !important;
+    font-size:25pt !important;
+    line-height:1 !important;
+    font-weight:500 !important;
+    margin:0 !important;
+    color:#171411 !important;
+  }
+  .p35-print-sub{
+    margin-top:2.5mm !important;
+    font-size:8.5pt !important;
+    line-height:1.35 !important;
+    color:#716a60 !important;
+  }
+  .p35-print-metrics{
+    display:grid !important;
+    grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+    gap:3mm !important;
+    margin-bottom:5mm !important;
+  }
+  .p35-print-card{
+    border:1px solid #e0d8cb !important;
+    border-left:3px solid #ce5a37 !important;
+    background:#fffdf8 !important;
+    padding:3mm !important;
+    min-height:21mm !important;
+    break-inside:avoid !important;
+    page-break-inside:avoid !important;
+  }
+  .p35-print-card.olive{border-left-color:#6b754b !important;}
+  .p35-print-card.ruby{border-left-color:#8f3b35 !important;}
+  .p35-print-card.gold{border-left-color:#a88442 !important;}
+  .p35-print-card span{
+    display:block !important;
+    font-size:6.7pt !important;
+    letter-spacing:.10em !important;
+    text-transform:uppercase !important;
+    font-weight:700 !important;
+    color:#716a60 !important;
+    white-space:normal !important;
+  }
+  .p35-print-card strong{
+    display:block !important;
+    margin-top:1.8mm !important;
+    font-family:"Cormorant Garamond",Georgia,serif !important;
+    font-size:16pt !important;
+    font-weight:500 !important;
+    line-height:1 !important;
+    color:#171411 !important;
+    white-space:normal !important;
+    word-break:break-word !important;
+  }
+  .p35-print-card em{
+    display:block !important;
+    margin-top:1.6mm !important;
+    font-size:6.8pt !important;
+    line-height:1.25 !important;
+    color:#716a60 !important;
+    font-style:normal !important;
+  }
+  .p35-print-section-title{
+    font-size:8pt !important;
+    letter-spacing:.12em !important;
+    text-transform:uppercase !important;
+    font-weight:700 !important;
+    color:#171411 !important;
+    padding-bottom:2mm !important;
+    margin:4mm 0 3mm !important;
+    border-bottom:1px solid #e0d8cb !important;
+  }
+  .p35-print-charts{
+    display:grid !important;
+    grid-template-columns:1fr !important;
+    gap:5mm !important;
+  }
+  .p35-print-chart{
+    border:1px solid #e0d8cb !important;
+    background:#fff !important;
+    padding:3mm !important;
+    break-inside:avoid !important;
+    page-break-inside:avoid !important;
+  }
+  .p35-print-chart h3{
+    margin:0 0 2mm !important;
+    font-size:8pt !important;
+    letter-spacing:.10em !important;
+    text-transform:uppercase !important;
+    font-weight:700 !important;
+    color:#171411 !important;
+  }
+  .p35-print-chart img{
+    display:block !important;
+    width:100% !important;
+    height:auto !important;
+    max-height:82mm !important;
+    object-fit:contain !important;
+  }
+  .p35-print-table{
+    width:100% !important;
+    border-collapse:collapse !important;
+    font-size:7.2pt !important;
+    margin-top:2mm !important;
+  }
+  .p35-print-table th,
+  .p35-print-table td{
+    border-bottom:1px solid #e6ded2 !important;
+    padding:1.8mm 2mm !important;
+    text-align:left !important;
+    vertical-align:top !important;
+    white-space:normal !important;
+  }
+  .p35-print-table th{
+    color:#716a60 !important;
+    text-transform:uppercase !important;
+    letter-spacing:.08em !important;
+    font-size:6.5pt !important;
+    font-weight:700 !important;
+  }
+}
+</style>
+
+<script id="p35-hard-print-panorama-and-smooth-legend">
+(function(){
+  "use strict";
+
+  function $(id){ return document.getElementById(id); }
+  function text(id, fallback){
+    var el = $(id);
+    var v = el ? (el.textContent || "").trim() : "";
+    return v || fallback || "—";
+  }
+
+  /* Force the panorama out of the accidental two-column empty-left layout. */
+  function hardFixPanorama(){
+    var grid = document.querySelector(".results-panorama .panorama-grid");
+    if(!grid) return;
+    grid.style.setProperty("display","grid","important");
+    grid.style.setProperty("grid-template-columns","minmax(0,1fr)","important");
+    grid.style.setProperty("grid-template-areas","none","important");
+    grid.style.setProperty("gap","14px","important");
+    Array.prototype.forEach.call(grid.children, function(child){
+      child.style.setProperty("grid-column","1 / -1","important");
+      child.style.setProperty("grid-row","auto","important");
+      child.style.setProperty("width","100%","important");
+      child.style.setProperty("max-width","100%","important");
+      child.style.setProperty("min-width","0","important");
+      child.style.setProperty("margin-left","0","important");
+      child.style.setProperty("margin-right","0","important");
+      child.style.setProperty("float","none","important");
+    });
+    var band = document.querySelector(".results-panorama .final-band-board");
+    if(band){
+      band.style.setProperty("display","grid","important");
+      band.style.setProperty("grid-template-columns", window.innerWidth < 900 ? "1fr" : "minmax(280px,.58fr) minmax(0,1fr)", "important");
+      band.style.setProperty("gap","14px","important");
+      band.style.setProperty("width","100%","important");
+      band.style.setProperty("max-width","100%","important");
+    }
+  }
+  window.addEventListener("resize", hardFixPanorama, {passive:true});
+  document.addEventListener("DOMContentLoaded", function(){
+    hardFixPanorama();
+    setTimeout(hardFixPanorama, 100);
+    setTimeout(hardFixPanorama, 500);
+    setTimeout(hardFixPanorama, 1200);
+  }, {once:true});
+  document.addEventListener("click", function(e){
+    if(e.target && (e.target.closest(".run-sim") || e.target.closest(".legacy-mode-btn") || e.target.closest(".mode-btn"))){
+      setTimeout(hardFixPanorama, 120);
+      setTimeout(hardFixPanorama, 700);
+    }
+  }, true);
+
+  /* Robust print report. We print a generated report instead of the whole interactive DOM. */
+  function ensureReport(){
+    var report = $("p35PrintReport");
+    if(!report){
+      report = document.createElement("div");
+      report.id = "p35PrintReport";
+      document.body.appendChild(report);
+    }
+    return report;
+  }
+
+  function canvasImage(id, title){
+    var canvas = $(id);
+    if(!canvas || !canvas.toDataURL || !canvas.width || !canvas.height) return "";
+    try{
+      var url = canvas.toDataURL("image/png");
+      if(!url || url.length < 80) return "";
+      return '<div class="p35-print-chart"><h3>' + title + '</h3><img src="' + url + '" alt="' + title + '"></div>';
+    }catch(e){
+      return "";
+    }
+  }
+
+  function metric(label, value, note, tone){
+    return '<div class="p35-print-card ' + (tone || "") + '"><span>' + label + '</span><strong>' + value + '</strong><em>' + (note || "") + '</em></div>';
+  }
+
+  function buildPrintReport(){
+    var report = ensureReport();
+    var now = new Date();
+    var metrics = [
+      metric("P5 Final Sermaye", text("hudP5"), text("hudP5Sub","Kötü senaryo bandı"), "ruby"),
+      metric("Alt %10 Ortalaması", text("hudTailAvg"), text("hudTailAvgSub","Alt kuyruk ortalaması"), "ruby"),
+      metric("Medyan Final Sermaye", text("hudP50"), text("hudP50Sub","Simülasyon medyan sonucu"), "gold"),
+      metric("Hedefe Ulaşma", text("hudTarget"), text("hudTargetSub","Temas olasılığı"), "olive"),
+      metric("Kârda Bitiş", text("hudProfit"), text("hudProfitSub","Final > başlangıç"), "olive"),
+      metric("Kritik Risk", text("hudCritical"), text("hudCriticalSub","Eşik teması"), "ruby"),
+      metric("Beklenen R", text("hudExpectedR"), text("hudExpectedRSub","Dağılım ayarlı"), "gold"),
+      metric("Skor", text("hudScore"), text("hudScoreSub","0–100"), "")
+    ].join("");
+
+    var panoramaRows = [
+      ["Medyan Final", text("p50Final")],
+      ["P5 Final", text("p5Final")],
+      ["P95 Final", text("p95Final")],
+      ["Ortalama Max Drawdown", text("avgDD")],
+      ["En Kötü Max Drawdown", text("worstDD")],
+      ["Ort. Sualtı Süresi", text("avgTUW")],
+      ["En Uzun Sualtı Süresi", text("maxTUW")],
+      ["En Uzun Net-Negatif Seri", text("maxStreak")],
+      ["Teorik Beklenen R", text("theoreticalER")],
+      ["Dağılım-Ayarlı Beklenen R", text("adjustedER")],
+      ["Net Kâr Faktörü", text("netPF")]
+    ].map(function(r){ return "<tr><td>" + r[0] + "</td><td>" + r[1] + "</td></tr>"; }).join("");
+
+    var chartHtml = [
+      canvasImage("fanChart","Sermaye Fan Grafiği"),
+      canvasImage("distChart","Final Sermaye Dağılımı"),
+      canvasImage("outcomeChart","Olasılık Dilimi Sonuçları"),
+      canvasImage("underwaterChart","Sualtı Eğrisi"),
+      canvasImage("ddHistChart","Drawdown Histogramı")
+    ].filter(Boolean).join("");
+
+    if(!chartHtml){
+      chartHtml = '<div class="p35-print-chart"><h3>Grafikler</h3><p>Simülasyon çalıştırılmadığı için grafik görüntüsü oluşmadı.</p></div>';
+    }
+
+    report.innerHTML =
+      '<section class="p35-print-page">' +
+        '<div class="p35-print-head">' +
+          '<div class="p35-print-kicker">Trade Monte Carlo Simülasyonu · PDF Rapor</div>' +
+          '<h1 class="p35-print-title">Strateji Sermaye Projeksiyonu</h1>' +
+          '<div class="p35-print-sub">Oluşturma zamanı: ' + now.toLocaleString("tr-TR") + ' · ' + text("runMeta","Güncel model") + '</div>' +
+        '</div>' +
+        '<div class="p35-print-metrics">' + metrics + '</div>' +
+        '<div class="p35-print-section-title">Sonuç Panoraması</div>' +
+        '<table class="p35-print-table"><thead><tr><th>Metrik</th><th>Değer</th></tr></thead><tbody>' + panoramaRows + '</tbody></table>' +
+      '</section>' +
+      '<section class="p35-print-page">' +
+        '<div class="p35-print-section-title">Grafik Özeti</div>' +
+        '<div class="p35-print-charts">' + chartHtml + '</div>' +
+      '</section>';
+  }
+
+  window.addEventListener("beforeprint", buildPrintReport);
+  if(window.matchMedia){
+    var mq = window.matchMedia("print");
+    if(mq && mq.addEventListener){
+      mq.addEventListener("change", function(e){ if(e.matches) buildPrintReport(); });
+    }
+  }
+
+  /* Smooth legend toggle for both Strategy and Math charts, including charts created later. */
+  function getInstances(){
+    if(!window.Chart || !Chart.instances) return [];
+    var inst = Chart.instances;
+    if(typeof inst.forEach === "function"){
+      var arr = [];
+      inst.forEach(function(c){ arr.push(c); });
+      return arr;
+    }
+    return Object.keys(inst).map(function(k){ return inst[k]; }).filter(Boolean);
+  }
+
+  function colorWithAlpha(color, alpha){
+    if(Array.isArray(color)) return color.map(function(c){ return colorWithAlpha(c, alpha); });
+    if(typeof color !== "string" || !color) return color;
+    var a = Math.max(0, Math.min(1, alpha));
+    var c = color.trim();
+    if(c.indexOf("var(") === 0) return color;
+    if(c[0] === "#"){
+      var hex = c.slice(1);
+      if(hex.length === 3) hex = hex.split("").map(function(x){ return x+x; }).join("");
+      if(hex.length === 6 || hex.length === 8){
+        var r = parseInt(hex.slice(0,2),16), g = parseInt(hex.slice(2,4),16), b = parseInt(hex.slice(4,6),16);
+        var oa = hex.length === 8 ? parseInt(hex.slice(6,8),16)/255 : 1;
+        return "rgba(" + r + "," + g + "," + b + "," + (oa*a).toFixed(3) + ")";
+      }
+    }
+    var m = c.match(/^rgba?\(([^)]+)\)$/i);
+    if(m){
+      var parts = m[1].split(",").map(function(x){ return x.trim(); });
+      var oa2 = parts.length > 3 ? parseFloat(parts[3]) : 1;
+      return "rgba(" + parts[0] + "," + parts[1] + "," + parts[2] + "," + (oa2*a).toFixed(3) + ")";
+    }
+    return color;
+  }
+
+  function base(ds){
+    if(!ds.__p35LegendBase){
+      ds.__p35LegendBase = {
+        borderColor: ds.borderColor,
+        backgroundColor: ds.backgroundColor,
+        pointBackgroundColor: ds.pointBackgroundColor,
+        pointBorderColor: ds.pointBorderColor,
+        pointRadius: ds.pointRadius,
+        pointHoverRadius: ds.pointHoverRadius,
+        borderWidth: ds.borderWidth
+      };
+    }
+    return ds.__p35LegendBase;
+  }
+  function fade(ds, a){
+    var b = base(ds);
+    ds.borderColor = colorWithAlpha(b.borderColor, a);
+    ds.backgroundColor = colorWithAlpha(b.backgroundColor, Math.max(a*.55,0));
+    ds.pointBackgroundColor = colorWithAlpha(b.pointBackgroundColor || b.backgroundColor || b.borderColor, a);
+    ds.pointBorderColor = colorWithAlpha(b.pointBorderColor || b.borderColor, a);
+    if(typeof b.borderWidth === "number") ds.borderWidth = Math.max(.25, b.borderWidth * Math.max(a,.08));
+    if(typeof b.pointRadius === "number") ds.pointRadius = Math.max(0, b.pointRadius * a);
+    if(typeof b.pointHoverRadius === "number") ds.pointHoverRadius = Math.max(0, b.pointHoverRadius * a);
+  }
+  function restore(ds){
+    var b = ds.__p35LegendBase;
+    if(!b) return;
+    ds.borderColor = b.borderColor;
+    ds.backgroundColor = b.backgroundColor;
+    ds.pointBackgroundColor = b.pointBackgroundColor;
+    ds.pointBorderColor = b.pointBorderColor;
+    ds.pointRadius = b.pointRadius;
+    ds.pointHoverRadius = b.pointHoverRadius;
+    ds.borderWidth = b.borderWidth;
+  }
+  function rafFade(chart, duration, step, done){
+    var start = performance.now();
+    function f(now){
+      var t = Math.min(1, (now - start) / duration);
+      var e = t < .5 ? 2*t*t : 1 - Math.pow(-2*t+2,2)/2;
+      step(e);
+      try{ chart.update("none"); }catch(err){}
+      if(t < 1) requestAnimationFrame(f);
+      else if(done) done();
+    }
+    requestAnimationFrame(f);
+  }
+  function p35LegendClick(evt, item, legend){
+    var chart = legend && legend.chart;
+    var index = item && item.datasetIndex;
+    if(!chart || index == null || !chart.data || !chart.data.datasets || !chart.data.datasets[index]) return;
+    var ds = chart.data.datasets[index];
+    var meta = chart.getDatasetMeta(index);
+    var isHidden = meta.hidden === true || (meta.hidden === null && ds.hidden === true);
+    var duration = 620;
+    if(!isHidden){
+      rafFade(chart, duration, function(t){ fade(ds, 1-t); }, function(){
+        meta.hidden = true;
+        restore(ds);
+        try{ chart.update("none"); }catch(err){}
+      });
+    }else{
+      base(ds);
+      meta.hidden = false;
+      ds.hidden = false;
+      fade(ds, 0);
+      try{ chart.update("none"); }catch(err){}
+      rafFade(chart, duration, function(t){ fade(ds, t); }, function(){
+        restore(ds);
+        try{ chart.update("none"); }catch(err){}
+      });
+    }
+  }
+
+  function installLegend(chart){
+    if(!chart || !chart.options) return;
+    chart.options.plugins = chart.options.plugins || {};
+    chart.options.plugins.legend = chart.options.plugins.legend || {};
+    chart.options.plugins.legend.onClick = p35LegendClick;
+    chart.options.plugins.tooltip = chart.options.plugins.tooltip || {};
+    chart.options.plugins.tooltip.enabled = true;
+    chart.options.events = chart.options.events || ["mousemove","mouseout","click","touchstart","touchmove"];
+  }
+
+  function installAll(){
+    if(!window.Chart) return;
+    try{
+      Chart.defaults.plugins = Chart.defaults.plugins || {};
+      Chart.defaults.plugins.legend = Chart.defaults.plugins.legend || {};
+      Chart.defaults.plugins.legend.onClick = p35LegendClick;
+      Chart.defaults.plugins.tooltip = Chart.defaults.plugins.tooltip || {};
+      Chart.defaults.plugins.tooltip.enabled = true;
+      Chart.defaults.events = ["mousemove","mouseout","click","touchstart","touchmove"];
+    }catch(e){}
+    getInstances().forEach(installLegend);
+  }
+
+  function registerPlugin(){
+    if(!window.Chart || Chart.__p35LegendPluginRegistered) return;
+    try{
+      Chart.register({
+        id:"p35SmoothLegendPlugin",
+        afterInit:function(chart){ installLegend(chart); },
+        beforeUpdate:function(chart){ installLegend(chart); }
+      });
+      Chart.__p35LegendPluginRegistered = true;
+    }catch(e){}
+  }
+
+  function bootLegend(){
+    registerPlugin();
+    installAll();
+  }
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", function(){
+      bootLegend();
+      [150,500,1200,2500].forEach(function(ms){ setTimeout(bootLegend, ms); });
+    }, {once:true});
+  }else{
+    bootLegend();
+    [150,500,1200,2500].forEach(function(ms){ setTimeout(bootLegend, ms); });
+  }
+  document.addEventListener("click", function(e){
+    if(e.target && (e.target.closest(".run-sim") || e.target.closest(".mode-btn") || e.target.closest(".legacy-mode-btn") || e.target.closest(".math-result-tab") || e.target.closest(".mini-tab"))){
+      [80,260,800].forEach(function(ms){ setTimeout(bootLegend, ms); });
+    }
+  }, true);
+})();
+</script>
+
 </body>
 </html>
