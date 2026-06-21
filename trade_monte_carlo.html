@@ -12896,7 +12896,7 @@ function renderCharts(result){
   function renderEditor(){
     const s=systems[selected], m=calc(s);
     const title=$("mathEditorTitle"); if(title) title.textContent=s.name;
-    const chip=$("mathGradeChip"); if(chip){chip.className="math-grade-chip "+m.grade.tone+" grade-"+m.grade.key; chip.textContent=m.grade.label+" · "+m.grade.why;}
+    const chip=$("mathGradeChip"); if(chip){chip.className="math-grade-chip "+m.grade.tone; chip.textContent=m.grade.label+" · "+m.grade.why;}
     const host=$("mathEditorControls"); if(!host) return;
     host.innerHTML=`
       <label class="math-slider-card math-name-card">
@@ -13044,18 +13044,52 @@ function renderCharts(result){
 
   function showPane(view){
     activeView=view;
-    qsa(".math-result-tab").forEach(b=>b.classList.toggle("active",b.dataset.mathView===view));
+    qsa(".math-result-tab").forEach(b=>{
+      const active=b.dataset.mathView===view;
+      b.classList.toggle("active",active);
+      b.setAttribute("aria-pressed",active?"true":"false");
+    });
     qsa(".math-result-pane").forEach(p=>p.classList.toggle("active",p.dataset.mathPane===view));
-    renderActiveChart();
+    window.setTimeout(()=>{renderActiveChart(); window.dispatchEvent(new Event("resize"));},40);
   }
   function destroyChart(id){if(charts[id]){charts[id].destroy(); delete charts[id];}}
   function baseChart(id,type,data,opts){
-    const el=$(id); if(!el || typeof Chart==="undefined") return;
+    const el=$(id);
+    if(!el) return;
+    const wrap=el.closest(".canvas-wrap") || el.parentElement;
+    function clearMsg(){
+      if(wrap) qsa(".chart-error,.chart-loading-note",wrap).forEach(n=>n.remove());
+    }
+    function showMsg(cls,msg){
+      if(!wrap) return;
+      clearMsg();
+      const box=document.createElement("div");
+      box.className=cls;
+      box.textContent=msg;
+      wrap.appendChild(box);
+    }
+    if(typeof Chart==="undefined"){
+      showMsg("chart-loading-note","Grafik motoru yükleniyor. Bağlantı hazır olduğunda grafik otomatik tekrar çizilir.");
+      if(!baseChart._retryCount) baseChart._retryCount={};
+      const n=baseChart._retryCount[id]||0;
+      if(n<20){
+        baseChart._retryCount[id]=n+1;
+        window.setTimeout(()=>renderActiveChart(),250);
+      }
+      return;
+    }
+    clearMsg();
+    const rect=wrap ? wrap.getBoundingClientRect() : el.getBoundingClientRect();
+    if(rect && (rect.width<20 || rect.height<20)){
+      window.setTimeout(()=>renderActiveChart(),120);
+      return;
+    }
     destroyChart(id);
     const defaults = {
       responsive:true,
       maintainAspectRatio:false,
       animation:false,
+      resizeDelay:80,
       events:["mousemove","mouseout","click","touchstart","touchmove"],
       interaction:{mode:"nearest",intersect:false},
       plugins:{
@@ -13072,7 +13106,13 @@ function renderCharts(result){
     merged.plugins = Object.assign({}, defaults.plugins, userPlugins);
     merged.plugins.tooltip = Object.assign({}, defaults.plugins.tooltip, userPlugins.tooltip || {});
     merged.plugins.legend = Object.assign({}, defaults.plugins.legend, userPlugins.legend || {});
-    charts[id]=new Chart(el,{type,data,options:merged});
+    try{
+      charts[id]=new Chart(el,{type,data,options:merged});
+      window.setTimeout(()=>{try{charts[id] && charts[id].resize();}catch(e){}},80);
+    }catch(err){
+      console.error("math chart render failed",id,err);
+      showMsg("chart-error","Grafik çizilemedi: "+(err && err.message ? err.message : String(err)));
+    }
   }
   function renderGrowth(){
     if(typeof Chart !== "undefined" && !renderGrowth._zonePluginRegistered){
@@ -13344,6 +13384,7 @@ function renderCharts(result){
     renderMatrix();
     updateMathHud();
     if(!skipChartOnce) renderActiveChart();
+    window.setTimeout(()=>{try{if(document.body.dataset.activeMode==="mathlab") renderActiveChart();}catch(err){}},120);
     skipChartOnce = false;
     skipEditorOnce = false;
   }
@@ -13358,7 +13399,7 @@ function renderCharts(result){
     if(!$("mathlab")) return;
     qsa(".math-result-tab").forEach(btn=>btn.addEventListener("click",()=>showPane(btn.dataset.mathView)));
     ["mathMcRun","mathMcRunLocal"].forEach(id=>{const b=$(id); if(b) b.addEventListener("click",()=>{mcCache=null; mcPending=false; showPane("montecarlo");});});
-    qsa(".mode-btn").forEach(btn=>btn.addEventListener("click",()=>window.setTimeout(()=>updateMathHud(),20)));
+    qsa(".mode-btn").forEach(btn=>btn.addEventListener("click",()=>window.setTimeout(()=>{updateMathHud(); if(document.body.dataset.activeMode==="mathlab"){renderAll(); window.dispatchEvent(new Event("resize"));}},60)));
     try{
       new MutationObserver(()=>updateMathHud()).observe(document.body,{attributes:true,attributeFilter:["data-active-mode"]});
     }catch(err){}
@@ -17240,6 +17281,474 @@ canvas{
     margin:0 0 4mm 0 !important;
   }
 }
+
+
+/* P44 FIX — sticky HUD, index-card parity, explicit segmented states, chart visibility */
+.result-strip{
+  position:sticky !important;
+  top:0 !important;
+  z-index:1200 !important;
+  display:grid !important;
+  align-items:stretch !important;
+  background:rgba(255,253,248,.94) !important;
+  backdrop-filter:blur(18px) saturate(1.05) !important;
+  -webkit-backdrop-filter:blur(18px) saturate(1.05) !important;
+  border:1px solid rgba(205,191,174,.82) !important;
+  box-shadow:0 16px 34px rgba(56,42,25,.105) !important;
+}
+.result-strip.math-aware-hud{
+  grid-template-columns:minmax(220px,1.2fr) repeat(6,minmax(126px,1fr)) !important;
+  gap:8px !important;
+  padding:8px !important;
+}
+.result-strip.math-aware-hud .metric{
+  min-height:74px !important;
+  background:#fffdf8 !important;
+  border:1px solid rgba(226,216,201,.92) !important;
+  box-shadow:0 8px 18px rgba(56,42,25,.045) !important;
+  border-radius:10px !important;
+}
+.result-strip.math-aware-hud .metric.hero-metric{
+  border-left:4px solid var(--terra) !important;
+}
+.result-strip.math-aware-hud .metric-label{
+  font-size:8.8px !important;
+  letter-spacing:.105em !important;
+  line-height:1.16 !important;
+}
+.result-strip.math-aware-hud .metric-value{
+  font-size:clamp(22px,1.75vw,30px) !important;
+  line-height:.98 !important;
+  margin-top:6px !important;
+}
+.result-strip.math-aware-hud .metric-sub{
+  display:block !important;
+  max-height:2.5em !important;
+  white-space:normal !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  font-size:9px !important;
+  line-height:1.25 !important;
+}
+.math-hud-dot{
+  display:inline-block;
+  width:8px;
+  height:8px;
+  border-radius:999px;
+  margin-right:6px;
+  vertical-align:middle;
+  box-shadow:0 0 0 3px rgba(255,253,248,.9),0 0 0 4px rgba(205,191,174,.55);
+}
+@media(max-width:1240px){
+  .result-strip,
+  .result-strip.math-aware-hud{
+    display:flex !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    scroll-snap-type:x proximity !important;
+    grid-template-columns:none !important;
+  }
+  .result-strip .metric,
+  .result-strip.math-aware-hud .metric{
+    flex:0 0 158px !important;
+    scroll-snap-align:start !important;
+  }
+  .result-strip .metric:first-child,
+  .result-strip.math-aware-hud .metric:first-child{
+    flex-basis:218px !important;
+  }
+}
+.segmented-selector{
+  border-radius:10px !important;
+  background:#f4ecdf !important;
+  border:1px solid rgba(205,191,174,.86) !important;
+  padding:5px !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.72) !important;
+}
+.segmented-option{
+  position:relative !important;
+  border-radius:7px !important;
+  min-height:42px !important;
+  border:1px solid transparent !important;
+  color:var(--stone) !important;
+  background:transparent !important;
+  box-shadow:none !important;
+}
+.segmented-option.active,
+.segmented-option[aria-pressed="true"]{
+  background:#fffdf8 !important;
+  color:var(--ink) !important;
+  border-color:rgba(198,91,54,.36) !important;
+  box-shadow:0 6px 16px rgba(56,42,25,.085), inset 0 -2px 0 rgba(198,91,54,.42) !important;
+}
+.segmented-option.active::before,
+.segmented-option[aria-pressed="true"]::before{
+  content:"";
+  width:7px;
+  height:7px;
+  border-radius:999px;
+  background:var(--terra);
+  box-shadow:0 0 0 3px rgba(198,91,54,.10);
+}
+.seed-selector .segmented-option.active::before,
+.seed-selector .segmented-option[aria-pressed="true"]::before{
+  background:var(--olive);
+  box-shadow:0 0 0 3px rgba(100,112,73,.12);
+}
+.risk-mode-compact,
+.audit-card{
+  border-radius:10px !important;
+  background:#fffdf8 !important;
+  border:1px solid rgba(226,216,201,.92) !important;
+  box-shadow:0 10px 24px rgba(56,42,25,.045) !important;
+}
+.risk-mode-compact:has(.segmented-option.active),
+.audit-card:has(.segmented-option.active){
+  border-color:rgba(198,91,54,.24) !important;
+}
+.seed-input-wrap{
+  border-radius:10px !important;
+}
+.math-workbench{
+  grid-template-columns:minmax(280px,.36fr) minmax(0,1fr) !important;
+  gap:16px !important;
+}
+.math-system-row{
+  display:grid !important;
+  gap:11px !important;
+  align-content:start !important;
+}
+.math-system-card{
+  position:relative !important;
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) auto !important;
+  gap:10px !important;
+  align-items:stretch !important;
+  overflow:hidden !important;
+  min-height:158px !important;
+  padding:0 !important;
+  border:1px solid rgba(226,216,201,.95) !important;
+  border-radius:10px !important;
+  background:linear-gradient(180deg,#fffdf8,#fbf7ef) !important;
+  box-shadow:0 10px 28px rgba(56,42,25,.045) !important;
+  opacity:1 !important;
+  cursor:default !important;
+}
+.math-system-card::after{
+  content:"";
+  position:absolute;
+  right:-34px;
+  bottom:-42px;
+  width:112px;
+  height:112px;
+  border-radius:999px;
+  background:color-mix(in srgb, var(--sys-color) 10%, transparent);
+  pointer-events:none;
+}
+.math-system-card.is-active,
+.math-system-card.active{
+  border-color:color-mix(in srgb, var(--sys-color) 42%, var(--line)) !important;
+  box-shadow:inset 4px 0 0 var(--sys-color), 0 12px 30px rgba(56,42,25,.06) !important;
+  background:linear-gradient(180deg,#fffdf8,#fbf2e8) !important;
+}
+.math-system-card.is-disabled,
+.math-system-card.disabled{
+  opacity:.72 !important;
+  filter:saturate(.75) !important;
+}
+.math-system-card-bar{
+  position:absolute;
+  inset:0 auto 0 0;
+  width:4px;
+  background:var(--sys-color);
+  opacity:.95;
+}
+.math-system-main{
+  position:relative;
+  z-index:1;
+  display:flex !important;
+  flex-direction:column !important;
+  gap:9px !important;
+  width:100% !important;
+  min-width:0 !important;
+  height:100% !important;
+  padding:14px 12px 14px 16px !important;
+  border:0 !important;
+  background:transparent !important;
+  color:var(--ink) !important;
+  text-align:left !important;
+  cursor:pointer !important;
+}
+.math-sys-top{
+  display:flex !important;
+  align-items:flex-start !important;
+  justify-content:space-between !important;
+  gap:10px !important;
+  font-size:10px !important;
+  letter-spacing:.12em !important;
+  text-transform:uppercase !important;
+  font-weight:900 !important;
+  line-height:1.22 !important;
+}
+.math-sys-title{
+  display:inline-flex !important;
+  align-items:center !important;
+  gap:8px !important;
+  min-width:0 !important;
+}
+.math-sys-title strong{
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  white-space:nowrap !important;
+}
+.math-sys-dot{
+  display:inline-block !important;
+  width:10px !important;
+  height:10px !important;
+  flex:none !important;
+  border-radius:999px !important;
+  background:var(--sys-color) !important;
+  box-shadow:0 0 0 3px rgba(255,253,248,.96),0 0 0 4px rgba(205,191,174,.60) !important;
+}
+.math-sys-top em{
+  display:inline-flex !important;
+  align-items:center !important;
+  min-height:22px !important;
+  padding:4px 7px !important;
+  border-radius:7px !important;
+  border:1px solid rgba(205,191,174,.72) !important;
+  background:#fffdf8 !important;
+  color:var(--stone) !important;
+  font-size:8.5px !important;
+  letter-spacing:.08em !important;
+  font-style:normal !important;
+  white-space:nowrap !important;
+}
+.math-system-card.is-active .math-sys-top em{
+  border-color:color-mix(in srgb, var(--sys-color) 42%, var(--line)) !important;
+  color:var(--sys-color) !important;
+}
+.math-sys-line{
+  color:var(--stone) !important;
+  font-size:10.5px !important;
+  line-height:1.35 !important;
+  white-space:normal !important;
+}
+.math-sys-edge{
+  font-family:"Cormorant Garamond",Georgia,serif !important;
+  font-size:31px !important;
+  line-height:.98 !important;
+  letter-spacing:-.028em !important;
+  font-weight:600 !important;
+}
+.math-sys-edge.good{color:var(--olive) !important;}
+.math-sys-edge.bad{color:var(--ruby) !important;}
+.math-sys-mini-ledger{
+  display:grid !important;
+  grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  gap:7px !important;
+  padding-top:8px !important;
+  border-top:1px solid rgba(226,216,201,.72) !important;
+}
+.math-sys-mini-ledger span{
+  display:grid !important;
+  gap:3px !important;
+  min-width:0 !important;
+}
+.math-sys-mini-ledger b{
+  color:var(--muted) !important;
+  font-size:7.6px !important;
+  letter-spacing:.12em !important;
+  text-transform:uppercase !important;
+  font-weight:900 !important;
+  white-space:nowrap !important;
+}
+.math-sys-mini-ledger strong{
+  color:var(--ink) !important;
+  font-size:11px !important;
+  line-height:1.05 !important;
+  white-space:nowrap !important;
+}
+.math-sys-grade{
+  justify-self:start !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  max-width:100% !important;
+  min-height:26px !important;
+  padding:6px 9px !important;
+  border-radius:7px !important;
+  border:1px solid rgba(205,191,174,.76) !important;
+  background:#fffdf8 !important;
+  color:var(--stone) !important;
+  font-size:8.5px !important;
+  letter-spacing:.10em !important;
+  text-transform:uppercase !important;
+  font-weight:900 !important;
+  line-height:1.15 !important;
+}
+.math-sys-grade.good{color:var(--olive) !important;border-color:rgba(100,112,73,.32) !important;background:rgba(100,112,73,.055) !important;}
+.math-sys-grade.warn{color:#7a5d24 !important;border-color:rgba(168,132,66,.32) !important;background:rgba(168,132,66,.065) !important;}
+.math-sys-grade.bad{color:var(--ruby) !important;border-color:rgba(127,39,55,.28) !important;background:rgba(127,39,55,.055) !important;}
+.math-sys-toggle{
+  position:relative !important;
+  z-index:2 !important;
+  align-self:start !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:7px !important;
+  margin:12px 10px 0 0 !important;
+  min-width:104px !important;
+  min-height:34px !important;
+  padding:7px 9px !important;
+  border-radius:8px !important;
+  border:1px solid rgba(205,191,174,.80) !important;
+  background:#fffdf8 !important;
+  color:var(--stone) !important;
+  font-size:8.2px !important;
+  letter-spacing:.09em !important;
+  text-transform:uppercase !important;
+  font-weight:900 !important;
+  cursor:pointer !important;
+}
+.math-sys-toggle span{
+  width:24px !important;
+  height:14px !important;
+  border-radius:999px !important;
+  background:#e6ded2 !important;
+  position:relative !important;
+  box-shadow:inset 0 0 0 1px rgba(113,106,96,.16) !important;
+}
+.math-sys-toggle span::after{
+  content:"";
+  position:absolute;
+  left:2px;
+  top:2px;
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:#fffdf8;
+  box-shadow:0 1px 4px rgba(56,42,25,.22);
+  transition:transform .16s ease;
+}
+.math-sys-toggle.on{
+  border-color:rgba(100,112,73,.32) !important;
+  color:var(--olive) !important;
+}
+.math-sys-toggle.on span{
+  background:rgba(100,112,73,.72) !important;
+}
+.math-sys-toggle.on span::after{
+  transform:translateX(10px);
+}
+.math-matrix-block h3{
+  font-family:Inter,system-ui,sans-serif !important;
+  font-size:12px !important;
+  letter-spacing:.13em !important;
+  text-transform:uppercase !important;
+  font-weight:900 !important;
+  color:var(--ink) !important;
+}
+.math-head-dot{
+  display:inline-block;
+  width:8px;
+  height:8px;
+  border-radius:999px;
+  margin-right:6px;
+  vertical-align:middle;
+}
+.hm-great{background:rgba(100,112,73,.30) !important;color:#2f3a21 !important;font-weight:950 !important;}
+.hm-good{background:rgba(100,112,73,.16) !important;color:var(--olive) !important;font-weight:900 !important;}
+.hm-watch{background:rgba(168,132,66,.16) !important;color:#765b24 !important;font-weight:900 !important;}
+.hm-bad{background:rgba(127,39,55,.10) !important;color:var(--ruby) !important;font-weight:900 !important;}
+.hm-dead{background:rgba(127,39,55,.22) !important;color:var(--ruby) !important;font-weight:950 !important;}
+.math-heat-marker{
+  display:inline-flex;
+  align-items:center;
+  margin:4px 2px 0;
+  padding:2px 5px;
+  border:1px solid currentColor;
+  border-radius:6px;
+  background:#fffdf8;
+  font-size:7.6px;
+  font-weight:900;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+.canvas-wrap,
+.math-result-pane .canvas-wrap{
+  position:relative !important;
+  min-height:320px !important;
+  height:360px !important;
+}
+.canvas-wrap canvas,
+.math-result-pane canvas{
+  display:block !important;
+  width:100% !important;
+  height:100% !important;
+}
+.chart-error{
+  position:absolute;
+  inset:12px;
+  display:grid;
+  place-items:center;
+  padding:16px;
+  border:1px solid rgba(127,39,55,.24);
+  background:rgba(127,39,55,.055);
+  color:var(--ruby);
+  font-size:12px;
+  line-height:1.45;
+  text-align:center;
+  z-index:3;
+}
+.chart-loading-note{
+  position:absolute;
+  inset:12px;
+  display:grid;
+  place-items:center;
+  padding:16px;
+  border:1px solid rgba(168,132,66,.22);
+  background:rgba(168,132,66,.055);
+  color:var(--stone);
+  font-size:12px;
+  text-align:center;
+}
+.math-result-tabs{
+  display:flex !important;
+  overflow-x:auto !important;
+  gap:6px !important;
+  scroll-snap-type:x proximity !important;
+}
+.math-result-tab{
+  flex:0 0 auto !important;
+  min-width:138px !important;
+  border-radius:8px !important;
+}
+@media(max-width:1180px){
+  .math-workbench{grid-template-columns:1fr !important;}
+  .math-system-row{
+    grid-auto-flow:column !important;
+    grid-auto-columns:minmax(286px,340px) !important;
+    overflow-x:auto !important;
+    padding-bottom:8px !important;
+    scroll-snap-type:x proximity !important;
+  }
+  .math-system-card{scroll-snap-align:start !important;}
+}
+@media(max-width:620px){
+  .math-system-row{grid-auto-columns:88vw !important;}
+  .math-system-card{
+    grid-template-columns:1fr !important;
+    min-height:auto !important;
+  }
+  .math-sys-toggle{
+    margin:0 12px 12px 16px !important;
+    justify-self:start !important;
+  }
+  .math-sys-mini-ledger{grid-template-columns:1fr 1fr 1fr !important;}
+  .canvas-wrap,.math-result-pane .canvas-wrap{height:300px !important;min-height:300px !important;}
+}
+
 </style>
 
 <script id="p34-smooth-legend-fade-toggle">
