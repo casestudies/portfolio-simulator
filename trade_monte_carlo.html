@@ -8508,7 +8508,7 @@ body[data-active-mode="basic"] .simulation-output{
         <div class="math-thresholds">
           <div class="math-threshold-card">
             <span>Grade eşikleri</span>
-            <p><strong>Negative</strong>: E_net ≤ 0R · <strong>Over-Risked</strong>: E_net &gt; 0 ama g ≤ 0; sistem edge üretir fakat risk büyüklüğü sermayeyi aşındırır · <strong>Fragile</strong>: PF &lt; 1.30 veya Edge Buffer &lt; 5pp · <strong>Aggressive</strong>: pozitif edge ama P(10 kayıp) ≥ 25% · <strong>Balanced</strong>: g &gt; 0, PF ≥ 1.30, Edge Buffer ≥ 5pp · <strong>Institutional</strong>: PF ≥ 1.80, Edge Buffer ≥ 15pp, P(10 kayıp) &lt; 15%.</p>
+            <p><strong>Negatif Beklenti</strong>: E_net ≤ 0R. <strong>Risk Fazla</strong>: edge pozitif olsa bile g ≤ 0 veya risk Full-Kelly üstünde. <strong>Kırılgan Edge</strong>: E_net &lt; 0.10R, PF &lt; 1.30 veya Edge Buffer &lt; 5pp. <strong>Agresif / Yüksek Yük</strong>: P(10 kayıp) ≥ 25% veya risk Half-Kelly üstünde. <strong>Dengeli</strong>: E_net ≥ 0.10R, PF ≥ 1.30, Edge ≥ 5pp ve g &gt; 0. <strong>Kurumsal Kalite</strong>: E_net ≥ 0.25R, PF ≥ 1.60, Edge ≥ 10pp, P(10 kayıp) &lt; 18% ve risk ≤ Half-Kelly.</p>
           </div>
           <div class="math-threshold-card math-formula-card">
             <span>Temel formüller</span>
@@ -12785,34 +12785,118 @@ function renderCharts(result){
     const p50=s.capital*Math.exp(N*g);
     const p5=s.capital*Math.exp(N*g-1.645*Math.sqrt(Math.max(0,N*varLog)));
     const p95=s.capital*Math.exp(N*g+1.645*Math.sqrt(Math.max(0,N*varLog)));
-    const grade=gradeOf({e,pf,edge,g,streak10});
+    const grade=gradeOf({e,pf,edge,g,streak10,kelly,halfKelly,f});
     return {p,q,R,L,c,f,N,gross,e,be,reqR,pf,edge,sigma,probNeg,streak10,streak5,maxStreak,dd10,recovery,g,kelly,halfKelly,quality,nmin,p50,p5,p95,grade};
   }
   function gradeOf(m){
-    if(m.e<=0) return {label:"Negative",tone:"bad",why:"E_net ≤ 0R"};
-    if(m.e>0 && m.g<=0) return {label:"Over-Risked",tone:"warn",why:"E_net > 0 ama g ≤ 0 — risk geometrik büyümeyi eziyor"};
-    if(m.pf<1.30 || m.edge<.05) return {label:"Fragile",tone:"warn",why:"PF < 1.30 veya Edge Buffer < 5pp"};
-    if(m.pf>=1.80 && m.edge>=.15 && m.streak10<.15) return {label:"Institutional",tone:"good",why:"PF ≥ 1.80, Edge ≥ 15pp, P10-streak < 15%"};
-    if(m.streak10>=.25) return {label:"Aggressive",tone:"warn",why:"Pozitif edge ama P(10 kayıp) ≥ 25%"};
-    return {label:"Balanced",tone:"good",why:"g > 0, PF ≥ 1.30, Edge ≥ 5pp"};
+    const riskRatio = (m.kelly > 0 && Number.isFinite(m.kelly)) ? (m.f / m.kelly) : Infinity;
+    if(m.e <= 0){
+      return {
+        key:"negative",
+        label:"Negatif Beklenti",
+        tone:"bad",
+        why:"Net beklenti sıfırın altında: E_net ≤ 0R. Bu sistem uzun vadede matematiksel avantaj üretmiyor."
+      };
+    }
+    if(m.g <= 0 || riskRatio > 1.10){
+      return {
+        key:"overrisked",
+        label:"Risk Fazla",
+        tone:"warn",
+        why:"Edge pozitif olsa da risk boyutu geometrik büyümeyi eziyor: g ≤ 0 veya risk Full-Kelly bandını aşıyor."
+      };
+    }
+    if(m.e < 0.10 || m.pf < 1.30 || m.edge < 0.05){
+      return {
+        key:"fragile",
+        label:"Kırılgan Edge",
+        tone:"warn",
+        why:"Pozitif ama ince marjlı: E_net < 0.10R, PF < 1.30 veya Edge Buffer < 5pp."
+      };
+    }
+    if(m.e >= 0.25 && m.pf >= 1.60 && m.edge >= 0.10 && m.streak10 < 0.18 && riskRatio <= 0.50){
+      return {
+        key:"institutional",
+        label:"Kurumsal Kalite",
+        tone:"good",
+        why:"Güçlü ve kontrollü: E_net ≥ 0.25R, PF ≥ 1.60, Edge ≥ 10pp, P(10 kayıp) < 18%, risk ≤ Half-Kelly."
+      };
+    }
+    if(m.streak10 >= 0.25 || riskRatio > 0.50){
+      return {
+        key:"aggressive",
+        label:"Agresif / Yüksek Yük",
+        tone:"warn",
+        why:"Beklenti pozitif; fakat P(10 kayıp) ≥ 25% veya risk Half-Kelly üstünde. Disiplin ve sermaye toleransı gerekir."
+      };
+    }
+    return {
+      key:"balanced",
+      label:"Dengeli",
+      tone:"good",
+      why:"Sağlıklı taban: E_net ≥ 0.10R, PF ≥ 1.30, Edge ≥ 5pp, g > 0 ve risk Kelly bandında kontrollü."
+    };
   }
+
   function enabled(){return systems.map((s,i)=>({s,i,m:calc(s)})).filter(x=>x.s.on);}
   function selectedPack(){return {s:systems[selected],m:calc(systems[selected]),i:selected};}
   function renderCards(){
     const host=$("mathSystemCards"); if(!host) return;
-    host.innerHTML=systems.map((s,i)=>{const m=calc(s);return `
-      <button class="math-system-card ${i===selected?"active":""} ${s.on?"":"disabled"}" type="button" data-sys="${i}">
-        <span class="math-sys-top"><strong>${s.name}</strong><em>${s.on?"Aktif":"Kapalı"}</em></span>
-        <span class="math-sys-line mono">${s.wr}% WR · ${s.R}R · ${s.risk}% risk</span>
-        <span class="math-sys-edge ${m.e>=0?"good":"bad"} mono">${fmtR(m.e)} / trade</span>
-        <span class="math-sys-grade ${m.grade.tone}">${m.grade.label}</span>
-      </button>`;}).join("");
-    qsa("[data-sys]",host).forEach(btn=>btn.addEventListener("click",()=>{selected=+btn.dataset.sys; mcCache=null; schedule();}));
+    const esc=(value)=>String(value ?? "").replace(/[&<>"']/g,(ch)=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[ch]));
+    host.innerHTML=systems.map((s,i)=>{
+      const m=calc(s);
+      const pfText=Number.isFinite(m.pf)?rFmt.format(m.pf):"∞";
+      const isActive=i===selected;
+      return `
+      <article class="math-system-card ${isActive?"active is-active":""} ${s.on?"is-enabled":"disabled is-disabled"} grade-${m.grade.key}" data-sys-card="${i}" style="--sys-color:${colors[i]};">
+        <div class="math-system-card-bar" aria-hidden="true"></div>
+        <button class="math-system-main" type="button" data-sys-select="${i}" aria-label="${esc(s.name)} sistemini düzenle">
+          <span class="math-sys-top">
+            <span class="math-sys-title"><i class="math-sys-dot" aria-hidden="true"></i><strong>${esc(s.name)}</strong></span>
+            <em>${isActive?"Düzenleniyor":"Seç"}</em>
+          </span>
+          <span class="math-sys-line mono">${s.wr}% WR · ${s.R}R Avg Win · ${s.risk}% risk</span>
+          <span class="math-sys-edge ${m.e>=0?"good":"bad"} mono">${fmtR(m.e)} / trade</span>
+          <span class="math-sys-mini-ledger">
+            <span><b>BE WR</b><strong class="mono">${fmtPct(m.be)}</strong></span>
+            <span><b>Net PF</b><strong class="mono">${pfText}</strong></span>
+            <span><b>Kelly</b><strong class="mono">${fmtPct(m.kelly)}</strong></span>
+          </span>
+          <span class="math-sys-grade ${m.grade.tone} grade-${m.grade.key}" title="${esc(m.grade.why)}">${m.grade.label}</span>
+        </button>
+        <button class="math-sys-toggle ${s.on?"on":"off"}" type="button" data-sys-toggle="${i}" aria-pressed="${s.on}" title="${s.on?"Kıyaslamadan çıkar":"Kıyaslamaya al"}">
+          <span aria-hidden="true"></span>${s.on?"Kıyaslamada":"Dışarıda"}
+        </button>
+      </article>`;}).join("");
+    qsa("[data-sys-select]",host).forEach(btn=>btn.addEventListener("click",(ev)=>{
+      ev.preventDefault();
+      selected=+btn.dataset.sysSelect;
+      mcCache=null;
+      schedule();
+    }));
+    qsa("[data-sys-card]",host).forEach(card=>card.addEventListener("click",(ev)=>{
+      if(ev.target.closest("[data-sys-toggle]") || ev.target.closest("[data-sys-select]")) return;
+      selected=+card.dataset.sysCard;
+      mcCache=null;
+      schedule();
+    }));
+    qsa("[data-sys-toggle]",host).forEach(btn=>btn.addEventListener("click",(ev)=>{
+      ev.preventDefault();
+      ev.stopPropagation();
+      const idx=+btn.dataset.sysToggle;
+      const next=!systems[idx].on;
+      if(!next && systems.filter((sys,j)=>j!==idx && sys.on).length===0) return;
+      systems[idx].on=next;
+      if(next) selected=idx;
+      mcCache=null;
+      schedule();
+    }));
   }
+
   function renderEditor(){
     const s=systems[selected], m=calc(s);
     const title=$("mathEditorTitle"); if(title) title.textContent=s.name;
-    const chip=$("mathGradeChip"); if(chip){chip.className="math-grade-chip "+m.grade.tone; chip.textContent=m.grade.label+" · "+m.grade.why;}
+    const chip=$("mathGradeChip"); if(chip){chip.className="math-grade-chip "+m.grade.tone+" grade-"+m.grade.key; chip.textContent=m.grade.label+" · "+m.grade.why;}
     const host=$("mathEditorControls"); if(!host) return;
     host.innerHTML=`
       <label class="math-slider-card math-name-card">
@@ -12858,20 +12942,23 @@ function renderCharts(result){
     if(toggle) toggle.addEventListener("click",()=>{s.on=!s.on; mcCache=null; schedule();});
   }
   function cellClass(metric,val,m){
-    if(metric==="e") return val>0?"good":"bad";
+    if(metric==="grade") return m.grade.tone==="good"?"good":(m.grade.tone==="bad"?"bad":"watch");
+    if(metric==="e") return val>=0.25?"good":(val>=0.10?"watch":"bad");
     if(metric==="be") return val<=.25?"good":val<=.45?"watch":"bad";
     if(metric==="reqR") return val<=1.5?"good":val<=3?"watch":"bad";
-    if(metric==="pf") return val>=1.8?"good":val>=1.3?"watch":"bad";
-    if(metric==="edge") return val>=.15?"good":val>=.05?"watch":"bad";
+    if(metric==="pf") return val>=1.60?"good":val>=1.30?"watch":"bad";
+    if(metric==="edge") return val>=.10?"good":val>=.05?"watch":"bad";
     if(metric==="g") return val>0?"good":"bad";
+    if(metric==="kelly") return val>=.03?"good":val>=.01?"watch":"bad";
     if(metric==="probNeg") return val<.05?"good":val<.20?"watch":"bad";
     if(metric==="nmin") return val<=30?"good":val<=150?"watch":"bad";
     if(metric==="streak5") return val<.20?"good":val<.55?"watch":"bad";
-    if(metric==="streak10") return val<.15?"good":val<.35?"watch":"bad";
+    if(metric==="streak10") return val<.18?"good":val<.25?"watch":"bad";
     if(metric==="dd10") return val<.12?"good":val<.25?"watch":"bad";
     if(metric==="recovery") return val<.15?"good":val<.35?"watch":"bad";
     return "";
   }
+
   function renderDuel(){
     const host=$("mathDuelPanel"); if(!host) return;
     const packs=enabled();
@@ -12914,6 +13001,7 @@ function renderCharts(result){
     const host=$("mathMatrixSections"); if(!host) return;
     const rows=[
       {title:"Matematiksel Kenar",items:[
+        ["Grade","grade",x=>x.grade.label],
         ["Net Beklenen Değer (E_net)","e",x=>fmtR(x.e)],
         ["Break-even WR","be",x=>fmtPct(x.be)],
         ["Required R","reqR",x=>Number.isFinite(x.reqR)?fmtR(x.reqR):"∞"],
@@ -12940,17 +13028,20 @@ function renderCharts(result){
       ]}
     ];
     const packs=enabled();
+    const esc=(value)=>String(value ?? "").replace(/[&<>"']/g,(ch)=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[ch]));
+    const head=packs.map(p=>`<th><span class="math-head-dot" style="background:${colors[p.i]}"></span>${esc(p.s.name)}</th>`).join("");
     host.innerHTML=rows.map(section=>`
       <section class="math-matrix-block">
         <h3>${section.title}</h3>
         <div class="math-matrix-wrap">
           <table class="math-matrix">
-            <thead><tr><th>Kritik Metrikler</th>${packs.map(p=>`<th>${p.s.name}</th>`).join("")}</tr></thead>
+            <thead><tr><th>Kritik Metrikler</th>${head}</tr></thead>
             <tbody>${section.items.map(([label,key,fmt])=>`<tr><td>${label}</td>${packs.map(p=>`<td class="${cellClass(key,p.m[key],p.m)} mono">${fmt(p.m)}</td>`).join("")}</tr>`).join("")}</tbody>
           </table>
         </div>
       </section>`).join("");
   }
+
   function showPane(view){
     activeView=view;
     qsa(".math-result-tab").forEach(b=>b.classList.toggle("active",b.dataset.mathView===view));
@@ -12984,22 +13075,68 @@ function renderCharts(result){
     charts[id]=new Chart(el,{type,data,options:merged});
   }
   function renderGrowth(){
+    if(typeof Chart !== "undefined" && !renderGrowth._zonePluginRegistered){
+      try{
+        Chart.register({
+          id:"caKellyZones",
+          beforeDatasetsDraw(chart,args,opts){
+            if(!opts || !opts.enabled) return;
+            const {ctx,chartArea,scales}=chart;
+            if(!chartArea || !scales?.x) return;
+            const xScale=scales.x;
+            const min=xScale.min ?? 0.1;
+            const max=xScale.max ?? 5;
+            const half=Number(opts.half);
+            const kelly=Number(opts.kelly);
+            if(!Number.isFinite(half) || !Number.isFinite(kelly) || kelly<=0) return;
+            const clampX=(v)=>Math.max(min,Math.min(max,v));
+            const zones=[
+              {from:min,to:clampX(half),fill:"rgba(168,132,66,.075)",label:"Düşük risk"},
+              {from:clampX(half),to:clampX(kelly),fill:"rgba(100,112,73,.085)",label:"Optimal bant"},
+              {from:clampX(kelly),to:max,fill:"rgba(127,39,55,.070)",label:"Aşırı risk"}
+            ].filter(z=>z.to>z.from);
+            ctx.save();
+            zones.forEach(z=>{
+              const x1=xScale.getPixelForValue(z.from);
+              const x2=xScale.getPixelForValue(z.to);
+              ctx.fillStyle=z.fill;
+              ctx.fillRect(x1,chartArea.top,x2-x1,chartArea.bottom-chartArea.top);
+              if((x2-x1)>52){
+                ctx.fillStyle="rgba(23,20,17,.38)";
+                ctx.font="700 10px Inter, system-ui, sans-serif";
+                ctx.textAlign="center";
+                ctx.fillText(z.label,(x1+x2)/2,chartArea.top+16);
+              }
+            });
+            ctx.restore();
+          }
+        });
+      }catch(err){}
+      renderGrowth._zonePluginRegistered=true;
+    }
     const packs=enabled(); 
     const riskValues=[]; for(let r=.1;r<=5.001;r+=.1) riskValues.push(+r.toFixed(1));
     let yMin=Infinity, yMax=-Infinity;
     const datasets=packs.map(p=>{
       const data=riskValues.map(r=>{const y=calc(Object.assign({},p.s,{risk:r})).g*100; yMin=Math.min(yMin,y); yMax=Math.max(yMax,y); return {x:r,y};});
-      return {label:p.s.name+" g%",data,borderColor:colors[p.i],borderWidth:p.i===selected?2.6:1.8,pointRadius:0,tension:.18};
+      return {label:p.s.name+" g%",data,borderColor:colors[p.i],backgroundColor:colors[p.i],borderWidth:p.i===selected?2.8:1.8,pointRadius:0,tension:.18};
     });
     const sel=selectedPack();
     const k=Math.max(0,sel.m.kelly*100), hk=Math.max(0,sel.m.halfKelly*100);
     if(!Number.isFinite(yMin)){yMin=-1;yMax=1;}
     const pad=Math.max(.05,(yMax-yMin)*.08); yMin-=pad; yMax+=pad;
-    if(k>0 && k<=5) datasets.push({label:sel.s.name+" Kelly",data:[{x:k,y:yMin},{x:k,y:yMax}],borderColor:"#7f2737",borderWidth:1.5,borderDash:[5,4],pointRadius:0});
-    if(hk>0 && hk<=5) datasets.push({label:sel.s.name+" Half-Kelly",data:[{x:hk,y:yMin},{x:hk,y:yMax}],borderColor:"#a88442",borderWidth:1.5,borderDash:[2,4],pointRadius:0});
-    datasets.push({label:sel.s.name+" Mevcut risk",data:[{x:sel.s.risk,y:sel.m.g*100}],type:"scatter",backgroundColor:"#171411",borderColor:"#171411",pointRadius:5,pointHoverRadius:7});
-    baseChart("mathGrowthChart","line",{datasets},{scales:{x:{type:"linear",min:.1,max:5,title:{display:true,text:"Risk / Trade (%)"},ticks:{callback:v=>v+"%"}},y:{ticks:{callback:v=>v+"%"}}}});
+    if(k>0 && k<=5) datasets.push({label:sel.s.name+" Kelly",data:[{x:k,y:yMin},{x:k,y:yMax}],borderColor:"#7f2737",backgroundColor:"#7f2737",borderWidth:1.5,borderDash:[5,4],pointRadius:0});
+    if(hk>0 && hk<=5) datasets.push({label:sel.s.name+" Half-Kelly",data:[{x:hk,y:yMin},{x:hk,y:yMax}],borderColor:"#a88442",backgroundColor:"#a88442",borderWidth:1.5,borderDash:[2,4],pointRadius:0});
+    datasets.push({label:sel.s.name+" Mevcut risk",data:[{x:sel.s.risk,y:sel.m.g*100}],type:"scatter",backgroundColor:colors[sel.i],borderColor:"#171411",pointRadius:6,pointHoverRadius:8});
+    baseChart("mathGrowthChart","line",{datasets},{
+      plugins:{caKellyZones:{enabled:true,half:hk,kelly:k}},
+      scales:{
+        x:{type:"linear",min:.1,max:5,title:{display:true,text:"Risk / Trade (%)"},ticks:{callback:v=>v+"%"}},
+        y:{ticks:{callback:v=>v+"%"}}
+      }
+    });
   }
+
   function renderBurden(){
     const packs=enabled(); const labels=Array.from({length:14},(_,i)=>String(i+2));
     baseChart("mathStreakChart","line",{labels,datasets:packs.map(p=>({label:p.s.name,data:labels.map(k=>{const kk=+k;return (1-Math.exp(-p.s.N*(p.s.wr/100)*Math.pow(1-p.s.wr/100,kk)))*100;}),borderColor:colors[p.i],borderWidth:2,pointRadius:0}))},{scales:{y:{ticks:{callback:v=>v+"%"}}}});
@@ -13093,21 +13230,29 @@ function renderCharts(result){
       const rs=[.5,1,1.5,2,3,4,6,8,10,12,15];
       const packs=enabled();
       function nearest(arr,v){return arr.reduce((a,b)=>Math.abs(b-v)<Math.abs(a-v)?b:a,arr[0]);}
+      function heatClass(e){
+        if(e>=1.25) return "hm-great";
+        if(e>=0.35) return "hm-good";
+        if(e>0) return "hm-watch";
+        if(e>=-0.50) return "hm-bad";
+        return "hm-dead";
+      }
       const markers={};
       packs.forEach(p=>{
         const wr=nearest(wrs,p.s.wr), rr=nearest(rs,p.s.R);
         const key=wr+"|"+rr;
         markers[key]=(markers[key]||[]).concat(`<span class="math-heat-marker" style="border-color:${colors[p.i]};color:${colors[p.i]}">${p.s.name}</span>`);
       });
-      host.innerHTML=`<table><thead><tr><th>WR \\ R</th>${rs.map(r=>`<th>${r}R</th>`).join("")}</tr></thead><tbody>${wrs.map(w=>`<tr><th>${w}%</th>${rs.map(R=>{const e=calc(Object.assign({},s,{wr:w,R})).e; const cls=e>0.6?"hm-good":e>0?"hm-watch":"hm-bad"; const mark=markers[w+"|"+R]?`<div class="math-heat-markers">${markers[w+"|"+R].join("")}</div>`:""; return `<td class="${cls} mono"><span>${fmtR(e)}</span>${mark}</td>`;}).join("")}</tr>`).join("")}</tbody></table>`;
+      host.innerHTML=`<table><thead><tr><th>WR \\ R</th>${rs.map(r=>`<th>${r}R</th>`).join("")}</tr></thead><tbody>${wrs.map(w=>`<tr><th>${w}%</th>${rs.map(R=>{const e=calc(Object.assign({},s,{wr:w,R})).e; const cls=heatClass(e); const mark=markers[w+"|"+R]?`<div class="math-heat-markers">${markers[w+"|"+R].join("")}</div>`:""; return `<td class="${cls} mono"><span>${fmtR(e)}</span>${mark}</td>`;}).join("")}</tr>`).join("")}</tbody></table>`;
     }
     const curve=[]; for(let r=.5;r<=15.001;r+=.25) curve.push({x:+r.toFixed(2),y:((s.L+s.cost)/(r+s.L))*100});
     const packs=enabled();
-    const datasets=[{label:"Break-even WR",data:curve,borderColor:"#c65b36",borderWidth:2,pointRadius:0}].concat(
+    const datasets=[{label:"Break-even WR",data:curve,borderColor:"#c65b36",backgroundColor:"#c65b36",borderWidth:2,pointRadius:0}].concat(
       packs.map(p=>({label:p.s.name,data:[{x:p.s.R,y:p.m.be*100}],type:"scatter",backgroundColor:colors[p.i],borderColor:colors[p.i],pointRadius:p.i===selected?6:4,pointHoverRadius:8}))
     );
     baseChart("mathBreakEvenChart","line",{datasets},{scales:{x:{type:"linear",min:.5,max:15,title:{display:true,text:"Average Win R"},ticks:{callback:v=>v+"R"}},y:{ticks:{callback:v=>v+"%"}}}});
   }
+
   function renderCost(){
     const packs=enabled();
     baseChart("mathCostChart","bar",{
@@ -13126,15 +13271,83 @@ function renderCharts(result){
     if(activeView==="surface") renderSurface();
     if(activeView==="cost") renderCost();
   }
+  const mathHudIds=["hudP5","hudTailAvg","hudMedian","hudTarget","hudProfit","hudRuin","hudER","hudHealth"];
+  let originalHudHTML=null;
+  let mathHudActive=false;
+  function restoreStrategyHud(){
+    const strip=document.querySelector(".result-strip");
+    if(strip && mathHudActive && originalHudHTML){
+      strip.classList.remove("math-aware-hud");
+      strip.innerHTML=originalHudHTML;
+      mathHudActive=false;
+      window.dispatchEvent(new Event("resize"));
+    }
+  }
+  function updateMathHud(){
+    const strip=document.querySelector(".result-strip");
+    if(!strip) return;
+    const isMath=document.body.dataset.activeMode==="mathlab" || $("mathlab")?.classList.contains("active");
+    if(!isMath){restoreStrategyHud(); return;}
+    if(!originalHudHTML) originalHudHTML=strip.innerHTML;
+    const pack=selectedPack();
+    const s=pack.s, m=pack.m;
+    const pfText=Number.isFinite(m.pf)?rFmt.format(m.pf):"∞";
+    const nMin=Number.isFinite(m.nmin)?String(m.nmin):"—";
+    strip.classList.add("math-aware-hud");
+    mathHudActive=true;
+    strip.innerHTML=`
+      <div class="metric hero-metric">
+        <div class="metric-label"><span class="math-hud-dot" style="background:${colors[pack.i]}"></span>${s.name} · Aktif Sistem</div>
+        <div class="metric-value mono">${fmtR(m.e)}</div>
+        <div class="metric-sub">${m.grade.label}</div>
+      </div>
+      <div class="metric ${m.grade.tone==="bad"?"bad":(m.grade.tone==="good"?"good":"")}">
+        <div class="metric-label">Grade Eşiği</div>
+        <div class="metric-value">${m.grade.label}</div>
+        <div class="metric-sub">${m.grade.why}</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Break-even WR</div>
+        <div class="metric-value mono">${fmtPct(m.be)}</div>
+        <div class="metric-sub">Mevcut WR: ${pctFmt.format(s.wr)}%</div>
+      </div>
+      <div class="metric good">
+        <div class="metric-label">Net Profit Factor</div>
+        <div class="metric-value mono">${pfText}</div>
+        <div class="metric-sub">PF ≥ 1.30 taban kalite</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Kelly / Half</div>
+        <div class="metric-value mono">${fmtPct(m.kelly)}</div>
+        <div class="metric-sub">Half: ${fmtPct(m.halfKelly)} · Risk: ${pctFmt.format(s.risk)}%</div>
+      </div>
+      <div class="metric bad">
+        <div class="metric-label">P(10 Kayıp Serisi)</div>
+        <div class="metric-value mono">${fmtPct(m.streak10)}</div>
+        <div class="metric-sub">Psikolojik yük eşiği</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Growth g</div>
+        <div class="metric-value mono">${fmtPct(m.g)}</div>
+        <div class="metric-sub">Geometrik büyüme</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">N_min</div>
+        <div class="metric-value mono">${nMin}</div>
+        <div class="metric-sub">İstatistiksel güven için trade</div>
+      </div>`;
+  }
   function renderAll(){
     renderCards();
     if(!skipEditorOnce) renderEditor();
     renderDuel();
     renderMatrix();
+    updateMathHud();
     if(!skipChartOnce) renderActiveChart();
     skipChartOnce = false;
     skipEditorOnce = false;
   }
+
   function schedule(opts){
     if(opts && opts.skipChart) skipChartOnce = true;
     if(opts && opts.skipEditor) skipEditorOnce = true;
@@ -13145,8 +13358,14 @@ function renderCharts(result){
     if(!$("mathlab")) return;
     qsa(".math-result-tab").forEach(btn=>btn.addEventListener("click",()=>showPane(btn.dataset.mathView)));
     ["mathMcRun","mathMcRunLocal"].forEach(id=>{const b=$(id); if(b) b.addEventListener("click",()=>{mcCache=null; mcPending=false; showPane("montecarlo");});});
+    qsa(".mode-btn").forEach(btn=>btn.addEventListener("click",()=>window.setTimeout(()=>updateMathHud(),20)));
+    try{
+      new MutationObserver(()=>updateMathHud()).observe(document.body,{attributes:true,attributeFilter:["data-active-mode"]});
+    }catch(err){}
     renderAll();
+    window.setTimeout(()=>updateMathHud(),80);
   }
+
   if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",boot); else boot();
 })();
 </script>
@@ -18072,6 +18291,367 @@ body.show-metric-dock .metric-dock{
   }
 })();
 </script>
+
+
+<style id="ca-math-first7-patch">
+/* CA First-7 Math Model upgrade: index-aligned system cards, tab-aware HUD, 5-step heatmap, Kelly zones */
+#mathlab .math-system-row{
+  gap:10px !important;
+}
+#mathlab .math-system-card{
+  position:relative !important;
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) auto !important;
+  gap:10px !important;
+  align-items:stretch !important;
+  min-height:168px !important;
+  padding:0 !important;
+  border:1px solid rgba(226,216,201,.92) !important;
+  background:linear-gradient(180deg,#fffefb,#fbf7ef) !important;
+  color:var(--ink) !important;
+  border-radius:16px !important;
+  box-shadow:0 10px 24px rgba(56,42,25,.035) !important;
+  opacity:1 !important;
+  cursor:default !important;
+  overflow:hidden !important;
+}
+#mathlab .math-system-card::after{
+  content:"" !important;
+  position:absolute !important;
+  inset:auto -28px -38px auto !important;
+  width:96px !important;
+  height:96px !important;
+  border-radius:50% !important;
+  background:color-mix(in srgb,var(--sys-color) 10%,transparent) !important;
+  pointer-events:none !important;
+}
+#mathlab .math-system-card-bar{
+  position:absolute !important;
+  inset:0 auto 0 0 !important;
+  width:4px !important;
+  background:transparent !important;
+}
+#mathlab .math-system-card.is-active .math-system-card-bar{
+  background:var(--sys-color) !important;
+}
+#mathlab .math-system-card.is-active{
+  border-color:color-mix(in srgb,var(--sys-color) 48%,var(--line)) !important;
+  background:linear-gradient(180deg,#fffdf8,#fbf3ea) !important;
+}
+#mathlab .math-system-card.is-disabled{
+  background:#fffdf8 !important;
+}
+#mathlab .math-system-card.is-disabled .math-system-main{
+  opacity:.56 !important;
+}
+#mathlab .math-system-main{
+  position:relative !important;
+  z-index:1 !important;
+  min-width:0 !important;
+  border:0 !important;
+  background:transparent !important;
+  color:inherit !important;
+  cursor:pointer !important;
+  display:grid !important;
+  gap:8px !important;
+  text-align:left !important;
+  padding:14px 12px 14px 15px !important;
+}
+#mathlab .math-system-main:focus-visible,
+#mathlab .math-sys-toggle:focus-visible{
+  outline:3px solid rgba(198,91,54,.18) !important;
+  outline-offset:2px !important;
+}
+#mathlab .math-sys-top{
+  display:flex !important;
+  justify-content:space-between !important;
+  align-items:center !important;
+  gap:8px !important;
+  font-size:10px !important;
+  letter-spacing:.12em !important;
+  text-transform:uppercase !important;
+  font-weight:850 !important;
+}
+#mathlab .math-sys-title{
+  display:inline-flex !important;
+  align-items:center !important;
+  gap:8px !important;
+  min-width:0 !important;
+}
+#mathlab .math-sys-title strong{
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  white-space:nowrap !important;
+}
+#mathlab .math-sys-dot,
+#mathlab .math-head-dot,
+.math-aware-hud .math-hud-dot{
+  display:inline-block !important;
+  width:9px !important;
+  height:9px !important;
+  border-radius:50% !important;
+  background:var(--sys-color,var(--terra)) !important;
+  box-shadow:0 0 0 3px rgba(226,216,201,.55) !important;
+  flex:none !important;
+}
+#mathlab .math-sys-line{
+  color:var(--stone) !important;
+  font-size:11px !important;
+  line-height:1.35 !important;
+}
+#mathlab .math-sys-edge{
+  font-family:"Cormorant Garamond",Georgia,serif !important;
+  font-size:28px !important;
+  line-height:.96 !important;
+  font-weight:600 !important;
+  letter-spacing:-.025em !important;
+}
+#mathlab .math-sys-edge.good{color:var(--olive) !important;}
+#mathlab .math-sys-edge.bad{color:var(--ruby) !important;}
+#mathlab .math-sys-mini-ledger{
+  display:grid !important;
+  grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  gap:6px !important;
+}
+#mathlab .math-sys-mini-ledger span{
+  min-width:0 !important;
+  border:1px solid rgba(226,216,201,.78) !important;
+  background:#fffdf8 !important;
+  padding:7px 8px !important;
+  border-radius:10px !important;
+}
+#mathlab .math-sys-mini-ledger b{
+  display:block !important;
+  color:var(--stone) !important;
+  font-size:7.6px !important;
+  line-height:1.1 !important;
+  letter-spacing:.10em !important;
+  text-transform:uppercase !important;
+  font-weight:850 !important;
+}
+#mathlab .math-sys-mini-ledger strong{
+  display:block !important;
+  margin-top:4px !important;
+  color:var(--ink) !important;
+  font-size:11px !important;
+  line-height:1 !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  white-space:nowrap !important;
+}
+#mathlab .math-sys-grade,
+#mathlab .math-grade-chip{
+  border-radius:999px !important;
+  background:#fffdf8 !important;
+  font-size:9px !important;
+  letter-spacing:.085em !important;
+  text-transform:uppercase !important;
+}
+#mathlab .math-sys-grade.grade-institutional,
+#mathlab .math-grade-chip.grade-institutional{
+  color:var(--olive) !important;
+  border-color:rgba(100,112,73,.34) !important;
+  background:rgba(100,112,73,.07) !important;
+}
+#mathlab .math-sys-grade.grade-balanced,
+#mathlab .math-grade-chip.grade-balanced{
+  color:var(--olive) !important;
+  border-color:rgba(100,112,73,.26) !important;
+}
+#mathlab .math-sys-grade.grade-aggressive,
+#mathlab .math-sys-grade.grade-fragile,
+#mathlab .math-sys-grade.grade-overrisked,
+#mathlab .math-grade-chip.grade-aggressive,
+#mathlab .math-grade-chip.grade-fragile,
+#mathlab .math-grade-chip.grade-overrisked{
+  color:var(--terra) !important;
+  border-color:rgba(198,91,54,.34) !important;
+  background:rgba(198,91,54,.055) !important;
+}
+#mathlab .math-sys-grade.grade-negative,
+#mathlab .math-grade-chip.grade-negative{
+  color:var(--ruby) !important;
+  border-color:rgba(127,39,55,.30) !important;
+  background:rgba(127,39,55,.055) !important;
+}
+#mathlab .math-sys-toggle{
+  position:relative !important;
+  z-index:2 !important;
+  align-self:start !important;
+  justify-self:end !important;
+  margin:12px 12px 0 0 !important;
+  min-width:92px !important;
+  min-height:34px !important;
+  border:1px solid rgba(226,216,201,.85) !important;
+  background:#fffdf8 !important;
+  color:var(--stone) !important;
+  border-radius:999px !important;
+  cursor:pointer !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:6px !important;
+  padding:6px 8px !important;
+  font-size:8px !important;
+  letter-spacing:.08em !important;
+  text-transform:uppercase !important;
+  font-weight:900 !important;
+  white-space:nowrap !important;
+}
+#mathlab .math-sys-toggle span{
+  width:8px !important;
+  height:8px !important;
+  border-radius:50% !important;
+  background:var(--muted) !important;
+}
+#mathlab .math-sys-toggle.on{
+  color:var(--olive) !important;
+  border-color:rgba(100,112,73,.34) !important;
+  background:rgba(100,112,73,.055) !important;
+}
+#mathlab .math-sys-toggle.on span{background:var(--olive) !important;}
+#mathlab .math-sys-toggle.off{
+  color:var(--ruby) !important;
+  border-color:rgba(127,39,55,.26) !important;
+}
+#mathlab .math-sys-toggle.off span{background:var(--ruby) !important;}
+#mathlab .math-editor-board,
+#mathlab .math-matrix-block,
+#mathlab .math-heatmap-table{
+  background:#fffdf8 !important;
+  border:1px solid var(--line) !important;
+  box-shadow:0 10px 24px rgba(56,42,25,.035) !important;
+}
+#mathlab .math-matrix-block h3{
+  font-family:Inter,system-ui,sans-serif !important;
+  color:var(--stone) !important;
+  font-size:10px !important;
+  letter-spacing:.13em !important;
+  text-transform:uppercase !important;
+  font-weight:900 !important;
+}
+#mathlab .math-head-dot{
+  margin-right:7px !important;
+  vertical-align:middle !important;
+}
+#mathlab .math-heat-marker{
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  margin-top:5px !important;
+  border:1px solid currentColor !important;
+  border-radius:999px !important;
+  padding:2px 5px !important;
+  font-family:Inter,system-ui,sans-serif !important;
+  font-size:7px !important;
+  letter-spacing:.06em !important;
+  text-transform:uppercase !important;
+  font-weight:900 !important;
+  background:#fffdf8 !important;
+}
+#mathlab .math-heat-markers{
+  display:flex !important;
+  justify-content:center !important;
+  flex-wrap:wrap !important;
+  gap:3px !important;
+}
+#mathlab .hm-great{
+  background:rgba(100,112,73,.28) !important;
+  color:#2f3a21 !important;
+  font-weight:950 !important;
+}
+#mathlab .hm-good{
+  background:rgba(100,112,73,.15) !important;
+  color:var(--olive) !important;
+  font-weight:900 !important;
+}
+#mathlab .hm-watch{
+  background:rgba(168,132,66,.15) !important;
+  color:#765b24 !important;
+  font-weight:900 !important;
+}
+#mathlab .hm-bad{
+  background:rgba(127,39,55,.105) !important;
+  color:var(--ruby) !important;
+  font-weight:900 !important;
+}
+#mathlab .hm-dead{
+  background:rgba(127,39,55,.22) !important;
+  color:var(--ruby) !important;
+  font-weight:950 !important;
+}
+.result-strip.math-aware-hud{
+  grid-template-columns:repeat(8,minmax(0,1fr)) !important;
+}
+.result-strip.math-aware-hud .metric-value{
+  font-family:"Cormorant Garamond",Georgia,serif !important;
+}
+.result-strip.math-aware-hud .metric:nth-child(2){
+  min-width:0 !important;
+}
+.result-strip.math-aware-hud .metric-sub{
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+.math-aware-hud .math-hud-dot{
+  margin-right:6px !important;
+  vertical-align:-1px !important;
+}
+@media(max-width:1180px){
+  #mathlab .math-system-row{
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  }
+}
+@media(max-width:760px){
+  #mathlab .math-system-row{
+    display:flex !important;
+    grid-template-columns:none !important;
+    overflow-x:auto !important;
+    gap:9px !important;
+    padding-bottom:4px !important;
+    scroll-snap-type:x proximity !important;
+    -webkit-overflow-scrolling:touch !important;
+  }
+  #mathlab .math-system-card{
+    flex:0 0 286px !important;
+    scroll-snap-align:start !important;
+    min-height:176px !important;
+  }
+  #mathlab .math-sys-mini-ledger{
+    grid-template-columns:1fr 1fr 1fr !important;
+  }
+  #mathlab .math-result-tabs{
+    display:flex !important;
+    overflow-x:auto !important;
+    grid-template-columns:none !important;
+    -webkit-overflow-scrolling:touch !important;
+  }
+  #mathlab .math-result-tab{
+    flex:0 0 auto !important;
+    min-width:136px !important;
+  }
+  .result-strip.math-aware-hud{
+    display:flex !important;
+    overflow-x:auto !important;
+    grid-template-columns:none !important;
+  }
+  .result-strip.math-aware-hud .metric{
+    flex:0 0 156px !important;
+  }
+  .result-strip.math-aware-hud .metric.hero-metric{
+    flex-basis:210px !important;
+  }
+}
+@media(max-width:520px){
+  #mathlab .math-system-card{
+    flex-basis:272px !important;
+  }
+  #mathlab .math-sys-edge{
+    font-size:25px !important;
+  }
+}
+</style>
 
 </body>
 </html>
