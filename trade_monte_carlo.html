@@ -8508,7 +8508,7 @@ body[data-active-mode="basic"] .simulation-output{
         <div class="math-thresholds">
           <div class="math-threshold-card">
             <span>Grade eşikleri</span>
-            <p><strong>Negative</strong>: E_net ≤ 0R · <strong>Fragile</strong>: PF &lt; 1.30 veya Edge Buffer &lt; 5pp veya g ≤ 0 · <strong>Aggressive</strong>: pozitif edge ama P(10 kayıp) ≥ 25% · <strong>Balanced</strong>: g &gt; 0, PF ≥ 1.30, Edge Buffer ≥ 5pp · <strong>Institutional</strong>: PF ≥ 1.80, Edge Buffer ≥ 15pp, P(10 kayıp) &lt; 15%.</p>
+            <p><strong>Negative</strong>: E_net ≤ 0R · <strong>Over-Risked</strong>: E_net &gt; 0 ama g ≤ 0; sistem edge üretir fakat risk büyüklüğü sermayeyi aşındırır · <strong>Fragile</strong>: PF &lt; 1.30 veya Edge Buffer &lt; 5pp · <strong>Aggressive</strong>: pozitif edge ama P(10 kayıp) ≥ 25% · <strong>Balanced</strong>: g &gt; 0, PF ≥ 1.30, Edge Buffer ≥ 5pp · <strong>Institutional</strong>: PF ≥ 1.80, Edge Buffer ≥ 15pp, P(10 kayıp) &lt; 15%.</p>
           </div>
           <div class="math-threshold-card math-formula-card">
             <span>Temel formüller</span>
@@ -12785,7 +12785,7 @@ function renderCharts(result){
   }
   function gradeOf(m){
     if(m.e<=0) return {label:"Negative",tone:"bad",why:"E_net ≤ 0R"};
-    if(m.g<=0) return {label:"Fragile",tone:"warn",why:"g ≤ 0"};
+    if(m.e>0 && m.g<=0) return {label:"Over-Risked",tone:"warn",why:"E_net > 0 ama g ≤ 0 — risk geometrik büyümeyi eziyor"};
     if(m.pf<1.30 || m.edge<.05) return {label:"Fragile",tone:"warn",why:"PF < 1.30 veya Edge Buffer < 5pp"};
     if(m.pf>=1.80 && m.edge>=.15 && m.streak10<.15) return {label:"Institutional",tone:"good",why:"PF ≥ 1.80, Edge ≥ 15pp, P10-streak < 15%"};
     if(m.streak10>=.25) return {label:"Aggressive",tone:"warn",why:"Pozitif edge ama P(10 kayıp) ≥ 25%"};
@@ -12809,7 +12809,11 @@ function renderCharts(result){
     const title=$("mathEditorTitle"); if(title) title.textContent=s.name;
     const chip=$("mathGradeChip"); if(chip){chip.className="math-grade-chip "+m.grade.tone; chip.textContent=m.grade.label+" · "+m.grade.why;}
     const host=$("mathEditorControls"); if(!host) return;
-    host.innerHTML=ranges.map(r=>{const raw=s[r.key], display=(r.prefix||"")+raw+(r.suffix||""); const fill=(raw-r.min)/(r.max-r.min)*100; return `
+    host.innerHTML=`
+      <label class="math-slider-card math-name-card">
+        <span class="math-slider-top"><b>Sistem Adı</b><em>Editable</em></span>
+        <input class="field small math-name-input" id="mathSystemNameInput" type="text" maxlength="28" value="${s.name.replace(/"/g,'&quot;')}">
+      </label>`+ranges.map(r=>{const raw=s[r.key], display=(r.prefix||"")+raw+(r.suffix||""); const fill=(raw-r.min)/(r.max-r.min)*100; return `
       <label class="math-slider-card">
         <span class="math-slider-top"><b>${r.label}</b><em class="mono">${display}</em></span>
         <input class="range math-range" data-key="${r.key}" type="range" min="${r.min}" max="${r.max}" step="${r.step}" value="${raw}" style="--fill:${fill}%">
@@ -12819,6 +12823,15 @@ function renderCharts(result){
         <span class="math-slider-top"><b>Sistem Durumu</b><em>${s.on?"Aktif":"Kapalı"}</em></span>
         <button class="btn ${s.on?"olive":"ruby"}" id="mathToggleSystem" type="button">${s.on?"Kıyaslamadan çıkar":"Kıyaslamaya al"}</button>
       </label>`;
+    const nameInput=$("mathSystemNameInput");
+    if(nameInput) nameInput.addEventListener("input",()=>{
+      const next=(nameInput.value||"").trim().slice(0,28);
+      systems[selected].name=next || ("Sys "+String.fromCharCode(65+selected));
+      const title=$("mathEditorTitle"); if(title) title.textContent=systems[selected].name;
+      schedule({skipChart:true, skipEditor:true});
+      window.clearTimeout(chartDebounce);
+      chartDebounce=window.setTimeout(()=>{renderActiveChart();},180);
+    });
     qsa("[data-key]",host).forEach(el=>{
       el.addEventListener("input",()=>{
         const key=el.dataset.key; const cfg=ranges.find(x=>x.key===key);
@@ -12841,13 +12854,17 @@ function renderCharts(result){
   }
   function cellClass(metric,val,m){
     if(metric==="e") return val>0?"good":"bad";
+    if(metric==="be") return val<=.25?"good":val<=.45?"watch":"bad";
+    if(metric==="reqR") return val<=1.5?"good":val<=3?"watch":"bad";
     if(metric==="pf") return val>=1.8?"good":val>=1.3?"watch":"bad";
     if(metric==="edge") return val>=.15?"good":val>=.05?"watch":"bad";
     if(metric==="g") return val>0?"good":"bad";
     if(metric==="probNeg") return val<.05?"good":val<.20?"watch":"bad";
     if(metric==="nmin") return val<=30?"good":val<=150?"watch":"bad";
+    if(metric==="streak5") return val<.20?"good":val<.55?"watch":"bad";
     if(metric==="streak10") return val<.15?"good":val<.35?"watch":"bad";
     if(metric==="dd10") return val<.12?"good":val<.25?"watch":"bad";
+    if(metric==="recovery") return val<.15?"good":val<.35?"watch":"bad";
     return "";
   }
   function renderMatrix(){
@@ -12855,6 +12872,8 @@ function renderCharts(result){
     const rows=[
       {title:"Matematiksel Kenar",items:[
         ["Net Beklenen Değer (E_net)","e",x=>fmtR(x.e)],
+        ["Break-even WR","be",x=>fmtPct(x.be)],
+        ["Required R","reqR",x=>Number.isFinite(x.reqR)?fmtR(x.reqR):"∞"],
         ["Kâr Faktörü (Net PF)","pf",x=>Number.isFinite(x.pf)?rFmt.format(x.pf):"∞"],
         ["Edge Buffer (WR Fazlası)","edge",x=>fmtPP(x.edge)]
       ]},
@@ -12865,12 +12884,13 @@ function renderCharts(result){
         ["Gereken Min. Trade (N_min)","nmin",x=>Number.isFinite(x.nmin)?x.nmin:"—"]
       ]},
       {title:"Psikolojik Taşıma Yükü",items:[
+        ["P(5-Ardışık Kayıp)","streak5",x=>fmtPct(x.streak5)],
         ["P(10-Ardışık Kayıp)","streak10",x=>fmtPct(x.streak10)],
         ["Beklenen Max Streak","maxStreak",x=>Math.round(x.maxStreak)+" trade"],
         ["DD @ 10-Kayıp","dd10",x=>fmtPct(x.dd10)],
         ["Recovery Yükü (@ 10 DD)","recovery",x=>fmtPct(x.recovery)]
       ]},
-      {title:"Monte Carlo P50/P5 Bandı",items:[
+      {title:"Analytical Projection (Log-Normal)",items:[
         ["Medyan Final (P50)","p50",x=>moneyFmt.format(x.p50)],
         ["Kötü Senaryo (P5)","p5",x=>moneyFmt.format(x.p5)],
         ["İyi Senaryo (P95)","p95",x=>moneyFmt.format(x.p95)]
@@ -12921,8 +12941,21 @@ function renderCharts(result){
     charts[id]=new Chart(el,{type,data,options:merged});
   }
   function renderGrowth(){
-    const {s,m}=selectedPack(); const labels=[], vals=[]; for(let r=.1;r<=5.001;r+=.1){const x=Object.assign({},s,{risk:+r.toFixed(1)}); labels.push(r.toFixed(1)+"%"); vals.push(calc(x).g*100);}
-    baseChart("mathGrowthChart","line",{labels,datasets:[{label:s.name+" g%",data:vals,borderColor:colors[selected],borderWidth:2,pointRadius:0},{label:"Mevcut risk",data:labels.map((_,i)=>Math.abs((i+1)/10-s.risk)<.051?m.g*100:null),borderColor:"#7f2737",pointRadius:4,showLine:false}]},{scales:{y:{ticks:{callback:v=>v+"%"}}}});
+    const packs=enabled(); 
+    const riskValues=[]; for(let r=.1;r<=5.001;r+=.1) riskValues.push(+r.toFixed(1));
+    let yMin=Infinity, yMax=-Infinity;
+    const datasets=packs.map(p=>{
+      const data=riskValues.map(r=>{const y=calc(Object.assign({},p.s,{risk:r})).g*100; yMin=Math.min(yMin,y); yMax=Math.max(yMax,y); return {x:r,y};});
+      return {label:p.s.name+" g%",data,borderColor:colors[p.i],borderWidth:p.i===selected?2.6:1.8,pointRadius:0,tension:.18};
+    });
+    const sel=selectedPack();
+    const k=Math.max(0,sel.m.kelly*100), hk=Math.max(0,sel.m.halfKelly*100);
+    if(!Number.isFinite(yMin)){yMin=-1;yMax=1;}
+    const pad=Math.max(.05,(yMax-yMin)*.08); yMin-=pad; yMax+=pad;
+    if(k>0 && k<=5) datasets.push({label:sel.s.name+" Kelly",data:[{x:k,y:yMin},{x:k,y:yMax}],borderColor:"#7f2737",borderWidth:1.5,borderDash:[5,4],pointRadius:0});
+    if(hk>0 && hk<=5) datasets.push({label:sel.s.name+" Half-Kelly",data:[{x:hk,y:yMin},{x:hk,y:yMax}],borderColor:"#a88442",borderWidth:1.5,borderDash:[2,4],pointRadius:0});
+    datasets.push({label:sel.s.name+" Mevcut risk",data:[{x:sel.s.risk,y:sel.m.g*100}],type:"scatter",backgroundColor:"#171411",borderColor:"#171411",pointRadius:5,pointHoverRadius:7});
+    baseChart("mathGrowthChart","line",{datasets},{scales:{x:{type:"linear",min:.1,max:5,title:{display:true,text:"Risk / Trade (%)"},ticks:{callback:v=>v+"%"}},y:{ticks:{callback:v=>v+"%"}}}});
   }
   function renderBurden(){
     const packs=enabled(); const labels=Array.from({length:14},(_,i)=>String(i+2));
@@ -12957,13 +12990,38 @@ function renderCharts(result){
     baseChart("mathEquityChart","line",{labels:mcCache.labels,datasets:ds},{scales:{y:{ticks:{callback:v=>moneyFmt.format(v)}}}});
   }
   function renderSurface(){
-    const {s}=selectedPack(); const host=$("mathHeatmapTable"); if(host){const wrs=[20,30,40,50,60,70,80], rs=[1,1.5,2,3,4,6,8]; host.innerHTML=`<table><thead><tr><th>WR \\ R</th>${rs.map(r=>`<th>${r}R</th>`).join("")}</tr></thead><tbody>${wrs.map(w=>`<tr><th>${w}%</th>${rs.map(R=>{const e=calc(Object.assign({},s,{wr:w,R})).e; const cls=e>0.6?"hm-good":e>0?"hm-watch":"hm-bad"; return `<td class="${cls} mono">${fmtR(e)}</td>`;}).join("")}</tr>`).join("")}</tbody></table>`;}
-    const labels=[], be=[]; for(let r=.5;r<=10.001;r+=.25){labels.push(r.toFixed(2)); be.push(((s.L+s.cost)/(r+s.L))*100);}
-    baseChart("mathBreakEvenChart","line",{labels,datasets:[{label:"Break-even WR",data:be,borderColor:"#c65b36",borderWidth:2,pointRadius:0},{label:s.name,data:[{x:String(s.R),y:calc(s).be*100}],type:"scatter",backgroundColor:"#171411",pointRadius:5}]},{scales:{y:{ticks:{callback:v=>v+"%"}}}});
+    const {s}=selectedPack(); 
+    const host=$("mathHeatmapTable"); 
+    if(host){
+      const wrs=[5,10,15,20,30,40,50,60,70,80,90,95];
+      const rs=[.5,1,1.5,2,3,4,6,8,10,12,15];
+      const packs=enabled();
+      function nearest(arr,v){return arr.reduce((a,b)=>Math.abs(b-v)<Math.abs(a-v)?b:a,arr[0]);}
+      const markers={};
+      packs.forEach(p=>{
+        const wr=nearest(wrs,p.s.wr), rr=nearest(rs,p.s.R);
+        const key=wr+"|"+rr;
+        markers[key]=(markers[key]||[]).concat(`<span class="math-heat-marker" style="border-color:${colors[p.i]};color:${colors[p.i]}">${p.s.name}</span>`);
+      });
+      host.innerHTML=`<table><thead><tr><th>WR \\ R</th>${rs.map(r=>`<th>${r}R</th>`).join("")}</tr></thead><tbody>${wrs.map(w=>`<tr><th>${w}%</th>${rs.map(R=>{const e=calc(Object.assign({},s,{wr:w,R})).e; const cls=e>0.6?"hm-good":e>0?"hm-watch":"hm-bad"; const mark=markers[w+"|"+R]?`<div class="math-heat-markers">${markers[w+"|"+R].join("")}</div>`:""; return `<td class="${cls} mono"><span>${fmtR(e)}</span>${mark}</td>`;}).join("")}</tr>`).join("")}</tbody></table>`;
+    }
+    const curve=[]; for(let r=.5;r<=15.001;r+=.25) curve.push({x:+r.toFixed(2),y:((s.L+s.cost)/(r+s.L))*100});
+    const packs=enabled();
+    const datasets=[{label:"Break-even WR",data:curve,borderColor:"#c65b36",borderWidth:2,pointRadius:0}].concat(
+      packs.map(p=>({label:p.s.name,data:[{x:p.s.R,y:p.m.be*100}],type:"scatter",backgroundColor:colors[p.i],borderColor:colors[p.i],pointRadius:p.i===selected?6:4,pointHoverRadius:8}))
+    );
+    baseChart("mathBreakEvenChart","line",{datasets},{scales:{x:{type:"linear",min:.5,max:15,title:{display:true,text:"Average Win R"},ticks:{callback:v=>v+"R"}},y:{ticks:{callback:v=>v+"%"}}}});
   }
   function renderCost(){
-    const {s,m}=selectedPack();
-    baseChart("mathCostChart","bar",{labels:["Gross E","Cost","Net E"],datasets:[{label:"R",data:[m.gross,-s.cost,m.e],backgroundColor:["#647049","#7f2737","#c65b36"]}]},{plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>v+"R"}}}});
+    const packs=enabled();
+    baseChart("mathCostChart","bar",{
+      labels:packs.map(p=>p.s.name),
+      datasets:[
+        {label:"Gross E",data:packs.map(p=>p.m.gross),backgroundColor:"#647049"},
+        {label:"Cost",data:packs.map(p=>-p.s.cost),backgroundColor:"#7f2737"},
+        {label:"Net E",data:packs.map(p=>p.m.e),backgroundColor:"#c65b36"}
+      ]
+    },{scales:{y:{ticks:{callback:v=>v+"R"}}}});
   }
   function renderActiveChart(){
     if(activeView==="growth") renderGrowth();
@@ -17576,6 +17634,276 @@ canvas{
   }, true);
 })();
 </script>
+
+
+<style id="p36-math-model-product-fixes">
+/* P36 — product fixes from review: Over-Risked grade, richer matrix rows, system markers, editable names. */
+#mathlab .math-name-card{
+  border-left:3px solid var(--gold) !important;
+}
+#mathlab .math-name-input{
+  width:100% !important;
+  font-family:Inter,system-ui,sans-serif !important;
+  font-weight:650 !important;
+  letter-spacing:.01em !important;
+  text-align:left !important;
+}
+#mathlab .math-grade-chip.warn{
+  border-left:3px solid var(--gold) !important;
+}
+#mathlab .math-heatmap td{
+  position:relative !important;
+  vertical-align:middle !important;
+  min-width:74px !important;
+}
+#mathlab .math-heatmap td > span{
+  display:block !important;
+}
+#mathlab .math-heat-markers{
+  display:flex !important;
+  flex-wrap:wrap !important;
+  gap:3px !important;
+  justify-content:center !important;
+  margin-top:4px !important;
+}
+#mathlab .math-heat-marker{
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  max-width:100% !important;
+  padding:1px 4px !important;
+  border:1px solid currentColor !important;
+  background:#fffdf8 !important;
+  font-family:Inter,system-ui,sans-serif !important;
+  font-size:7.4px !important;
+  line-height:1.2 !important;
+  font-weight:750 !important;
+  letter-spacing:.04em !important;
+  text-transform:uppercase !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+#mathlab .math-matrix-block h3{
+  overflow-wrap:anywhere !important;
+}
+#mathlab .math-matrix td:first-child{
+  min-width:190px !important;
+}
+@media (max-width:760px){
+  #mathlab .math-heatmap table{
+    min-width:980px !important;
+  }
+  #mathlab .math-heat-marker{
+    font-size:8px !important;
+  }
+  #mathlab .math-matrix td:first-child{
+    min-width:170px !important;
+  }
+}
+</style>
+
+
+<style id="p37-panorama-readability-patch">
+/* p37 — Sonuç Panoraması okunabilirlik düzeltmesi */
+.results-panorama .panorama-grid{
+  display:grid !important;
+  grid-template-columns:1fr !important;
+  gap:18px !important;
+}
+.results-panorama .panorama-block,
+.results-panorama .final-band-board,
+.results-panorama .comfort-block,
+.results-panorama .edge-block{
+  grid-column:1 / -1 !important;
+  width:100% !important;
+  max-width:100% !important;
+  min-width:0 !important;
+}
+.results-panorama .final-board-main{
+  display:grid !important;
+  grid-template-columns:minmax(320px,.92fr) minmax(0,1.28fr) !important;
+  grid-template-areas:
+    "title scale"
+    "hero  scale"
+    "tail  scale" !important;
+  gap:16px 18px !important;
+  align-items:start !important;
+}
+.results-panorama .final-board-title{grid-area:title !important; min-width:0 !important;}
+.results-panorama .final-board-hero{grid-area:hero !important; min-width:0 !important;}
+.results-panorama .tail-ledger{grid-area:tail !important; min-width:0 !important;}
+.results-panorama .final-board-scale{grid-area:scale !important; min-width:0 !important;}
+
+.results-panorama .final-board-title h3{
+  font-size:clamp(32px,3.2vw,44px) !important;
+  line-height:.96 !important;
+  letter-spacing:-.025em !important;
+}
+.results-panorama .final-board-title p{
+  max-width:36ch !important;
+  font-size:13px !important;
+  line-height:1.45 !important;
+}
+
+.results-panorama .final-board-hero,
+.results-panorama .tail-ledger > div,
+.results-panorama .final-ledger-cell{
+  background:#fffdf8 !important;
+  border:1px solid rgba(224,216,203,.78) !important;
+  box-shadow:none !important;
+}
+
+.results-panorama .final-board-hero{
+  padding:18px 18px 16px !important;
+  min-height:136px !important;
+  display:flex !important;
+  flex-direction:column !important;
+  justify-content:center !important;
+}
+.results-panorama .final-board-hero span{
+  display:block !important;
+  font-size:10px !important;
+  letter-spacing:.15em !important;
+  text-transform:uppercase !important;
+  font-weight:800 !important;
+  color:var(--stone) !important;
+}
+.results-panorama .final-board-hero strong{
+  display:block !important;
+  margin-top:8px !important;
+  font-family:"Cormorant Garamond", Georgia, serif !important;
+  font-size:clamp(34px,3.8vw,54px) !important;
+  line-height:.95 !important;
+  letter-spacing:-.03em !important;
+  white-space:normal !important;
+  overflow:visible !important;
+  text-overflow:clip !important;
+  word-break:break-word !important;
+}
+.results-panorama .final-board-hero em{
+  display:block !important;
+  margin-top:8px !important;
+  font-style:normal !important;
+  color:var(--stone) !important;
+  font-size:12px !important;
+  line-height:1.35 !important;
+}
+
+.results-panorama .tail-ledger{
+  display:grid !important;
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  gap:10px !important;
+}
+.results-panorama .tail-ledger > div{
+  min-width:0 !important;
+  padding:14px 14px 12px !important;
+}
+.results-panorama .tail-ledger > div span{
+  display:block !important;
+  font-size:10px !important;
+  text-transform:uppercase !important;
+  letter-spacing:.14em !important;
+  font-weight:800 !important;
+  color:var(--stone) !important;
+}
+.results-panorama .tail-ledger > div strong{
+  display:block !important;
+  margin-top:6px !important;
+  font-family:"Cormorant Garamond", Georgia, serif !important;
+  font-size:clamp(22px,2.2vw,30px) !important;
+  line-height:1 !important;
+  letter-spacing:-.02em !important;
+  white-space:normal !important;
+  overflow:visible !important;
+  text-overflow:clip !important;
+  word-break:break-word !important;
+}
+.results-panorama .tail-ledger > div em{
+  display:block !important;
+  margin-top:5px !important;
+  font-style:normal !important;
+  color:var(--stone) !important;
+  font-size:11px !important;
+}
+
+.results-panorama .final-board-scale{
+  padding:10px 0 0 !important;
+}
+.results-panorama .final-ledger-grid{
+  display:grid !important;
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  gap:10px !important;
+}
+.results-panorama .final-ledger-cell{
+  min-height:108px !important;
+  padding:14px 16px !important;
+  display:flex !important;
+  flex-direction:column !important;
+  justify-content:flex-start !important;
+}
+.results-panorama .final-ledger-cell span{
+  display:block !important;
+  font-size:10px !important;
+  text-transform:uppercase !important;
+  letter-spacing:.14em !important;
+  font-weight:800 !important;
+  color:var(--stone) !important;
+}
+.results-panorama .final-ledger-cell strong{
+  display:block !important;
+  margin-top:8px !important;
+  font-family:"Cormorant Garamond", Georgia, serif !important;
+  font-size:clamp(28px,2.8vw,38px) !important;
+  line-height:.98 !important;
+  letter-spacing:-.025em !important;
+  white-space:normal !important;
+  overflow:visible !important;
+  text-overflow:clip !important;
+  word-break:break-word !important;
+}
+.results-panorama .final-ledger-cell em{
+  display:block !important;
+  margin-top:6px !important;
+  font-style:normal !important;
+  color:var(--stone) !important;
+  font-size:12px !important;
+  line-height:1.3 !important;
+}
+
+@media (max-width:1120px){
+  .results-panorama .final-board-main{
+    grid-template-columns:1fr !important;
+    grid-template-areas:
+      "title"
+      "hero"
+      "tail"
+      "scale" !important;
+  }
+  .results-panorama .tail-ledger,
+  .results-panorama .final-ledger-grid{
+    grid-template-columns:1fr 1fr !important;
+  }
+}
+@media (max-width:640px){
+  .results-panorama .final-board-title h3{
+    font-size:28px !important;
+  }
+  .results-panorama .tail-ledger,
+  .results-panorama .final-ledger-grid{
+    grid-template-columns:1fr !important;
+  }
+  .results-panorama .final-board-hero strong{
+    font-size:34px !important;
+  }
+  .results-panorama .tail-ledger > div strong{
+    font-size:24px !important;
+  }
+  .results-panorama .final-ledger-cell strong{
+    font-size:30px !important;
+  }
+}
+</style>
 
 </body>
 </html>
