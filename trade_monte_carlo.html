@@ -8141,46 +8141,62 @@ body[data-active-mode="basic"] .simulation-output{
 <a class="btn olive" href="./index.html"><svg viewbox="0 0 24 24"><path d="M19 12H5"></path><path d="M12 19l-7-7 7-7"></path></svg>Ana Portföy</a>
 </div>
 </header>
-<section aria-label="Özet sonuçlar" class="result-strip">
-<div class="metric bad">
-<div class="metric-label">P5 Final Sermaye</div>
-<div class="metric-value mono" id="hudP5">—</div>
-<div class="metric-sub" id="hudP5Sub">Kötü senaryo bandı</div>
+<section aria-label="Özet sonuçlar" class="result-strip executive-hud gallery-ledger-hud trade-index-hud">
+<div class="metric hud-card hero">
+<div class="metric-label hud-label">Medyan Final Sermaye<span>Simülasyonun ana sermaye patikası</span></div>
+<div class="metric-value hud-value mono" id="hudMedian">—</div>
+<div class="hud-rows">
+<div class="metric-sub hud-row" id="hudMedianSub"><span>Durum</span><strong>Simülasyon henüz çalışmadı.</strong></div>
 </div>
-<div class="metric bad tail-avg-metric">
-<div class="metric-label">Alt %10 Ortalaması</div>
-<div class="metric-value mono" id="hudTailAvg">—</div>
-<div class="metric-sub" id="hudTailAvgSub">Alt %5: —</div>
 </div>
-<div class="metric hero-metric">
-<div class="metric-label">Medyan Final Sermaye</div>
-<div class="metric-value mono" id="hudMedian">—</div>
-<div class="metric-sub" id="hudMedianSub">Simülasyon henüz çalışmadı.</div>
+<div class="metric hud-card life">
+<div class="metric-label hud-label">P5 Final Sermaye<span>Kötü senaryo sermaye tabanı</span></div>
+<div class="metric-value hud-value mono" id="hudP5">—</div>
+<div class="hud-rows">
+<div class="metric-sub hud-row" id="hudP5Sub"><span>Alt bant</span><strong>Kötü senaryo bandı</strong></div>
 </div>
-<div class="metric good">
-<div class="metric-label">Hedefe Ulaşma</div>
-<div class="metric-value mono" id="hudTarget">—</div>
-<div class="metric-sub">P(hedefe en az bir temas)</div>
 </div>
-<div class="metric">
-<div class="metric-label">Kârda Bitme</div>
-<div class="metric-value mono" id="hudProfit">—</div>
-<div class="metric-sub">P(final &gt; başlangıç)</div>
+<div class="metric hud-card small">
+<div class="metric-label hud-label">Alt %10 Ortalaması<span>Tail risk ortalaması</span></div>
+<div class="metric-value hud-value mono" id="hudTailAvg">—</div>
+<div class="hud-rows">
+<div class="metric-sub hud-row" id="hudTailAvgSub"><span>Alt %5</span><strong>—</strong></div>
 </div>
-<div class="metric bad">
-<div class="metric-label">Kritik Sermaye Riski</div>
-<div class="metric-value mono" id="hudRuin">—</div>
-<div class="metric-sub">P(eşik altına temas)</div>
 </div>
-<div class="metric">
-<div class="metric-label">Dağılım-Ayarlı Beklenen R</div>
-<div class="metric-value mono" id="hudER">—</div>
-<div class="metric-sub" id="hudERSub">Teorik edge bekleniyor</div>
+<div class="metric hud-card small">
+<div class="metric-label hud-label">Hedefe Ulaşma<span>P(hedefe en az bir temas)</span></div>
+<div class="metric-value hud-value mono" id="hudTarget">—</div>
+<div class="hud-rows">
+<div class="metric-sub hud-row"><span>Olasılık</span><strong>Temas</strong></div>
 </div>
-<div class="metric">
-<div class="metric-label">Strateji Skoru</div>
-<div class="metric-value mono" id="hudHealth">—</div>
-<div class="metric-sub">0–100 uygunluk göstergesi</div>
+</div>
+<div class="metric hud-card small">
+<div class="metric-label hud-label">Kârda Bitme<span>P(final &gt; başlangıç)</span></div>
+<div class="metric-value hud-value mono" id="hudProfit">—</div>
+<div class="hud-rows">
+<div class="metric-sub hud-row"><span>Final</span><strong>Kâr</strong></div>
+</div>
+</div>
+<div class="metric hud-card small">
+<div class="metric-label hud-label">Kritik Sermaye Riski<span>P(eşik altına temas)</span></div>
+<div class="metric-value hud-value mono" id="hudRuin">—</div>
+<div class="hud-rows">
+<div class="metric-sub hud-row"><span>Eşik</span><strong>Risk</strong></div>
+</div>
+</div>
+<div class="metric hud-card small">
+<div class="metric-label hud-label">Dağılım-Ayarlı Beklenen R<span>Teorik edge göstergesi</span></div>
+<div class="metric-value hud-value mono" id="hudER">—</div>
+<div class="hud-rows">
+<div class="metric-sub hud-row" id="hudERSub"><span>Edge</span><strong>Bekleniyor</strong></div>
+</div>
+</div>
+<div class="metric hud-card small">
+<div class="metric-label hud-label">Strateji Skoru<span>0–100 uygunluk göstergesi</span></div>
+<div class="metric-value hud-value mono" id="hudHealth">—</div>
+<div class="hud-rows">
+<div class="metric-sub hud-row"><span>Skor</span><strong>0–100</strong></div>
+</div>
 </div>
 </section>
 
@@ -12848,21 +12864,20 @@ function renderCharts(result){
       const pfText=Number.isFinite(m.pf)?rFmt.format(m.pf):"∞";
       const isActive=i===selected;
       return `
-      <article class="math-system-card ${isActive?"active is-active":""} ${s.on?"is-enabled":"disabled is-disabled"} grade-${m.grade.key}" data-sys-card="${i}" style="--sys-color:${colors[i]};">
-        <div class="math-system-card-bar" aria-hidden="true"></div>
+      <article class="math-system-card stat-card input-card index-system-card ${isActive?"active is-active":""} ${s.on?"is-enabled":"disabled is-disabled"} grade-${m.grade.key}" data-sys-card="${i}" style="--sys-color:${colors[i]};">
         <button class="math-system-main" type="button" data-sys-select="${i}" aria-label="${esc(s.name)} sistemini düzenle">
-          <span class="math-sys-top">
+          <span class="stat-label math-sys-top">
             <span class="math-sys-title"><i class="math-sys-dot" aria-hidden="true"></i><strong>${esc(s.name)}</strong></span>
-            <em>${isActive?"Düzenleniyor":"Seç"}</em>
+            <em class="pill ${isActive?"terra":""}">${isActive?"Düzenleniyor":"Seç"}</em>
           </span>
-          <span class="math-sys-line mono">${s.wr}% WR · ${s.R}R Avg Win · ${s.risk}% risk</span>
-          <span class="math-sys-edge ${m.e>=0?"good":"bad"} mono">${fmtR(m.e)} / trade</span>
-          <span class="math-sys-mini-ledger">
-            <span><b>BE WR</b><strong class="mono">${fmtPct(m.be)}</strong></span>
-            <span><b>Net PF</b><strong class="mono">${pfText}</strong></span>
-            <span><b>Kelly</b><strong class="mono">${fmtPct(m.kelly)}</strong></span>
+          <span class="stat-value math-sys-edge ${m.e>=0?"good":"bad"}">${fmtR(m.e)}</span>
+          <span class="stat-note math-sys-line mono">${s.wr}% WR · ${s.R}R Avg Win · ${s.risk}% Risk · ${s.N} Trade</span>
+          <span class="hud-rows math-sys-mini-ledger">
+            <span class="hud-row"><b>BE WR</b><strong class="mono">${fmtPct(m.be)}</strong></span>
+            <span class="hud-row"><b>Net PF</b><strong class="mono">${pfText}</strong></span>
+            <span class="hud-row"><b>Kelly</b><strong class="mono">${fmtPct(m.kelly)}</strong></span>
           </span>
-          <span class="math-sys-grade ${m.grade.tone} grade-${m.grade.key}" title="${esc(m.grade.why)}">${m.grade.label}</span>
+          <span class="math-sys-grade pill ${m.grade.tone} grade-${m.grade.key}" title="${esc(m.grade.why)}">${m.grade.label}</span>
         </button>
         <button class="math-sys-toggle ${s.on?"on":"off"}" type="button" data-sys-toggle="${i}" aria-pressed="${s.on}" title="${s.on?"Kıyaslamadan çıkar":"Kıyaslamaya al"}">
           <span aria-hidden="true"></span>${s.on?"Kıyaslamada":"Dışarıda"}
@@ -13044,52 +13059,18 @@ function renderCharts(result){
 
   function showPane(view){
     activeView=view;
-    qsa(".math-result-tab").forEach(b=>{
-      const active=b.dataset.mathView===view;
-      b.classList.toggle("active",active);
-      b.setAttribute("aria-pressed",active?"true":"false");
-    });
+    qsa(".math-result-tab").forEach(b=>b.classList.toggle("active",b.dataset.mathView===view));
     qsa(".math-result-pane").forEach(p=>p.classList.toggle("active",p.dataset.mathPane===view));
-    window.setTimeout(()=>{renderActiveChart(); window.dispatchEvent(new Event("resize"));},40);
+    renderActiveChart();
   }
   function destroyChart(id){if(charts[id]){charts[id].destroy(); delete charts[id];}}
   function baseChart(id,type,data,opts){
-    const el=$(id);
-    if(!el) return;
-    const wrap=el.closest(".canvas-wrap") || el.parentElement;
-    function clearMsg(){
-      if(wrap) qsa(".chart-error,.chart-loading-note",wrap).forEach(n=>n.remove());
-    }
-    function showMsg(cls,msg){
-      if(!wrap) return;
-      clearMsg();
-      const box=document.createElement("div");
-      box.className=cls;
-      box.textContent=msg;
-      wrap.appendChild(box);
-    }
-    if(typeof Chart==="undefined"){
-      showMsg("chart-loading-note","Grafik motoru yükleniyor. Bağlantı hazır olduğunda grafik otomatik tekrar çizilir.");
-      if(!baseChart._retryCount) baseChart._retryCount={};
-      const n=baseChart._retryCount[id]||0;
-      if(n<20){
-        baseChart._retryCount[id]=n+1;
-        window.setTimeout(()=>renderActiveChart(),250);
-      }
-      return;
-    }
-    clearMsg();
-    const rect=wrap ? wrap.getBoundingClientRect() : el.getBoundingClientRect();
-    if(rect && (rect.width<20 || rect.height<20)){
-      window.setTimeout(()=>renderActiveChart(),120);
-      return;
-    }
+    const el=$(id); if(!el || typeof Chart==="undefined") return;
     destroyChart(id);
     const defaults = {
       responsive:true,
       maintainAspectRatio:false,
       animation:false,
-      resizeDelay:80,
       events:["mousemove","mouseout","click","touchstart","touchmove"],
       interaction:{mode:"nearest",intersect:false},
       plugins:{
@@ -13106,13 +13087,7 @@ function renderCharts(result){
     merged.plugins = Object.assign({}, defaults.plugins, userPlugins);
     merged.plugins.tooltip = Object.assign({}, defaults.plugins.tooltip, userPlugins.tooltip || {});
     merged.plugins.legend = Object.assign({}, defaults.plugins.legend, userPlugins.legend || {});
-    try{
-      charts[id]=new Chart(el,{type,data,options:merged});
-      window.setTimeout(()=>{try{charts[id] && charts[id].resize();}catch(e){}},80);
-    }catch(err){
-      console.error("math chart render failed",id,err);
-      showMsg("chart-error","Grafik çizilemedi: "+(err && err.message ? err.message : String(err)));
-    }
+    charts[id]=new Chart(el,{type,data,options:merged});
   }
   function renderGrowth(){
     if(typeof Chart !== "undefined" && !renderGrowth._zonePluginRegistered){
@@ -13384,7 +13359,6 @@ function renderCharts(result){
     renderMatrix();
     updateMathHud();
     if(!skipChartOnce) renderActiveChart();
-    window.setTimeout(()=>{try{if(document.body.dataset.activeMode==="mathlab") renderActiveChart();}catch(err){}},120);
     skipChartOnce = false;
     skipEditorOnce = false;
   }
@@ -13399,7 +13373,7 @@ function renderCharts(result){
     if(!$("mathlab")) return;
     qsa(".math-result-tab").forEach(btn=>btn.addEventListener("click",()=>showPane(btn.dataset.mathView)));
     ["mathMcRun","mathMcRunLocal"].forEach(id=>{const b=$(id); if(b) b.addEventListener("click",()=>{mcCache=null; mcPending=false; showPane("montecarlo");});});
-    qsa(".mode-btn").forEach(btn=>btn.addEventListener("click",()=>window.setTimeout(()=>{updateMathHud(); if(document.body.dataset.activeMode==="mathlab"){renderAll(); window.dispatchEvent(new Event("resize"));}},60)));
+    qsa(".mode-btn").forEach(btn=>btn.addEventListener("click",()=>window.setTimeout(()=>updateMathHud(),20)));
     try{
       new MutationObserver(()=>updateMathHud()).observe(document.body,{attributes:true,attributeFilter:["data-active-mode"]});
     }catch(err){}
@@ -17281,474 +17255,6 @@ canvas{
     margin:0 0 4mm 0 !important;
   }
 }
-
-
-/* P44 FIX — sticky HUD, index-card parity, explicit segmented states, chart visibility */
-.result-strip{
-  position:sticky !important;
-  top:0 !important;
-  z-index:1200 !important;
-  display:grid !important;
-  align-items:stretch !important;
-  background:rgba(255,253,248,.94) !important;
-  backdrop-filter:blur(18px) saturate(1.05) !important;
-  -webkit-backdrop-filter:blur(18px) saturate(1.05) !important;
-  border:1px solid rgba(205,191,174,.82) !important;
-  box-shadow:0 16px 34px rgba(56,42,25,.105) !important;
-}
-.result-strip.math-aware-hud{
-  grid-template-columns:minmax(220px,1.2fr) repeat(6,minmax(126px,1fr)) !important;
-  gap:8px !important;
-  padding:8px !important;
-}
-.result-strip.math-aware-hud .metric{
-  min-height:74px !important;
-  background:#fffdf8 !important;
-  border:1px solid rgba(226,216,201,.92) !important;
-  box-shadow:0 8px 18px rgba(56,42,25,.045) !important;
-  border-radius:10px !important;
-}
-.result-strip.math-aware-hud .metric.hero-metric{
-  border-left:4px solid var(--terra) !important;
-}
-.result-strip.math-aware-hud .metric-label{
-  font-size:8.8px !important;
-  letter-spacing:.105em !important;
-  line-height:1.16 !important;
-}
-.result-strip.math-aware-hud .metric-value{
-  font-size:clamp(22px,1.75vw,30px) !important;
-  line-height:.98 !important;
-  margin-top:6px !important;
-}
-.result-strip.math-aware-hud .metric-sub{
-  display:block !important;
-  max-height:2.5em !important;
-  white-space:normal !important;
-  overflow:hidden !important;
-  text-overflow:ellipsis !important;
-  font-size:9px !important;
-  line-height:1.25 !important;
-}
-.math-hud-dot{
-  display:inline-block;
-  width:8px;
-  height:8px;
-  border-radius:999px;
-  margin-right:6px;
-  vertical-align:middle;
-  box-shadow:0 0 0 3px rgba(255,253,248,.9),0 0 0 4px rgba(205,191,174,.55);
-}
-@media(max-width:1240px){
-  .result-strip,
-  .result-strip.math-aware-hud{
-    display:flex !important;
-    overflow-x:auto !important;
-    overflow-y:hidden !important;
-    scroll-snap-type:x proximity !important;
-    grid-template-columns:none !important;
-  }
-  .result-strip .metric,
-  .result-strip.math-aware-hud .metric{
-    flex:0 0 158px !important;
-    scroll-snap-align:start !important;
-  }
-  .result-strip .metric:first-child,
-  .result-strip.math-aware-hud .metric:first-child{
-    flex-basis:218px !important;
-  }
-}
-.segmented-selector{
-  border-radius:10px !important;
-  background:#f4ecdf !important;
-  border:1px solid rgba(205,191,174,.86) !important;
-  padding:5px !important;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.72) !important;
-}
-.segmented-option{
-  position:relative !important;
-  border-radius:7px !important;
-  min-height:42px !important;
-  border:1px solid transparent !important;
-  color:var(--stone) !important;
-  background:transparent !important;
-  box-shadow:none !important;
-}
-.segmented-option.active,
-.segmented-option[aria-pressed="true"]{
-  background:#fffdf8 !important;
-  color:var(--ink) !important;
-  border-color:rgba(198,91,54,.36) !important;
-  box-shadow:0 6px 16px rgba(56,42,25,.085), inset 0 -2px 0 rgba(198,91,54,.42) !important;
-}
-.segmented-option.active::before,
-.segmented-option[aria-pressed="true"]::before{
-  content:"";
-  width:7px;
-  height:7px;
-  border-radius:999px;
-  background:var(--terra);
-  box-shadow:0 0 0 3px rgba(198,91,54,.10);
-}
-.seed-selector .segmented-option.active::before,
-.seed-selector .segmented-option[aria-pressed="true"]::before{
-  background:var(--olive);
-  box-shadow:0 0 0 3px rgba(100,112,73,.12);
-}
-.risk-mode-compact,
-.audit-card{
-  border-radius:10px !important;
-  background:#fffdf8 !important;
-  border:1px solid rgba(226,216,201,.92) !important;
-  box-shadow:0 10px 24px rgba(56,42,25,.045) !important;
-}
-.risk-mode-compact:has(.segmented-option.active),
-.audit-card:has(.segmented-option.active){
-  border-color:rgba(198,91,54,.24) !important;
-}
-.seed-input-wrap{
-  border-radius:10px !important;
-}
-.math-workbench{
-  grid-template-columns:minmax(280px,.36fr) minmax(0,1fr) !important;
-  gap:16px !important;
-}
-.math-system-row{
-  display:grid !important;
-  gap:11px !important;
-  align-content:start !important;
-}
-.math-system-card{
-  position:relative !important;
-  display:grid !important;
-  grid-template-columns:minmax(0,1fr) auto !important;
-  gap:10px !important;
-  align-items:stretch !important;
-  overflow:hidden !important;
-  min-height:158px !important;
-  padding:0 !important;
-  border:1px solid rgba(226,216,201,.95) !important;
-  border-radius:10px !important;
-  background:linear-gradient(180deg,#fffdf8,#fbf7ef) !important;
-  box-shadow:0 10px 28px rgba(56,42,25,.045) !important;
-  opacity:1 !important;
-  cursor:default !important;
-}
-.math-system-card::after{
-  content:"";
-  position:absolute;
-  right:-34px;
-  bottom:-42px;
-  width:112px;
-  height:112px;
-  border-radius:999px;
-  background:color-mix(in srgb, var(--sys-color) 10%, transparent);
-  pointer-events:none;
-}
-.math-system-card.is-active,
-.math-system-card.active{
-  border-color:color-mix(in srgb, var(--sys-color) 42%, var(--line)) !important;
-  box-shadow:inset 4px 0 0 var(--sys-color), 0 12px 30px rgba(56,42,25,.06) !important;
-  background:linear-gradient(180deg,#fffdf8,#fbf2e8) !important;
-}
-.math-system-card.is-disabled,
-.math-system-card.disabled{
-  opacity:.72 !important;
-  filter:saturate(.75) !important;
-}
-.math-system-card-bar{
-  position:absolute;
-  inset:0 auto 0 0;
-  width:4px;
-  background:var(--sys-color);
-  opacity:.95;
-}
-.math-system-main{
-  position:relative;
-  z-index:1;
-  display:flex !important;
-  flex-direction:column !important;
-  gap:9px !important;
-  width:100% !important;
-  min-width:0 !important;
-  height:100% !important;
-  padding:14px 12px 14px 16px !important;
-  border:0 !important;
-  background:transparent !important;
-  color:var(--ink) !important;
-  text-align:left !important;
-  cursor:pointer !important;
-}
-.math-sys-top{
-  display:flex !important;
-  align-items:flex-start !important;
-  justify-content:space-between !important;
-  gap:10px !important;
-  font-size:10px !important;
-  letter-spacing:.12em !important;
-  text-transform:uppercase !important;
-  font-weight:900 !important;
-  line-height:1.22 !important;
-}
-.math-sys-title{
-  display:inline-flex !important;
-  align-items:center !important;
-  gap:8px !important;
-  min-width:0 !important;
-}
-.math-sys-title strong{
-  overflow:hidden !important;
-  text-overflow:ellipsis !important;
-  white-space:nowrap !important;
-}
-.math-sys-dot{
-  display:inline-block !important;
-  width:10px !important;
-  height:10px !important;
-  flex:none !important;
-  border-radius:999px !important;
-  background:var(--sys-color) !important;
-  box-shadow:0 0 0 3px rgba(255,253,248,.96),0 0 0 4px rgba(205,191,174,.60) !important;
-}
-.math-sys-top em{
-  display:inline-flex !important;
-  align-items:center !important;
-  min-height:22px !important;
-  padding:4px 7px !important;
-  border-radius:7px !important;
-  border:1px solid rgba(205,191,174,.72) !important;
-  background:#fffdf8 !important;
-  color:var(--stone) !important;
-  font-size:8.5px !important;
-  letter-spacing:.08em !important;
-  font-style:normal !important;
-  white-space:nowrap !important;
-}
-.math-system-card.is-active .math-sys-top em{
-  border-color:color-mix(in srgb, var(--sys-color) 42%, var(--line)) !important;
-  color:var(--sys-color) !important;
-}
-.math-sys-line{
-  color:var(--stone) !important;
-  font-size:10.5px !important;
-  line-height:1.35 !important;
-  white-space:normal !important;
-}
-.math-sys-edge{
-  font-family:"Cormorant Garamond",Georgia,serif !important;
-  font-size:31px !important;
-  line-height:.98 !important;
-  letter-spacing:-.028em !important;
-  font-weight:600 !important;
-}
-.math-sys-edge.good{color:var(--olive) !important;}
-.math-sys-edge.bad{color:var(--ruby) !important;}
-.math-sys-mini-ledger{
-  display:grid !important;
-  grid-template-columns:repeat(3,minmax(0,1fr)) !important;
-  gap:7px !important;
-  padding-top:8px !important;
-  border-top:1px solid rgba(226,216,201,.72) !important;
-}
-.math-sys-mini-ledger span{
-  display:grid !important;
-  gap:3px !important;
-  min-width:0 !important;
-}
-.math-sys-mini-ledger b{
-  color:var(--muted) !important;
-  font-size:7.6px !important;
-  letter-spacing:.12em !important;
-  text-transform:uppercase !important;
-  font-weight:900 !important;
-  white-space:nowrap !important;
-}
-.math-sys-mini-ledger strong{
-  color:var(--ink) !important;
-  font-size:11px !important;
-  line-height:1.05 !important;
-  white-space:nowrap !important;
-}
-.math-sys-grade{
-  justify-self:start !important;
-  display:inline-flex !important;
-  align-items:center !important;
-  max-width:100% !important;
-  min-height:26px !important;
-  padding:6px 9px !important;
-  border-radius:7px !important;
-  border:1px solid rgba(205,191,174,.76) !important;
-  background:#fffdf8 !important;
-  color:var(--stone) !important;
-  font-size:8.5px !important;
-  letter-spacing:.10em !important;
-  text-transform:uppercase !important;
-  font-weight:900 !important;
-  line-height:1.15 !important;
-}
-.math-sys-grade.good{color:var(--olive) !important;border-color:rgba(100,112,73,.32) !important;background:rgba(100,112,73,.055) !important;}
-.math-sys-grade.warn{color:#7a5d24 !important;border-color:rgba(168,132,66,.32) !important;background:rgba(168,132,66,.065) !important;}
-.math-sys-grade.bad{color:var(--ruby) !important;border-color:rgba(127,39,55,.28) !important;background:rgba(127,39,55,.055) !important;}
-.math-sys-toggle{
-  position:relative !important;
-  z-index:2 !important;
-  align-self:start !important;
-  display:inline-flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-  gap:7px !important;
-  margin:12px 10px 0 0 !important;
-  min-width:104px !important;
-  min-height:34px !important;
-  padding:7px 9px !important;
-  border-radius:8px !important;
-  border:1px solid rgba(205,191,174,.80) !important;
-  background:#fffdf8 !important;
-  color:var(--stone) !important;
-  font-size:8.2px !important;
-  letter-spacing:.09em !important;
-  text-transform:uppercase !important;
-  font-weight:900 !important;
-  cursor:pointer !important;
-}
-.math-sys-toggle span{
-  width:24px !important;
-  height:14px !important;
-  border-radius:999px !important;
-  background:#e6ded2 !important;
-  position:relative !important;
-  box-shadow:inset 0 0 0 1px rgba(113,106,96,.16) !important;
-}
-.math-sys-toggle span::after{
-  content:"";
-  position:absolute;
-  left:2px;
-  top:2px;
-  width:10px;
-  height:10px;
-  border-radius:50%;
-  background:#fffdf8;
-  box-shadow:0 1px 4px rgba(56,42,25,.22);
-  transition:transform .16s ease;
-}
-.math-sys-toggle.on{
-  border-color:rgba(100,112,73,.32) !important;
-  color:var(--olive) !important;
-}
-.math-sys-toggle.on span{
-  background:rgba(100,112,73,.72) !important;
-}
-.math-sys-toggle.on span::after{
-  transform:translateX(10px);
-}
-.math-matrix-block h3{
-  font-family:Inter,system-ui,sans-serif !important;
-  font-size:12px !important;
-  letter-spacing:.13em !important;
-  text-transform:uppercase !important;
-  font-weight:900 !important;
-  color:var(--ink) !important;
-}
-.math-head-dot{
-  display:inline-block;
-  width:8px;
-  height:8px;
-  border-radius:999px;
-  margin-right:6px;
-  vertical-align:middle;
-}
-.hm-great{background:rgba(100,112,73,.30) !important;color:#2f3a21 !important;font-weight:950 !important;}
-.hm-good{background:rgba(100,112,73,.16) !important;color:var(--olive) !important;font-weight:900 !important;}
-.hm-watch{background:rgba(168,132,66,.16) !important;color:#765b24 !important;font-weight:900 !important;}
-.hm-bad{background:rgba(127,39,55,.10) !important;color:var(--ruby) !important;font-weight:900 !important;}
-.hm-dead{background:rgba(127,39,55,.22) !important;color:var(--ruby) !important;font-weight:950 !important;}
-.math-heat-marker{
-  display:inline-flex;
-  align-items:center;
-  margin:4px 2px 0;
-  padding:2px 5px;
-  border:1px solid currentColor;
-  border-radius:6px;
-  background:#fffdf8;
-  font-size:7.6px;
-  font-weight:900;
-  letter-spacing:.06em;
-  text-transform:uppercase;
-}
-.canvas-wrap,
-.math-result-pane .canvas-wrap{
-  position:relative !important;
-  min-height:320px !important;
-  height:360px !important;
-}
-.canvas-wrap canvas,
-.math-result-pane canvas{
-  display:block !important;
-  width:100% !important;
-  height:100% !important;
-}
-.chart-error{
-  position:absolute;
-  inset:12px;
-  display:grid;
-  place-items:center;
-  padding:16px;
-  border:1px solid rgba(127,39,55,.24);
-  background:rgba(127,39,55,.055);
-  color:var(--ruby);
-  font-size:12px;
-  line-height:1.45;
-  text-align:center;
-  z-index:3;
-}
-.chart-loading-note{
-  position:absolute;
-  inset:12px;
-  display:grid;
-  place-items:center;
-  padding:16px;
-  border:1px solid rgba(168,132,66,.22);
-  background:rgba(168,132,66,.055);
-  color:var(--stone);
-  font-size:12px;
-  text-align:center;
-}
-.math-result-tabs{
-  display:flex !important;
-  overflow-x:auto !important;
-  gap:6px !important;
-  scroll-snap-type:x proximity !important;
-}
-.math-result-tab{
-  flex:0 0 auto !important;
-  min-width:138px !important;
-  border-radius:8px !important;
-}
-@media(max-width:1180px){
-  .math-workbench{grid-template-columns:1fr !important;}
-  .math-system-row{
-    grid-auto-flow:column !important;
-    grid-auto-columns:minmax(286px,340px) !important;
-    overflow-x:auto !important;
-    padding-bottom:8px !important;
-    scroll-snap-type:x proximity !important;
-  }
-  .math-system-card{scroll-snap-align:start !important;}
-}
-@media(max-width:620px){
-  .math-system-row{grid-auto-columns:88vw !important;}
-  .math-system-card{
-    grid-template-columns:1fr !important;
-    min-height:auto !important;
-  }
-  .math-sys-toggle{
-    margin:0 12px 12px 16px !important;
-    justify-self:start !important;
-  }
-  .math-sys-mini-ledger{grid-template-columns:1fr 1fr 1fr !important;}
-  .canvas-wrap,.math-result-pane .canvas-wrap{height:300px !important;min-height:300px !important;}
-}
-
 </style>
 
 <script id="p34-smooth-legend-fade-toggle">
@@ -19161,6 +18667,1515 @@ body.show-metric-dock .metric-dock{
   }
 }
 </style>
+
+
+<style id="p45-emergency-index-card-and-chart-repair">
+/* P45 emergency repair: use the previous working P43/PFirst7 base, then hard-align the visible pieces with index.html */
+
+/* 1) Sticky HUD must remain visible while scrolling. */
+.result-strip{
+  position:sticky !important;
+  top:0 !important;
+  z-index:1200 !important;
+  display:grid !important;
+  grid-template-columns:repeat(8,minmax(0,1fr)) !important;
+  gap:8px !important;
+  padding:8px 0 10px !important;
+  margin:0 !important;
+  background:var(--paper,#f7f3eb) !important;
+  border:0 !important;
+  border-bottom:1px solid rgba(216,205,189,.86) !important;
+  box-shadow:0 10px 24px rgba(32,27,21,.055) !important;
+  overflow:visible !important;
+  transform:none !important;
+}
+.result-strip .metric{
+  min-width:0 !important;
+  min-height:74px !important;
+  padding:10px 11px !important;
+  border:1px solid var(--line,#e6ded2) !important;
+  border-radius:10px !important;
+  background:#fffdf8 !important;
+  box-shadow:0 10px 28px rgba(56,42,25,.045) !important;
+  overflow:hidden !important;
+}
+.result-strip .metric.hero-metric{border-left:4px solid var(--terra,#ce5a37) !important;}
+.result-strip .metric.good{border-left:4px solid var(--olive,#6b754b) !important;}
+.result-strip .metric.bad{border-left:4px solid var(--ruby,#8f3b35) !important;}
+.result-strip .metric-label{
+  color:var(--stone,#716a60) !important;
+  font-size:8.8px !important;
+  letter-spacing:.115em !important;
+  line-height:1.15 !important;
+  text-transform:uppercase !important;
+  font-weight:800 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+.result-strip .metric-value{
+  font-family:"Cormorant Garamond",Georgia,serif !important;
+  color:var(--ink,#171411) !important;
+  font-size:clamp(20px,1.55vw,28px) !important;
+  line-height:1 !important;
+  letter-spacing:-.025em !important;
+  font-weight:600 !important;
+  margin-top:6px !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+.result-strip .hero-metric .metric-value{font-size:clamp(24px,2vw,34px) !important;}
+.result-strip .metric-sub{
+  margin-top:6px !important;
+  color:var(--muted,#9a9286) !important;
+  font-size:9.2px !important;
+  line-height:1.2 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+
+/* 2) Risk modeli + simülasyon tekrarı: make selected state as explicit as index segmented controls. */
+.risk-mode-compact,
+.audit-card{
+  border:1px solid var(--line,#e6ded2) !important;
+  background:linear-gradient(180deg,#fffdf8,#fbf8f1) !important;
+  border-radius:10px !important;
+  box-shadow:0 10px 28px rgba(56,42,25,.045) !important;
+}
+.segmented-selector,
+.seed-selector{
+  position:relative !important;
+  display:grid !important;
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  gap:6px !important;
+  padding:5px !important;
+  border:1px solid var(--line,#e6ded2) !important;
+  border-radius:10px !important;
+  background:#f4ecdf !important;
+}
+.segmented-option{
+  position:relative !important;
+  min-height:42px !important;
+  border:1px solid transparent !important;
+  border-radius:7px !important;
+  background:transparent !important;
+  color:var(--stone,#716a60) !important;
+  font-size:10px !important;
+  font-weight:800 !important;
+  letter-spacing:.09em !important;
+  text-transform:uppercase !important;
+  cursor:pointer !important;
+  transition:background .16s ease,border-color .16s ease,color .16s ease,box-shadow .16s ease !important;
+}
+.segmented-option:hover{
+  background:rgba(255,253,248,.68) !important;
+  color:var(--ink,#171411) !important;
+}
+.segmented-option.active,
+.segmented-option[aria-pressed="true"]{
+  background:#fffdf8 !important;
+  color:var(--ink,#171411) !important;
+  border-color:rgba(198,91,54,.38) !important;
+  box-shadow:0 6px 16px rgba(56,42,25,.075), inset 0 -2px 0 rgba(198,91,54,.55) !important;
+}
+.segmented-option.active::before,
+.segmented-option[aria-pressed="true"]::before{
+  content:"" !important;
+  width:7px !important;
+  height:7px !important;
+  border-radius:50% !important;
+  background:var(--terra,#ce5a37) !important;
+  box-shadow:0 0 0 3px rgba(198,91,54,.10) !important;
+  margin-right:7px !important;
+  display:inline-block !important;
+  vertical-align:1px !important;
+}
+
+/* 3) Math system cards: hard-match index card language, not a separate trade-widget style. */
+#mathlab .math-workbench{
+  display:flex !important;
+  flex-direction:column !important;
+  gap:14px !important;
+}
+#mathlab .math-system-row{
+  width:100% !important;
+  display:grid !important;
+  grid-template-columns:repeat(5,minmax(180px,1fr)) !important;
+  gap:12px !important;
+  align-items:stretch !important;
+  overflow:visible !important;
+}
+#mathlab .math-system-card{
+  position:relative !important;
+  min-width:0 !important;
+  min-height:190px !important;
+  padding:0 !important;
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) auto !important;
+  align-items:stretch !important;
+  gap:8px !important;
+  border:1px solid var(--line,#e6ded2) !important;
+  border-radius:10px !important;
+  background:linear-gradient(180deg,#fffdf8,#fbf8f1) !important;
+  box-shadow:0 10px 28px rgba(56,42,25,.045) !important;
+  color:var(--ink,#171411) !important;
+  overflow:hidden !important;
+  opacity:1 !important;
+}
+#mathlab .math-system-card::after{
+  content:"" !important;
+  position:absolute !important;
+  inset:auto -32px -38px auto !important;
+  width:98px !important;
+  height:98px !important;
+  border-radius:50% !important;
+  background:color-mix(in srgb,var(--sys-color,var(--terra)) 9%,transparent) !important;
+  pointer-events:none !important;
+}
+#mathlab .math-system-card-bar{
+  position:absolute !important;
+  inset:0 auto 0 0 !important;
+  width:0 !important;
+  background:var(--sys-color,var(--terra)) !important;
+  transition:width .16s ease !important;
+}
+#mathlab .math-system-card.is-active,
+#mathlab .math-system-card.active{
+  border-color:color-mix(in srgb,var(--sys-color,var(--terra)) 44%,var(--line)) !important;
+  box-shadow:0 12px 28px rgba(56,42,25,.055), inset 0 0 0 1px rgba(255,255,255,.60) !important;
+  background:linear-gradient(180deg,#fffdf8,#fbf4ea) !important;
+}
+#mathlab .math-system-card.is-active .math-system-card-bar,
+#mathlab .math-system-card.active .math-system-card-bar{
+  width:4px !important;
+}
+#mathlab .math-system-card.is-disabled .math-system-main{
+  opacity:.62 !important;
+}
+#mathlab .math-system-main{
+  position:relative !important;
+  z-index:1 !important;
+  display:grid !important;
+  gap:9px !important;
+  min-width:0 !important;
+  padding:15px 11px 15px 16px !important;
+  border:0 !important;
+  background:transparent !important;
+  color:inherit !important;
+  text-align:left !important;
+  cursor:pointer !important;
+}
+#mathlab .math-sys-top{
+  display:flex !important;
+  align-items:flex-start !important;
+  justify-content:space-between !important;
+  gap:8px !important;
+  color:var(--stone,#716a60) !important;
+  font-size:10px !important;
+  letter-spacing:.12em !important;
+  text-transform:uppercase !important;
+  font-weight:800 !important;
+}
+#mathlab .math-sys-title{
+  display:inline-flex !important;
+  align-items:center !important;
+  gap:8px !important;
+  min-width:0 !important;
+}
+#mathlab .math-sys-title strong{
+  color:var(--ink,#171411) !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  white-space:nowrap !important;
+}
+#mathlab .math-sys-dot,
+#mathlab .math-head-dot,
+.math-aware-hud .math-hud-dot{
+  display:inline-block !important;
+  flex:none !important;
+  width:9px !important;
+  height:9px !important;
+  border-radius:50% !important;
+  background:var(--sys-color,var(--terra)) !important;
+  box-shadow:0 0 0 3px rgba(226,216,201,.58) !important;
+}
+#mathlab .math-sys-line{
+  color:var(--stone,#716a60) !important;
+  font-size:11px !important;
+  line-height:1.35 !important;
+}
+#mathlab .math-sys-edge{
+  font-family:"Cormorant Garamond",Georgia,serif !important;
+  font-size:clamp(27px,2.15vw,36px) !important;
+  line-height:.95 !important;
+  font-weight:600 !important;
+  letter-spacing:-.025em !important;
+  margin-top:1px !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+#mathlab .math-sys-edge.good{color:var(--olive,#6b754b) !important;}
+#mathlab .math-sys-edge.bad{color:var(--ruby,#8f3b35) !important;}
+#mathlab .math-sys-mini-ledger{
+  display:grid !important;
+  grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  gap:6px !important;
+}
+#mathlab .math-sys-mini-ledger span{
+  min-width:0 !important;
+  border:1px solid rgba(230,222,210,.90) !important;
+  border-radius:10px !important;
+  background:#fffdf8 !important;
+  padding:7px 8px !important;
+}
+#mathlab .math-sys-mini-ledger b{
+  display:block !important;
+  color:var(--stone,#716a60) !important;
+  font-family:Inter,system-ui,sans-serif !important;
+  font-size:8px !important;
+  line-height:1.1 !important;
+  letter-spacing:.10em !important;
+  text-transform:uppercase !important;
+  font-weight:800 !important;
+}
+#mathlab .math-sys-mini-ledger strong{
+  display:block !important;
+  margin-top:4px !important;
+  color:var(--ink,#171411) !important;
+  font-family:"JetBrains Mono",ui-monospace,monospace !important;
+  font-size:11px !important;
+  line-height:1 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+#mathlab .math-sys-grade,
+#mathlab .math-grade-chip{
+  justify-self:start !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  min-height:26px !important;
+  border:1px solid var(--line,#e6ded2) !important;
+  border-radius:7px !important;
+  padding:6px 8px !important;
+  background:#fffdf8 !important;
+  font-size:9px !important;
+  letter-spacing:.085em !important;
+  text-transform:uppercase !important;
+  font-weight:850 !important;
+  color:var(--stone,#716a60) !important;
+}
+#mathlab .math-sys-toggle{
+  position:relative !important;
+  z-index:2 !important;
+  align-self:start !important;
+  justify-self:end !important;
+  margin:12px 12px 0 0 !important;
+  min-width:96px !important;
+  min-height:36px !important;
+  border:1px solid var(--line,#e6ded2) !important;
+  border-radius:7px !important;
+  background:#fffdf8 !important;
+  color:var(--stone,#716a60) !important;
+  cursor:pointer !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:6px !important;
+  padding:6px 8px !important;
+  font-size:8px !important;
+  letter-spacing:.08em !important;
+  text-transform:uppercase !important;
+  font-weight:900 !important;
+  white-space:nowrap !important;
+  box-shadow:0 4px 12px rgba(56,42,25,.045) !important;
+}
+#mathlab .math-sys-toggle span{
+  width:8px !important;
+  height:8px !important;
+  border-radius:50% !important;
+  background:var(--muted,#9a9286) !important;
+}
+#mathlab .math-sys-toggle.on{
+  color:var(--olive,#6b754b) !important;
+  border-color:rgba(107,117,75,.36) !important;
+  background:rgba(107,117,75,.055) !important;
+}
+#mathlab .math-sys-toggle.on span{background:var(--olive,#6b754b) !important;}
+#mathlab .math-sys-toggle.off{
+  color:var(--ruby,#8f3b35) !important;
+  border-color:rgba(143,59,53,.30) !important;
+  background:rgba(143,59,53,.045) !important;
+}
+#mathlab .math-sys-toggle.off span{background:var(--ruby,#8f3b35) !important;}
+
+/* 4) Charts: make blank whitespace impossible from CSS sizing. */
+.chart-shell,
+#mathlab .math-chart-shell{
+  min-height:0 !important;
+}
+.canvas-wrap,
+.canvas-wrap.small,
+.canvas-wrap.priority,
+.mathlab-equity-wrap{
+  position:relative !important;
+  display:block !important;
+  min-height:320px !important;
+  height:360px !important;
+}
+.canvas-wrap.small{height:320px !important;}
+.canvas-wrap canvas,
+.mathlab-equity-wrap canvas,
+canvas{
+  display:block !important;
+  width:100% !important;
+  min-height:260px !important;
+}
+.math-result-pane:not(.active){
+  display:none !important;
+}
+.math-result-pane.active{
+  display:block !important;
+}
+
+/* Header color dots in matrix/table */
+#mathlab .math-head-dot{
+  margin-right:7px !important;
+  vertical-align:middle !important;
+}
+
+@media(max-width:1180px){
+  .result-strip{
+    display:flex !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    gap:8px !important;
+    padding:8px 0 10px !important;
+    scroll-snap-type:x proximity !important;
+    -webkit-overflow-scrolling:touch !important;
+  }
+  .result-strip .metric{
+    flex:0 0 160px !important;
+    scroll-snap-align:start !important;
+  }
+  .result-strip .metric.hero-metric{flex-basis:230px !important;}
+  #mathlab .math-system-row{
+    display:flex !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    gap:10px !important;
+    padding-bottom:8px !important;
+    scroll-snap-type:x proximity !important;
+    -webkit-overflow-scrolling:touch !important;
+  }
+  #mathlab .math-system-card{
+    flex:0 0 308px !important;
+    scroll-snap-align:start !important;
+  }
+}
+@media(max-width:640px){
+  .result-strip .metric{flex-basis:148px !important;min-height:70px !important;}
+  .result-strip .metric.hero-metric{flex-basis:220px !important;}
+  #mathlab .math-system-card{flex-basis:292px !important;min-height:184px !important;}
+  .canvas-wrap,
+  .canvas-wrap.small,
+  .canvas-wrap.priority,
+  .mathlab-equity-wrap{
+    height:300px !important;
+    min-height:300px !important;
+  }
+}
+</style>
+
+
+<script id="p45-chart-rescue-and-segment-sync">
+(function(){
+  "use strict";
+
+  function setPressedWithin(groupSelector, activeSelector){
+    document.querySelectorAll(groupSelector).forEach(function(group){
+      var buttons = Array.prototype.slice.call(group.querySelectorAll(".segmented-option"));
+      buttons.forEach(function(btn){
+        var active = btn.matches(activeSelector) || btn.classList.contains("active") || btn.getAttribute("aria-pressed")==="true";
+        btn.setAttribute("aria-pressed", active ? "true" : "false");
+      });
+    });
+  }
+
+  function normalizeSegmented(){
+    setPressedWithin(".segmented-selector", ".active");
+  }
+
+  function ensureCanvasSize(){
+    document.querySelectorAll("canvas").forEach(function(canvas){
+      var wrap = canvas.closest(".canvas-wrap,.mathlab-equity-wrap");
+      if(wrap){
+        var h = Math.max(260, wrap.clientHeight || 0);
+        if(canvas.clientHeight < 40){
+          canvas.style.minHeight = h + "px";
+        }
+      }
+    });
+  }
+
+  function resizeCharts(){
+    ensureCanvasSize();
+    if(typeof Chart !== "undefined"){
+      try{
+        Object.keys(Chart.instances || {}).forEach(function(id){
+          var chart = Chart.instances[id];
+          if(chart && typeof chart.resize === "function") chart.resize();
+          if(chart && typeof chart.update === "function") chart.update("none");
+        });
+      }catch(err){}
+    }
+    window.dispatchEvent(new Event("resize"));
+  }
+
+  function rerenderActiveMathChart(){
+    var activeMathTab = document.querySelector(".math-result-tab.active");
+    if(activeMathTab){
+      activeMathTab.dispatchEvent(new MouseEvent("click",{bubbles:true,cancelable:true,view:window}));
+    }
+  }
+
+  function boot(){
+    normalizeSegmented();
+    ensureCanvasSize();
+    document.addEventListener("click", function(ev){
+      var seg = ev.target.closest(".segmented-option");
+      if(seg){
+        setTimeout(normalizeSegmented, 0);
+        setTimeout(resizeCharts, 60);
+      }
+      if(ev.target.closest(".mode-btn,.legacy-mode-btn,.math-result-tab,[data-math-view]")){
+        setTimeout(resizeCharts, 80);
+        setTimeout(rerenderActiveMathChart, 120);
+      }
+    }, true);
+
+    [80,250,650,1200,2200].forEach(function(ms){
+      setTimeout(function(){
+        normalizeSegmented();
+        rerenderActiveMathChart();
+        resizeCharts();
+      }, ms);
+    });
+    window.addEventListener("resize", resizeCharts, {passive:true});
+    window.addEventListener("load", function(){
+      rerenderActiveMathChart();
+      resizeCharts();
+    }, {once:true});
+  }
+
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", boot, {once:true});
+  }else{
+    boot();
+  }
+})();
+</script>
+
+
+<style id="p46-index-identical-card-system">
+/* P46 — index.html component parity layer
+   HUD, metric cards and Math Model system cards are intentionally mapped to the
+   same visual primitives used by index.html: gallery-ledger-hud, hud-card,
+   input-card/stat-card language, Cormorant hero values, Inter labels and mono ledgers. */
+:root{
+  --paper-deep:#efe7dc;
+  --card-soft:#fbf8f1;
+  --metric-border:rgba(222,212,196,.42);
+  --metric-border-strong:rgba(216,205,189,.55);
+  --metric-paper:#fffdf8;
+}
+
+/* ========== INDEX HUD: same gallery ledger language, kept sticky for this Trade MC flow ========== */
+.result-strip.trade-index-hud,
+.result-strip.executive-hud.gallery-ledger-hud{
+  position:sticky !important;
+  top:0 !important;
+  z-index:1400 !important;
+  box-sizing:border-box !important;
+  width:100% !important;
+  max-width:100% !important;
+  min-width:0 !important;
+  overflow:visible !important;
+  display:grid !important;
+  grid-template-columns:minmax(0,1.58fr) minmax(0,1.05fr) repeat(3,minmax(0,.60fr)) !important;
+  grid-template-rows:minmax(108px,auto) minmax(108px,auto) !important;
+  grid-auto-flow:row !important;
+  gap:8px !important;
+  padding:0 0 12px !important;
+  margin:0 !important;
+  border-top:1px solid rgba(230,222,210,.54) !important;
+  border-bottom:1px solid rgba(222,212,196,.52) !important;
+  border-left:0 !important;
+  border-right:0 !important;
+  border-radius:0 !important;
+  background:rgba(247,243,235,.96) !important;
+  backdrop-filter:blur(16px) !important;
+  -webkit-backdrop-filter:blur(16px) !important;
+  box-shadow:0 10px 20px rgba(32,27,21,.026) !important;
+  align-items:stretch !important;
+  grid-template-areas:
+    "hero life cagr xirr moic"
+    "hero life drawdown income swr" !important;
+}
+
+.result-strip.trade-index-hud .metric,
+.result-strip.trade-index-hud .hud-card,
+.result-strip.executive-hud.gallery-ledger-hud .metric,
+.result-strip.executive-hud.gallery-ledger-hud .hud-card{
+  box-sizing:border-box !important;
+  min-width:0 !important;
+  width:100% !important;
+  min-height:0 !important;
+  border-radius:0 !important;
+  background:#fffefb !important;
+  border:1px solid rgba(224,216,203,.62) !important;
+  box-shadow:0 7px 16px rgba(32,27,21,.022) !important;
+  padding:10px 11px !important;
+  overflow:hidden !important;
+  display:flex !important;
+  flex-direction:column !important;
+  justify-content:flex-start !important;
+  scroll-snap-align:start !important;
+}
+.result-strip.trade-index-hud .metric::before,
+.result-strip.trade-index-hud .metric::after,
+.result-strip.trade-index-hud .hud-card::before,
+.result-strip.trade-index-hud .hud-card::after{
+  display:none !important;
+}
+
+/* Explicit Trade-MC mapping into the exact index ledger geometry. */
+.result-strip.trade-index-hud .index-hud-hero{
+  grid-area:hero !important;
+  border-color:rgba(216,205,189,.70) !important;
+  box-shadow:0 10px 22px rgba(32,27,21,.030) !important;
+  border-left:4px solid var(--terra) !important;
+  padding:15px 17px !important;
+}
+.result-strip.trade-index-hud .index-hud-life{
+  grid-area:life !important;
+  border-color:rgba(216,205,189,.70) !important;
+  box-shadow:0 10px 22px rgba(32,27,21,.030) !important;
+  border-left:4px solid var(--olive) !important;
+  padding:14px 15px !important;
+}
+.result-strip.trade-index-hud .index-hud-cagr{grid-area:cagr !important;}
+.result-strip.trade-index-hud .index-hud-xirr{grid-area:xirr !important;}
+.result-strip.trade-index-hud .index-hud-moic{grid-area:moic !important;}
+.result-strip.trade-index-hud .index-hud-drawdown{grid-area:drawdown !important;}
+.result-strip.trade-index-hud .index-hud-income{grid-area:income !important;}
+.result-strip.trade-index-hud .index-hud-swr{grid-area:swr !important;}
+
+.result-strip.trade-index-hud .metric-label,
+.result-strip.executive-hud.gallery-ledger-hud .metric-label,
+.result-strip.trade-index-hud .hud-label{
+  display:block !important;
+  min-height:auto !important;
+  color:#726b62 !important;
+  font-size:8.2px !important;
+  letter-spacing:.105em !important;
+  line-height:1.18 !important;
+  text-transform:uppercase !important;
+  font-weight:700 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+.result-strip.trade-index-hud .metric-value,
+.result-strip.executive-hud.gallery-ledger-hud .metric-value,
+.result-strip.trade-index-hud .hud-value{
+  flex:0 0 auto !important;
+  color:var(--ink) !important;
+  font-family:"Cormorant Garamond",Georgia,serif !important;
+  font-weight:500 !important;
+  letter-spacing:-.022em !important;
+  line-height:.98 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  margin-top:5px !important;
+}
+.result-strip.trade-index-hud .index-hud-hero .metric-value{
+  font-size:34px !important;
+  margin-top:8px !important;
+}
+.result-strip.trade-index-hud .index-hud-life .metric-value{
+  font-size:21px !important;
+  margin-top:8px !important;
+  white-space:normal !important;
+  line-height:1.02 !important;
+}
+.result-strip.trade-index-hud .metric:not(.index-hud-hero):not(.index-hud-life) .metric-value{
+  font-size:16px !important;
+  margin-top:5px !important;
+}
+.result-strip.trade-index-hud .metric-sub{
+  display:block !important;
+  margin-top:auto !important;
+  padding-top:6px !important;
+  border-top:1px solid rgba(230,222,210,.58) !important;
+  color:#746d64 !important;
+  font-size:8.25px !important;
+  line-height:1.13 !important;
+  font-weight:400 !important;
+  min-width:0 !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+.result-strip.trade-index-hud .metric:not(.index-hud-hero):not(.index-hud-life) .metric-sub{
+  white-space:nowrap !important;
+  padding-top:0 !important;
+  border-top:0 !important;
+}
+
+/* ========== INDEX METRIC CARD FAMILY ========== */
+.stat-card,
+.results-grid .stat-card,
+.r-box,
+.compare-card,
+.mc-sensitivity-card{
+  border:1px solid var(--line) !important;
+  border-radius:10px !important;
+  background:#fffdf8 !important;
+  padding:15px !important;
+  box-shadow:0 10px 28px rgba(56,42,25,.045) !important;
+}
+.stat-label,
+.r-label,
+.compare-card strong,
+.mc-sensitivity-card strong{
+  color:var(--stone) !important;
+  font-size:9px !important;
+  letter-spacing:.13em !important;
+  text-transform:uppercase !important;
+  font-weight:900 !important;
+}
+.stat-value,
+.r-value,
+.compare-card .mono,
+.mc-sensitivity-card .mono{
+  font-family:"Cormorant Garamond",Georgia,serif !important;
+  font-size:27px !important;
+  line-height:1 !important;
+  margin-top:8px !important;
+  font-weight:600 !important;
+  color:var(--ink) !important;
+}
+
+/* ========== INDEX INPUT/STAT CARD LANGUAGE FOR MATH SYSTEM CARDS ========== */
+#mathlab .math-system-row{
+  gap:12px !important;
+}
+#mathlab .math-system-card{
+  position:relative !important;
+  display:grid !important;
+  gap:10px !important;
+  text-align:left !important;
+  background:linear-gradient(180deg,#fffdf9,#fbf7ef) !important; /* index .input-card */
+  border:1px solid var(--line) !important;
+  border-radius:10px !important; /* final index card radius */
+  padding:14px !important;
+  margin:0 !important;
+  color:var(--ink) !important;
+  cursor:pointer !important;
+  box-shadow:0 10px 28px rgba(56,42,25,.045) !important;
+  overflow:hidden !important;
+  opacity:1 !important;
+  transition:border-color .18s ease,box-shadow .18s ease,background .18s ease !important;
+}
+#mathlab .math-system-card::after{
+  content:"" !important;
+  position:absolute !important;
+  inset:auto -28px -36px auto !important;
+  width:92px !important;
+  height:92px !important;
+  border-radius:50% !important;
+  background:rgba(198,91,54,.055) !important;
+  pointer-events:none !important;
+}
+#mathlab .math-system-card.grade-institutional::after,
+#mathlab .math-system-card.grade-balanced::after{
+  background:rgba(100,112,73,.065) !important;
+}
+#mathlab .math-system-card.grade-negative::after,
+#mathlab .math-system-card.grade-overrisk::after{
+  background:rgba(127,39,55,.055) !important;
+}
+#mathlab .math-system-card:hover{
+  border-color:rgba(198,91,54,.36) !important;
+  box-shadow:0 12px 28px rgba(56,42,25,.058) !important;
+}
+#mathlab .math-system-card.is-active,
+#mathlab .math-system-card.active{
+  background:linear-gradient(180deg,#fffdf9,#fbf1e8) !important;
+  border-color:rgba(198,91,54,.52) !important;
+  box-shadow:inset 4px 0 0 var(--sys-color,var(--terra)),0 12px 28px rgba(56,42,25,.058) !important;
+}
+#mathlab .math-system-card.is-disabled{
+  opacity:.64 !important;
+  background:#fffdf8 !important;
+}
+#mathlab .math-system-card-bar{
+  display:none !important;
+}
+#mathlab .math-system-main{
+  position:relative !important;
+  z-index:1 !important;
+  display:grid !important;
+  gap:8px !important;
+  border:0 !important;
+  background:transparent !important;
+  padding:0 !important;
+  color:inherit !important;
+  text-align:left !important;
+  cursor:pointer !important;
+  min-width:0 !important;
+}
+#mathlab .math-sys-top{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:10px !important;
+  color:var(--stone) !important;
+  font-size:10px !important;
+  text-transform:uppercase !important;
+  letter-spacing:.12em !important;
+  font-weight:800 !important; /* index .input-head */
+}
+#mathlab .math-sys-title{
+  display:inline-flex !important;
+  align-items:center !important;
+  gap:8px !important;
+  min-width:0 !important;
+}
+#mathlab .math-sys-title strong{
+  color:var(--ink) !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  white-space:nowrap !important;
+}
+#mathlab .math-sys-top em{
+  flex:none !important;
+  border:1px solid var(--line) !important;
+  background:#fffdf8 !important;
+  color:var(--stone) !important;
+  border-radius:7px !important;
+  padding:4px 7px !important;
+  font-style:normal !important;
+  font-size:8px !important;
+  letter-spacing:.09em !important;
+  text-transform:uppercase !important;
+  font-weight:900 !important;
+}
+#mathlab .math-system-card.is-active .math-sys-top em{
+  color:var(--terra) !important;
+  border-color:rgba(198,91,54,.32) !important;
+}
+#mathlab .math-sys-dot{
+  width:9px !important;
+  height:9px !important;
+  border-radius:50% !important;
+  background:var(--sys-color,var(--terra)) !important;
+  box-shadow:0 0 0 3px rgba(255,253,248,.90),0 0 0 4px rgba(205,191,174,.62) !important;
+  flex:none !important;
+}
+#mathlab .math-sys-line{
+  color:var(--muted) !important;
+  font-size:10.5px !important;
+  line-height:1.4 !important;
+  font-weight:700 !important;
+}
+#mathlab .math-sys-edge{
+  font-family:"Cormorant Garamond",Georgia,serif !important;
+  font-size:28px !important; /* index stat-value scale */
+  line-height:1 !important;
+  letter-spacing:-.02em !important;
+  font-weight:600 !important;
+  margin-top:2px !important;
+  color:var(--ink) !important;
+}
+#mathlab .math-sys-edge.good{color:var(--olive) !important;}
+#mathlab .math-sys-edge.bad{color:var(--ruby) !important;}
+#mathlab .math-sys-mini-ledger{
+  display:grid !important;
+  grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  gap:7px !important;
+  margin-top:2px !important;
+}
+#mathlab .math-sys-mini-ledger span{
+  display:grid !important;
+  gap:3px !important;
+  border:1px solid rgba(226,216,201,.86) !important;
+  background:#fffdf8 !important;
+  border-radius:10px !important;
+  padding:8px 7px !important;
+  min-width:0 !important;
+}
+#mathlab .math-sys-mini-ledger b{
+  color:var(--stone) !important;
+  font-size:8px !important;
+  letter-spacing:.12em !important;
+  text-transform:uppercase !important;
+  font-weight:900 !important;
+}
+#mathlab .math-sys-mini-ledger strong{
+  color:var(--ink) !important;
+  font-size:11px !important;
+  font-weight:850 !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  white-space:nowrap !important;
+}
+#mathlab .math-sys-grade{
+  justify-self:start !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  max-width:100% !important;
+  border:1px solid var(--line) !important;
+  background:#fffdf8 !important;
+  border-radius:7px !important; /* index button chip radius */
+  padding:6px 8px !important;
+  color:var(--stone) !important;
+  font-size:9px !important;
+  letter-spacing:.09em !important;
+  text-transform:uppercase !important;
+  font-weight:900 !important;
+  line-height:1.15 !important;
+}
+#mathlab .math-sys-grade.good{color:var(--olive) !important;border-color:rgba(100,112,73,.28) !important;background:rgba(100,112,73,.055) !important;}
+#mathlab .math-sys-grade.warn{color:var(--terra) !important;border-color:rgba(198,91,54,.30) !important;background:rgba(198,91,54,.055) !important;}
+#mathlab .math-sys-grade.bad{color:var(--ruby) !important;border-color:rgba(127,39,55,.28) !important;background:rgba(127,39,55,.055) !important;}
+#mathlab .math-sys-toggle{
+  position:relative !important;
+  z-index:1 !important;
+  min-height:34px !important;
+  border:1px solid var(--line-strong) !important;
+  background:linear-gradient(180deg,#fffdf8,#f7efe4) !important; /* index .btn */
+  color:var(--ink) !important;
+  border-radius:7px !important;
+  padding:7px 10px !important;
+  cursor:pointer !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:8px !important;
+  font-size:9px !important;
+  letter-spacing:.10em !important;
+  text-transform:uppercase !important;
+  font-weight:850 !important;
+}
+#mathlab .math-sys-toggle span{
+  width:8px !important;
+  height:8px !important;
+  border-radius:50% !important;
+  background:currentColor !important;
+}
+#mathlab .math-sys-toggle.on{
+  color:var(--olive) !important;
+  border-color:rgba(107,117,75,.50) !important;
+  background:#fffdf8 !important;
+}
+#mathlab .math-sys-toggle.off{
+  color:var(--muted) !important;
+  border-color:rgba(205,191,174,.60) !important;
+  background:#fbf7ef !important;
+}
+
+/* Editor/threshold cards under Math Model should also read as index cards. */
+#mathlab .math-editor-board,
+#mathlab .math-threshold-card,
+#mathlab .math-output-panel,
+#mathlab .math-clean-panel{
+  background:#fffdf8 !important;
+  border:1px solid var(--line) !important;
+  border-radius:10px !important;
+  box-shadow:0 10px 28px rgba(56,42,25,.045) !important;
+}
+#mathlab .math-slider-card{
+  border:1px solid var(--line) !important;
+  border-radius:10px !important;
+  padding:17px !important;
+  background:linear-gradient(180deg,#fffdf8,#f8f2e8) !important; /* index .slider-card */
+  box-shadow:none !important;
+}
+#mathlab .math-slider-top,
+#mathlab .math-kicker{
+  color:var(--stone) !important;
+  font-size:10px !important;
+  text-transform:uppercase !important;
+  letter-spacing:.13em !important;
+  font-weight:900 !important;
+}
+
+/* Keep charts visible; this must not change chart logic. */
+.canvas-wrap,
+.canvas-wrap.small,
+.canvas-wrap.priority,
+.mathlab-equity-wrap{
+  position:relative !important;
+  min-height:300px !important;
+}
+.canvas-wrap canvas,
+.mathlab-equity-wrap canvas{
+  display:block !important;
+  width:100% !important;
+  max-width:100% !important;
+  min-height:260px !important;
+  visibility:visible !important;
+  opacity:1 !important;
+}
+
+@media(max-width:1180px){
+  .result-strip.trade-index-hud,
+  .result-strip.executive-hud.gallery-ledger-hud{
+    display:flex !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    scroll-snap-type:x proximity !important;
+    padding:0 0 10px !important;
+    gap:8px !important;
+    grid-template-columns:none !important;
+    grid-template-rows:none !important;
+    -webkit-overflow-scrolling:touch !important;
+  }
+  .result-strip.trade-index-hud .metric{
+    flex:0 0 148px !important;
+    min-height:98px !important;
+    padding:10px !important;
+  }
+  .result-strip.trade-index-hud .index-hud-hero{
+    flex-basis:280px !important;
+    min-height:126px !important;
+    padding:14px 15px !important;
+  }
+  .result-strip.trade-index-hud .index-hud-life{
+    flex-basis:220px !important;
+    min-height:126px !important;
+    padding:14px 15px !important;
+  }
+  #mathlab .math-system-row{
+    display:flex !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    gap:10px !important;
+    padding-bottom:4px !important;
+    scroll-snap-type:x proximity !important;
+  }
+  #mathlab .math-system-card{
+    flex:0 0 304px !important;
+    scroll-snap-align:start !important;
+  }
+}
+@media(max-width:640px){
+  .result-strip.trade-index-hud .metric{flex-basis:148px !important;min-height:96px !important;}
+  .result-strip.trade-index-hud .index-hud-hero{flex-basis:266px !important;min-height:124px !important;}
+  .result-strip.trade-index-hud .index-hud-life{flex-basis:214px !important;min-height:124px !important;}
+  #mathlab .math-system-card{flex-basis:292px !important;}
+  #mathlab .math-sys-mini-ledger{grid-template-columns:1fr !important;}
+}
+</style>
+
+
+
+<style id="p47-direct-index-cards">
+/* P47: Direct index.html component parity — HUD, metric cards, Math system cards. */
+.result-strip.trade-index-hud,
+.result-strip.executive-hud.gallery-ledger-hud{
+  position:sticky !important;
+  top:0 !important;
+  z-index:70 !important;
+  box-sizing:border-box !important;
+  width:100% !important;
+  max-width:100% !important;
+  min-width:0 !important;
+  overflow:visible !important;
+  display:grid !important;
+  grid-template-columns:minmax(0,1.58fr) minmax(0,1.05fr) repeat(3,minmax(0,.60fr)) !important;
+  grid-template-rows:minmax(108px,auto) minmax(108px,auto) !important;
+  grid-auto-flow:row !important;
+  gap:8px !important;
+  padding:0 0 12px !important;
+  border:0 !important;
+  border-top:1px solid rgba(230,222,210,.54) !important;
+  border-bottom:1px solid rgba(222,212,196,.52) !important;
+  border-radius:0 !important;
+  background:rgba(247,243,235,.96) !important;
+  backdrop-filter:blur(14px) !important;
+  box-shadow:none !important;
+  align-items:stretch !important;
+  grid-template-areas:
+    "hero life cagr xirr moic"
+    "hero life drawdown income swr" !important;
+}
+.result-strip.trade-index-hud .metric,
+.result-strip.trade-index-hud .hud-card{
+  box-sizing:border-box !important;
+  min-width:0 !important;
+  width:100% !important;
+  min-height:0 !important;
+  border-radius:0 !important;
+  background:#fffefb !important;
+  border:1px solid rgba(224,216,203,.62) !important;
+  box-shadow:0 7px 16px rgba(32,27,21,.022) !important;
+  padding:10px 11px !important;
+  overflow:hidden !important;
+  display:flex !important;
+  flex-direction:column !important;
+  justify-content:flex-start !important;
+}
+.result-strip.trade-index-hud .hero{
+  grid-area:hero !important;
+  border-left:4px solid var(--terra) !important;
+  border-color:rgba(216,205,189,.70) !important;
+  padding:15px 17px !important;
+  box-shadow:0 10px 22px rgba(32,27,21,.030) !important;
+}
+.result-strip.trade-index-hud .life{
+  grid-area:life !important;
+  border-left:4px solid var(--olive) !important;
+  border-color:rgba(216,205,189,.70) !important;
+  padding:14px 15px !important;
+  box-shadow:0 10px 22px rgba(32,27,21,.030) !important;
+}
+.result-strip.trade-index-hud .metric:nth-child(3){grid-area:cagr !important;}
+.result-strip.trade-index-hud .metric:nth-child(4){grid-area:xirr !important;}
+.result-strip.trade-index-hud .metric:nth-child(5){grid-area:moic !important;}
+.result-strip.trade-index-hud .metric:nth-child(6){grid-area:drawdown !important;}
+.result-strip.trade-index-hud .metric:nth-child(7){grid-area:income !important;}
+.result-strip.trade-index-hud .metric:nth-child(8){grid-area:swr !important;}
+.result-strip.trade-index-hud .metric::before,
+.result-strip.trade-index-hud .metric::after{display:none !important;}
+.result-strip.trade-index-hud .hud-label,
+.result-strip.trade-index-hud .metric-label{
+  display:block !important;
+  min-height:auto !important;
+  color:#726b62 !important;
+  font-size:8.2px !important;
+  letter-spacing:.105em !important;
+  line-height:1.18 !important;
+  text-transform:uppercase !important;
+  font-weight:700 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+.result-strip.trade-index-hud .hud-label span,
+.result-strip.trade-index-hud .metric-label span{
+  display:-webkit-box !important;
+  margin-top:2px !important;
+  color:#9a9288 !important;
+  font-size:8.2px !important;
+  letter-spacing:0 !important;
+  text-transform:none !important;
+  font-weight:400 !important;
+  line-height:1.14 !important;
+  white-space:normal !important;
+  overflow:hidden !important;
+  -webkit-line-clamp:2 !important;
+  -webkit-box-orient:vertical !important;
+}
+.result-strip.trade-index-hud .hud-value,
+.result-strip.trade-index-hud .metric-value{
+  flex:0 0 auto !important;
+  color:var(--ink) !important;
+  font-family:"Cormorant Garamond",Georgia,serif !important;
+  font-weight:500 !important;
+  letter-spacing:-.022em !important;
+  line-height:.98 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  margin-top:5px !important;
+}
+.result-strip.trade-index-hud .hero .hud-value,
+.result-strip.trade-index-hud .hero .metric-value{
+  font-size:34px !important;
+  margin-top:8px !important;
+}
+.result-strip.trade-index-hud .life .hud-value,
+.result-strip.trade-index-hud .life .metric-value{
+  font-size:21px !important;
+  margin-top:8px !important;
+  white-space:normal !important;
+  line-height:1.02 !important;
+}
+.result-strip.trade-index-hud .small .hud-value,
+.result-strip.trade-index-hud .small .metric-value{
+  font-size:16px !important;
+  margin-top:5px !important;
+}
+.result-strip.trade-index-hud .hud-rows{
+  display:grid !important;
+  gap:3px !important;
+  margin-top:auto !important;
+  min-height:0 !important;
+}
+.result-strip.trade-index-hud .hero .hud-rows,
+.result-strip.trade-index-hud .life .hud-rows{
+  padding-top:8px !important;
+  border-top:1px solid rgba(230,222,210,.58) !important;
+}
+.result-strip.trade-index-hud .hud-row,
+.result-strip.trade-index-hud .metric-sub{
+  display:flex !important;
+  align-items:baseline !important;
+  justify-content:space-between !important;
+  gap:6px !important;
+  margin:0 !important;
+  padding:0 !important;
+  border:0 !important;
+  color:#746d64 !important;
+  font-size:8.25px !important;
+  line-height:1.13 !important;
+  font-weight:400 !important;
+  min-width:0 !important;
+}
+.result-strip.trade-index-hud .small .hud-row,
+.result-strip.trade-index-hud .small .metric-sub{
+  display:block !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+.result-strip.trade-index-hud .hud-row strong{
+  color:var(--ink) !important;
+  font-weight:600 !important;
+  white-space:nowrap !important;
+}
+
+/* Exact index.stat-card structure for Math Model system cards */
+#mathlab .math-system-row{
+  display:grid !important;
+  grid-template-columns:repeat(auto-fit,minmax(245px,1fr)) !important;
+  gap:12px !important;
+  align-items:stretch !important;
+}
+#mathlab .math-system-card.stat-card,
+#mathlab .math-system-card.index-system-card{
+  border:1px solid var(--line) !important;
+  border-radius:18px !important;
+  background:#fffdf8 !important;
+  padding:15px !important;
+  box-shadow:none !important;
+  position:relative !important;
+  overflow:hidden !important;
+  display:flex !important;
+  flex-direction:column !important;
+  gap:10px !important;
+  min-height:188px !important;
+  opacity:1 !important;
+  color:var(--ink) !important;
+}
+#mathlab .math-system-card.stat-card::before{
+  content:"" !important;
+  position:absolute !important;
+  inset:0 auto 0 0 !important;
+  width:4px !important;
+  background:transparent !important;
+  pointer-events:none !important;
+}
+#mathlab .math-system-card.stat-card.is-active::before,
+#mathlab .math-system-card.stat-card.active::before{
+  background:var(--sys-color,var(--terra)) !important;
+}
+#mathlab .math-system-card.stat-card::after{
+  display:none !important;
+}
+#mathlab .math-system-card.stat-card:hover{
+  border-color:rgba(198,91,54,.36) !important;
+  box-shadow:0 8px 20px rgba(198,91,54,.055) !important;
+}
+#mathlab .math-system-card.stat-card.is-active,
+#mathlab .math-system-card.stat-card.active{
+  border-color:rgba(198,91,54,.42) !important;
+  background:#fffdf8 !important;
+  box-shadow:0 8px 20px rgba(198,91,54,.055) !important;
+}
+#mathlab .math-system-card.stat-card.is-disabled,
+#mathlab .math-system-card.stat-card.disabled{
+  opacity:.62 !important;
+}
+#mathlab .math-system-main{
+  position:relative !important;
+  z-index:1 !important;
+  border:0 !important;
+  background:transparent !important;
+  padding:0 !important;
+  color:inherit !important;
+  text-align:left !important;
+  cursor:pointer !important;
+  display:flex !important;
+  flex-direction:column !important;
+  gap:0 !important;
+  min-width:0 !important;
+  flex:1 1 auto !important;
+}
+#mathlab .math-sys-top.stat-label{
+  color:var(--stone) !important;
+  font-size:9px !important;
+  letter-spacing:.13em !important;
+  text-transform:uppercase !important;
+  font-weight:900 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:10px !important;
+  margin:0 !important;
+}
+#mathlab .math-sys-title{
+  display:inline-flex !important;
+  align-items:center !important;
+  gap:8px !important;
+  min-width:0 !important;
+}
+#mathlab .math-sys-title strong{
+  color:var(--stone) !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  white-space:nowrap !important;
+}
+#mathlab .math-sys-dot{
+  width:8px !important;
+  height:8px !important;
+  border-radius:50% !important;
+  background:var(--sys-color,var(--terra)) !important;
+  box-shadow:0 0 0 3px rgba(255,253,248,.96),0 0 0 4px rgba(216,205,189,.54) !important;
+  flex:none !important;
+}
+#mathlab .math-sys-top .pill{
+  border-radius:7px !important;
+  padding:4px 7px !important;
+  font-size:8px !important;
+  letter-spacing:.08em !important;
+  line-height:1 !important;
+  white-space:nowrap !important;
+}
+#mathlab .math-sys-edge.stat-value{
+  font-family:"Cormorant Garamond",Georgia,serif !important;
+  font-size:27px !important;
+  line-height:1 !important;
+  margin-top:8px !important;
+  font-weight:600 !important;
+  letter-spacing:-.02em !important;
+  color:var(--ink) !important;
+}
+#mathlab .math-sys-edge.good{color:var(--olive) !important;}
+#mathlab .math-sys-edge.bad{color:var(--ruby) !important;}
+#mathlab .math-sys-line.stat-note{
+  color:var(--muted) !important;
+  font-size:10px !important;
+  margin-top:8px !important;
+  line-height:1.35 !important;
+  font-weight:700 !important;
+}
+#mathlab .math-sys-mini-ledger.hud-rows{
+  display:grid !important;
+  grid-template-columns:1fr !important;
+  gap:5px !important;
+  margin-top:11px !important;
+  padding-top:10px !important;
+  border-top:1px solid rgba(222,212,196,.62) !important;
+}
+#mathlab .math-sys-mini-ledger .hud-row{
+  display:flex !important;
+  justify-content:space-between !important;
+  align-items:baseline !important;
+  gap:10px !important;
+  color:#746d64 !important;
+  font-size:9.2px !important;
+  line-height:1.18 !important;
+  font-weight:400 !important;
+}
+#mathlab .math-sys-mini-ledger .hud-row b{
+  color:var(--stone) !important;
+  font-size:8.3px !important;
+  letter-spacing:.10em !important;
+  text-transform:uppercase !important;
+  font-weight:700 !important;
+}
+#mathlab .math-sys-mini-ledger .hud-row strong{
+  color:var(--ink) !important;
+  font-weight:600 !important;
+}
+#mathlab .math-sys-grade.pill{
+  align-self:flex-start !important;
+  margin-top:10px !important;
+  border-radius:7px !important;
+  padding:6px 8px !important;
+  font-size:8.5px !important;
+  letter-spacing:.08em !important;
+  text-transform:uppercase !important;
+  font-weight:800 !important;
+  background:#fffdf8 !important;
+}
+#mathlab .math-sys-grade.good{color:var(--olive) !important;border-color:rgba(100,112,73,.28) !important;background:rgba(100,112,73,.055) !important;}
+#mathlab .math-sys-grade.warn{color:var(--terra) !important;border-color:rgba(198,91,54,.30) !important;background:rgba(198,91,54,.055) !important;}
+#mathlab .math-sys-grade.bad{color:var(--ruby) !important;border-color:rgba(127,39,55,.28) !important;background:rgba(127,39,55,.055) !important;}
+#mathlab .math-sys-toggle{
+  position:relative !important;
+  z-index:1 !important;
+  width:100% !important;
+  min-height:34px !important;
+  border-radius:7px !important;
+  border:1px solid var(--line) !important;
+  background:#fffdf8 !important;
+  color:var(--stone) !important;
+  font-size:9px !important;
+  letter-spacing:.09em !important;
+  text-transform:uppercase !important;
+  font-weight:800 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:7px !important;
+  cursor:pointer !important;
+}
+#mathlab .math-sys-toggle span{
+  width:7px !important;
+  height:7px !important;
+  border-radius:50% !important;
+  background:currentColor !important;
+}
+#mathlab .math-sys-toggle.on{
+  color:var(--olive) !important;
+  border-color:rgba(100,112,73,.28) !important;
+  background:rgba(100,112,73,.045) !important;
+}
+#mathlab .math-sys-toggle.off{
+  color:var(--ruby) !important;
+  border-color:rgba(127,39,55,.24) !important;
+  background:rgba(127,39,55,.04) !important;
+}
+@media(max-width:1120px){
+  .result-strip.trade-index-hud,
+  .result-strip.executive-hud.gallery-ledger-hud{
+    display:flex !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    scroll-snap-type:x proximity !important;
+    padding:0 0 10px !important;
+    gap:8px !important;
+    grid-template-columns:none !important;
+    grid-template-rows:none !important;
+    -webkit-overflow-scrolling:touch !important;
+  }
+  .result-strip.trade-index-hud .metric{
+    scroll-snap-align:start !important;
+    flex:0 0 148px !important;
+    min-height:98px !important;
+    padding:10px !important;
+  }
+  .result-strip.trade-index-hud .hero{
+    flex-basis:280px !important;
+    min-height:126px !important;
+    padding:14px 15px !important;
+  }
+  .result-strip.trade-index-hud .life{
+    flex-basis:220px !important;
+    min-height:126px !important;
+    padding:14px 15px !important;
+  }
+  #mathlab .math-system-row{
+    display:flex !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    gap:10px !important;
+    padding-bottom:5px !important;
+    scroll-snap-type:x proximity !important;
+  }
+  #mathlab .math-system-card.stat-card{
+    flex:0 0 286px !important;
+    scroll-snap-align:start !important;
+  }
+}
+</style>
+
+<script id="p46-index-component-aliasing">
+(function(){
+  "use strict";
+
+  function cardFor(id){
+    var el=document.getElementById(id);
+    return el ? el.closest(".metric,.hud-card") : null;
+  }
+
+  function addClasses(el, classes){
+    if(!el) return;
+    classes.split(/\s+/).forEach(function(cls){ if(cls) el.classList.add(cls); });
+  }
+
+  function applyIndexHudAliases(){
+    var hud=document.querySelector(".result-strip");
+    if(!hud) return;
+    addClasses(hud,"executive-hud gallery-ledger-hud trade-index-hud");
+    Array.prototype.forEach.call(hud.querySelectorAll(".metric"),function(card){
+      addClasses(card,"hud-card");
+      var value=card.querySelector(".metric-value");
+      if(value) addClasses(value,"hud-value");
+      var label=card.querySelector(".metric-label");
+      if(label) addClasses(label,"hud-label");
+    });
+
+    addClasses(cardFor("hudMedian"),"index-hud-hero");
+    addClasses(cardFor("hudP5"),"index-hud-life");
+    addClasses(cardFor("hudTailAvg"),"index-hud-cagr");
+    addClasses(cardFor("hudTarget"),"index-hud-xirr");
+    addClasses(cardFor("hudProfit"),"index-hud-moic");
+    addClasses(cardFor("hudRuin"),"index-hud-drawdown");
+    addClasses(cardFor("hudER"),"index-hud-income");
+    addClasses(cardFor("hudHealth"),"index-hud-swr");
+  }
+
+  function applyMathCardAliases(){
+    var cards=document.querySelectorAll("#mathlab .math-system-card");
+    Array.prototype.forEach.call(cards,function(card){
+      addClasses(card,"input-card stat-card index-system-card");
+    });
+  }
+
+  function resizeCharts(){
+    if(typeof Chart==="undefined") return;
+    try{
+      var instances=Chart.instances || {};
+      Object.keys(instances).forEach(function(k){
+        var chart=instances[k];
+        if(chart && typeof chart.resize==="function") chart.resize();
+        if(chart && typeof chart.update==="function") chart.update("none");
+      });
+    }catch(err){}
+  }
+
+  function applyAll(){
+    applyIndexHudAliases();
+    applyMathCardAliases();
+  }
+
+  function boot(){
+    applyAll();
+    resizeCharts();
+    [60,180,450,900,1600].forEach(function(ms){
+      setTimeout(function(){applyAll(); resizeCharts();},ms);
+    });
+    document.addEventListener("click",function(ev){
+      if(ev.target.closest(".math-system-card,.mode-btn,.legacy-mode-btn,.math-result-tab,[data-sys-toggle],[data-sys-select]")){
+        setTimeout(function(){applyAll(); resizeCharts();},30);
+        setTimeout(function(){applyAll(); resizeCharts();},180);
+      }
+    },true);
+  }
+
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",boot);
+  else boot();
+})();
+</script>
 
 </body>
 </html>
