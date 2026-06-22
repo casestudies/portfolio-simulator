@@ -5230,6 +5230,61 @@ body[data-active-mode]:not([data-active-mode="basic"]) .simulation-output{displa
   }
   .btn{max-width:100% !important;}
 }
+
+/* ============================================================
+   PRINCIPAL UI · DOCK + SEÇİLİ KART + MOBİL TAŞMA (nihai katman)
+   ============================================================ */
+
+/* --- Sticky özet bar: premium, tema-uyumlu, net --- */
+.metric-dock{
+  background:rgba(251,248,241,.985) !important;
+  backdrop-filter:blur(20px) saturate(1.06) !important;
+  -webkit-backdrop-filter:blur(20px) saturate(1.06) !important;
+  border-bottom:1px solid var(--line-strong) !important;
+  box-shadow:0 10px 26px rgba(56,42,25,.12) !important;
+}
+.metric-dock .dock-card{
+  background:transparent !important;
+  border-right:1px solid rgba(222,212,196,.5) !important;
+  border-left:2px solid rgba(205,188,170,.75) !important;
+}
+.metric-dock .dock-card.dock-tail{border-left-color:var(--ruby) !important;}
+.metric-dock .dock-card.dock-primary{border-left-color:var(--terra) !important;}
+.metric-dock .dock-card.dock-risk{border-left-color:var(--ruby) !important;}
+.metric-dock .dock-card strong{color:var(--ink) !important;font-weight:640 !important;}
+.metric-dock .dock-card span{color:var(--stone) !important;font-weight:850 !important;}
+.metric-dock .dock-card em{color:var(--muted) !important;}
+
+/* --- Seçili sistem kartı: elegan, somon çerçeve YOK, köşesiz --- */
+.math-system-card{border-radius:0 !important;}
+.math-system-card.active{
+  border-color:rgba(205,188,170,.9) !important;
+  border-left:4px solid var(--terra) !important;
+  background:linear-gradient(180deg,rgba(198,91,54,.055),rgba(255,253,248,.35)) !important;
+  box-shadow:inset 0 0 0 1px rgba(198,91,54,.18),0 12px 26px rgba(198,91,54,.10) !important;
+  transform:none !important;
+}
+.math-system-card.active::before{opacity:.22 !important;}
+.math-system-card.active .msc-status{
+  color:var(--terra) !important;
+  border:1px solid rgba(198,91,54,.34) !important;
+  background:rgba(198,91,54,.07) !important;
+}
+
+/* --- Mobil: optimizasyon & math GERÇEKTEN sığsın (kırpma değil) --- */
+@media (max-width:900px){
+  .hero{grid-template-columns:1fr !important;}
+  .hero h1{font-size:clamp(28px,7.5vw,42px) !important;overflow-wrap:anywhere !important;}
+  .hero-actions{display:grid !important;grid-template-columns:1fr !important;}
+  .hero-actions .btn{width:100% !important;}
+  .opt-layout,.opt-output-grid{grid-template-columns:1fr !important;}
+  .opt-param-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important;}
+  .opt-constraint{grid-template-columns:1fr !important;}
+  .table-wrap,.opt-table-wrap{overflow-x:auto !important;-webkit-overflow-scrolling:touch !important;}
+}
+@media (max-width:440px){
+  .opt-param-grid{grid-template-columns:1fr !important;}
+}
 </style>
 </head>
 <body data-active-mode="basic">
@@ -5947,15 +6002,6 @@ body[data-active-mode]:not([data-active-mode="basic"]) .simulation-output{displa
 </div>
 <div class="scatter-inline-note"><strong>Okuma sırası:</strong> Önce final sermaye ile maksimum drawdown ilişkisine bakın. Noktalar sol-üstte yoğunlaşıyorsa strateji daha taşınabilir görünür. Ardından R volatilitesi haritasında P50 ve P5’in birbirinden ayrılıp ayrılmadığını kontrol edin; ayrışma büyüyorsa medyan sonuç iyi kalsa bile kötü senaryo riski artıyor olabilir.</div>
 <section aria-label="Yol kalitesi haritası" class="chart-shell scatter-shell-group">
-<div class="chart-head">
-<div>
-<div class="chart-title">Yol Kaönsi Haritası · Final Sermaye ve Drawdown</div>
-<div class="chart-copy">Her nokta ana Monte Carlo simülasyonundaki bir sermaye yolunu temsil eder. Dikey eksen final sermayeyi, yatay eksen yol boyunca yaşanan en derin drawdown’ı gösterir. Bu grafik, sonucun yalnızca büyüklüğünü değil, o sonuca hangi taşıma yüküyle ulaşıldığını gösterir.</div>
-</div>
-<div class="scatter-meta">
-<div class="scatter-status" id="scatterPathStatus">Simülasyon çalışınca yol kalitesi güncellenir</div>
-</div>
-</div>
 <div class="scatter-pair diagnostic-single">
 <div class="scatter-shell">
 <div class="chart-head">
@@ -5978,7 +6024,7 @@ body[data-active-mode]:not([data-active-mode="basic"]) .simulation-output{displa
 </div>
 </div>
 <div class="ana-narrative-grid" id="pathQualityNarrative">
-<div class="ana-narrative-card"><div class="ana-narrative-kicker">Yol Kaönsi</div><strong>Simülasyon sonrası yorum oluşur.</strong><p>Final sermaye, drawdown, kayıp serisi ve hedef/kritik eşik bilgileri aynı ana Monte Carlo yollarından okunacaktır.</p></div>
+<div class="ana-narrative-card"><div class="ana-narrative-kicker">Yol Kalitesi</div><strong>Simülasyon sonrası yorum oluşur.</strong><p>Final sermaye, drawdown, kayıp serisi ve hedef/kritik eşik bilgileri aynı ana Monte Carlo yollarından okunacaktır.</p></div>
 </div>
 </section>
 <section aria-label="R volatilitesi haritası" class="chart-grid equal scatter-risk-grid diagnostic-single">
