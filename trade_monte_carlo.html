@@ -5285,6 +5285,383 @@ body[data-active-mode]:not([data-active-mode="basic"]) .simulation-output{displa
 @media (max-width:440px){
   .opt-param-grid{grid-template-columns:1fr !important;}
 }
+
+/* === MOBILE RESPONSIVE REPAIR · Optimization + Mathematics tabs === */
+/* Applied as the last cascade layer to neutralize earlier !important desktop overrides. */
+.mode-panel,
+.panel,
+.chart-shell,
+.callout,
+.opt-panel,
+.math-clean-panel,
+.math-output-panel,
+.math-workbench,
+.math-editor-board,
+.math-result-pane{
+  min-width:0 !important;
+  max-width:100% !important;
+}
+
+#optimization,
+#mathlab{
+  overflow-x:hidden !important;
+}
+
+/* Optimization: all high-specificity grids collapse safely and every dense surface scrolls inside itself. */
+.opt-layout,
+.opt-output-grid,
+.opt-results .opt-output-grid{
+  min-width:0 !important;
+}
+
+.opt-card,
+.opt-output-card,
+.opt-best-card,
+.opt-narrative,
+.opt-current-compare,
+.opt-frontier-card,
+.opt-heatmap,
+.opt-table-wrap,
+.scatter-guide{
+  min-width:0 !important;
+  max-width:100% !important;
+}
+
+.opt-heatmap,
+.opt-table-wrap,
+.table-wrap,
+.math-matrix-wrap,
+.math-heatmap-table{
+  overflow-x:auto !important;
+  -webkit-overflow-scrolling:touch !important;
+  overscroll-behavior-x:contain !important;
+}
+
+.opt-actions .btn,
+.opt-panel .btn,
+.math-clean-panel .btn,
+.math-output-panel .btn{
+  min-width:0 !important;
+}
+
+@media (max-width:900px){
+  #optimization .panel-head,
+  #mathlab .panel-head{
+    display:grid !important;
+    grid-template-columns:1fr !important;
+    align-items:stretch !important;
+  }
+
+  #optimization .panel-head .btn,
+  #mathlab .panel-head .btn{
+    width:100% !important;
+    justify-self:stretch !important;
+  }
+
+  .opt-layout,
+  .opt-output-grid,
+  .opt-results .opt-output-grid{
+    display:grid !important;
+    grid-template-columns:minmax(0,1fr) !important;
+    gap:14px !important;
+  }
+
+  .opt-param-grid,
+  .opt-constraint{
+    display:grid !important;
+    grid-template-columns:1fr !important;
+  }
+
+  .opt-best-card{
+    display:grid !important;
+    grid-template-columns:1fr !important;
+    gap:10px !important;
+    align-items:start !important;
+  }
+
+  .opt-goals,
+  .opt-third-options{
+    display:flex !important;
+    grid-template-columns:none !important;
+    overflow-x:auto !important;
+    padding:6px !important;
+    gap:7px !important;
+    scroll-snap-type:x proximity !important;
+    -webkit-overflow-scrolling:touch !important;
+  }
+
+  .opt-option,
+  .opt-toggle{
+    min-height:44px !important;
+    white-space:normal !important;
+    line-height:1.15 !important;
+  }
+
+  .opt-goals .opt-option,
+  .opt-third-options .opt-option{
+    flex:0 0 clamp(118px,42vw,166px) !important;
+    min-width:0 !important;
+    scroll-snap-align:start !important;
+  }
+
+  .scatter-zone-grid{
+    grid-template-columns:1fr !important;
+  }
+
+  .opt-heatmap-grid{
+    min-width:520px !important;
+  }
+
+  .opt-table{
+    min-width:680px !important;
+  }
+
+  .opt-best-main,
+  .opt-narrative,
+  .opt-current-compare{
+    overflow-wrap:anywhere !important;
+    word-break:normal !important;
+  }
+}
+
+@media (max-width:520px){
+  .opt-goal-block,
+  .opt-card,
+  .opt-output-card,
+  .opt-best-card,
+  .opt-narrative,
+  .opt-current-compare{
+    padding:12px !important;
+    border-radius:14px !important;
+  }
+
+  .opt-mobile-intro{
+    display:block !important;
+    font-size:11px !important;
+  }
+
+  .opt-actions{
+    display:grid !important;
+    grid-template-columns:1fr !important;
+  }
+
+  .opt-actions .btn{
+    width:100% !important;
+  }
+
+  .priority-chart-shell .canvas-wrap.priority,
+  .priority-chart-shell .canvas-wrap.priority-sensitivity,
+  #optimization .canvas-wrap,
+  #optimization .canvas-wrap.small{
+    height:280px !important;
+  }
+
+  .opt-heatmap{
+    padding:8px !important;
+  }
+
+  .opt-heatmap-grid{
+    min-width:500px !important;
+  }
+
+  .opt-heatmap-cell,
+  .opt-heatmap-axis{
+    min-height:34px !important;
+    font-size:8.5px !important;
+  }
+}
+
+/* Mathematics: system cards, editor controls, result tabs and commentary become touch-first. */
+.math-clean-panel,
+.math-output-panel,
+.math-editor-board{
+  overflow:hidden !important;
+}
+
+.math-system-row,
+.math-slider-grid,
+.math-thresholds,
+.math-result-tabs,
+.math-compact-metrics,
+.model-compact-metrics{
+  min-width:0 !important;
+}
+
+.math-editor-title h3,
+.math-grade-chip,
+.math-slider-top,
+.math-result-tab,
+.model-compact-body,
+.model-inline-title{
+  overflow-wrap:anywhere !important;
+}
+
+@media (max-width:900px){
+  .math-system-row{
+    display:flex !important;
+    grid-template-columns:none !important;
+    overflow-x:auto !important;
+    gap:10px !important;
+    padding:2px 2px 10px !important;
+    margin:0 -2px !important;
+    scroll-snap-type:x mandatory !important;
+    -webkit-overflow-scrolling:touch !important;
+  }
+
+  .math-system-card{
+    flex:0 0 clamp(210px,72vw,310px) !important;
+    max-width:none !important;
+    min-height:126px !important;
+    scroll-snap-align:start !important;
+  }
+
+  .math-editor-title{
+    display:grid !important;
+    grid-template-columns:1fr !important;
+  }
+
+  .math-editor-title h3{
+    font-size:clamp(26px,8vw,34px) !important;
+  }
+
+  .math-grade-chip{
+    width:100% !important;
+    max-width:none !important;
+    text-align:left !important;
+    border-radius:12px !important;
+  }
+
+  .math-slider-grid,
+  .math-thresholds{
+    grid-template-columns:1fr !important;
+  }
+
+  .math-slider-card{
+    padding:12px !important;
+  }
+
+  .math-range{
+    height:44px !important;
+  }
+
+  .math-number{
+    min-height:44px !important;
+    font-size:16px !important;
+  }
+
+  .math-result-tabs{
+    display:flex !important;
+    grid-template-columns:none !important;
+    overflow-x:auto !important;
+    gap:6px !important;
+    padding:6px !important;
+    scroll-snap-type:x proximity !important;
+    -webkit-overflow-scrolling:touch !important;
+  }
+
+  .math-result-tab{
+    flex:0 0 clamp(126px,38vw,168px) !important;
+    min-height:46px !important;
+    white-space:normal !important;
+    line-height:1.15 !important;
+    scroll-snap-align:start !important;
+  }
+
+  .math-result-tab::after{
+    left:16px !important;
+    right:16px !important;
+  }
+
+  .math-matrix,
+  .math-heatmap-table table{
+    min-width:620px !important;
+  }
+
+  .model-compact-head{
+    display:grid !important;
+    grid-template-columns:1fr !important;
+  }
+
+  .model-status-badge{
+    justify-self:start !important;
+    white-space:normal !important;
+    text-align:left !important;
+    border-radius:12px !important;
+  }
+
+  .model-compact-metrics{
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  }
+
+  .model-compact-line{
+    grid-template-columns:1fr !important;
+    gap:5px !important;
+  }
+
+  .model-kicker{
+    white-space:normal !important;
+  }
+}
+
+@media (max-width:520px){
+  .math-clean-panel,
+  .math-output-panel,
+  .math-editor-board{
+    padding:12px !important;
+    border-radius:14px !important;
+  }
+
+  .math-system-card{
+    flex-basis:86vw !important;
+  }
+
+  .math-slider-top{
+    display:grid !important;
+    grid-template-columns:1fr !important;
+    align-items:start !important;
+  }
+
+  .math-slider-top em{
+    justify-self:start !important;
+  }
+
+  .math-result-tab{
+    flex-basis:148px !important;
+  }
+
+  .math-matrix,
+  .math-heatmap-table table{
+    min-width:560px !important;
+    font-size:11px !important;
+  }
+
+  .math-matrix th,
+  .math-matrix td,
+  .math-heatmap-table th,
+  .math-heatmap-table td{
+    padding:8px !important;
+  }
+
+  .model-compact-metrics{
+    grid-template-columns:1fr !important;
+  }
+
+  .model-compact-li{
+    padding:12px !important;
+  }
+
+  .model-inline-title{
+    display:block !important;
+    margin:0 0 4px !important;
+    font-size:17px !important;
+  }
+
+  .model-chip{
+    white-space:normal !important;
+    line-height:1.2 !important;
+  }
+}
+
 </style>
 </head>
 <body data-active-mode="basic">
