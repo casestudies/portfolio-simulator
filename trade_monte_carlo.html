@@ -8630,8 +8630,8 @@ canvas{max-width:100% !important}
 </div>
 <div class="hero-actions">
 <button class="btn primary run-sim" type="button"><svg viewbox="0 0 24 24"><path d="M5 3l14 9-14 9V3z"></path></svg>Risk Motorunu Çalıştır</button>
-<button class="btn ghost" onclick="window.print()" type="button"><svg viewbox="0 0 24 24"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><path d="M6 14h12v8H6z"></path></svg>PDF Risk Raporu</button>
-<a class="btn olive" href="#committeeReport"><svg viewbox="0 0 24 24"><path d="M4 5h16"></path><path d="M4 12h16"></path><path d="M4 19h10"></path></svg>Ana Rapor</a>
+<button class="btn ghost" onclick="window.printRiskReport(); return false;" type="button"><svg viewbox="0 0 24 24"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><path d="M6 14h12v8H6z"></path></svg>PDF Risk Raporu</button>
+<a class="btn olive" href="index.html"><svg viewbox="0 0 24 24"><path d="M4 5h16"></path><path d="M4 12h16"></path><path d="M4 19h10"></path></svg>Ana Rapor</a>
 </div>
 </header>
 <section aria-label="Özet sonuçlar" class="result-strip">
@@ -16947,6 +16947,491 @@ if(document.readyState === "loading") document.addEventListener("DOMContentLoade
   window.getLockedScenarioMemory = lockedScenario;
   if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
   else boot();
+})();
+</script>
+
+
+<script>
+(function(){
+  try{
+    document.querySelectorAll('a,button').forEach(function(el){
+      var label=(el.textContent||'').trim().toLowerCase();
+      if(label === 'ana rapor' && el.tagName.toLowerCase() === 'a'){
+        el.setAttribute('href','index.html');
+        el.removeAttribute('data-mode');
+        el.removeAttribute('data-tab');
+      }
+    });
+  }catch(e){}
+})();
+</script>
+
+
+<style>
+/* === EMERGENCY FLOW FIX · no auto print, usable first screen, calmer Turkish product UI === */
+@media screen{
+  /* Layout order: hero -> tabs -> scenario memory -> active inputs -> results -> decision/trust */
+  .app{
+    display:flex !important;
+    flex-direction:column !important;
+    gap:14px !important;
+  }
+  .hero{order:1 !important}
+  .onboarding-strip{order:2 !important}
+  .mode-tabs,.legacy-mode-tabs{order:3 !important}
+  #scenarioMemoryPanel{order:4 !important}
+  .mode-panel{order:10 !important}
+  .result-strip{order:20 !important}
+  .breakout-exec{order:30 !important}
+  .chart-grid,.results-grid,.interpretation,.footer-actions{order:40 !important}
+  .committee-report,.breakout-print-cover,.print-params{order:90 !important}
+
+  /* Report is a report, not a first-screen blocker. It still prints. */
+  .committee-report,
+  .breakout-print-cover,
+  .print-params{
+    display:none !important;
+  }
+
+  /* Sticky HUD was covering inputs on tablet/mobile; keep it readable but not sticky. */
+  .result-strip{
+    position:relative !important;
+    top:auto !important;
+    z-index:1 !important;
+    background:transparent !important;
+    backdrop-filter:none !important;
+    box-shadow:none !important;
+    border:0 !important;
+    padding:0 !important;
+    margin:2px 0 0 !important;
+    overflow-x:auto !important;
+    -webkit-overflow-scrolling:touch !important;
+  }
+  .metric-dock{
+    display:none !important;
+  }
+
+  /* Executive block must not swallow the product. Keep it as a result summary after inputs. */
+  .breakout-exec{
+    grid-template-columns:1fr !important;
+    gap:12px !important;
+    margin-top:0 !important;
+  }
+  .breakout-health-card,
+  .breakout-action-card{
+    padding:16px !important;
+    border-radius:16px !important;
+    box-shadow:0 10px 26px rgba(56,42,25,.035) !important;
+    border:1px solid rgba(226,216,201,.92) !important;
+    border-left:1px solid rgba(226,216,201,.92) !important;
+    background:linear-gradient(180deg,#fffefa,#fbf6ee) !important;
+  }
+  .breakout-score{
+    font-size:clamp(38px,5vw,58px) !important;
+  }
+  .breakout-health-title{
+    font-size:clamp(24px,2.3vw,34px) !important;
+    line-height:1.04 !important;
+  }
+  .breakout-decision-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+    gap:9px !important;
+  }
+  .breakout-decision{
+    padding:11px 12px !important;
+    border-radius:12px !important;
+    background:#fffdf8 !important;
+    border:1px solid rgba(226,216,201,.78) !important;
+  }
+
+  /* Keep trust details away from first-screen decision flow. They belong to audit/report. */
+  .seed-card,
+  .validation-card,
+  .health-breakdown-card,
+  .fragility-strip,
+  .trust-layer-card,
+  .report-validation-block{
+    display:none !important;
+  }
+  .breakout-reality-strip{
+    display:none !important;
+  }
+
+  /* Calmer metric cards: no loud orange hero card, no angular/screaming accent. */
+  .premium-metric-card,
+  .metric,
+  .stat-card,
+  .breakout-output,
+  .risk-band,
+  .csv-card,
+  .csv-diagnostic,
+  .library-card,
+  .report-kpi > div,
+  .readiness-item,
+  .system-card,
+  .math-system-card,
+  .choice-card,
+  .optimization-card,
+  .opt-result-card,
+  .opt-summary-card,
+  .reality-card,
+  .stress-card,
+  .prop-go-card,
+  .prop-go-card-executive,
+  .risk-depth-status,
+  .risk-current-memo,
+  .csv-empty-memo,
+  .pending-memo,
+  .empty-state,
+  .error-box{
+    background:linear-gradient(180deg,#fffefa,#fbf6ee) !important;
+    border:1px solid rgba(226,216,201,.92) !important;
+    border-left:1px solid rgba(226,216,201,.92) !important;
+    border-radius:16px !important;
+    box-shadow:0 10px 24px rgba(56,42,25,.035) !important;
+  }
+  .result-strip .metric.hero-metric,
+  .metric.hero-metric,
+  .tail-avg-metric{
+    border-left:1px solid rgba(226,216,201,.92) !important;
+    border-color:rgba(226,216,201,.92) !important;
+    background:linear-gradient(180deg,#fffefa,#fbf6ee) !important;
+  }
+  .metric-value,
+  .stat-value,
+  .r-value{
+    color:var(--ink) !important;
+  }
+  .metric-label,
+  .stat-label,
+  .r-label{
+    color:var(--stone) !important;
+  }
+
+  /* The input panel comes first: sliders must be reachable immediately. */
+  #basic .panel:first-child{
+    order:1 !important;
+  }
+  #basic .panel,
+  .panel,
+  .chart-shell{
+    border-radius:18px !important;
+    box-shadow:0 10px 28px rgba(56,42,25,.035) !important;
+    background:rgba(255,253,248,.92) !important;
+  }
+  .control-grid{
+    grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+    gap:12px !important;
+  }
+  .control-card{
+    min-height:154px !important;
+  }
+
+  /* Seed/trust controls hidden from main setup; reproducibility remains in report/audit internals. */
+  .audit-toolbar{
+    display:none !important;
+  }
+
+  /* Scenario memory must be easy to find, not buried inside Library. */
+  #scenarioMemoryPanel{
+    margin:0 !important;
+    padding:0 !important;
+    border:0 !important;
+    background:transparent !important;
+    box-shadow:none !important;
+  }
+  #scenarioMemoryPanel .scenario-memory-card{
+    padding:14px 16px !important;
+    border-radius:16px !important;
+  }
+  .scenario-memory-title{
+    font-size:9px !important;
+    letter-spacing:.14em !important;
+  }
+  .scenario-memory-copy{
+    font-size:11.5px !important;
+    max-width:760px !important;
+  }
+
+  /* Tabs: cleaner and less button-like. */
+  .mode-tabs,.legacy-mode-tabs{
+    position:relative !important;
+    display:flex !important;
+    overflow-x:auto !important;
+    gap:6px !important;
+    padding:6px !important;
+    border-radius:16px !important;
+    background:rgba(255,253,248,.72) !important;
+    border:1px solid rgba(226,216,201,.82) !important;
+    box-shadow:none !important;
+  }
+  .mode-btn,.legacy-mode-btn{
+    flex:0 0 auto !important;
+    min-height:44px !important;
+    border-radius:12px !important;
+    border:1px solid transparent !important;
+    padding:10px 13px !important;
+    background:transparent !important;
+    color:var(--stone) !important;
+    font-size:9.5px !important;
+    letter-spacing:.10em !important;
+  }
+  .mode-btn.active,.legacy-mode-btn.active{
+    color:var(--ink) !important;
+    border-color:rgba(205,191,174,.86) !important;
+    background:linear-gradient(180deg,#fffdf8,#f5eddf) !important;
+    box-shadow:inset 0 -2px 0 rgba(198,91,54,.45) !important;
+  }
+
+  /* Prop Survival: reduce visual chaos, make the verdict the one hero card. */
+  #prop .panel,
+  #riskopt .panel,
+  #library .panel{
+    gap:14px !important;
+  }
+  .prop-go-card,
+  .prop-go-card-executive{
+    padding:18px !important;
+    border-left-width:3px !important;
+    box-shadow:0 14px 34px rgba(56,42,25,.055) !important;
+  }
+  .prop-go-card.go,.prop-go-card-executive.go{border-left-color:rgba(100,112,73,.72) !important}
+  .prop-go-card.watch,.prop-go-card-executive.watch{border-left-color:rgba(168,132,66,.72) !important}
+  .prop-go-card.reduce,.prop-go-card-executive.reduce{border-left-color:rgba(198,91,54,.70) !important}
+  .prop-go-card.nogo,.prop-go-card-executive.nogo{border-left-color:rgba(127,39,55,.72) !important}
+  .prop-output-grid,
+  .risk-band-grid,
+  .csv-summary-grid,
+  .csv-mapping-grid{
+    gap:10px !important;
+  }
+
+  /* Action Engine and sanity/validation must not duplicate as top-level noise. */
+  #actionEngine{
+    margin-top:0 !important;
+  }
+  #actionEngine .breakout-kicker::before{
+    content:"Karar Notu · ";
+  }
+
+  /* Mobile / tablet cleanup. */
+  @media (max-width:1180px){
+    .control-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+    .breakout-decision-grid{grid-template-columns:1fr !important}
+  }
+  @media (max-width:680px){
+    html,body{
+      max-width:100% !important;
+      overflow-x:hidden !important;
+    }
+    body{padding:10px !important}
+    .app{gap:12px !important}
+    .hero{padding:14px !important}
+    .hero h1{
+      font-size:clamp(27px,8.5vw,38px) !important;
+      line-height:1.03 !important;
+      letter-spacing:-.025em !important;
+    }
+    .hero-actions{
+      display:grid !important;
+      grid-template-columns:1fr !important;
+      width:100% !important;
+    }
+    .hero-actions .btn{width:100% !important}
+    .control-grid,
+    .prop-output-grid,
+    .risk-band-grid,
+    .csv-mapping-grid,
+    .csv-summary-grid,
+    .report-kpi,
+    .form-grid,
+    .r-summary{
+      grid-template-columns:1fr !important;
+    }
+    .result-strip{
+      display:flex !important;
+      gap:8px !important;
+      margin-inline:0 !important;
+      padding-bottom:2px !important;
+    }
+    .result-strip .metric{
+      flex:0 0 156px !important;
+      min-height:70px !important;
+      padding:9px 10px !important;
+      border-radius:14px !important;
+    }
+    .metric-value{font-size:20px !important}
+    .panel,.chart-shell{padding:14px !important}
+    .table-wrap,
+    .math-matrix-wrap,
+    .opt-table-wrap,
+    .report-table-wrap{
+      overflow-x:auto !important;
+    }
+    canvas{max-width:100% !important}
+  }
+}
+
+/* Print must still be a report and must not inherit the hidden screen report rule. */
+@media print{
+  .committee-report,
+  .breakout-print-cover,
+  .print-params{
+    display:block !important;
+  }
+  .mode-tabs,.legacy-mode-tabs,.hero-actions,.footer-actions,.btn,.mode-panel,.result-strip,.metric-dock,#scenarioMemoryPanel{
+    display:none !important;
+  }
+  .seed-card,
+  .validation-card,
+  .health-breakdown-card,
+  .fragility-strip,
+  .trust-layer-card,
+  .report-validation-block{
+    display:block !important;
+  }
+  body{
+    background:#fff !important;
+    padding:0 !important;
+  }
+}
+</style>
+
+<script>
+/* === EMERGENCY FLOW FIX · print separation, Turkish copy, top-level scenario memory === */
+(function(){
+  "use strict";
+  const $ = id => document.getElementById(id);
+  const q = sel => document.querySelector(sel);
+  const qa = sel => Array.from(document.querySelectorAll(sel));
+
+  function textExact(oldText, newText){
+    qa("button,a,div,span,strong,h1,h2,h3,p,summary").forEach(el=>{
+      if((el.childNodes.length === 1 || el.children.length === 0) && (el.textContent||"").trim() === oldText){
+        el.textContent = newText;
+      }
+    });
+  }
+
+  function polishLanguage(){
+    textExact("What Should I Change?", "Ne Değişmeli?");
+    textExact("Action Engine", "Aksiyon Motoru");
+    textExact("Immediate Action", "İlk Aksiyon");
+    textExact("Risk Control", "Risk Kontrolü");
+    textExact("Scaling Rule", "Ölçekleme Kuralı");
+    textExact("Executive Verdict", "Yönetici Kararı");
+    textExact("Primary Risk", "Ana Risk");
+    textExact("Recommended Action", "Önerilen Aksiyon");
+    textExact("Strategy Health Score", "Strateji Sağlık Skoru");
+    textExact("Health Score Breakdown", "Skor Dökümü");
+    textExact("Risk Optimizer", "Risk Optimizasyonu");
+    textExact("Sanity Check", "Tutarlılık Kontrolü");
+    textExact("Simulation Seed", "Simülasyon Anahtarı");
+    textExact("Median Final Capital", "Medyan Final Sermaye");
+
+    const actionKicker = q("#actionEngine .breakout-kicker");
+    if(actionKicker) actionKicker.textContent = "Ne Değişmeli?";
+    const actionTitle = q("#actionEngine h3");
+    if(actionTitle) actionTitle.textContent = "Aksiyon Motoru";
+  }
+
+  function ensureScenarioMemoryTop(){
+    const tabs = q(".mode-tabs") || q(".legacy-mode-tabs");
+    if(!tabs) return;
+    let panel = $("scenarioMemoryPanel");
+    if(!panel){
+      panel = document.createElement("section");
+      panel.id = "scenarioMemoryPanel";
+      panel.className = "scenario-memory-panel";
+      panel.innerHTML = `
+        <div class="scenario-memory-card">
+          <div class="scenario-memory-head">
+            <div>
+              <div class="scenario-memory-title">SENARYO HAFIZASI</div>
+              <p class="scenario-memory-copy">Mevcut varsayımı kilitleyin; sonra senaryo karşılaştırmasında aynı nakit planıyla birlikte izleyin.</p>
+            </div>
+            <div class="scenario-memory-actions">
+              <button class="mini-btn primary" id="lockScenarioMemory" type="button">SENARYOYU KİLİTLE</button>
+              <button class="mini-btn" id="clearScenarioMemory" type="button">TEMİZLE</button>
+            </div>
+          </div>
+          <div class="scenario-memory-list" id="scenarioMemoryList"><div class="scenario-memory-empty">Henüz kilitli senaryo yok.</div></div>
+        </div>`;
+    }
+    if(panel.parentElement !== tabs.parentElement || panel.previousElementSibling !== tabs){
+      tabs.insertAdjacentElement("afterend", panel);
+    }
+  }
+
+  function preventAutoPrintAndPrepareManualPrint(){
+    const nativePrint = window.__nativePrint || window.print.bind(window);
+    window.__nativePrint = nativePrint;
+
+    window.prepareRiskReport = function(){
+      try{ if(typeof refreshTrustLayer === "function") refreshTrustLayer(); }catch(e){}
+      try{ if(typeof applyPremiumUiClasses === "function") applyPremiumUiClasses(); }catch(e){}
+      return true;
+    };
+
+    window.generatePrintReport = function(){
+      window.prepareRiskReport();
+      return true;
+    };
+
+    window.printRiskReport = function(){
+      window.prepareRiskReport();
+      nativePrint();
+      return true;
+    };
+
+    qa('button[onclick*="print"],a[onclick*="print"]').forEach(el=>{
+      el.setAttribute("onclick","window.printRiskReport(); return false;");
+    });
+    qa("button,a").forEach(el=>{
+      const t=(el.textContent||"").trim();
+      if(t === "PDF Risk Raporu" || t === "PDF Rapor" || t === "PDF"){
+        el.onclick = function(ev){ ev.preventDefault(); window.printRiskReport(); return false; };
+      }
+    });
+  }
+
+  function calmTopFlow(){
+    document.body.classList.add("flow-corrected-v11");
+    const median = $("hudMedian")?.closest(".metric");
+    if(median){
+      median.classList.remove("hero-metric");
+      median.classList.add("neutral-metric");
+    }
+    const healthDetails = q(".health-breakdown-card details");
+    if(healthDetails) healthDetails.removeAttribute("open");
+  }
+
+  function patchPropCopy(){
+    qa(".prop-go-card,.prop-go-card-executive").forEach(card=>{
+      card.innerHTML = card.innerHTML
+        .replace(/Current risk: inside safe band/gi, "Current risk: inside recommended band")
+        .replace(/Current risk: above safe band/gi, "Current risk: above recommended band");
+    });
+  }
+
+  function boot(){
+    preventAutoPrintAndPrepareManualPrint();
+    ensureScenarioMemoryTop();
+    polishLanguage();
+    calmTopFlow();
+    patchPropCopy();
+    setTimeout(()=>{ preventAutoPrintAndPrepareManualPrint(); ensureScenarioMemoryTop(); polishLanguage(); calmTopFlow(); patchPropCopy(); }, 250);
+    setTimeout(()=>{ preventAutoPrintAndPrepareManualPrint(); ensureScenarioMemoryTop(); polishLanguage(); calmTopFlow(); patchPropCopy(); }, 900);
+  }
+
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
+  else boot();
+
+  document.addEventListener("click", function(ev){
+    if(ev.target && ev.target.closest && ev.target.closest(".mode-btn,.legacy-mode-btn")){
+      setTimeout(()=>{ ensureScenarioMemoryTop(); polishLanguage(); calmTopFlow(); patchPropCopy(); }, 80);
+    }
+  }, true);
 })();
 </script>
 
