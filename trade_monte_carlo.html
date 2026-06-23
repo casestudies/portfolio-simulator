@@ -2211,13 +2211,7 @@ table{width:100%;border-collapse:collapse}
 .scatter-shell .canvas-wrap.tall{
   height:400px;
 }
-.scatter-meta{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  flex-wrap:wrap;
-}
+
 .scatter-status{
   display:inline-flex;
   align-items:center;
@@ -5211,7 +5205,30 @@ body[data-active-mode]:not([data-active-mode="basic"]) .simulation-output{displa
   .math-result-tab{flex:0 0 auto !important;min-width:104px !important;white-space:nowrap !important;}
 }
 
-/* === MOBİL TAŞMA KORUMASI (kesin) === */
+/* === Sonuç şeridi: kartların ARKASINDAKİ çerçeve kaldırıldı (her ekran) === */
+.result-strip{
+  background:transparent !important;
+  border:0 !important;
+  border-radius:0 !important;
+  box-shadow:none !important;
+  backdrop-filter:none !important;
+}
+@media (min-width:901px){ .result-strip{padding:2px 0 !important;} }
+
+/* === Kaydetme göstergesi (localStorage geri bildirimi) === */
+.tmc-toast{
+  position:fixed; left:50%; bottom:18px; transform:translate(-50%,14px);
+  z-index:9999; pointer-events:none; opacity:0;
+  display:inline-flex; align-items:center; gap:7px;
+  padding:8px 14px; border-radius:999px;
+  background:rgba(40,33,24,.92); color:#f7f3eb;
+  font:600 11.5px/1 "Inter",system-ui,sans-serif; letter-spacing:.04em;
+  box-shadow:0 8px 24px rgba(32,27,21,.22);
+  transition:opacity .25s ease, transform .25s ease;
+}
+.tmc-toast.show{ opacity:1; transform:translate(-50%,0); }
+.tmc-toast::before{ content:""; width:7px; height:7px; border-radius:50%; background:#9bab6f; }
+
 @media (max-width:900px){
   html,body{overflow-x:hidden !important;}
   .app{max-width:100% !important;}
@@ -5482,7 +5499,6 @@ body[data-active-mode]:not([data-active-mode="basic"]) .simulation-output{displa
 .math-slider-grid,
 .math-thresholds,
 .math-result-tabs,
-.math-compact-metrics,
 .model-compact-metrics{
   min-width:0 !important;
 }
@@ -10025,7 +10041,69 @@ function renderCharts(result){
   }
 
 
+  var TMC_STORE_KEY = "tmc_state_v2";
+  // Sayfadaki id'li TÜM giriş alanlarını otomatik toplar — yeni slider/sekme/input
+  // eklendikçe ekstra kod gerekmeden kalıcı olur (jenerik/genişletilebilir).
+  function tmcAllInputs(){
+    var list = document.querySelectorAll("input[id], select[id], textarea[id]");
+    return Array.prototype.filter.call(list, function(el){
+      return el.id && el.type !== "file" && el.type !== "password";
+    });
+  }
+  function tmcShowToast(msg){
+    try {
+      var t = document.getElementById("tmcToast");
+      if(!t){ t = document.createElement("div"); t.id = "tmcToast"; t.className = "tmc-toast"; (document.body||document.documentElement).appendChild(t); }
+      t.textContent = msg || "Ayarlar kaydedildi";
+      t.classList.add("show");
+      clearTimeout(t._h); t._h = setTimeout(function(){ t.classList.remove("show"); }, 1400);
+    } catch(e){}
+  }
+  function tmcRestore(){
+    var data = null;
+    try { data = JSON.parse(window.localStorage.getItem(TMC_STORE_KEY) || "null"); } catch(e){ data = null; }
+    if(!data || data.v !== 2) return null;
+    try {
+      if(data.controls) controls.forEach(function(c){
+        var v = parseFloat(data.controls[c.key]);
+        if(isFinite(v)) c.value = clamp(v, c.min, c.max);
+      });
+      if(data.tradeFrequency) state.tradeFrequency = data.tradeFrequency;
+      if(data.seedMode) state.seedMode = data.seedMode;
+      if(data.seedValue != null) state.seedValue = data.seedValue;
+      if(data.inputs) Object.keys(data.inputs).forEach(function(id){
+        var el = $(id);
+        if(!el) return;                       // artık olmayan alanlar sessizce atlanır
+        var v = data.inputs[id];
+        if(el.type === "checkbox" || el.type === "radio"){ el.checked = !!v; }
+        else if(v != null){ el.value = v; }
+      });
+    } catch(e){}
+    return data;
+  }
+  function tmcSave(){
+    try {
+      var data = { v:2, controls:{}, inputs:{},
+        mode: (document.body.dataset.activeMode || "basic"),
+        tradeFrequency: state.tradeFrequency, seedMode: state.seedMode, seedValue: state.seedValue };
+      controls.forEach(function(c){
+        var n = $(c.key + "Number");
+        if(n) data.controls[c.key] = (n.dataset && n.dataset.applied != null) ? n.dataset.applied : n.value;
+      });
+      tmcAllInputs().forEach(function(el){
+        data.inputs[el.id] = (el.type === "checkbox" || el.type === "radio") ? el.checked : el.value;
+      });
+      var sel = document.querySelector(".math-system-card.active");
+      if(sel && sel.dataset.sys != null) data.mathSys = sel.dataset.sys;
+      window.localStorage.setItem(TMC_STORE_KEY, JSON.stringify(data));
+      tmcShowToast("Ayarlar kaydedildi");
+    } catch(e){}
+  }
+  var tmcSaveTimer = null;
+  function tmcSaveSoon(){ if(tmcSaveTimer) clearTimeout(tmcSaveTimer); tmcSaveTimer = setTimeout(tmcSave, 400); }
+
   function init(){
+    var __tmcSaved = tmcRestore();
     renderControls();
     setupControlEvents();
     setupRiskModeEvents();
@@ -10045,6 +10123,27 @@ function renderCharts(result){
     const realSensitivity = $("runRealSensitivity");
     if(realSensitivity) realSensitivity.addEventListener("click", runRealSensitivity);
     window.setTimeout(() => { const meta = $("runMeta"); if(meta) meta.textContent = "Çalıştırmaya hazır"; }, 120);
+
+    // --- localStorage: ayarları kalıcı kıl ---
+    document.addEventListener("input", tmcSaveSoon, true);
+    document.addEventListener("change", tmcSaveSoon, true);
+    document.addEventListener("click", function(e){
+      if(e.target && e.target.closest && e.target.closest(".mode-btn,[data-sys]")) window.setTimeout(tmcSave, 60);
+    }, true);
+    window.addEventListener("beforeunload", tmcSave);
+    if(__tmcSaved){
+      window.setTimeout(function(){ tmcShowToast("Ayarların geri yüklendi"); }, 450);
+      if(__tmcSaved.mode && __tmcSaved.mode !== "basic"){
+        var __mb = document.querySelector('.mode-btn[data-mode="' + __tmcSaved.mode + '"]');
+        if(__mb) __mb.click();
+      }
+      if(__tmcSaved.mathSys != null){
+        window.setTimeout(function(){
+          var __sb = document.querySelector('[data-sys="' + __tmcSaved.mathSys + '"]');
+          if(__sb) __sb.click();
+        }, 250);
+      }
+    }
   }
 
   if(document.readyState === "loading"){
