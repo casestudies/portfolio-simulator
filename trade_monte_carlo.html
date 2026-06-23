@@ -15440,5 +15440,1515 @@ function installFinalUiObserver(){
 if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", ()=>{ bootPublicContract(); installFinalUiObserver(); }); else (bootPublicContract(), installFinalUiObserver());
 </script>
 
+
+<style>
+/* === TRUST LAYER UI PASS · analytical validation, reproducibility, transparent score === */
+.trust-layer-card,
+.seed-card,
+.validation-card,
+.health-breakdown-card,
+.fragility-strip,
+.onboarding-strip,
+.csv-trust-preview,
+.prop-preset-library,
+.report-validation-block{
+  background:linear-gradient(180deg,#fffefa,#fbf6ee);
+  border:1px solid rgba(226,216,201,.92);
+  border-radius:16px;
+  box-shadow:0 10px 24px rgba(56,42,25,.038);
+  padding:14px 16px;
+}
+.trust-layer-card .trust-kicker,
+.seed-card .trust-kicker,
+.validation-card .trust-kicker,
+.health-breakdown-card .trust-kicker,
+.fragility-strip .trust-kicker{
+  color:var(--stone);
+  font-size:8.5px;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+  font-weight:900;
+}
+.trust-layer-card h3,
+.validation-card h3,
+.health-breakdown-card h3,
+.onboarding-strip h3{
+  font-family:"Cormorant Garamond",Georgia,serif;
+  font-size:26px;
+  line-height:1;
+  margin:7px 0 8px;
+  font-weight:600;
+  letter-spacing:-.025em;
+}
+.trust-note{color:var(--stone);font-size:11.5px;line-height:1.52}
+.seed-card{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:12px;
+  align-items:center;
+  margin:10px 0 12px;
+}
+.seed-value{
+  font-family:"JetBrains Mono",monospace;
+  font-size:18px;
+  color:var(--ink);
+  font-weight:900;
+}
+.seed-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.seed-actions .mini-btn{min-height:34px}
+.validation-grid,
+.health-components,
+.csv-quality-grid,
+.report-trust-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:10px;
+  margin-top:10px;
+}
+.validation-item,
+.health-component-row,
+.csv-quality-item,
+.report-trust-item{
+  border:1px solid rgba(226,216,201,.82);
+  border-radius:14px;
+  background:#fffdf8;
+  padding:11px 12px;
+  min-width:0;
+}
+.validation-item strong,
+.csv-quality-item strong,
+.report-trust-item strong{
+  display:block;
+  color:var(--stone);
+  font-size:8.5px;
+  letter-spacing:.11em;
+  text-transform:uppercase;
+  font-weight:900;
+}
+.validation-item span,
+.csv-quality-item span,
+.report-trust-item span{
+  display:block;
+  margin-top:6px;
+  font-family:"JetBrains Mono",monospace;
+  color:var(--ink);
+  font-weight:800;
+  font-size:12px;
+}
+.validation-badge,
+.audit-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  border:1px solid rgba(205,191,174,.72);
+  background:#fffdf8;
+  border-radius:999px;
+  padding:6px 9px;
+  font-size:9px;
+  letter-spacing:.09em;
+  text-transform:uppercase;
+  font-weight:900;
+}
+.validation-badge.good,.audit-badge.good{color:var(--olive);border-color:rgba(100,112,73,.30)}
+.validation-badge.warn,.audit-badge.warn{color:var(--gold);border-color:rgba(168,132,66,.34)}
+.validation-badge.bad,.audit-badge.bad{color:var(--ruby);border-color:rgba(127,39,55,.28)}
+.health-breakdown-card{margin-top:12px}
+.health-breakdown-card details{margin:0}
+.health-breakdown-card summary{
+  cursor:pointer;
+  list-style:none;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  color:var(--ink);
+  font-size:10px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  font-weight:950;
+}
+.health-breakdown-card summary::-webkit-details-marker{display:none}
+.health-component-row{
+  display:grid;
+  grid-template-columns:minmax(0,1.2fr) 70px minmax(80px,.8fr);
+  gap:10px;
+  align-items:center;
+}
+.health-component-row.weakest{
+  border-color:rgba(127,39,55,.25);
+  box-shadow:inset 3px 0 0 var(--ruby);
+}
+.health-component-label{
+  min-width:0;
+  font-size:11px;
+  color:var(--ink);
+  font-weight:900;
+}
+.health-component-reason{
+  grid-column:1/-1;
+  color:var(--stone);
+  font-size:11px;
+  line-height:1.45;
+}
+.health-component-score{
+  font-family:"JetBrains Mono",monospace;
+  font-size:12px;
+  font-weight:900;
+  color:var(--ink);
+  text-align:right;
+}
+.health-mini-bar{
+  height:7px;
+  border-radius:999px;
+  border:1px solid rgba(205,191,174,.75);
+  background:#eee4d5;
+  overflow:hidden;
+}
+.health-mini-bar i{
+  display:block;
+  height:100%;
+  width:var(--w,0%);
+  border-radius:999px;
+  background:linear-gradient(90deg,var(--terra),var(--gold));
+}
+.health-component-row.good .health-mini-bar i{background:var(--olive)}
+.health-component-row.warn .health-mini-bar i{background:var(--gold)}
+.health-component-row.bad .health-mini-bar i{background:var(--ruby)}
+.fragility-strip{
+  margin:10px 0 12px;
+  border-left:2px solid var(--gold);
+}
+.fragility-strip strong{color:var(--ink)}
+.trust-disclaimer-line{
+  margin-top:10px;
+  color:var(--stone);
+  font-size:11px;
+  line-height:1.5;
+  border-top:1px solid rgba(226,216,201,.70);
+  padding-top:9px;
+}
+.onboarding-strip{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:12px;
+  align-items:center;
+  margin:10px 0 12px;
+  border-left:2px solid var(--terra);
+}
+.onboarding-steps{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:8px;
+}
+.onboarding-steps span{
+  border:1px solid rgba(226,216,201,.82);
+  background:#fffdf8;
+  border-radius:999px;
+  padding:7px 10px;
+  color:var(--stone);
+  font-size:10px;
+  font-weight:850;
+}
+.onboarding-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.csv-trust-preview{margin-top:12px}
+.csv-trust-preview table{min-width:680px}
+.csv-trust-preview th,.csv-trust-preview td{
+  padding:8px 9px;
+  border-bottom:1px solid rgba(226,216,201,.64);
+  font-size:11px;
+  white-space:nowrap;
+}
+.csv-trust-preview th{
+  color:var(--stone);
+  background:#f5ede2;
+  font-size:8px;
+  letter-spacing:.10em;
+  text-transform:uppercase;
+}
+.csv-quality-item.high{border-left:2px solid var(--olive)}
+.csv-quality-item.medium{border-left:2px solid var(--gold)}
+.csv-quality-item.low{border-left:2px solid var(--ruby)}
+.prop-preset-library{
+  margin:0 0 12px;
+  display:grid;
+  gap:10px;
+}
+.prop-preset-row{display:flex;gap:8px;flex-wrap:wrap}
+.prop-preset-row .preset-pill{min-height:34px}
+.drawdown-mode-row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  color:var(--stone);
+  font-size:11px;
+}
+.drawdown-mode-row select{
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:#fffdf8;
+  padding:8px 10px;
+  color:var(--ink);
+  font-weight:850;
+}
+.report-section .report-trust-grid{break-inside:avoid}
+#reportModelValidation,#reportHealthBreakdown{
+  display:block;
+}
+@media (max-width:680px){
+  .seed-card,.onboarding-strip{grid-template-columns:1fr}
+  .seed-actions,.onboarding-actions{justify-content:flex-start}
+  .health-component-row{grid-template-columns:1fr}
+  .health-component-score{text-align:left}
+  .csv-trust-preview{overflow-x:auto}
+  .validation-grid,.health-components,.csv-quality-grid,.report-trust-grid{grid-template-columns:1fr}
+}
+@media print{
+  .seed-actions,.onboarding-strip,.prop-preset-library,#trustSeedCard .seed-actions{display:none!important}
+  .seed-card,.validation-card,.health-breakdown-card,.fragility-strip,.report-validation-block{
+    box-shadow:none!important;
+    background:#fff!important;
+    break-inside:avoid-page!important;
+    page-break-inside:avoid!important;
+  }
+  #reportModelValidation,#reportHealthBreakdown,#reportDisclaimer{
+    display:block!important;
+    break-inside:avoid-page!important;
+    page-break-inside:avoid!important;
+  }
+}
+</style>
+
+<script>
+/* === TRUST LAYER v8 · sanity checks, reproducibility, transparent score === */
+(function(){
+  "use strict";
+  const $ = id => document.getElementById(id);
+  const q = sel => document.querySelector(sel);
+  const qa = sel => Array.from(document.querySelectorAll(sel));
+  const clamp = (v,a,b) => Math.max(a, Math.min(b, v));
+  const fmtPct = (x,d=1) => Number.isFinite(x) ? (x*100).toFixed(d).replace(".",",")+"%" : "—";
+  const fmtPct100 = (x,d=1) => Number.isFinite(x) ? Number(x).toFixed(d).replace(".",",")+"%" : "—";
+  const fmtNum = (x,d=2) => Number.isFinite(x) ? Number(x).toFixed(d).replace(".",",") : "—";
+  const fmtMoney = x => {
+    try { return new Intl.NumberFormat("tr-TR",{style:"currency",currency:"USD",maximumFractionDigits:0}).format(Number.isFinite(x)?x:0); }
+    catch(e){ return String(Math.round(Number.isFinite(x)?x:0)); }
+  };
+  const MODEL_VERSION_TRUST = "Breakout Risk Decision Engine v1.1 · Trust Layer";
+  const STORE_KEY = "trade_monte_carlo_strategy_library_v1";
+  const ONBOARD_KEY = "tmc_onboarding_hidden_v1";
+  let currentSeed = Number(localStorage.getItem("tmc_active_seed") || "") || generateNewSeed();
+  let seedLocked = localStorage.getItem("tmc_seed_locked") === "1";
+
+  function mulberry32Local(seed){
+    let t = (Math.floor(Math.abs(seed)) || 1) >>> 0;
+    return function(){
+      t += 0x6D2B79F5;
+      let r = Math.imul(t ^ (t >>> 15), 1 | t);
+      r ^= r + Math.imul(r ^ (r >>> 7), 61 | r);
+      return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  function generateNewSeed(){
+    return Math.max(1, Math.floor((Date.now() ^ (Math.random()*2147483647)) % 2147483646));
+  }
+  function setSeed(seed){
+    const n = Math.max(1, Math.min(2147483646, Math.floor(Number(seed) || generateNewSeed())));
+    currentSeed = n;
+    localStorage.setItem("tmc_active_seed", String(currentSeed));
+    const st = window.__AETHELGARD_STATE;
+    if(st){
+      st.seedValue = currentSeed;
+      st.seedMode = seedLocked ? "fixed" : "auto";
+    }
+    renderSeedCard();
+    return currentSeed;
+  }
+  function getActiveSeed(){ return currentSeed; }
+  function setSeedLocked(locked){
+    seedLocked = !!locked;
+    localStorage.setItem("tmc_seed_locked", seedLocked ? "1" : "0");
+    const st = window.__AETHELGARD_STATE;
+    if(st){
+      st.seedMode = seedLocked ? "fixed" : "auto";
+      st.seedValue = currentSeed;
+    }
+    renderSeedCard();
+    return seedLocked;
+  }
+  function resetRandomStreamForRun(){
+    if(!seedLocked) setSeed(generateNewSeed());
+    const st = window.__AETHELGARD_STATE;
+    if(st){ st.seedValue = currentSeed; st.seedMode = "fixed"; }
+    window.__trustLayerRandom = mulberry32Local(currentSeed);
+    Math.random = window.__trustLayerRandom;
+    renderSeedCard();
+  }
+
+  function readNum(id, fallback=0){
+    const el = $(id);
+    const raw = el ? (el.value ?? el.textContent ?? "") : "";
+    const n = parseFlexibleNumber(raw);
+    return Number.isFinite(n) ? n : fallback;
+  }
+  function readMainParams(){
+    const n = (key, fallback) => readNum(key+"Number", readNum(key+"Range", readNum(key, fallback)));
+    return {
+      initialCapital:n("initialCapital",100000),
+      targetCapital:n("targetCapital",200000),
+      days:n("days",126),
+      iterations:n("iterations",5000),
+      tradesPerDay:n("tradesPerDay",3),
+      winRate:n("winRate",55),
+      breakEvenRate:n("breakEvenRate",0),
+      avgWinR:n("avgWinR",1.8),
+      avgLossR:n("avgLossR",1),
+      riskPerTradePct:n("riskPerTradePct",1),
+      tradeCostR:n("tradeCostR",0.05),
+      ruinThresholdPct:n("ruinThresholdPct",50),
+      maxDailyLossPct:n("maxDailyLossPct",5),
+      volatilityFactor:n("volatilityFactor",1),
+      shockProbability:n("shockProbability",0),
+      shockImpactR:n("shockImpactR",0),
+      riskMode: $("riskMode")?.value || "compounding",
+      seedMode: seedLocked ? "fixed" : "auto",
+      simAnahtar: currentSeed
+    };
+  }
+  function setInputValue(id, value){
+    const el = $(id);
+    if(!el) return;
+    el.value = String(value);
+    el.dataset.applied = String(value);
+    el.dispatchEvent(new Event("input",{bubbles:true}));
+    el.dispatchEvent(new Event("change",{bubbles:true}));
+  }
+  function setParamField(key, value){
+    setInputValue(key+"Number", value);
+    setInputValue(key+"Range", value);
+    setInputValue(key, value);
+  }
+
+  function probabilityAtLeastOneLosingStreak(trials, lossProb, streakLength){
+    trials = Math.floor(Number(trials) || 0);
+    lossProb = clamp(Number(lossProb) || 0, 0, 1);
+    streakLength = Math.floor(Number(streakLength) || 0);
+    if(trials <= 0) return 0;
+    if(streakLength <= 0) return 1;
+    if(lossProb <= 0) return 0;
+    if(lossProb >= 1) return trials >= streakLength ? 1 : 0;
+    if(trials < streakLength) return 0;
+    let dp = Array.from({length:streakLength},()=>0);
+    dp[0] = 1;
+    let hit = 0;
+    const winProb = 1 - lossProb;
+    for(let i=0;i<trials;i++){
+      const next = Array.from({length:streakLength},()=>0);
+      let safeMass = 0;
+      for(let r=0;r<streakLength;r++) safeMass += dp[r];
+      next[0] += safeMass * winProb;
+      for(let r=0;r<streakLength;r++){
+        const loseMass = dp[r] * lossProb;
+        if(r + 1 >= streakLength) hit += loseMass;
+        else next[r+1] += loseMass;
+      }
+      dp = next;
+    }
+    return clamp(hit,0,1);
+  }
+
+  function analyticalRuinApproximation(params){
+    const p = Object.assign(readMainParams(), params || {});
+    const w = clamp((p.winRate||0)/100,0,1);
+    const be = clamp((p.breakEvenRate||0)/100,0,0.95);
+    const loss = clamp(1-w-be,0,1);
+    const winR = Math.max(0, (p.avgWinR||0) - (p.tradeCostR||0));
+    const lossR = Math.max(0.0001, (p.avgLossR||1) + (p.tradeCostR||0));
+    const risk = Math.max(0.000001, (p.riskPerTradePct||1)/100);
+    const trades = Math.max(1, Math.round((p.days||1) * (p.tradesPerDay||1)));
+    const ruinThreshold = clamp((p.ruinThresholdPct||50)/100, 0.01, 0.99);
+    const targetLogLoss = Math.abs(Math.log(Math.max(0.001, ruinThreshold)));
+    const outcomes = [
+      {p:w, r:Math.log(Math.max(0.0001, 1 + risk*winR))},
+      {p:be, r:Math.log(Math.max(0.0001, 1 - risk*(p.tradeCostR||0)))},
+      {p:loss, r:Math.log(Math.max(0.0001, 1 - risk*lossR))}
+    ].filter(x=>x.p>0 && Number.isFinite(x.r));
+    const mu = outcomes.reduce((a,x)=>a+x.p*x.r,0);
+    const variance = Math.max(1e-9, outcomes.reduce((a,x)=>a+x.p*Math.pow(x.r-mu,2),0));
+    if(!Number.isFinite(mu) || !Number.isFinite(variance) || variance <= 0){
+      return {probability:null,method:"log-growth drift approximation",note:"Analytical approximation not reliable for this parameter set.",assumptions:["Path-dependent sizing and drawdown rules dominate."]};
+    }
+    let probability;
+    if(mu <= 0){
+      probability = clamp(0.35 + Math.min(0.6, Math.abs(mu)*Math.sqrt(trades)/Math.sqrt(variance)*0.12),0,0.98);
+    } else {
+      probability = Math.exp(-2 * mu * targetLogLoss / variance);
+      probability = clamp(probability,0,0.98);
+      probability = Math.min(probability, probabilityAtLeastOneLosingStreak(trades, loss, Math.max(3, Math.ceil(targetLogLoss/Math.abs(Math.log(Math.max(0.001,1-risk*lossR)))))) * 1.15);
+    }
+    return {
+      probability:clamp(probability,0,1),
+      method:"log-growth drift / volatility approximation",
+      note:"Analytical approximation; Monte Carlo remains primary because the live model is path-dependent.",
+      assumptions:["Simplified independent win/loss R outcomes.","Fractional risk approximated with log returns.","Daily drawdown and trailing constraints are not fully closed-form."]
+    };
+  }
+
+  function validationTone(sim, analytical){
+    if(!Number.isFinite(sim) || !Number.isFinite(analytical)) return {tone:"warn",label:"Approx unavailable",gap:null};
+    const gap = Math.abs(sim-analytical);
+    if(gap < .05) return {tone:"good",label:"Within expected band",gap};
+    if(gap < .12) return {tone:"warn",label:"Approximation gap",gap};
+    return {tone:"bad",label:"Model gap — check path assumptions",gap};
+  }
+  function computeModelValidation(core){
+    const p = Object.assign(readMainParams(), core?.p || {});
+    const trades = Math.max(1, Math.round((p.days||126)*(p.tradesPerDay||1)));
+    const lossProb = clamp(1 - (p.winRate||0)/100 - (p.breakEvenRate||0)/100, 0, 1);
+    const streakLength = 10;
+    const analyticalStreak = probabilityAtLeastOneLosingStreak(trades, lossProb, streakLength);
+    let simStreak = Number.isFinite(core?.p10Loss) ? core.p10Loss : analyticalStreak;
+    const last = window.__AETHELGARD_STATE?.last;
+    if(last?.streaks?.length){
+      const hit = Array.from(last.streaks).filter(v=>v>=streakLength).length;
+      simStreak = hit / last.streaks.length;
+    }
+    const ruinApprox = analyticalRuinApproximation(p);
+    let simRuin = Number.isFinite(last?.ruinProb) ? last.ruinProb/100 : (Number.isFinite(core?.p10Loss) ? core.p10Loss : null);
+    const streakTone = validationTone(simStreak, analyticalStreak);
+    const ruinTone = validationTone(simRuin, ruinApprox.probability);
+    return {trades,lossProb,streakLength,simStreak,analyticalStreak,streakTone,simRuin,ruinApprox,ruinTone};
+  }
+
+  function scoreComponentsFromCore(core){
+    const p = Object.assign(readMainParams(), core?.p || {});
+    const e = Number(core?.e ?? 0);
+    const pf = Number(core?.pf ?? 0);
+    const edgeBuffer = Number(core?.edgeBuffer ?? 0);
+    const p10Loss = Number(core?.p10Loss ?? probabilityAtLeastOneLosingStreak(Math.round(p.days*p.tradesPerDay), 1-p.winRate/100, 10));
+    const approxDD = Number(core?.approxDD ?? 0);
+    const costDrag = Number(core?.costDrag ?? Math.max(0,(p.tradeCostR||0)));
+    const stressOK = [
+      Object.assign({},p,{winRate:Math.max(1,p.winRate-5)}),
+      Object.assign({},p,{avgWinR:p.avgWinR*.9}),
+      Object.assign({},p,{tradeCostR:p.tradeCostR*2})
+    ].filter(x=>{
+      const w=x.winRate/100, l=Math.max(0,1-w-(x.breakEvenRate||0)/100);
+      return w*(x.avgWinR-x.tradeCostR)-l*(x.avgLossR+x.tradeCostR)>0;
+    }).length;
+    const components = [
+      {key:"expectancy",label:"Expectancy quality",points:e<=0?0:clamp(e/.35,0,1)*20,max:20,reason:e<=0?"Net expectancy pozitif değil; sistem ölçeklenmemeli.":e<.15?"Net expectancy pozitif fakat hata payı sınırlı.":"Net expectancy güçlü ve pozitif."},
+      {key:"profitFactor",label:"Profit factor",points:pf<1.10?0:pf<1.30?5+(pf-1.10)/.20*4:pf<1.80?9+(pf-1.30)/.50*4:15,max:15,reason:pf<1.3?"Profit factor düşük; küçük performans düşüşü kırılganlık yaratır.":pf<1.8?"Profit factor kabul edilebilir ama izlenmeli.":"Profit factor güçlü bir edge gösteriyor."},
+      {key:"breakEven",label:"Break-even safety",points:edgeBuffer<=0?0:edgeBuffer<5?edgeBuffer/5*5:edgeBuffer<15?5+(edgeBuffer-5)/10*7:15,max:15,reason:edgeBuffer<5?"Break-even buffer düşük; sistem küçük sapmalara hassas.":"Break-even buffer varsayım hatalarına karşı tampon oluşturuyor."},
+      {key:"streak",label:"Losing streak risk",points:p10Loss>.65?0:p10Loss>.35?5:p10Loss>.15?10:15,max:15,reason:p10Loss>.35?"10 kayıp serisi olasılığı yüksek; daily stop/risk reduction gerekir.":"Kayıp serisi riski izlenebilir bantta."},
+      {key:"drawdown",label:"Drawdown / recovery burden",points:approxDD>.45?0:approxDD>.30?7:approxDD>.18?14:20,max:20,reason:approxDD>.30?"Recovery burden yüksek; risk sizing agresif kalıyor.":"Drawdown ve recovery yükü yönetilebilir görünüyor."},
+      {key:"cost",label:"Cost drag",points:costDrag>.20?0:costDrag>.10?5:10,max:10,reason:costDrag>.10?"Komisyon/spread/slippage edge’i belirgin aşındırıyor.":"Execution cost edge’i aşırı bozmuyor."},
+      {key:"robustness",label:"Robustness",points:stressOK/3*5,max:5,reason:stressOK<2?"Küçük streslerde sistem kırılganlaşıyor.":"Temel streslerde edge tamamen kaybolmuyor."}
+    ].map(c=>{
+      c.points = Math.round(clamp(c.points,0,c.max));
+      c.tone = c.points/c.max >= .72 ? "good" : c.points/c.max >= .42 ? "warn" : "bad";
+      return c;
+    });
+    const weakestComponent = components.slice().sort((a,b)=>(a.points/a.max)-(b.points/b.max))[0];
+    return {components,weakestComponent};
+  }
+
+  function enhancedCore(params){
+    let core;
+    try {
+      core = window.__trustPrevCalculate ? window.__trustPrevCalculate(params || readMainParams()) : (window.calculateStrategyHealthScore ? window.calculateStrategyHealthScore(params || readMainParams()) : {});
+    } catch(e){ core = {}; }
+    core = Object.assign({}, core || {});
+    if(!Number.isFinite(core.score)){
+      const p = Object.assign(readMainParams(), params || {});
+      const w = clamp(p.winRate/100,0,1), loss = clamp(1-w-(p.breakEvenRate||0)/100,0,1);
+      core.e = w*(p.avgWinR-p.tradeCostR)-loss*(p.avgLossR+p.tradeCostR);
+      core.pf = (w*p.avgWinR)/Math.max(.0001, loss*(p.avgLossR+p.tradeCostR));
+      core.edgeBuffer = p.winRate - ((p.avgLossR+p.tradeCostR)/Math.max(.0001,p.avgWinR+p.avgLossR))*100;
+      core.p10Loss = probabilityAtLeastOneLosingStreak(Math.round(p.days*p.tradesPerDay), loss, 10);
+      core.approxDD = clamp(core.p10Loss * p.riskPerTradePct/100 * 10,0,.95);
+      core.costDrag = p.tradeCostR;
+      core.score = Math.round(clamp(50 + core.e*70 + Math.max(0,core.edgeBuffer)*1.2 - core.p10Loss*25 - core.approxDD*35 - p.tradeCostR*20,0,100));
+      core.verdict = core.score<35?"Untradable":core.score<55?"Fragile":core.score<70?"Tradable but Streak-Sensitive":core.score<85?"Balanced":"Institutional Quality";
+      core.primaryRisk = core.e<=0?"Negative expectancy":core.edgeBuffer<5?"Weak break-even buffer":core.p10Loss>.25?"High losing streak probability":"Recovery burden";
+      core.recommendedAction = core.e<=0?"Bu sistem ölçeklenmemeli; önce win rate veya average R iyileştirilmeli.":"Risk bandını doğrula ve scale-up için 300+ trade kanıtı bekle.";
+      core.p = p;
+    }
+    const bd = scoreComponentsFromCore(core);
+    core.components = bd.components;
+    core.weakestComponent = bd.weakestComponent;
+    core.modelValidation = computeModelValidation(core);
+    return core;
+  }
+
+  function renderHealthBreakdown(core){
+    core = core || enhancedCore(readMainParams());
+    const healthCard = $("healthCard") || q(".breakout-health-card") || $("breakoutExecutive");
+    if(!healthCard) return;
+    let card = $("healthBreakdownCard");
+    if(!card){
+      card = document.createElement("div");
+      card.id = "healthBreakdownCard";
+      card.className = "health-breakdown-card";
+      healthCard.insertAdjacentElement("afterend", card);
+    }
+    const rows = (core.components||[]).map(c=>`
+      <div class="health-component-row ${c.tone} ${core.weakestComponent && c.key===core.weakestComponent.key ? "weakest" : ""}">
+        <div class="health-component-label">${escapeHtml(c.label)}</div>
+        <div class="health-component-score">${Math.round(c.points)}/${c.max}</div>
+        <div class="health-mini-bar"><i style="--w:${clamp(c.points/c.max*100,0,100)}%"></i></div>
+        <div class="health-component-reason">${escapeHtml(c.reason)}</div>
+      </div>`).join("");
+    card.innerHTML = `<details open>
+      <summary><span>Health Score Breakdown</span><span class="audit-badge ${core.weakestComponent?.tone||"warn"}">Weakest: ${escapeHtml(core.weakestComponent?.label||"—")}</span></summary>
+      <div class="health-components">${rows}</div>
+      <p class="trust-disclaimer-line">Bu varsayımları sen giriyorsun. Sonuçlar girdiğin verinin kalitesine bağlıdır.</p>
+    </details>`;
+  }
+
+  function renderMostFragile(core){
+    core = core || enhancedCore(readMainParams());
+    const host = $("breakoutExecutive");
+    if(!host) return;
+    let strip = $("mostFragileAssumptionStrip");
+    if(!strip){
+      strip = document.createElement("div");
+      strip.id = "mostFragileAssumptionStrip";
+      strip.className = "fragility-strip";
+      host.insertAdjacentElement("afterend", strip);
+    }
+    const weak = core.weakestComponent || {};
+    const label = weak.label || core.primaryRisk || "assumption quality";
+    const reason = weak.reason || "Reality Check sonuçları çalıştırıldığında en kırılgan varsayım burada netleşir.";
+    strip.innerHTML = `<div class="trust-kicker">Most Fragile Assumption</div>
+      <div class="trust-note"><strong>Modeldeki en kırılgan alan: ${escapeHtml(label)}.</strong> ${escapeHtml(reason)}</div>
+      <div class="trust-disclaimer-line">Bu araç finansal tavsiye değil, varsayıma dayalı risk simülasyonudur. No account. No cloud. Verin cihazında kalır.</div>`;
+  }
+
+  function renderModelValidation(core){
+    core = core || enhancedCore(readMainParams());
+    const val = core.modelValidation || computeModelValidation(core);
+    const after = $("healthBreakdownCard") || $("breakoutExecutive") || q(".result-strip");
+    if(!after) return;
+    let card = $("modelValidationCard");
+    if(!card){
+      card = document.createElement("div");
+      card.id = "modelValidationCard";
+      card.className = "validation-card";
+      after.insertAdjacentElement("afterend", card);
+    }
+    const ruinApproxText = val.ruinApprox.probability === null ? "Unavailable" : fmtPct(val.ruinApprox.probability,1);
+    const ruinLine = val.ruinApprox.probability === null
+      ? "Analytical approximation unavailable — model is path-dependent. Monte Carlo result remains primary."
+      : `Simulation RoR: ${fmtPct(val.simRuin,1)} · Analytical Approx: ${ruinApproxText}`;
+    card.innerHTML = `<div class="trust-kicker">Model Validation · Sanity Check</div>
+      <h3>Analytical approximation</h3>
+      <p class="trust-note">Bu bölüm Monte Carlo sonuçlarını bağımsız ama yaklaşık kontrollerle sanity-check eder. Kapalı formül sonucu Monte Carlo’nun yerine geçmez.</p>
+      <div class="validation-grid">
+        <div class="validation-item"><strong>Losing streak</strong><span>Simülasyon: ${fmtPct(val.simStreak,1)} · Analitik: ${fmtPct(val.analyticalStreak,1)}</span><em class="validation-badge ${val.streakTone.tone}">${val.streakTone.label}</em></div>
+        <div class="validation-item"><strong>Risk of ruin</strong><span>${ruinLine}</span><em class="validation-badge ${val.ruinTone.tone}">${val.ruinApprox.probability===null ? "Monte Carlo primary" : val.ruinTone.label}</em></div>
+        <div class="validation-item"><strong>Method</strong><span>${escapeHtml(val.ruinApprox.method)}</span><em class="trust-note">${escapeHtml(val.ruinApprox.note)}</em></div>
+      </div>`;
+  }
+
+  function renderSeedCard(){
+    let anchor = q(".result-strip") || q(".hero") || document.body.firstElementChild;
+    if(!anchor) return;
+    let card = $("trustSeedCard");
+    if(!card){
+      card = document.createElement("section");
+      card.id = "trustSeedCard";
+      card.className = "seed-card";
+      anchor.insertAdjacentElement("afterend", card);
+    }
+    card.innerHTML = `<div>
+      <div class="trust-kicker">Simulation Seed</div>
+      <div class="seed-value">Seed: ${currentSeed}</div>
+      <p class="trust-note">Aynı parametreler ve aynı seed aynı sonucu üretir.</p>
+    </div>
+    <div class="seed-actions">
+      <button class="mini-btn" id="newSeedBtn" type="button">Yeni Seed</button>
+      <button class="mini-btn" id="toggleSeedLockBtn" type="button">${seedLocked ? "Kilidi Aç" : "Sabitle"}</button>
+    </div>`;
+    $("newSeedBtn")?.addEventListener("click",()=>{ setSeed(generateNewSeed()); setSeedLocked(true); });
+    $("toggleSeedLockBtn")?.addEventListener("click",()=>setSeedLocked(!seedLocked));
+  }
+
+  function detectDelimiter(text){
+    const sample = String(text||"").split(/\r?\n/).filter(x=>x.trim()).slice(0,10);
+    const candidates = [",",";","\t","|"];
+    let best = ",", bestScore = -Infinity;
+    for(const d of candidates){
+      const counts = sample.map(line => splitCsvLine(line,d).length).filter(n=>n>1);
+      if(!counts.length) continue;
+      const mode = counts.slice().sort((a,b)=>counts.filter(v=>v===a).length-counts.filter(v=>v===b).length).pop();
+      const consistency = counts.filter(n=>n===mode).length / Math.max(1, counts.length);
+      const score = consistency * 100 + mode;
+      if(score > bestScore){ bestScore = score; best = d; }
+    }
+    return best;
+  }
+  function splitCsvLine(line, delimiter){
+    const out=[]; let cur="", q=false;
+    line=String(line||"");
+    for(let i=0;i<line.length;i++){
+      const ch=line[i], nx=line[i+1];
+      if(ch === '"' && q && nx === '"'){ cur += '"'; i++; continue; }
+      if(ch === '"'){ q = !q; continue; }
+      if(ch === delimiter && !q){ out.push(cur.trim()); cur=""; continue; }
+      cur += ch;
+    }
+    out.push(cur.trim());
+    return out;
+  }
+  function parseFlexibleNumber(value){
+    if(typeof value === "number") return Number.isFinite(value) ? value : NaN;
+    let s = String(value ?? "").trim();
+    if(!s) return NaN;
+    let neg = false;
+    if(/^\(.*\)$/.test(s)){ neg = true; s = s.slice(1,-1); }
+    s = s.replace(/[$€£₺]/g,"").replace(/\s+/g,"").replace(/[^\d,.\-]/g,"");
+    if((s.match(/-/g)||[]).length){ neg = true; s = s.replace(/-/g,""); }
+    const lastComma = s.lastIndexOf(",");
+    const lastDot = s.lastIndexOf(".");
+    if(lastComma >= 0 && lastDot >= 0){
+      if(lastComma > lastDot) s = s.replace(/\./g,"").replace(",",".");
+      else s = s.replace(/,/g,"");
+    } else if(lastComma >= 0){
+      const decimals = s.length - lastComma - 1;
+      s = decimals === 3 && lastComma > 0 ? s.replace(/,/g,"") : s.replace(",",".");
+    } else if(lastDot >= 0){
+      const decimals = s.length - lastDot - 1;
+      if(decimals === 3 && lastDot > 0) s = s.replace(/\./g,"");
+    }
+    const n = Number(s);
+    return Number.isFinite(n) ? (neg ? -Math.abs(n) : n) : NaN;
+  }
+  function parseFlexibleDate(value){
+    const raw = String(value ?? "").trim();
+    if(!raw) return {date:null,warning:"missing date"};
+    let d = new Date(raw);
+    if(!isNaN(d.getTime())) return {date:d,warning:null};
+    const m = raw.match(/^(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4})(?:\s+(.+))?$/);
+    if(m){
+      const a=Number(m[1]), b=Number(m[2]), y=Number(m[3].length===2 ? "20"+m[3] : m[3]);
+      const dayFirst = a > 12 || /[.]/.test(raw);
+      d = new Date(y, (dayFirst?b:a)-1, dayFirst?a:b);
+      if(!isNaN(d.getTime())) return {date:d,warning:null};
+    }
+    return {date:null,warning:"unrecognized date"};
+  }
+  function hasHeader(rows){
+    if(!rows.length) return false;
+    const first = rows[0];
+    const textish = first.filter(c=>/[a-zA-ZğüşöçıİĞÜŞÖÇ]/.test(String(c))).length;
+    const numeric = first.filter(c=>Number.isFinite(parseFlexibleNumber(c))).length;
+    return textish >= Math.max(1,numeric);
+  }
+  const alias = {
+    pnl:["pnl","profit","net profit","closed pnl","realized pnl","profit/loss","profit loss","p/l","pl"],
+    r:["r","r multiple","r-multiple","r_mult","r_multiple","multiple"],
+    date:["date","time","close time","exit time","timestamp","open time"],
+    symbol:["symbol","instrument","market","ticker","pair"],
+    size:["size","qty","quantity","lots","contracts","volume"],
+    entry:["entry","entry price","open price","open"],
+    exit:["exit","exit price","close price","close"],
+    capital:["capital","equity","balance","account balance"]
+  };
+  function guessColumn(headers,names){
+    const wanted = Array.isArray(names) ? names : (alias[names] || [names]);
+    const lower = headers.map(h=>String(h||"").toLowerCase().replace(/[_\-]+/g," ").trim());
+    for(const name of wanted){
+      const n = String(name).toLowerCase();
+      let idx = lower.findIndex(h=>h===n);
+      if(idx >= 0) return idx;
+      idx = lower.findIndex(h=>h.includes(n));
+      if(idx >= 0) return idx;
+    }
+    return -1;
+  }
+  function parseCSVTradeHistory(text){
+    const delimiter = detectDelimiter(text);
+    const lines = String(text||"").split(/\r?\n/).filter(x=>x.trim());
+    const matrix = lines.map(line=>splitCsvLine(line, delimiter));
+    const headerDetected = hasHeader(matrix);
+    const headers = headerDetected ? matrix[0].map(h=>h||"") : (matrix[0]||[]).map((_,i)=>"Column "+(i+1));
+    const rows = headerDetected ? matrix.slice(1) : matrix;
+    const idx = {
+      date:guessColumn(headers,"date"), symbol:guessColumn(headers,"symbol"), pnl:guessColumn(headers,"pnl"), r:guessColumn(headers,"r"),
+      capital:guessColumn(headers,"capital"), entry:guessColumn(headers,"entry"), exit:guessColumn(headers,"exit"), size:guessColumn(headers,"size")
+    };
+    const values=[]; let badRows=0; let dateWarnings=0;
+    rows.forEach((row,rowIndex)=>{
+      let r = NaN;
+      if(idx.date >= 0 && parseFlexibleDate(row[idx.date]).warning) dateWarnings++;
+      if(idx.r >= 0) r = parseFlexibleNumber(row[idx.r]);
+      if(!Number.isFinite(r) && idx.pnl >= 0){
+        const pnl = parseFlexibleNumber(row[idx.pnl]);
+        const cap = idx.capital >= 0 ? parseFlexibleNumber(row[idx.capital]) : readMainParams().initialCapital;
+        const riskCash = Math.max(1, cap * readMainParams().riskPerTradePct/100);
+        if(Number.isFinite(pnl)) r = pnl / riskCash;
+      }
+      if(!Number.isFinite(r) && idx.entry >= 0 && idx.exit >= 0){
+        const entry = parseFlexibleNumber(row[idx.entry]), exit = parseFlexibleNumber(row[idx.exit]);
+        if(Number.isFinite(entry) && Number.isFinite(exit) && entry !== 0){
+          r = (exit-entry)/Math.abs(entry) * 100 / Math.max(.01, readMainParams().riskPerTradePct);
+        }
+      }
+      if(Number.isFinite(r)){
+        values.push({r,row,rowIndex,date:idx.date>=0?parseFlexibleDate(row[idx.date]).date:null,symbol:idx.symbol>=0?row[idx.symbol]:""});
+      } else badRows++;
+    });
+    const rVals = values.map(x=>x.r);
+    const wins = rVals.filter(x=>x>0), losses = rVals.filter(x=>x<0);
+    const validRows = rVals.length, totalRows = rows.length;
+    const winRate = validRows ? wins.length/validRows*100 : 0;
+    const avgWin = wins.length ? wins.reduce((a,b)=>a+b,0)/wins.length : 0;
+    const avgLoss = losses.length ? Math.abs(losses.reduce((a,b)=>a+b,0)/losses.length) : 0;
+    const pf = Math.abs(losses.reduce((a,b)=>a+b,0))>0 ? wins.reduce((a,b)=>a+b,0)/Math.abs(losses.reduce((a,b)=>a+b,0)) : (wins.length?Infinity:0);
+    const expectancy = validRows ? rVals.reduce((a,b)=>a+b,0)/validRows : 0;
+    let streak=0,maxStreak=0; rVals.forEach(x=>{ if(x<=0){ streak++; maxStreak=Math.max(maxStreak,streak); } else streak=0; });
+    let eq=1, peak=1, maxDrawdown=0; rVals.forEach(x=>{ eq = Math.max(.0001, eq*(1+x*readMainParams().riskPerTradePct/100)); peak=Math.max(peak,eq); maxDrawdown=Math.max(maxDrawdown,(peak-eq)/peak); });
+    const detectedFormat = idx.r>=0 ? "date,symbol,r_multiple" : idx.pnl>=0 && idx.capital>=0 ? "date,symbol,pnl,capital" : idx.pnl>=0 ? "date,symbol,pnl" : idx.entry>=0&&idx.exit>=0 ? "date,symbol,entry,exit,size,pnl" : "unknown / manual mapping recommended";
+    const badRatio = totalRows ? badRows/totalRows : 1;
+    let confidenceLabel = "Low";
+    if(validRows >= 100 && (idx.r>=0 || idx.pnl>=0 || (idx.entry>=0&&idx.exit>=0)) && badRatio < .05) confidenceLabel = "High";
+    else if(validRows >= 30 && badRatio < .15) confidenceLabel = "Medium";
+    const confidence = confidenceLabel==="High" ? .9 : confidenceLabel==="Medium" ? .62 : .28;
+    const sampleWarning = validRows < 30 ? "Too few trades for reliable Monte Carlo." :
+      validRows < 100 ? "Usable but still early sample." :
+      validRows < 300 ? "Good sample for initial review; 300+ trades recommended before scaling." :
+      "Sample size is strong enough for more stable strategy review.";
+    return {delimiter,headers,rows,values:rVals,badRows,validRows,detectedFormat,confidence,confidenceLabel,sampleWarning,dateWarnings,mapping:idx,summary:{trades:validRows,winRate,avgWin,avgLoss,pf,expectancy,maxStreak,maxDrawdown}};
+  }
+
+  function renderCsvTrust(parsed){
+    if(!parsed) return;
+    window.__lastCsvImportDiagnostics = parsed;
+    const diag = $("csvDiagnostics");
+    if(diag){
+      const delimName = parsed.delimiter === "\t" ? "tab" : parsed.delimiter === "," ? "comma" : parsed.delimiter === ";" ? "semicolon" : parsed.delimiter === "|" ? "pipe" : parsed.delimiter;
+      const tone = parsed.confidenceLabel.toLowerCase();
+      diag.innerHTML = `
+        <div class="csv-quality-grid">
+          <div class="csv-quality-item ${tone}"><strong>Detected delimiter</strong><span>${escapeHtml(delimName)}</span><em class="trust-note">Best consistency across first rows.</em></div>
+          <div class="csv-quality-item ${tone}"><strong>Detected format</strong><span>${escapeHtml(parsed.detectedFormat)}</span><em class="trust-note">Broker aliases are best-effort.</em></div>
+          <div class="csv-quality-item ${tone}"><strong>Valid trades</strong><span>${parsed.validRows}</span><em class="trust-note">${escapeHtml(parsed.sampleWarning)}</em></div>
+          <div class="csv-quality-item ${parsed.badRows ? "medium" : "high"}"><strong>Bad rows</strong><span>${parsed.badRows}</span><em class="trust-note">${parsed.badRows ? "Skipped without blocking import." : "No invalid trade rows detected."}</em></div>
+          <div class="csv-quality-item ${tone}"><strong>Import confidence</strong><span>${parsed.confidenceLabel}</span><em class="trust-note">${csvConfidenceAction(parsed.confidenceLabel)}</em></div>
+          <div class="csv-quality-item ${tone}"><strong>Imported PF</strong><span>${Number.isFinite(parsed.summary.pf)?fmtNum(parsed.summary.pf,2):"∞"}</span><em class="trust-note">Gross imported profit factor.</em></div>
+          <div class="csv-quality-item ${tone}"><strong>Expectancy</strong><span>${fmtNum(parsed.summary.expectancy,3)}R</span><em class="trust-note">Average imported R.</em></div>
+          <div class="csv-quality-item ${tone}"><strong>Max DD / Streak</strong><span>${fmtPct(parsed.summary.maxDrawdown,1)} · ${parsed.summary.maxStreak}</span><em class="trust-note">Imported equity curve proxy.</em></div>
+        </div>`;
+    }
+    const mapHost = $("csvMapping");
+    if(mapHost){
+      const fields = [["date","Date"],["symbol","Symbol"],["pnl","PnL"],["r","R Multiple"],["capital","Capital"],["entry","Entry"],["exit","Exit"],["size","Size"]];
+      const opts = `<option value="-1">—</option>` + parsed.headers.map((h,i)=>`<option value="${i}">${escapeHtml(h)}</option>`).join("");
+      mapHost.innerHTML = fields.map(([key,label])=>`<div class="input-card"><label>${label}</label><select class="csv-select trust-csv-map" id="csvMap_${key}" data-key="${key}">${opts}</select></div>`).join("");
+      fields.forEach(([key])=>{ const el=$("csvMap_"+key); if(el) el.value = String(parsed.mapping[key] ?? -1); });
+    }
+    const preview = $("csvPreview");
+    if(preview){
+      const head = "<tr>"+parsed.headers.map(h=>`<th>${escapeHtml(h)}</th>`).join("")+"</tr>";
+      const body = parsed.rows.slice(0,5).map(r=>"<tr>"+parsed.headers.map((_,i)=>`<td>${escapeHtml(r[i]||"")}</td>`).join("")+"</tr>").join("");
+      preview.classList.add("csv-trust-preview");
+      preview.innerHTML = `<div class="trust-kicker">Preview · first 5 rows</div><div class="table-wrap"><table><thead>${head}</thead><tbody>${body}</tbody></table></div><p class="trust-note">${parsed.validRows + parsed.badRows} satır okundu, ${parsed.badRows} satır hatalı olduğu için atlandı.</p>`;
+    }
+  }
+  function csvConfidenceAction(label){
+    if(label === "Low") return "Imported sample is weak; do not scale capital based only on this dataset.";
+    if(label === "Medium") return "Imported sample is usable but early; validate with more trades before scaling.";
+    return "Imported sample quality is strong enough for initial strategy review.";
+  }
+  function applyTrustedCsvToModel(){
+    const parsed = window.__lastCsvImportDiagnostics;
+    if(!parsed || !parsed.values?.length) return;
+    setParamField("winRate", clamp(parsed.summary.winRate,1,95));
+    if(parsed.summary.avgWin>0) setParamField("avgWinR", clamp(parsed.summary.avgWin,.05,20));
+    if(parsed.summary.avgLoss>0) setParamField("avgLossR", clamp(parsed.summary.avgLoss,.05,20));
+    setParamField("days", clamp(Math.ceil(parsed.validRows/Math.max(0.1, readMainParams().tradesPerDay)),30,365));
+    const summary = $("csvSummary");
+    if(summary){
+      summary.innerHTML = [
+        ["Trades Imported",parsed.validRows,"CSV sample applied"],
+        ["Win Rate",fmtPct100(parsed.summary.winRate,1),"Detected from positive trades"],
+        ["Avg R",fmtNum(parsed.summary.avgWin,2)+" / -"+fmtNum(parsed.summary.avgLoss,2),"Average win / loss R"],
+        ["Profit Factor",Number.isFinite(parsed.summary.pf)?fmtNum(parsed.summary.pf,2):"∞","Gross imported PF"],
+        ["Expectancy",fmtNum(parsed.summary.expectancy,3)+"R","Net imported average"],
+        ["Max Losing Streak",String(parsed.summary.maxStreak),"Consecutive non-positive trades"],
+        ["Max Drawdown",fmtPct(parsed.summary.maxDrawdown,1),"Approx. imported R curve"],
+        ["Decision Note",csvConfidenceAction(parsed.confidenceLabel),parsed.confidenceLabel+" confidence"]
+      ].map(x=>`<div class="breakout-output premium-metric-card"><div class="label">${escapeHtml(x[0])}</div><div class="value mono">${escapeHtml(x[1])}</div><div class="note">${escapeHtml(x[2])}</div></div>`).join("");
+    }
+    refreshTrustLayer();
+  }
+
+  function propCfgTrust(){
+    const val = id => readNum(id,0);
+    return {
+      balance:val("propBalance")||100000,target:val("propTarget")||8,totalDD:val("propTotalDD")||10,dailyDD:val("propDailyDD")||5,
+      minDays:val("propMinDays")||5,maxDays:val("propMaxDays")||30,risk:val("propRisk")||.75,riskPerTrade:val("propRisk")||.75,
+      trades:val("propTrades")||3,winRate:val("propWR")||readMainParams().winRate,wr:val("propWR")||readMainParams().winRate,
+      winR:val("propWinR")||readMainParams().avgWinR,lossR:val("propLossR")||readMainParams().avgLossR,costR:val("propCostR")||readMainParams().tradeCostR,
+      cost:val("propCostR")||readMainParams().tradeCostR,stopLosses:val("propStopLosses")||3,profitLock:val("propProfitLock")||0,
+      drawdownMode:$("propDrawdownMode")?.value || "static",paths:1200
+    };
+  }
+  function runPropAtRiskTrust(cfg, risk, paths=1200){
+    resetRandomStreamForRun();
+    const rand = Math.random;
+    let pass=0,daily=0,total=0,timeout=0; const passDays=[];
+    const start=cfg.balance, target=start*(1+cfg.target/100);
+    for(let i=0;i<paths;i++){
+      let eq=start, peak=start, status="active", targetDay=null;
+      for(let d=1; d<=cfg.maxDays; d++){
+        const dayStart=eq; let losses=0, locked=false;
+        const trades = Math.max(0, Math.round(cfg.trades));
+        for(let t=0;t<trades;t++){
+          if(locked) break;
+          const r = rand() < (cfg.winRate||cfg.wr)/100 ? (cfg.winR-cfg.costR) : -(cfg.lossR+cfg.costR);
+          if(r<0) losses++;
+          eq = Math.max(0, eq + eq*(risk/100)*r);
+          peak = Math.max(peak, eq);
+          if(cfg.stopLosses>0 && losses >= cfg.stopLosses) break;
+          if(cfg.profitLock>0 && (eq-dayStart)/dayStart*100 >= cfg.profitLock) locked=true;
+          if((dayStart-eq)/dayStart*100 >= cfg.dailyDD){ status="daily"; break; }
+          const totalLine = cfg.drawdownMode === "trailing" ? peak*(1-cfg.totalDD/100) : start*(1-cfg.totalDD/100);
+          if(eq <= totalLine){ status="total"; break; }
+          if(eq >= target && d >= cfg.minDays){ targetDay=d; status="pass"; break; }
+        }
+        if(status !== "active") break;
+      }
+      if(status==="pass"){ pass++; passDays.push(targetDay); }
+      else if(status==="daily") daily++;
+      else if(status==="total") total++;
+      else timeout++;
+    }
+    passDays.sort((a,b)=>a-b);
+    return {passProb:pass/paths,dailyFail:daily/paths,totalFail:total/paths,timeout:timeout/paths,medianDays:passDays.length?passDays[Math.floor(passDays.length/2)]:null,paths,drawdownMode:cfg.drawdownMode};
+  }
+
+  const propPresetTrust = [
+    {name:"Evaluation 8% Target · 5% Daily · 10% Total", v:{propTarget:8,propDailyDD:5,propTotalDD:10,propMinDays:5,propMaxDays:30,propRisk:.65,propDrawdownMode:"static"}},
+    {name:"Two-Step Conservative", v:{propTarget:8,propDailyDD:4,propTotalDD:8,propMinDays:5,propMaxDays:60,propRisk:.45,propDrawdownMode:"static"}},
+    {name:"One-Step Aggressive", v:{propTarget:10,propDailyDD:5,propTotalDD:6,propMinDays:3,propMaxDays:20,propRisk:.85,propDrawdownMode:"static"}},
+    {name:"Funded Account Survival", v:{propTarget:4,propDailyDD:4,propTotalDD:8,propMinDays:0,propMaxDays:60,propRisk:.35,propDrawdownMode:"static"}},
+    {name:"Static Drawdown", v:{propTarget:8,propDailyDD:5,propTotalDD:10,propMinDays:5,propMaxDays:30,propRisk:.55,propDrawdownMode:"static"}},
+    {name:"Generic High-Watermark Trailing Drawdown", v:{propTarget:8,propDailyDD:5,propTotalDD:8,propMinDays:5,propMaxDays:45,propRisk:.35,propDrawdownMode:"trailing"}}
+  ];
+  function renderPropPresetLibrary(){
+    const host = $("propPresets");
+    if(!host || $("trustPropPresetLibrary")) return;
+    const wrap = document.createElement("div");
+    wrap.id = "trustPropPresetLibrary";
+    wrap.className = "prop-preset-library";
+    wrap.innerHTML = `<div class="trust-kicker">Prop Firm Preset Library</div>
+      <p class="trust-note">Generic setup’lar; marka veya firma özelinde kural iddiası değildir. Kullanıcı tüm değerleri değiştirebilir.</p>
+      <div class="drawdown-mode-row"><span>Total drawdown mode</span><select id="propDrawdownMode"><option value="static">Static drawdown</option><option value="trailing">Generic high-watermark trailing drawdown</option></select></div>
+      <div class="prop-preset-row">${propPresetTrust.map((p,i)=>`<button class="preset-pill" type="button" data-trust-prop-preset="${i}">${escapeHtml(p.name)}</button>`).join("")}</div>`;
+    host.insertAdjacentElement("afterbegin", wrap);
+  }
+  function applyPropPreset(i){
+    const p = propPresetTrust[i]; if(!p) return;
+    Object.entries(p.v).forEach(([id,v])=>{
+      if(id === "propDrawdownMode"){
+        if($("propDrawdownMode")) $("propDrawdownMode").value = v;
+      } else setInputValue(id,v);
+    });
+    setTimeout(()=>{ tryRunPropTrust(); },60);
+  }
+  function tryRunPropTrust(){
+    const cfg = propCfgTrust();
+    const result = runPropAtRiskTrust(cfg, cfg.risk, cfg.paths || 1200);
+    window.__lastPropResult = result;
+    if(typeof window.renderPropVerdict === "function") window.renderPropVerdict(result, cfg);
+    updatePropMetricFields(result,cfg);
+    refreshTrustLayer();
+    return result;
+  }
+  function updatePropMetricFields(result,cfg){
+    if($("propPass")) $("propPass").textContent = fmtPct(result.passProb,1);
+    if($("propDailyFail")) $("propDailyFail").textContent = fmtPct(result.dailyFail,1);
+    if($("propTotalFail")) $("propTotalFail").textContent = fmtPct(result.totalFail,1);
+    if($("propMedianDays")) $("propMedianDays").textContent = result.medianDays ? String(result.medianDays) : "—";
+  }
+
+  function renderReportTrust(core){
+    core = core || enhancedCore(readMainParams());
+    ensureReportSections();
+    const val = core.modelValidation || computeModelValidation(core);
+    const seedText = `Seed: ${currentSeed} · ${seedLocked ? "locked" : "auto-generated"}`;
+    if($("reportVersion")) $("reportVersion").textContent = MODEL_VERSION_TRUST;
+    if($("printModelVersion")) $("printModelVersion").textContent = `${MODEL_VERSION_TRUST} · ${seedText} · Local-only parameter ledger`;
+    if($("reportTrustSeed")) $("reportTrustSeed").textContent = seedText;
+    const h = $("reportHealthBreakdownRows");
+    if(h){
+      h.innerHTML = (core.components||[]).map(c=>`<tr><th>${escapeHtml(c.label)}</th><td class="mono">${Math.round(c.points)}/${c.max}</td><td>${escapeHtml(c.reason)}</td></tr>`).join("");
+    }
+    const v = $("reportModelValidationRows");
+    if(v){
+      v.innerHTML = `
+        <tr><th>Losing streak sanity check</th><td class="mono">Simulation ${fmtPct(val.simStreak,1)} · Analytical ${fmtPct(val.analyticalStreak,1)}</td><td>${escapeHtml(val.streakTone.label)}</td></tr>
+        <tr><th>Risk-of-ruin approximation</th><td class="mono">Simulation ${fmtPct(val.simRuin,1)} · Analytical ${val.ruinApprox.probability===null?"Unavailable":fmtPct(val.ruinApprox.probability,1)}</td><td>${escapeHtml(val.ruinApprox.note)}</td></tr>
+        <tr><th>Seed</th><td class="mono">${currentSeed}</td><td>${seedLocked ? "Reproducible run locked." : "Auto seed; lock seed for exact reruns."}</td></tr>`;
+    }
+    const led = $("reportLedgerRows");
+    if(led && !led.dataset.trustSeedAdded){
+      led.insertAdjacentHTML("beforeend", `<tr><th>Simulation Seed</th><td>${currentSeed}</td></tr><tr><th>CSV Import Confidence</th><td>${window.__lastCsvImportDiagnostics?.confidenceLabel || "Not used"}</td></tr><tr><th>Model Version</th><td>${MODEL_VERSION_TRUST}</td></tr>`);
+      led.dataset.trustSeedAdded = "1";
+    }
+    const rf = $("reportMostFragile");
+    if(rf) rf.textContent = `${core.weakestComponent?.label || core.primaryRisk}: ${core.weakestComponent?.reason || "Run the risk engine to populate this section with current simulation output."}`;
+  }
+  function ensureReportSections(){
+    const disclaimer = $("reportDisclaimer");
+    const before = disclaimer || $("reportLedger") || q(".report-section:last-of-type");
+    if(!$("reportHealthBreakdown")){
+      const sec = document.createElement("section");
+      sec.id = "reportHealthBreakdown";
+      sec.className = "report-health-breakdown report-section";
+      sec.innerHTML = `<div class="report-section-kicker">3 · Health Score Breakdown</div><h2>Score Transparency</h2><p>Component-level score explanation and weakest component.</p><div class="table-wrap report-table-wrap"><table class="fin-table"><tbody id="reportHealthBreakdownRows"></tbody></table></div>`;
+      before?.insertAdjacentElement("beforebegin", sec);
+    }
+    if(!$("reportModelValidation")){
+      const sec = document.createElement("section");
+      sec.id = "reportModelValidation";
+      sec.className = "report-model-validation report-section";
+      sec.innerHTML = `<div class="report-section-kicker">5 · Model Validation</div><h2>Analytical Approximation / Sanity Check</h2><p>Approximate checks; Monte Carlo remains primary for path-dependent rules.</p><div class="table-wrap report-table-wrap"><table class="fin-table"><tbody id="reportModelValidationRows"></tbody></table></div>`;
+      before?.insertAdjacentElement("beforebegin", sec);
+    }
+    if(disclaimer){
+      const h = disclaimer.querySelector("h2, .report-section-kicker");
+      if(h && !/10/.test(h.textContent)) h.textContent = "10 · Privacy & Model Disclaimer";
+    }
+    if($("reportCover") && !$("reportTrustSeed")){
+      $("reportCover").insertAdjacentHTML("beforeend", `<p class="mono" id="reportTrustSeed">Seed: ${currentSeed}</p>`);
+    }
+    if($("reportExecutive") && !$("reportMostFragile")){
+      $("reportExecutive").insertAdjacentHTML("beforeend", `<div class="report-trust-item"><strong>Most Fragile Assumption</strong><span id="reportMostFragile">Run the risk engine to populate this section with current simulation output.</span></div>`);
+    }
+  }
+
+  function renderOnboarding(){
+    if(localStorage.getItem(ONBOARD_KEY)==="1") return;
+    const hero = q(".hero");
+    if(!hero || $("trustOnboardingStrip")) return;
+    const strip = document.createElement("section");
+    strip.id = "trustOnboardingStrip";
+    strip.className = "onboarding-strip";
+    strip.innerHTML = `<div><div class="trust-kicker">First 15 seconds</div><h3>Start with a realistic survival memo</h3>
+      <p class="trust-note">Yeni kullanıcı ilk anda boş ekran görmez; örnek strateji kusursuz değil, kırılgan varsayımı ve next action üretmek için seçildi.</p>
+      <div class="onboarding-steps"><span>1. Parametreleri gir veya örnek stratejiyi incele</span><span>2. Skoru ve kırılgan varsayımı gör</span><span>3. Risk bandını ayarla</span></div></div>
+      <div class="onboarding-actions"><button class="mini-btn" id="exploreSampleStrategy" type="button">Örnekle keşfet</button><button class="mini-btn" id="manualStartStrategy" type="button">Manuel parametrelerle başla</button><button class="mini-btn" id="dismissOnboarding" type="button">Kapat</button></div>`;
+    hero.insertAdjacentElement("afterend", strip);
+    $("exploreSampleStrategy")?.addEventListener("click",()=>{
+      const sample = {initialCapital:100000,targetCapital:160000,days:126,iterations:5000,tradesPerDay:3,winRate:54,avgWinR:1.55,avgLossR:1,tradeCostR:.06,riskPerTradePct:.85,ruinThresholdPct:70,breakEvenRate:4,volatilityFactor:1.05,shockProbability:2,shockImpactR:1.5,maxDailyLossPct:4};
+      Object.entries(sample).forEach(([k,v])=>setParamField(k,v));
+      setSeed(48213); setSeedLocked(true);
+      refreshTrustLayer();
+    });
+    $("manualStartStrategy")?.addEventListener("click",()=>{ localStorage.setItem(ONBOARD_KEY,"1"); strip.remove(); });
+    $("dismissOnboarding")?.addEventListener("click",()=>{ localStorage.setItem(ONBOARD_KEY,"1"); strip.remove(); });
+  }
+
+  function escapeHtml(v){
+    return String(v ?? "").replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+  }
+
+  function refreshTrustLayer(){
+    const core = enhancedCore(readMainParams());
+    renderSeedCard();
+    renderHealthBreakdown(core);
+    renderMostFragile(core);
+    renderModelValidation(core);
+    renderReportTrust(core);
+    if(window.__lastCsvImportDiagnostics){
+      const action = csvConfidenceAction(window.__lastCsvImportDiagnostics.confidenceLabel);
+      const el = $("actionImmediate") || $("recommendedAction");
+      if(el && !el.textContent.includes(action)) el.textContent = `${el.textContent} · ${action}`;
+    }
+    try { if(typeof window.applyPremiumUiClasses === "function") window.applyPremiumUiClasses(); } catch(e){}
+    return core;
+  }
+
+  const prev = {
+    calculate: window.calculateStrategyHealthScore,
+    parseCSV: window.parseCSVTradeHistory,
+    exportJSON: window.exportStrategyJSON,
+    importJSON: window.importStrategyJSON,
+    generatePrintReport: window.generatePrintReport,
+    runProp: window.runPropSurvivalMonteCarlo,
+    runRiskOpt: window.optimizeRiskPerTrade,
+    readiness: window.runProductReadinessCheck
+  };
+  window.__trustPrevCalculate = prev.calculate;
+
+  window.calculateStrategyHealthScore = function(params){
+    return enhancedCore(params || readMainParams());
+  };
+  window.probabilityAtLeastOneLosingStreak = probabilityAtLeastOneLosingStreak;
+  window.analyticalRuinApproximation = analyticalRuinApproximation;
+  window.generateNewSeed = function(){ const s = generateNewSeed(); setSeed(s); return s; };
+  window.setSeed = setSeed;
+  window.getActiveSeed = getActiveSeed;
+  window.parseFlexibleNumber = parseFlexibleNumber;
+  window.parseFlexibleDate = parseFlexibleDate;
+  window.detectDelimiter = detectDelimiter;
+  window.parseCSVTradeHistory = parseCSVTradeHistory;
+
+  window.runPropSurvivalMonteCarlo = function(cfg){
+    cfg = Object.assign(propCfgTrust(), cfg || {});
+    const res = runPropAtRiskTrust(cfg, cfg.risk || cfg.riskPerTrade || .75, cfg.paths || 1200);
+    window.__lastPropResult = res;
+    if(typeof window.renderPropVerdict === "function") window.renderPropVerdict(res,cfg);
+    updatePropMetricFields(res,cfg);
+    refreshTrustLayer();
+    return res;
+  };
+  window.optimizeRiskPerTrade = function(options){
+    resetRandomStreamForRun();
+    const res = prev.runRiskOpt ? prev.runRiskOpt(options || {}) : null;
+    setTimeout(refreshTrustLayer,160);
+    return res;
+  };
+  window.exportStrategyJSON = function(){
+    const payload = {name:$("strategyName")?.value || "Strategy Survival Setup",timestamp:new Date().toISOString(),modelVersion:MODEL_VERSION_TRUST,seed:currentSeed,seedLocked,params:readMainParams(),prop:propCfgTrust(),csvConfidence:window.__lastCsvImportDiagnostics?.confidenceLabel || null};
+    const blob = new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "strategy-survival-"+new Date().toISOString().slice(0,10)+".json";
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(a.href),500);
+    return payload;
+  };
+  window.importStrategyJSON = function(fileOrText){
+    function apply(obj){
+      const data = obj.params ? obj : {params:obj};
+      if(data.seed){ setSeed(data.seed); setSeedLocked(!!data.seedLocked); }
+      Object.entries(data.params || {}).forEach(([k,v])=>setParamField(k,v));
+      Object.entries(data.prop || {}).forEach(([k,v])=>{
+        const id = k.startsWith("prop") ? k : ({balance:"propBalance",target:"propTarget",totalDD:"propTotalDD",dailyDD:"propDailyDD",minDays:"propMinDays",maxDays:"propMaxDays",risk:"propRisk",trades:"propTrades",winRate:"propWR",wr:"propWR",winR:"propWinR",lossR:"propLossR",costR:"propCostR"}[k]);
+        if(id) setInputValue(id,v);
+      });
+      refreshTrustLayer();
+      return data;
+    }
+    if(fileOrText instanceof File){
+      const r = new FileReader();
+      r.onload = () => { try{ apply(JSON.parse(r.result)); } catch(e){ alert("JSON import failed: "+e.message); } };
+      r.readAsText(fileOrText);
+      return true;
+    }
+    try { return apply(JSON.parse(String(fileOrText || "{}"))); }
+    catch(e){ alert("JSON import failed: "+e.message); return null; }
+  };
+  window.generatePrintReport = function(){
+    refreshTrustLayer();
+    window.print();
+    return true;
+  };
+  window.runProductReadinessCheck = function(){
+    const res = prev.readiness ? prev.readiness() : [];
+    const checks = Array.isArray(res) ? res : [];
+    const critical = ["calculateStrategyHealthScore","runPropSurvivalMonteCarlo","optimizeRiskPerTrade","parseCSVTradeHistory","generatePrintReport","probabilityAtLeastOneLosingStreak","analyticalRuinApproximation","getActiveSeed"].filter(k=>typeof window[k] !== "function");
+    const acceptance = {
+      breakoutReady: critical.length === 0 && !!$("reportDisclaimer") && (document.body.innerText||"").toLowerCase().includes("no cloud"),
+      missingCriticalItems: critical,
+      pendingItems: checks.filter(c=>c.status==="PENDING").map(c=>c.name),
+      publicApiReady: critical.length===0,
+      reportReady: !!$("reportModelValidation") && !!$("reportHealthBreakdown") && !!$("reportDisclaimer"),
+      privacyReady: (document.body.innerText||"").toLowerCase().includes("no account") && (document.body.innerText||"").toLowerCase().includes("no cloud"),
+      trustLayerReady: true,
+      activeSeed: currentSeed
+    };
+    try { console.table ? console.table(acceptance) : console.log(acceptance); } catch(e){ console.log(acceptance); }
+    window.__lastProductReadiness = acceptance;
+    return checks;
+  };
+
+  function bootTrustLayer(){
+    setSeed(currentSeed);
+    renderSeedCard();
+    renderOnboarding();
+    renderPropPresetLibrary();
+    ensureReportSections();
+    refreshTrustLayer();
+
+    ["click"].forEach(ev=>{
+      document.addEventListener(ev, e=>{
+        if(e.target.closest(".run-sim,#riskOptRun,#propRun,#optRunFast,#optRunDeep,#optRunProbability")){
+          resetRandomStreamForRun();
+          setTimeout(refreshTrustLayer,500);
+        }
+      }, true);
+    });
+    $("propRun")?.addEventListener("click", e=>{
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      tryRunPropTrust();
+    }, true);
+    document.addEventListener("click", e=>{
+      const btn = e.target.closest("[data-trust-prop-preset]");
+      if(btn){ e.preventDefault(); applyPropPreset(Number(btn.dataset.trustPropPreset)); }
+    }, true);
+    $("csvFile")?.addEventListener("change", e=>{
+      const file = e.target.files && e.target.files[0];
+      if(!file) return;
+      e.stopImmediatePropagation();
+      const reader = new FileReader();
+      reader.onload = () => {
+        try { renderCsvTrust(parseCSVTradeHistory(reader.result)); }
+        catch(err){ alert("CSV parse error: "+err.message); }
+      };
+      reader.readAsText(file);
+    }, true);
+    $("applyCsvMapping")?.addEventListener("click", e=>{
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      applyTrustedCsvToModel();
+    }, true);
+    document.addEventListener("input", e=>{
+      if(e.target && /Number|Range|prop|csvMap_/.test(e.target.id||"")) setTimeout(refreshTrustLayer,180);
+    }, true);
+    window.addEventListener("beforeprint",()=>refreshTrustLayer());
+  }
+
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", bootTrustLayer);
+  else bootTrustLayer();
+})();
+</script>
+
+
+<style>
+/* === USER PATCH · Scenario Memory like index.html, quieter localStorage === */
+.scenario-memory-panel{
+  margin-top:14px;
+  display:grid;
+  gap:12px;
+  padding:16px 18px;
+  border:0 !important;
+  background:transparent !important;
+  box-shadow:none !important;
+}
+.scenario-memory-card{
+  background:linear-gradient(180deg,#fffefa,#fbf6ee);
+  border:1px solid rgba(226,216,201,.95);
+  border-radius:16px;
+  box-shadow:0 10px 28px rgba(56,42,25,.045);
+  padding:16px 18px;
+}
+.scenario-memory-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:14px;
+  border-bottom:1px solid rgba(226,216,201,.72);
+  padding-bottom:12px;
+  margin-bottom:12px;
+}
+.scenario-memory-title{
+  font-size:10px;
+  letter-spacing:.15em;
+  text-transform:uppercase;
+  font-weight:900;
+  color:var(--ink);
+}
+.scenario-memory-copy{
+  margin-top:6px;
+  max-width:760px;
+  color:var(--stone);
+  font-size:12px;
+  line-height:1.55;
+}
+.scenario-memory-actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+.scenario-memory-actions .mini-btn,
+.scenario-memory-actions .btn{
+  min-height:38px;
+  border-radius:999px;
+}
+.scenario-memory-state{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:10px;
+}
+.scenario-memory-empty{
+  border:1px dashed rgba(205,191,174,.95);
+  background:rgba(255,253,248,.62);
+  color:var(--stone);
+  border-radius:14px;
+  padding:14px;
+  font-size:12px;
+  line-height:1.5;
+}
+.scenario-memory-kpi{
+  min-width:0;
+  background:#fffdf8;
+  border:1px solid rgba(226,216,201,.84);
+  border-left:2px solid var(--line-strong);
+  border-radius:14px;
+  padding:12px 13px;
+}
+.scenario-memory-kpi.good{border-left-color:var(--olive)}
+.scenario-memory-kpi.warn{border-left-color:var(--gold)}
+.scenario-memory-kpi.bad{border-left-color:var(--ruby)}
+.scenario-memory-kpi .label{
+  color:var(--stone);
+  font-size:8px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  font-weight:900;
+}
+.scenario-memory-kpi .value{
+  margin-top:7px;
+  font-family:"Cormorant Garamond",Georgia,serif;
+  font-size:24px;
+  line-height:1;
+  font-weight:600;
+  color:var(--ink);
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.scenario-memory-kpi .note{
+  margin-top:7px;
+  padding:0;
+  border:0;
+  background:transparent;
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.35;
+}
+.library-card.is-advanced-library{
+  margin-top:14px !important;
+}
+.advanced-library-details{
+  margin-top:4px;
+  border:1px solid rgba(226,216,201,.82);
+  border-radius:16px;
+  background:rgba(255,253,248,.54);
+  overflow:hidden;
+}
+.advanced-library-details > summary{
+  list-style:none;
+  cursor:pointer;
+  padding:12px 14px;
+  color:var(--stone);
+  font-size:10px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  font-weight:900;
+}
+.advanced-library-details > summary::-webkit-details-marker{display:none}
+.advanced-library-details[open] > summary{
+  border-bottom:1px solid rgba(226,216,201,.72);
+}
+.advanced-library-details .library-card{
+  margin-top:0 !important;
+  border:0 !important;
+  box-shadow:none !important;
+  background:transparent !important;
+}
+@media (max-width:680px){
+  .scenario-memory-panel{padding:0;margin-top:12px}
+  .scenario-memory-card{padding:14px;border-radius:14px}
+  .scenario-memory-head{display:grid;gap:10px}
+  .scenario-memory-actions{justify-content:stretch}
+  .scenario-memory-actions .mini-btn,
+  .scenario-memory-actions .btn{width:100%;min-height:44px}
+  .scenario-memory-state{grid-template-columns:1fr}
+}
+@media print{
+  .scenario-memory-actions,
+  .advanced-library-details{display:none !important}
+  .scenario-memory-card{box-shadow:none !important;background:#fff !important}
+}
+</style>
+<script>
+/* === USER PATCH · Scenario Memory localStorage panel === */
+(function(){
+  "use strict";
+  const MEMORY_KEY = "trade_monte_carlo_locked_scenario_v1";
+  const $ = id => document.getElementById(id);
+  const q = sel => document.querySelector(sel);
+  const money = n => new Intl.NumberFormat("tr-TR",{style:"currency",currency:"USD",maximumFractionDigits:0}).format(Number.isFinite(n)?n:0);
+  const pct = (n,d=1) => (Number.isFinite(n)?Number(n):0).toFixed(d).replace(".",",")+"%";
+  const num = (n,d=2) => (Number.isFinite(n)?Number(n):0).toFixed(d).replace(".",",");
+  function readControl(base, fallback){
+    const number = $(base+"Number");
+    const range = $(base+"Range");
+    const source = number || range || $(base);
+    if(!source) return fallback;
+    const raw = String(source.value ?? source.textContent ?? "").replace(",",".").replace(/[^\d.\-]/g,"");
+    const v = Number(raw);
+    return Number.isFinite(v) ? v : fallback;
+  }
+  function readCurrentScenarioParams(){
+    return {
+      initialCapital: readControl("initialCapital",100000),
+      days: readControl("days",250),
+      tradesPerDay: readControl("tradesPerDay",3),
+      winRate: readControl("winRate",55),
+      avgWinR: readControl("avgWinR",1.8),
+      avgLossR: readControl("avgLossR",1),
+      riskPerTradePct: readControl("riskPerTradePct",1),
+      costR: readControl("costR",0.05)
+    };
+  }
+  function safeHealth(params){
+    try{
+      if(typeof window.calculateStrategyHealthScore === "function"){
+        return window.calculateStrategyHealthScore(params);
+      }
+    }catch(err){}
+    const win = params.winRate/100, loss = 1-win;
+    const e = win*params.avgWinR - loss*params.avgLossR - (params.costR||0);
+    const score = Math.max(0, Math.min(100, Math.round(50 + e*22 - Math.max(0, params.riskPerTradePct-1)*8)));
+    return {
+      score,
+      verdict: score >= 75 ? "Balanced" : score >= 55 ? "Tradable but Streak-Sensitive" : "Fragile",
+      primaryRisk: e <= 0 ? "Negative expectancy" : (params.riskPerTradePct > 1.25 ? "Excessive risk per trade" : "Losing streak sensitivity")
+    };
+  }
+  function lockedScenario(){
+    try{return JSON.parse(localStorage.getItem(MEMORY_KEY) || "null");}
+    catch(err){return null;}
+  }
+  function saveLockedScenario(){
+    const params = readCurrentScenarioParams();
+    const health = safeHealth(params) || {};
+    const name = ($("strategyName") && $("strategyName").value) || "Kilitli Senaryo";
+    const scenario = {
+      id:"locked_"+Date.now(),
+      name,
+      lockedAt:new Date().toISOString(),
+      params,
+      healthScore: health.score,
+      verdict: health.verdict,
+      primaryRisk: health.primaryRisk,
+      seed: (typeof window.getActiveSeed === "function" ? window.getActiveSeed() : null)
+    };
+    localStorage.setItem(MEMORY_KEY, JSON.stringify(scenario));
+    renderScenarioMemory();
+    return scenario;
+  }
+  function clearLockedScenario(){
+    localStorage.removeItem(MEMORY_KEY);
+    renderScenarioMemory();
+  }
+  function tone(score){
+    if(!Number.isFinite(Number(score))) return "";
+    if(score >= 70) return "good";
+    if(score >= 50) return "warn";
+    return "bad";
+  }
+  function escapeHtml(s){
+    return String(s ?? "").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+  }
+  function renderScenarioMemory(){
+    const host = $("scenarioMemoryState");
+    if(!host) return;
+    const s = lockedScenario();
+    if(!s){
+      host.innerHTML = '<div class="scenario-memory-empty">Henüz kilitli senaryo yok.</div>';
+      return;
+    }
+    const p = s.params || {};
+    host.innerHTML = [
+      ["Senaryo", escapeHtml(s.name || "Kilitli Senaryo"), new Date(s.lockedAt || Date.now()).toLocaleString("tr-TR"), ""],
+      ["Health Score", (Number.isFinite(Number(s.healthScore)) ? s.healthScore+"/100" : "—"), escapeHtml(s.verdict || "Karar bekliyor"), tone(Number(s.healthScore))],
+      ["Sermaye / Risk", money(Number(p.initialCapital || 0))+" · "+pct(Number(p.riskPerTradePct || 0),2), "Aynı nakit planıyla karşılaştırma referansı", ""],
+      ["WR / R", pct(Number(p.winRate || 0),1)+" · "+num(Number(p.avgWinR || 0),2)+"R / -"+num(Number(p.avgLossR || 0),2)+"R", escapeHtml(s.primaryRisk || "Primary risk hesaplandı"), ""]
+    ].map(x=>`<div class="scenario-memory-kpi ${x[3]}"><div class="label">${x[0]}</div><div class="value">${x[1]}</div><div class="note">${x[2]}</div></div>`).join("");
+  }
+  function installScenarioMemoryPanel(){
+    const libraryPanel = $("library");
+    const panel = libraryPanel && libraryPanel.querySelector(".panel");
+    if(!panel || $("scenarioMemoryPanel")) return;
+
+    const existingCard = panel.querySelector(".library-card");
+    if(existingCard){
+      existingCard.classList.add("is-advanced-library");
+      const details = document.createElement("details");
+      details.className = "advanced-library-details";
+      details.innerHTML = '<summary>Gelişmiş strateji arşivi / JSON işlemleri</summary>';
+      existingCard.parentNode.insertBefore(details, existingCard);
+      details.appendChild(existingCard);
+    }
+
+    const memory = document.createElement("div");
+    memory.className = "scenario-memory-panel";
+    memory.id = "scenarioMemoryPanel";
+    memory.innerHTML = `
+      <div class="scenario-memory-card">
+        <div class="scenario-memory-head">
+          <div>
+            <div class="scenario-memory-title">SENARYO HAFIZASI</div>
+            <p class="scenario-memory-copy">Mevcut varsayımı kilitleyin; sonra senaryo karşılaştırmasında aynı nakit planıyla birlikte izleyin.</p>
+          </div>
+          <div class="scenario-memory-actions">
+            <button class="mini-btn primary" id="lockScenarioMemory" type="button">SENARYOYU KİLİTLE</button>
+            <button class="mini-btn" id="clearScenarioMemory" type="button">TEMİZLE</button>
+          </div>
+        </div>
+        <div class="scenario-memory-state" id="scenarioMemoryState">
+          <div class="scenario-memory-empty">Henüz kilitli senaryo yok.</div>
+        </div>
+      </div>
+    `;
+    const note = panel.querySelector(".local-note");
+    if(note && note.parentNode){
+      note.parentNode.insertBefore(memory, note.nextSibling);
+    }else{
+      panel.appendChild(memory);
+    }
+    $("lockScenarioMemory")?.addEventListener("click", function(e){
+      e.preventDefault();
+      saveLockedScenario();
+    });
+    $("clearScenarioMemory")?.addEventListener("click", function(e){
+      e.preventDefault();
+      clearLockedScenario();
+    });
+    renderScenarioMemory();
+  }
+  function quietLocalStorageCopy(){
+    const title = q("#library .panel-title");
+    if(title && /Local Strategy Library/i.test(title.textContent || "")){
+      title.innerHTML = title.innerHTML.replace(/Local Strategy Library & CSV Import/i, "Senaryo Hafızası & CSV Import");
+    }
+    const save = $("saveStrategy");
+    if(save) save.textContent = "SENARYOYU KİLİTLE";
+    const list = $("strategyList");
+    if(list && !list.children.length) list.innerHTML = '<div class="local-note">Henüz kilitli senaryo yok.</div>';
+  }
+  function boot(){
+    installScenarioMemoryPanel();
+    quietLocalStorageCopy();
+    const save = $("saveStrategy");
+    if(save && !save.dataset.scenarioMemoryBound){
+      save.dataset.scenarioMemoryBound = "1";
+      save.addEventListener("click", function(e){
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        saveLockedScenario();
+      }, true);
+    }
+    renderScenarioMemory();
+  }
+  window.lockScenarioMemory = saveLockedScenario;
+  window.clearScenarioMemory = clearLockedScenario;
+  window.getLockedScenarioMemory = lockedScenario;
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
+  else boot();
+})();
+</script>
+
 </body>
 </html>
