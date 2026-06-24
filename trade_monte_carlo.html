@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html lang="tr">
 <head>
@@ -8630,7 +8630,7 @@ canvas{max-width:100% !important}
 </div>
 <div class="hero-actions">
 <button class="btn primary run-sim" type="button"><svg viewbox="0 0 24 24"><path d="M5 3l14 9-14 9V3z"></path></svg>Risk Motorunu Çalıştır</button>
-<button class="btn ghost" onclick="window.printRiskReport(); return false;" type="button"><svg viewbox="0 0 24 24"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><path d="M6 14h12v8H6z"></path></svg>PDF Risk Raporu</button>
+<button class="btn ghost" onclick="window.print()" type="button"><svg viewbox="0 0 24 24"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><path d="M6 14h12v8H6z"></path></svg>PDF Risk Raporu</button>
 <a class="btn olive" href="index.html"><svg viewbox="0 0 24 24"><path d="M4 5h16"></path><path d="M4 12h16"></path><path d="M4 19h10"></path></svg>Ana Rapor</a>
 </div>
 </header>
@@ -8698,37 +8698,37 @@ canvas{max-width:100% !important}
   <p class="mono" id="printModelVersion">Model version: Breakout Quant Engine v1.0 · Local-only parameter ledger</p>
 </section>
 
-<section aria-label="Strategy Health Score ve karar motoru" class="breakout-exec report-section" id="breakoutExecutive">
+<section aria-label="Strateji Sağlık Skoru ve karar motoru" class="breakout-exec report-section" id="breakoutExecutive">
   <article class="breakout-health-card" id="healthCard">
     <div>
-      <div class="breakout-score-kicker">Strategy Health Score</div>
+      <div class="breakout-score-kicker">Strateji Sağlık Skoru</div>
       <div class="breakout-score mono" id="healthScore">—<span>/100</span></div>
       <div class="breakout-verdict" id="healthVerdict">Analiz bekleniyor</div>
     </div>
     <div>
-      <div class="breakout-kicker">Executive Verdict</div>
+      <div class="breakout-kicker">Yönetici Kararı</div>
       <h2 class="breakout-health-title">Kârlı görünen strateji sermaye dayanıklılığı testinden geçiyor mu?</h2>
       <div class="breakout-decision-grid">
-        <div class="breakout-decision"><strong>Primary Risk</strong><span id="primaryRisk">Simülasyon çalışınca ana kırılganlık burada görünecek.</span></div>
-        <div class="breakout-decision"><strong>Recommended Action</strong><span id="recommendedAction">Parametreleri girip Çalıştır düğmesine basın.</span></div>
-        <div class="breakout-decision"><strong>Break-even Buffer</strong><span class="mono" id="edgeBuffer">—</span></div>
-        <div class="breakout-decision"><strong>Risk-of-Ruin Proxy</strong><span class="mono" id="ruinProxy">—</span></div>
+        <div class="breakout-decision"><strong>Ana Risk</strong><span id="primaryRisk">Simülasyon çalışınca ana kırılganlık burada görünecek.</span></div>
+        <div class="breakout-decision"><strong>Önerilen Aksiyon</strong><span id="recommendedAction">Parametreleri girip Çalıştır düğmesine basın.</span></div>
+        <div class="breakout-decision"><strong>Başabaş Tamponu</strong><span class="mono" id="edgeBuffer">—</span></div>
+        <div class="breakout-decision"><strong>İflas Riski (Yaklaşık)</strong><span class="mono" id="ruinProxy">—</span></div>
       </div>
     </div>
   </article>
 
   <article class="breakout-action-card" id="actionEngine">
-    <div class="breakout-kicker">What Should I Change?</div>
-    <h3 class="breakout-health-title" style="font-size:34px">Action Engine</h3>
+    <div class="breakout-kicker">Ne Değiştirmeliyim?</div>
+    <h3 class="breakout-health-title" style="font-size:34px">Aksiyon Motoru</h3>
     <div class="breakout-action-list">
-      <div class="breakout-action-item"><div class="breakout-action-index">1</div><div><strong>Immediate Action</strong><span id="actionImmediate">Risk ve edge ölçümleri hazırlanıyor.</span></div></div>
-      <div class="breakout-action-item"><div class="breakout-action-index">2</div><div><strong>Risk Control</strong><span id="actionRiskControl">Losing streak ve günlük zarar freni değerlendiriliyor.</span></div></div>
-      <div class="breakout-action-item"><div class="breakout-action-index">3</div><div><strong>Scaling Rule</strong><span id="actionScaling">Ölçekleme kuralı PF, örneklem ve drawdown yüküne göre üretilecek.</span></div></div>
+      <div class="breakout-action-item"><div class="breakout-action-index">1</div><div><strong>Öncelikli Aksiyon</strong><span id="actionImmediate">Risk ve edge ölçümleri hazırlanıyor.</span></div></div>
+      <div class="breakout-action-item"><div class="breakout-action-index">2</div><div><strong>Risk Kontrolü</strong><span id="actionRiskControl">Losing streak ve günlük zarar freni değerlendiriliyor.</span></div></div>
+      <div class="breakout-action-item"><div class="breakout-action-index">3</div><div><strong>Ölçekleme Kuralı</strong><span id="actionScaling">Ölçekleme kuralı PF, örneklem ve drawdown yüküne göre üretilecek.</span></div></div>
     </div>
   </article>
 
   <div class="breakout-reality-strip" id="realityCards">
-    <article class="breakout-mini-card"><div class="mini-label">Reality Check</div><div class="mini-value">—</div><div class="mini-note">Stres testleri hesaplanıyor.</div></article>
+    <article class="breakout-mini-card"><div class="mini-label">Gerçeklik Kontrolü</div><div class="mini-value">—</div><div class="mini-note">Stres testleri hesaplanıyor.</div></article>
   </div>
 </section>
 
@@ -8755,7 +8755,7 @@ canvas{max-width:100% !important}
   <section id="reportCover" class="report-cover report-section">
     <div class="brand-kicker">Trade Survival Report · Privacy-first local model</div>
     <div class="report-section-number">1 · Cover / Strategy Report</div>
-    <h2>Strategy Survival & Prop Challenge Report</h2>
+    <h2>Strateji Dayanıklılığı & Prop Challenge Raporu</h2>
     <p id="reportCoverCopy">No account. No cloud. Your strategy data stays on your device. This report is generated locally from current assumptions, Monte Carlo outputs and risk optimization diagnostics.</p>
     <div class="report-kpi" style="margin-top:18px">
       <div><strong>Strategy</strong><span id="reportStrategyName">My Strategy</span></div>
@@ -8765,7 +8765,7 @@ canvas{max-width:100% !important}
   </section>
   <div class="report-grid">
     <section id="reportExecutive" class="report-executive report-section wide">
-      <h3>2 · Executive Verdict</h3>
+      <h3>2 · Yönetici Kararı</h3>
       <div class="report-kpi">
         <div><strong>Health Score</strong><span id="reportHealth">—</span></div>
         <div><strong>Verdict</strong><span id="reportVerdict">—</span></div>
@@ -8774,11 +8774,11 @@ canvas{max-width:100% !important}
       <p id="reportRecommendedAction" style="margin-top:10px">Recommended action will be generated from the active model.</p>
     </section>
     <section id="reportAssumptions" class="report-assumptions report-section">
-      <h3>3 · Core Assumptions</h3>
+      <h3>3 · Temel Varsayımlar</h3>
       <table class="report-table"><tbody id="reportAssumptionRows"></tbody></table>
     </section>
     <section id="reportMonteCarlo" class="report-montecarlo report-section">
-      <h3>4 · Monte Carlo Distribution</h3>
+      <h3>4 · Monte Carlo Dağılımı</h3>
       <div class="report-kpi">
         <div><strong>P5 Final</strong><span id="reportP5">—</span></div>
         <div><strong>P50 Final</strong><span id="reportP50">—</span></div>
@@ -8787,7 +8787,7 @@ canvas{max-width:100% !important}
       <p id="reportMCRisk" style="margin-top:10px">Drawdown and ruin diagnostics are included in the live HUD and parameter ledger.</p>
     </section>
     <section id="reportPropSurvival" class="report-prop report-section">
-      <h3>5 · Prop Survival Decision</h3>
+      <h3>5 · Prop Survival Kararı</h3>
       <div class="report-kpi">
         <div><strong>GO / NO-GO</strong><span id="reportPropGo">—</span></div>
         <div><strong>Pass Probability</strong><span id="reportPropPass">—</span></div>
@@ -8796,7 +8796,7 @@ canvas{max-width:100% !important}
       <p id="reportPropCopy" style="margin-top:10px">Run Prop Survival to populate this section.</p>
     </section>
     <section id="reportRiskOptimizer" class="report-riskopt report-section">
-      <h3>6 · Risk Per Trade Optimizer</h3>
+      <h3>6 · İşlem Başına Risk Optimizasyonu</h3>
       <div class="report-kpi">
         <div><strong>Conservative</strong><span id="reportBandConservative">—</span></div>
         <div><strong>Balanced</strong><span id="reportBandBalanced">—</span></div>
@@ -8805,15 +8805,15 @@ canvas{max-width:100% !important}
       <p id="reportRiskStatusCopy" style="margin-top:10px">Risk band result will be copied from the optimizer.</p>
     </section>
     <section id="reportRealityCheck" class="report-reality report-section">
-      <h3>7 · Reality Check</h3>
+      <h3>7 · Gerçeklik Kontrolü</h3>
       <table class="report-table"><tbody id="reportRealityRows"></tbody></table>
     </section>
     <section id="reportMathAppendix" class="report-math report-section">
-      <h3>8 · Mathematical Appendix</h3>
+      <h3>8 · Matematiksel Ek</h3>
       <table class="report-table"><tbody id="reportMathRows"></tbody></table>
     </section>
     <section id="reportLedger" class="report-ledger report-section wide">
-      <h3>9 · Parameter Ledger</h3>
+      <h3>9 · Parametre Defteri</h3>
       <p>All model assumptions are local-only and user-controlled. Model version: <span class="mono">Breakout Decision Engine v2.0</span>. No cloud storage, account or server-side strategy logging is used.</p>
       <table class="report-table" style="margin-top:8px"><tbody id="reportLedgerRows"></tbody></table>
     </section>
@@ -9264,71 +9264,89 @@ canvas{max-width:100% !important}
     <div class="panel-head">
       <div>
         <div class="panel-title"><svg viewBox="0 0 24 24"><path d="M12 2l7 4v6c0 5-3 8-7 10-4-2-7-5-7-10V6l7-4z"></path><path d="M9 12l2 2 4-5"></path></svg>Prop Survival</div>
-        <p class="panel-copy">Challenge için günlük ve toplam drawdown limitlerini, hedefi, minimum/maximum gün koşullarını ve işlem akışını Monte Carlo ile test eder. Cevap: bu challenge’a bu riskle girmeli miyim?</p>
+        <p class="panel-copy">Gerçek para koymadan önce: seçilen challenge kuralları altında stratejin kaç Monte Carlo yolunda geçer? Günlük drawdown, toplam drawdown, minimum/maksimum gün ve işlem akışı aynı anda test edilir — <strong>GO / NO-GO / RİSKİ AZALT</strong> kararı çıkar.</p>
       </div>
-      <button class="btn primary" id="propRun" type="button">Prop Survival Testi</button>
+      <button class="btn primary" id="propRun" type="button"><svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9V3z"></path></svg>Prop Survival Testi</button>
     </div>
+
+    <div class="prop-howit-banner">
+      <div class="prop-howit-step">
+        <div class="prop-howit-num">1</div>
+        <div><strong>Challenge Tipi Seç</strong><span>Aşağıdan bir prop firma şablonu seç ya da mevcut strateji değerlerini aktar.</span></div>
+      </div>
+      <div class="prop-howit-step">
+        <div class="prop-howit-num">2</div>
+        <div><strong>Limitleri Gir</strong><span>Firma drawdown sınırlarını, hedefi ve strateji istatistiklerini doldur.</span></div>
+      </div>
+      <div class="prop-howit-step">
+        <div class="prop-howit-num">3</div>
+        <div><strong>Kararı Oku</strong><span>Monte Carlo binlerce senaryoyu çalıştırır: geçme oranı, başarısızlık nedeni ve güvenli risk bandı.</span></div>
+      </div>
+    </div>
+
+    <div class="prop-section-kicker">Prop Firma / Challenge Tipi Seçin</div>
     <div class="prop-presets" id="propPresets"></div>
+
     <div class="prop-go-card prop-go-card-executive" id="propExecutiveVerdict">
-      <div class="prop-go-badge reduce" id="propExecutiveBadge">PENDING<small>Decision</small></div>
+      <div class="prop-go-badge reduce" id="propExecutiveBadge">BEKLEMEDE<small>Karar</small></div>
       <div class="prop-go-copy">
-        <strong id="propExecutiveHeadline">Challenge analysis pending. Run Prop Survival to compute GO / NO-GO.</strong>
-        <span id="propExecutiveCopy">This memo will show pass probability, main failure reason and whether current risk sits inside the recommended band.</span>
+        <strong id="propExecutiveHeadline">Challenge analizi bekleniyor. GO / NO-GO kararı için Prop Survival Testi çalıştırın.</strong>
+        <span id="propExecutiveCopy">Bu özet; geçme olasılığını, ana başarısızlık nedenini ve mevcut riskin önerilen güvenli banta uyup uymadığını gösterecek.</span>
         <div class="prop-verdict-metrics">
-          <span><b>Pass probability</b><em id="propExecutivePass">—</em></span>
-          <span><b>Main failure reason</b><em id="propExecutiveFailure">—</em></span>
-          <span><b>Current risk</b><em id="propExecutiveRiskStatus">—</em></span>
+          <span><b>Geçme Olasılığı</b><em id="propExecutivePass">—</em></span>
+          <span><b>Ana Başarısızlık Nedeni</b><em id="propExecutiveFailure">—</em></span>
+          <span><b>Mevcut Risk Durumu</b><em id="propExecutiveRiskStatus">—</em></span>
         </div>
       </div>
     </div>
+
     <div class="breakout-tab-grid">
       <div class="prop-card">
-        <div class="breakout-kicker">Challenge Inputs</div>
+        <div class="breakout-kicker">Challenge Parametreleri</div>
         <div class="input-grid" style="margin-top:12px">
-          <div class="input-card"><label>Starting Balance</label><input id="propBalance" type="number" value="100000" step="1000"></div>
-          <div class="input-card"><label>Profit Target %</label><input id="propTarget" type="number" value="8" step="0.25"></div>
-          <div class="input-card"><label>Max Total DD %</label><input id="propTotalDD" type="number" value="10" step="0.25"></div>
-          <div class="input-card"><label>Max Daily DD %</label><input id="propDailyDD" type="number" value="5" step="0.25"></div>
-          <div class="input-card"><label>Min Trading Days</label><input id="propMinDays" type="number" value="5" step="1"></div>
-          <div class="input-card"><label>Max Trading Days</label><input id="propMaxDays" type="number" value="30" step="1"></div>
-          <div class="input-card"><label>Risk Per Trade %</label><input id="propRisk" type="number" value="0.75" step="0.05"></div>
-          <div class="input-card"><label>Trades Per Day</label><input id="propTrades" type="number" value="3" step="0.1"></div>
-          <div class="input-card"><label>Win Rate %</label><input id="propWR" type="number" value="55" step="0.5"></div>
-          <div class="input-card"><label>Average Win R</label><input id="propWinR" type="number" value="1.8" step="0.05"></div>
-          <div class="input-card"><label>Average Loss R</label><input id="propLossR" type="number" value="1" step="0.05"></div>
-          <div class="input-card"><label>Cost R</label><input id="propCostR" type="number" value="0.05" step="0.01"></div>
-          <div class="input-card"><label>Daily Stop After N Losses</label><input id="propStopLosses" type="number" value="3" step="1"></div>
-          <div class="input-card"><label>Daily Profit Lock %</label><input id="propProfitLock" type="number" value="0" step="0.25"></div>
+          <div class="input-card"><label>Başlangıç Bakiyesi</label><input id="propBalance" type="number" value="100000" step="1000"></div>
+          <div class="input-card"><label>Kâr Hedefi %</label><input id="propTarget" type="number" value="8" step="0.25"></div>
+          <div class="input-card"><label>Toplam Max Drawdown %</label><input id="propTotalDD" type="number" value="10" step="0.25"></div>
+          <div class="input-card"><label>Günlük Max Drawdown %</label><input id="propDailyDD" type="number" value="5" step="0.25"></div>
+          <div class="input-card"><label>Min. İşlem Günü</label><input id="propMinDays" type="number" value="5" step="1"></div>
+          <div class="input-card"><label>Max. İşlem Günü</label><input id="propMaxDays" type="number" value="30" step="1"></div>
+          <div class="input-card"><label>Trade Başına Risk %</label><input id="propRisk" type="number" value="0.75" step="0.05"></div>
+          <div class="input-card"><label>Günlük Trade Sayısı</label><input id="propTrades" type="number" value="3" step="0.1"></div>
+          <div class="input-card"><label>Kazanma Oranı %</label><input id="propWR" type="number" value="55" step="0.5"></div>
+          <div class="input-card"><label>Ort. Kazanç (R)</label><input id="propWinR" type="number" value="1.8" step="0.05"></div>
+          <div class="input-card"><label>Ort. Kayıp (R)</label><input id="propLossR" type="number" value="1" step="0.05"></div>
+          <div class="input-card"><label>İşlem Maliyeti (R)</label><input id="propCostR" type="number" value="0.05" step="0.01"></div>
+          <div class="input-card"><label>Günlük Stop (N Kayıp Sonrası)</label><input id="propStopLosses" type="number" value="3" step="1"></div>
+          <div class="input-card"><label>Günlük Kâr Kilidi %</label><input id="propProfitLock" type="number" value="0" step="0.25"></div>
         </div>
-        <div class="local-note" style="margin-top:12px">No account. No cloud. Prop challenge assumptions stay on your device and are never sent to a server.</div>
+        <div class="local-note" style="margin-top:12px">Hesap yok · Bulut yok. Prop challenge parametreleri yalnızca cihazınızda kalır, sunucuya gönderilmez.</div>
       </div>
       <div class="breakout-stack">
         <div class="prop-card">
           <div class="prop-output-grid">
-            <div class="breakout-output"><div class="label">Pass Probability</div><div class="value mono" id="propPass">—</div><div class="note">Target + rules survived</div></div>
-            <div class="breakout-output"><div class="label">Daily DD Fail</div><div class="value mono" id="propDailyFail">—</div><div class="note">Intraday limit breach</div></div>
-            <div class="breakout-output"><div class="label">Total DD Fail</div><div class="value mono" id="propTotalFail">—</div><div class="note">Account-level breach</div></div>
-            <div class="breakout-output"><div class="label">Median Days to Pass</div><div class="value mono" id="propMedianDays">—</div><div class="note">Passed paths only</div></div>
+            <div class="breakout-output"><div class="label">Geçme Olasılığı</div><div class="value mono" id="propPass">—</div><div class="note">Hedef + tüm kurallar sağlandı</div></div>
+            <div class="breakout-output"><div class="label">Günlük DD Başarısız</div><div class="value mono" id="propDailyFail">—</div><div class="note">Günlük limit aşımı</div></div>
+            <div class="breakout-output"><div class="label">Toplam DD Başarısız</div><div class="value mono" id="propTotalFail">—</div><div class="note">Hesap düzeyi ihlali</div></div>
+            <div class="breakout-output"><div class="label">Medyan Geçiş Süresi</div><div class="value mono" id="propMedianDays">—</div><div class="note">Yalnızca başarılı yollar</div></div>
           </div>
-          <div class="prop-go-card" id="propGoCard">
-            <div class="prop-go-badge reduce" id="propGoNoGo">WAIT<small>Decision</small></div>
-            <div class="prop-go-copy">
-              <strong id="propFailureHeadline">Challenge risk verdict is waiting.</strong>
-              <span id="propRecommendedRisk">Run the prop test to receive a GO / NO-GO / REDUCE RISK FIRST decision and a recommended challenge risk band.</span>
-            </div>
+          <div style="display:none" aria-hidden="true" id="propGoCard">
+            <span id="propGoNoGo"></span>
+            <span id="propFailureHeadline"></span>
+            <span id="propRecommendedRisk"></span>
           </div>
-          <div class="breakout-verdict-box" id="propVerdict"><strong>Challenge Verdict:</strong> Parametreleri ana stratejiden alıp prop testini çalıştırın.</div>
+          <div style="display:none" id="propVerdict"></div>
         </div>
-        <div class="chart-shell">
-          <div class="chart-head"><div><div class="chart-title">Failure Reason Decomposition</div><p class="chart-copy">Pass dışındaki sonuçları günlük drawdown, toplam drawdown ve timeout olarak ayırır; hangi kuralın stratejiyi kırdığını gösterir.</p></div></div>
+        <div class="chart-shell prop-failure-chart-shell">
+          <div class="chart-head"><div><div class="chart-title">Başarısızlık Nedeni Dağılımı</div><p class="chart-copy">Başarısız sonuçları günlük drawdown, toplam drawdown ve timeout olarak ayırır — hangi kuralın stratejiyi kırdığını gösterir.</p></div></div>
           <div class="canvas-wrap small"><canvas id="propFailureChart"></canvas></div>
         </div>
       </div>
     </div>
+
     <div class="visual-why-grid">
-      <div class="visual-why-card"><strong>Görsel Gerekçe · Failure Decomposition</strong><p>Prop kullanıcısı için “geçemedim” tek cevap değildir. Başarısızlığın günlük limitten mi, toplam drawdown’dan mı, yoksa hedefe yetişememekten mi geldiği risk kuralını doğrudan belirler.</p></div>
-      <div class="visual-why-card"><strong>Görsel Gerekçe · Safe Risk Band</strong><p>Tek bir optimum nokta yerine güvenli bant gösterilir; çünkü gerçek trader uygulamasında slippage, trade sayısı ve psikoloji parametreleri sabit kalmaz.</p></div>
-      <div class="visual-why-card"><strong>Görsel Gerekçe · Median Days</strong><p>Yalnızca geçme olasılığı yeterli değildir. Hedefe kaç günde ulaşıldığı timeout riskini ve minimum trading day koşulunu aynı anda görünür kılar.</p></div>
+      <div class="visual-why-card"><strong>Neden Başarısızlık Dağılımı?</strong><p>Prop trader için "geçemedim" tek bir cevap değildir. Başarısızlığın günlük limitten mi, toplam drawdown’dan mı yoksa hedefe yetişememekten mi kaynaklandığı, risk kuralını doğrudan belirler.</p></div>
+      <div class="visual-why-card"><strong>Neden Güvenli Risk Bandı?</strong><p>Tek bir optimum nokta yerine güvenli bant gösterilir; çünkü gerçek uygulamada slippage, günlük trade sayısı ve psikoloji parametreleri sabit kalmaz.</p></div>
+      <div class="visual-why-card"><strong>Neden Medyan Gün?</strong><p>Yalnızca geçme olasılığı yeterli değildir. Hedefe kaç günde ulaşıldığı, timeout riskini ve minimum trading day koşulunu aynı anda görünür kılar.</p></div>
     </div>
   </div>
 </section>
@@ -9349,13 +9367,13 @@ canvas{max-width:100% !important}
           <div class="input-card"><label>Target DD Tolerance %</label><input id="optTargetDD" type="number" value="20" step="1"></div>
           <div class="input-card"><label>Ruin / Fail Threshold %</label><input id="optRuinThreshold" type="number" value="50" step="1"></div>
           <div class="input-card"><label>Max Acceptable P(20% DD) %</label><input id="optMaxDDProb" type="number" value="25" step="1"></div>
-          <div class="input-card"><label>Simulation Quality</label>
+          <div class="input-card"><label>Simülasyon Kalitesi</label>
             <div class="quality-selector" id="optQuality" aria-label="Risk optimizer simulation quality">
-              <button class="active" type="button" data-paths="250">Fast</button>
-              <button type="button" data-paths="750">Balanced</button>
-              <button type="button" data-paths="2000">Deep</button>
+              <button class="active" type="button" data-paths="250">Hızlı</button>
+              <button type="button" data-paths="750">Dengeli</button>
+              <button type="button" data-paths="2000">Derin</button>
             </div>
-            <small style="display:block;margin-top:7px;color:var(--stone);font-size:10px;line-height:1.35">Deep mode increases confidence but may take longer on mobile.</small>
+            <small style="display:block;margin-top:7px;color:var(--stone);font-size:10px;line-height:1.35">Derin mod güveni artırır ama mobilde daha uzun sürebilir.</small>
           </div>
           <div class="input-card risk-depth-managed"><label>Paths / Risk · controlled by depth mode</label><input id="optPaths" type="number" value="250" step="20" readonly aria-readonly="true"><small class="field-note">Fast / Balanced / Deep seçimi bu değeri otomatik belirler.</small></div>
         </div>
@@ -9367,14 +9385,14 @@ canvas{max-width:100% !important}
         <div class="breakout-verdict-box" id="riskStatus"><strong>Current Risk:</strong> Hesaplama bekleniyor.</div>
       </div>
       <div class="chart-shell">
-        <div class="chart-head"><div><div class="chart-title">Risk Band Chart · P50 / P5 / Drawdown Probability</div><p class="chart-copy">Risk arttıkça medyan büyüme yükselirken kötü senaryo tabanı ve drawdown ihtimali aynı anda izlenir. Current risk marker, seçili riskin bant içindeki durumunu gösterir.</p></div></div>
+        <div class="chart-head"><div><div class="chart-title">Risk Bandı Grafiği · P50 / P5 / Drawdown Olasılığı</div><p class="chart-copy">Risk arttıkça medyan büyüme yükselirken kötü senaryo tabanı ve drawdown ihtimali aynı anda izlenir. Current risk marker, seçili riskin bant içindeki durumunu gösterir.</p></div></div>
         <div class="canvas-wrap"><canvas id="riskBandChart"></canvas></div>
       </div>
     </div>
     <div class="visual-why-grid">
-      <div class="visual-why-card"><strong>Görsel Gerekçe · Dual Axis Risk Curve</strong><p>Trader için medyan büyüme tek başına aldatıcıdır. P50 ve P(20% DD) aynı grafikte gösterilince “daha çok kazanırım” hipotezinin drawdown bedeli görünür olur.</p></div>
+      <div class="visual-why-card"><strong>Görsel Gerekçe · Dual Axis Risk Curve</strong><p>Trader için medyan büyüme tek başına aldatıcıdır. P50 ve P(20% DD) aynı grafikte gösterilince "daha çok kazanırım" hipotezinin drawdown bedeli görünür olur.</p></div>
       <div class="visual-why-card"><strong>Görsel Gerekçe · P5 Floor</strong><p>P5 final sermaye, stratejinin kötü ama makul senaryoda ne kadar sermaye tabanı bıraktığını gösterir; ölçekleme kararında medyandan daha koruyucu bir filtredir.</p></div>
-      <div class="visual-why-card"><strong>Görsel Gerekçe · Current Marker</strong><p>Kullanıcı “kaç risk almalıyım?” sorusunu soyut tabloda değil, mevcut riskinin güvenli/watch/danger bölgesine göre cevaplar.</p></div>
+      <div class="visual-why-card"><strong>Görsel Gerekçe · Current Marker</strong><p>Kullanıcı "kaç risk almalıyım?" sorusunu soyut tabloda değil, mevcut riskinin güvenli/watch/danger bölgesine göre cevaplar.</p></div>
     </div>
   </div>
 </section>
@@ -9386,40 +9404,40 @@ canvas{max-width:100% !important}
         <div class="panel-title"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"></path><path d="M8 4v16"></path><path d="M4 9h16"></path></svg>Local Strategy Library & CSV Import</div>
         <p class="panel-copy">Backend yok, hesap yok, cloud yok. Strateji kayıtları localStorage içinde bu cihazda tutulur; JSON ve CSV dosyaları yalnızca tarayıcı içinde okunur.</p>
       </div>
-      <button class="btn primary" id="saveStrategy" type="button">Save Strategy</button>
+      <button class="btn primary" id="saveStrategy" type="button">Stratejiyi Kaydet</button>
     </div>
     <div class="local-note">All saved strategies are stored locally on this device. No account. No cloud. Your strategy data stays on your device.</div>
     <div class="library-card" style="margin-top:14px">
       <div class="library-toolbar">
-        <input class="library-input" id="strategyName" value="My Strategy" aria-label="Strategy name">
-        <button class="mini-btn" id="duplicateStrategy" type="button">Duplicate</button>
-        <button class="mini-btn" id="renameStrategy" type="button">Rename</button>
-        <button class="mini-btn" id="deleteStrategy" type="button">Delete</button>
-        <button class="mini-btn" id="exportStrategy" type="button">Export JSON</button>
+        <input class="library-input" id="strategyName" value="Stratejim" aria-label="Strateji adı">
+        <button class="mini-btn" id="duplicateStrategy" type="button">Kopyala</button>
+        <button class="mini-btn" id="renameStrategy" type="button">Yeniden Adlandır</button>
+        <button class="mini-btn" id="deleteStrategy" type="button">Sil</button>
+        <button class="mini-btn" id="exportStrategy" type="button">JSON Dışa Aktar</button>
       </div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
-        <label class="mini-btn" for="importStrategyFile">Import Strategy JSON</label><input id="importStrategyFile" type="file" accept=".json,application/json" style="display:none">
-        <button class="mini-btn" id="compareStrategies" type="button">Compare Saved Strategies</button>
-        <button class="mini-btn" id="resetPreset" type="button">Reset to Preset</button>
+        <label class="mini-btn" for="importStrategyFile">Strateji JSON İçe Aktar</label><input id="importStrategyFile" type="file" accept=".json,application/json" style="display:none">
+        <button class="mini-btn" id="compareStrategies" type="button">Kayıtlı Stratejileri Karşılaştır</button>
+        <button class="mini-btn" id="resetPreset" type="button">Hazıra Sıfırla</button>
       </div>
       <div class="library-presets" id="libraryPresets"></div>
       <div class="library-list" id="strategyList"></div>
-      <div class="table-wrap" style="margin-top:12px"><table class="fin-table"><thead><tr><th>Strategy</th><th>Health</th><th>Verdict</th><th>PF</th><th>Expectancy</th><th>Risk</th><th>Primary Risk</th></tr></thead><tbody id="strategyCompareRows"><tr><td colspan="7">Kayıtlı stratejileri karşılaştırmak için Compare düğmesini kullanın.</td></tr></tbody></table></div>
+      <div class="table-wrap" style="margin-top:12px"><table class="fin-table"><thead><tr><th>Strateji</th><th>Sağlık</th><th>Karar</th><th>PF</th><th>Beklenti</th><th>Risk</th><th>Ana Risk</th></tr></thead><tbody id="strategyCompareRows"><tr><td colspan="7">Kayıtlı stratejileri karşılaştırmak için Compare düğmesini kullanın.</td></tr></tbody></table></div>
     </div>
     <div class="csv-card" style="margin-top:14px">
-      <div class="breakout-kicker">Import Trade History</div>
+      <div class="breakout-kicker">İşlem Geçmişi İçe Aktar</div>
       <p class="panel-copy">Desteklenen minimum formatlar: date,symbol,pnl · date,symbol,r_multiple · date,symbol,pnl,capital · date,symbol,entry,exit,size,pnl.</p>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
-        <label class="mini-btn" for="csvFile">Import Trade History CSV</label><input id="csvFile" type="file" accept=".csv,text/csv" style="display:none">
-        <button class="mini-btn" id="applyCsvMapping" type="button">Apply Mapping to Model</button>
+        <label class="mini-btn" for="csvFile">İşlem Geçmişi CSV İçe Aktar</label><input id="csvFile" type="file" accept=".csv,text/csv" style="display:none">
+        <button class="mini-btn" id="applyCsvMapping" type="button">Eşlemeyi Modele Uygula</button>
       </div>
       <div class="csv-mapping-grid" id="csvMapping"></div>
       <div class="csv-summary-grid" id="csvSummary" style="margin-top:12px"></div>
       <div class="csv-diagnostics" id="csvDiagnostics">
-        <div class="csv-diagnostic"><strong>Detected Format</strong><span>—</span><em>Delimiter and column structure will appear after import.</em></div>
-        <div class="csv-diagnostic"><strong>Import Confidence</strong><span>—</span><em>Based on mapped fields, numeric validity and sample size.</em></div>
-        <div class="csv-diagnostic"><strong>Bad Rows</strong><span>—</span><em>Rows skipped due to missing or invalid values.</em></div>
-        <div class="csv-diagnostic"><strong>Sample Warning</strong><span>—</span><em>300+ trades recommended before scaling capital.</em></div>
+        <div class="csv-diagnostic"><strong>Algılanan Format</strong><span>—</span><em>Delimiter and column structure will appear after import.</em></div>
+        <div class="csv-diagnostic"><strong>İçe Aktarma Güveni</strong><span>—</span><em>Based on mapped fields, numeric validity and sample size.</em></div>
+        <div class="csv-diagnostic"><strong>Hatalı Satır</strong><span>—</span><em>Rows skipped due to missing or invalid values.</em></div>
+        <div class="csv-diagnostic"><strong>Örneklem Uyarısı</strong><span>—</span><em>300+ trades recommended before scaling capital.</em></div>
       </div>
       <div class="csv-preview" id="csvPreview"></div>
     </div>
@@ -9462,7 +9480,7 @@ canvas{max-width:100% !important}
 <ul class="concept-points">
 <li>+2R, riske edilen tutarın iki katı kâr anlamına gelir.</li>
 <li>−1R, planlanan stop kaybıdır; −1.5R ise stop kayması, gap veya disiplin bozulması gibi ek kayıp anlamına gelebilir.</li>
-<li>R bazlı düşünmek, “kaç TL kazandım?” yerine “aldığım riske göre ne kazandım?” sorusunu cevaplar.</li>
+<li>R bazlı düşünmek, "kaç TL kazandım?" yerine "aldığım riske göre ne kazandım?" sorusunu cevaplar.</li>
 </ul>
 <div class="concept-example mono concept-mini">Örnek: Entry 100 · Stop 95 · Hedef 110 → Risk 5 puan · Ödül 10 puan · Hedef +2R.</div>
 </article><article class="concept-card deep olive">
@@ -9482,7 +9500,7 @@ canvas{max-width:100% !important}
 <ul class="concept-points">
 <li>Yüksek kârda bitme oranı istikrar göstergesidir, ancak hedefe ulaşma anlamına gelmez.</li>
 <li>Bir strateji sık kârda bitebilir ama hedef sermayeye nadiren ulaşabilir.</li>
-<li>Bu metrik P5 ile birlikte okunursa “sık küçük kâr mı, seyrek büyük sonuç mu?” ayrımı yapılır.</li>
+<li>Bu metrik P5 ile birlikte okunursa "sık küçük kâr mı, seyrek büyük sonuç mu?" ayrımı yapılır.</li>
 </ul>
 <div class="concept-example mono concept-mini">Örnek: 5.000 yolun 3.400’ü başlangıcın üzerinde kapanırsa kârda bitme olasılığı %68 olur.</div>
 </article><article class="concept-card deep olive">
@@ -9558,7 +9576,7 @@ canvas{max-width:100% !important}
 </article><article class="concept-card deep">
 <div class="concept-kicker mono">Duyarlılık</div>
 <h3>Varsayım Etkisi</h3>
-<p>Duyarlılık analizi, hangi varsayım değiştiğinde sonucun en fazla oynadığını gösterir. Bu bölüm “tahmin kesinliği” değil, modelin hangi düğmelerden daha çok etkilendiğini anlamak için kullanılır.</p>
+<p>Duyarlılık analizi, hangi varsayım değiştiğinde sonucun en fazla oynadığını gösterir. Bu bölüm "tahmin kesinliği" değil, modelin hangi düğmelerden daha çok etkilendiğini anlamak için kullanılır.</p>
 <ul class="concept-points">
 <li>Analitik duyarlılık hızlı bir ön okuma sağlar.</li>
 <li>Monte Carlo duyarlılığı, seçili parametreleri tekrar simüle ederek P50, P5 ve kritik eşik etkisini ölçer.</li>
@@ -9571,7 +9589,7 @@ canvas{max-width:100% !important}
 <p>Anahtar, Monte Carlo rastgeleliğinin başlangıç anahtarıdır. Sabit anahtar kullanıldığında aynı parametrelerle aynı yollar tekrar üretilir; bu da rapor, denetim ve müşteri sunumu için tutarlı karşılaştırma sağlar.</p>
 <ul class="concept-points">
 <li>Otomatik anahtar keşif ve hızlı deneme için uygundur.</li>
-<li>Sabit anahtar, “bu sonuç neden değişti?” sorusunu ortadan kaldırır.</li>
+<li>Sabit anahtar, "bu sonuç neden değişti?" sorusunu ortadan kaldırır.</li>
 <li>Karşılaştırmalarda yalnızca parametre değişsin isteniyorsa anahtar sabit tutulmalıdır.</li>
 </ul>
 <div class="concept-example mono concept-mini">Örnek: Anahtar 161803398 ve aynı parametreler kullanılırsa P5/P50/P95 aynı simülasyon evreninden tekrar hesaplanır.</div>
@@ -9591,7 +9609,7 @@ canvas{max-width:100% !important}
 <h3>Percentile Okuması</h3>
 <p>Percentile değerleri tek bir tahmin değil, olasılık dağılımının farklı noktalarıdır. P50 medyan yolu, P5 kötü senaryo tabanını, P95 ise güçlü ama daha az olası üst bandı gösterir.</p>
 <ul class="concept-points">
-<li>P5 düşükse strateji “ortalama olarak iyi” görünse bile sermaye koruma riski yüksektir.</li>
+<li>P5 düşükse strateji "ortalama olarak iyi" görünse bile sermaye koruma riski yüksektir.</li>
 <li>P50, tipik sonuçtur; yatırımcı sunumunda tek başına yeterli değildir.</li>
 <li>P95, potansiyeli gösterir; ancak stratejinin kalitesi P95 kadar P5 ve drawdown ile de değerlendirilmelidir.</li>
 </ul>
@@ -9627,7 +9645,7 @@ canvas{max-width:100% !important}
 <section aria-label="Yol kalitesi haritası" class="chart-shell scatter-shell-group">
 <div class="chart-head">
 <div>
-<div class="chart-title">Yol Kaönsi Haritası · Final Sermaye ve Drawdown</div>
+
 <div class="chart-copy">Her nokta ana Monte Carlo simülasyonundaki bir sermaye yolunu temsil eder. Dikey eksen final sermayeyi, yatay eksen yol boyunca yaşanan en derin drawdown’ı gösterir. Bu grafik, sonucun yalnızca büyüklüğünü değil, o sonuca hangi taşıma yüküyle ulaşıldığını gösterir.</div>
 </div>
 <div class="scatter-meta">
@@ -9656,7 +9674,7 @@ canvas{max-width:100% !important}
 </div>
 </div>
 <div class="ana-narrative-grid" id="pathQualityNarrative">
-<div class="ana-narrative-card"><div class="ana-narrative-kicker">Yol Kaönsi</div><strong>Simülasyon sonrası yorum oluşur.</strong><p>Final sermaye, drawdown, kayıp serisi ve hedef/kritik eşik bilgileri aynı ana Monte Carlo yollarından okunacaktır.</p></div>
+<div class="ana-narrative-card"><div class="ana-narrative-kicker">Yol Kapsamı</div><strong>Simülasyon sonrası yorum oluşur.</strong><p>Final sermaye, drawdown, kayıp serisi ve hedef/kritik eşik bilgileri aynı ana Monte Carlo yollarından okunacaktır.</p></div>
 </div>
 </section>
 <section aria-label="R volatilitesi haritası" class="chart-grid equal scatter-risk-grid diagnostic-single">
@@ -14126,11 +14144,11 @@ function renderCharts(result){
   }
 
   const propPresets = [
-    {name:"Generic 5% Daily / 10% Total",v:{propTarget:10,propDailyDD:5,propTotalDD:10,propMinDays:5,propMaxDays:30,propRisk:.75}},
-    {name:"Conservative Challenge",v:{propTarget:8,propDailyDD:4,propTotalDD:8,propMinDays:5,propMaxDays:60,propRisk:.45}},
-    {name:"Aggressive Challenge",v:{propTarget:10,propDailyDD:5,propTotalDD:10,propMinDays:3,propMaxDays:20,propRisk:1.1}},
-    {name:"Evaluation Account 8% Target",v:{propTarget:8,propDailyDD:5,propTotalDD:10,propMinDays:5,propMaxDays:30,propRisk:.65}},
-    {name:"Funded Account Survival",v:{propTarget:4,propDailyDD:4,propTotalDD:8,propMinDays:0,propMaxDays:60,propRisk:.35}}
+    {name:"Standart Challenge",badge:"En Yaygın",desc:"Günlük %5 / Toplam %10 · Hedef %10 · 30 gün",v:{propTarget:10,propDailyDD:5,propTotalDD:10,propMinDays:5,propMaxDays:30,propRisk:.75}},
+    {name:"Muhafazakâr Challenge",badge:"Düşük Risk",desc:"Günlük %4 / Toplam %8 · Hedef %8 · 60 gün",v:{propTarget:8,propDailyDD:4,propTotalDD:8,propMinDays:5,propMaxDays:60,propRisk:.45}},
+    {name:"Agresif Challenge",badge:"Yüksek Risk",desc:"Günlük %5 / Toplam %10 · Hedef %10 · 20 gün",v:{propTarget:10,propDailyDD:5,propTotalDD:10,propMinDays:3,propMaxDays:20,propRisk:1.1}},
+    {name:"Değerlendirme Hesabı",badge:"Dengeli",desc:"Günlük %5 / Toplam %10 · Hedef %8 · 30 gün",v:{propTarget:8,propDailyDD:5,propTotalDD:10,propMinDays:5,propMaxDays:30,propRisk:.65}},
+    {name:"Financed Hesap Koruma",badge:"Sermaye Koruma",desc:"Günlük %4 / Toplam %8 · Hedef %4 · 60 gün",v:{propTarget:4,propDailyDD:4,propTotalDD:8,propMinDays:0,propMaxDays:60,propRisk:.35}}
   ];
   function propDefaultsFromMain(){
     const p=readParams();
@@ -14271,7 +14289,7 @@ function renderCharts(result){
   function saveStore(items){ localStorage.setItem(STORE_KEY,JSON.stringify(items)); }
   function currentStrategy(name){
     const p=readParams(), c=coreMetrics(p);
-    return {id:"s_"+Date.now()+"_"+Math.random().toString(16).slice(2),name:name||($("strategyName")?.value||"My Strategy"),modified:new Date().toISOString(),params:p,health:c.score,verdict:c.verdict,primaryRisk:c.primaryRisk};
+    return {id:"s_"+Date.now()+"_"+Math.random().toString(16).slice(2),name:name||($("strategyName")?.value||"Stratejim"),modified:new Date().toISOString(),params:p,health:c.score,verdict:c.verdict,primaryRisk:c.primaryRisk};
   }
   function saveCurrent(){
     const items=loadStore();
@@ -14287,9 +14305,9 @@ function renderCharts(result){
     if(list){
       list.innerHTML = items.length ? items.map(s=>`<article class="strategy-card ${s.id===selectedStrategyId?"active":""}" data-id="${s.id}">
         <h4>${escapeHtml(s.name)}</h4>
-        <div class="strategy-meta">Modified: ${new Date(s.modified).toLocaleString("tr-TR")}<br>Health: <span class="mono">${s.health}/100</span> · ${escapeHtml(s.verdict)}<br>Primary Risk: ${escapeHtml(s.primaryRisk)}</div>
-        <div class="strategy-actions"><button type="button" data-act="load">Load</button><button type="button" data-act="select">Select</button><button type="button" data-act="duplicate">Duplicate</button><button type="button" data-act="delete">Delete</button></div>
-      </article>`).join("") : `<div class="local-note">Henüz kayıt yok. Save Strategy ile ilk stratejiyi bu cihaza kaydedin.</div>`;
+        <div class="strategy-meta">Değişiklik: ${new Date(s.modified).toLocaleString("tr-TR")}<br>Sağlık: <span class="mono">${s.health}/100</span> · ${escapeHtml(s.verdict)}<br>Ana Risk: ${escapeHtml(s.primaryRisk)}</div>
+        <div class="strategy-actions"><button type="button" data-act="load">Yükle</button><button type="button" data-act="select">Seç</button><button type="button" data-act="duplicate">Kopyala</button><button type="button" data-act="delete">Sil</button></div>
+      </article>`).join("") : `<div class="local-note">Henüz kayıt yok. Stratejiyi Kaydet ile ilk stratejiyi bu cihaza kaydedin.</div>`;
     }
     const presetHost=$("libraryPresets");
     if(presetHost && !presetHost.dataset.ready){
@@ -14427,7 +14445,7 @@ function renderCharts(result){
     updatePrintCover();
     const propHost=$("propPresets");
     if(propHost){
-      propHost.innerHTML = `<button class="preset-pill" type="button" id="propFromMain">Ana Parametrelerden Al</button>` + propPresets.map((p,i)=>`<button class="preset-pill" type="button" data-prop-preset="${i}">${p.name}</button>`).join("");
+      propHost.innerHTML = `<button class="preset-card-prop main-source" type="button" id="propFromMain"><span class="pcp-badge">Aktarım</span><span class="pcp-name">Ana Parametrelerden Al</span><span class="pcp-desc">Strateji sekmesindeki değerleri buraya kopyalar</span></button>` + propPresets.map((p,i)=>`<button class="preset-card-prop" type="button" data-prop-preset="${i}"><span class="pcp-badge">${p.badge||""}</span><span class="pcp-name">${p.name}</span><span class="pcp-desc">${p.desc||""}</span></button>`).join("");
     }
     setTimeout(()=>{ propDefaultsFromMain(); renderExecutive(); runRiskOptimizer(); runProp(); renderLibrary(); },180);
     document.addEventListener("input",e=>{
@@ -14443,7 +14461,7 @@ function renderCharts(result){
     $("propFromMain")?.addEventListener("click",()=>{propDefaultsFromMain(); runProp();});
     document.addEventListener("click",e=>{
       const pp=e.target.closest("[data-prop-preset]");
-      if(pp){ const p=propPresets[Number(pp.dataset.propPreset)]; Object.entries(p.v).forEach(([id,v])=>{ if($(id)) $(id).value=v; }); propDefaultsFromMain(); runProp(); }
+      if(pp){ document.querySelectorAll(".preset-card-prop").forEach(c=>c.classList.remove("active")); pp.classList.add("active"); const p=propPresets[Number(pp.dataset.propPreset)]; Object.entries(p.v).forEach(([id,v])=>{ if($(id)) $(id).value=v; }); propDefaultsFromMain(); runProp(); }
       const lp=e.target.closest("[data-lib-preset]");
       if(lp){ const p=libraryPresets[Number(lp.dataset.libPreset)]; if($("strategyName")) $("strategyName").value=p.name; applyValues(p.v); }
       const card=e.target.closest(".strategy-card");
@@ -15169,9 +15187,9 @@ function generateActionRecommendations(core, prop){
   if(csv?.confidenceLabel === "Low") a.push({title:"Import Warning", text:"Imported sample is weak; do not scale capital based only on this dataset."});
   else if(csv?.confidenceLabel === "Medium") a.push({title:"Import Warning", text:"Imported sample is usable but early; validate with more trades before scaling."});
   else if(csv?.confidenceLabel === "High") a.push({title:"Import Quality", text:"Imported sample quality is strong enough for initial strategy review."});
-  a.push({title:"Immediate Action", text:core.recommendedAction});
-  a.push({title:"Risk Control", text:core.p10Loss > 0.20 ? "Günlük 2–3 kayıp sonrası sistemi durdur veya sonraki trade riskini yarıya indir." : "Daily stop-loss kuralını koru ve drawdown limitlerine yaklaşınca trade frekansını azalt."});
-  a.push({title:"Scaling Rule", text:"En az 300 trade, PF > 1.30 ve pozitif edge buffer doğrulanmadan sermaye artırma."});
+  a.push({title:"Öncelikli Aksiyon", text:core.recommendedAction});
+  a.push({title:"Risk Kontrolü", text:core.p10Loss > 0.20 ? "Günlük 2–3 kayıp sonrası sistemi durdur veya sonraki trade riskini yarıya indir." : "Daily stop-loss kuralını koru ve drawdown limitlerine yaklaşınca trade frekansını azalt."});
+  a.push({title:"Ölçekleme Kuralı", text:"En az 300 trade, PF > 1.30 ve pozitif edge buffer doğrulanmadan sermaye artırma."});
   return a;
 }
 function runRealityCheck(core){
@@ -15440,2000 +15458,1133 @@ function installFinalUiObserver(){
 if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", ()=>{ bootPublicContract(); installFinalUiObserver(); }); else (bootPublicContract(), installFinalUiObserver());
 </script>
 
-
-<style>
-/* === TRUST LAYER UI PASS · analytical validation, reproducibility, transparent score === */
-.trust-layer-card,
-.seed-card,
-.validation-card,
-.health-breakdown-card,
-.fragility-strip,
-.onboarding-strip,
-.csv-trust-preview,
-.prop-preset-library,
-.report-validation-block{
-  background:linear-gradient(180deg,#fffefa,#fbf6ee);
-  border:1px solid rgba(226,216,201,.92);
-  border-radius:16px;
-  box-shadow:0 10px 24px rgba(56,42,25,.038);
-  padding:14px 16px;
-}
-.trust-layer-card .trust-kicker,
-.seed-card .trust-kicker,
-.validation-card .trust-kicker,
-.health-breakdown-card .trust-kicker,
-.fragility-strip .trust-kicker{
-  color:var(--stone);
-  font-size:8.5px;
-  letter-spacing:.13em;
-  text-transform:uppercase;
-  font-weight:900;
-}
-.trust-layer-card h3,
-.validation-card h3,
-.health-breakdown-card h3,
-.onboarding-strip h3{
-  font-family:"Cormorant Garamond",Georgia,serif;
-  font-size:26px;
-  line-height:1;
-  margin:7px 0 8px;
-  font-weight:600;
-  letter-spacing:-.025em;
-}
-.trust-note{color:var(--stone);font-size:11.5px;line-height:1.52}
-.seed-card{
-  display:grid;
-  grid-template-columns:minmax(0,1fr) auto;
-  gap:12px;
-  align-items:center;
-  margin:10px 0 12px;
-}
-.seed-value{
-  font-family:"JetBrains Mono",monospace;
-  font-size:18px;
-  color:var(--ink);
-  font-weight:900;
-}
-.seed-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
-.seed-actions .mini-btn{min-height:34px}
-.validation-grid,
-.health-components,
-.csv-quality-grid,
-.report-trust-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-  gap:10px;
-  margin-top:10px;
-}
-.validation-item,
-.health-component-row,
-.csv-quality-item,
-.report-trust-item{
-  border:1px solid rgba(226,216,201,.82);
-  border-radius:14px;
-  background:#fffdf8;
-  padding:11px 12px;
-  min-width:0;
-}
-.validation-item strong,
-.csv-quality-item strong,
-.report-trust-item strong{
-  display:block;
-  color:var(--stone);
-  font-size:8.5px;
-  letter-spacing:.11em;
-  text-transform:uppercase;
-  font-weight:900;
-}
-.validation-item span,
-.csv-quality-item span,
-.report-trust-item span{
-  display:block;
-  margin-top:6px;
-  font-family:"JetBrains Mono",monospace;
-  color:var(--ink);
-  font-weight:800;
-  font-size:12px;
-}
-.validation-badge,
-.audit-badge{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  border:1px solid rgba(205,191,174,.72);
-  background:#fffdf8;
-  border-radius:999px;
-  padding:6px 9px;
-  font-size:9px;
-  letter-spacing:.09em;
-  text-transform:uppercase;
-  font-weight:900;
-}
-.validation-badge.good,.audit-badge.good{color:var(--olive);border-color:rgba(100,112,73,.30)}
-.validation-badge.warn,.audit-badge.warn{color:var(--gold);border-color:rgba(168,132,66,.34)}
-.validation-badge.bad,.audit-badge.bad{color:var(--ruby);border-color:rgba(127,39,55,.28)}
-.health-breakdown-card{margin-top:12px}
-.health-breakdown-card details{margin:0}
-.health-breakdown-card summary{
-  cursor:pointer;
-  list-style:none;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:12px;
-  color:var(--ink);
-  font-size:10px;
-  letter-spacing:.12em;
-  text-transform:uppercase;
-  font-weight:950;
-}
-.health-breakdown-card summary::-webkit-details-marker{display:none}
-.health-component-row{
-  display:grid;
-  grid-template-columns:minmax(0,1.2fr) 70px minmax(80px,.8fr);
-  gap:10px;
-  align-items:center;
-}
-.health-component-row.weakest{
-  border-color:rgba(127,39,55,.25);
-  box-shadow:inset 3px 0 0 var(--ruby);
-}
-.health-component-label{
-  min-width:0;
-  font-size:11px;
-  color:var(--ink);
-  font-weight:900;
-}
-.health-component-reason{
-  grid-column:1/-1;
-  color:var(--stone);
-  font-size:11px;
-  line-height:1.45;
-}
-.health-component-score{
-  font-family:"JetBrains Mono",monospace;
-  font-size:12px;
-  font-weight:900;
-  color:var(--ink);
-  text-align:right;
-}
-.health-mini-bar{
-  height:7px;
-  border-radius:999px;
-  border:1px solid rgba(205,191,174,.75);
-  background:#eee4d5;
-  overflow:hidden;
-}
-.health-mini-bar i{
-  display:block;
-  height:100%;
-  width:var(--w,0%);
-  border-radius:999px;
-  background:linear-gradient(90deg,var(--terra),var(--gold));
-}
-.health-component-row.good .health-mini-bar i{background:var(--olive)}
-.health-component-row.warn .health-mini-bar i{background:var(--gold)}
-.health-component-row.bad .health-mini-bar i{background:var(--ruby)}
-.fragility-strip{
-  margin:10px 0 12px;
-  border-left:2px solid var(--gold);
-}
-.fragility-strip strong{color:var(--ink)}
-.trust-disclaimer-line{
-  margin-top:10px;
-  color:var(--stone);
-  font-size:11px;
-  line-height:1.5;
-  border-top:1px solid rgba(226,216,201,.70);
-  padding-top:9px;
-}
-.onboarding-strip{
-  display:grid;
-  grid-template-columns:minmax(0,1fr) auto;
-  gap:12px;
-  align-items:center;
-  margin:10px 0 12px;
-  border-left:2px solid var(--terra);
-}
-.onboarding-steps{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  margin-top:8px;
-}
-.onboarding-steps span{
-  border:1px solid rgba(226,216,201,.82);
-  background:#fffdf8;
-  border-radius:999px;
-  padding:7px 10px;
-  color:var(--stone);
-  font-size:10px;
-  font-weight:850;
-}
-.onboarding-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
-.csv-trust-preview{margin-top:12px}
-.csv-trust-preview table{min-width:680px}
-.csv-trust-preview th,.csv-trust-preview td{
-  padding:8px 9px;
-  border-bottom:1px solid rgba(226,216,201,.64);
-  font-size:11px;
-  white-space:nowrap;
-}
-.csv-trust-preview th{
-  color:var(--stone);
-  background:#f5ede2;
-  font-size:8px;
-  letter-spacing:.10em;
-  text-transform:uppercase;
-}
-.csv-quality-item.high{border-left:2px solid var(--olive)}
-.csv-quality-item.medium{border-left:2px solid var(--gold)}
-.csv-quality-item.low{border-left:2px solid var(--ruby)}
-.prop-preset-library{
-  margin:0 0 12px;
-  display:grid;
-  gap:10px;
-}
-.prop-preset-row{display:flex;gap:8px;flex-wrap:wrap}
-.prop-preset-row .preset-pill{min-height:34px}
-.drawdown-mode-row{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  flex-wrap:wrap;
-  color:var(--stone);
-  font-size:11px;
-}
-.drawdown-mode-row select{
-  border:1px solid var(--line);
-  border-radius:999px;
-  background:#fffdf8;
-  padding:8px 10px;
-  color:var(--ink);
-  font-weight:850;
-}
-.report-section .report-trust-grid{break-inside:avoid}
-#reportModelValidation,#reportHealthBreakdown{
-  display:block;
-}
-@media (max-width:680px){
-  .seed-card,.onboarding-strip{grid-template-columns:1fr}
-  .seed-actions,.onboarding-actions{justify-content:flex-start}
-  .health-component-row{grid-template-columns:1fr}
-  .health-component-score{text-align:left}
-  .csv-trust-preview{overflow-x:auto}
-  .validation-grid,.health-components,.csv-quality-grid,.report-trust-grid{grid-template-columns:1fr}
-}
-@media print{
-  .seed-actions,.onboarding-strip,.prop-preset-library,#trustSeedCard .seed-actions{display:none!important}
-  .seed-card,.validation-card,.health-breakdown-card,.fragility-strip,.report-validation-block{
-    box-shadow:none!important;
-    background:#fff!important;
-    break-inside:avoid-page!important;
-    page-break-inside:avoid!important;
+<!-- ===================== TRUST LAYER (Güven Katmanı) ===================== -->
+<!-- Additive, self-contained. Does not modify or depend on internal IIFE scopes. -->
+<style id="trustLayerStyle">
+  .tl-block{margin-top:14px}
+  .tl-card{background:var(--card,#fffdf8);border:1px solid var(--line,#e2d8c9);border-left:3px solid var(--stone,#6f675d);border-radius:8px;padding:14px 16px;box-shadow:0 8px 22px rgba(56,42,25,.04)}
+  .tl-card + .tl-card{margin-top:12px}
+  .tl-kicker{font:600 10px/1.2 'Inter',system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--stone,#6f675d);margin:0 0 6px}
+  .tl-title{font:600 14px/1.3 'Inter',system-ui,sans-serif;color:var(--ink,#171411);margin:0 0 4px}
+  .tl-muted{font:400 12px/1.5 'Inter',system-ui,sans-serif;color:var(--stone,#6f675d);margin:0}
+  .tl-mono{font-family:ui-monospace,'SFMono-Regular',Menlo,monospace}
+  .tl-badge{display:inline-flex;align-items:center;gap:6px;font:600 11px/1 'Inter',sans-serif;padding:5px 9px;border-radius:999px;border:1px solid;white-space:nowrap}
+  .tl-badge.ok{color:var(--olive,#647049);border-color:rgba(100,112,73,.5);background:rgba(100,112,73,.08)}
+  .tl-badge.warn{color:var(--gold,#a88442);border-color:rgba(168,132,66,.5);background:rgba(168,132,66,.10)}
+  .tl-badge.bad{color:var(--ruby,#7f2737);border-color:rgba(127,39,55,.45);background:rgba(127,39,55,.08)}
+  .tl-valrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;justify-content:space-between;padding:9px 0;border-top:1px dashed var(--line,#e2d8c9)}
+  .tl-valrow:first-of-type{border-top:0}
+  .tl-valrow .tl-label{font:600 12px/1.3 'Inter',sans-serif;color:var(--ink,#171411);flex:1 1 150px}
+  .tl-valrow .tl-nums{font-size:12px;color:var(--breakout-ink-soft,#2f2922);flex:1 1 auto;text-align:right}
+  .tl-valrow .tl-nums b{font-weight:700}
+  .tl-note{font:400 11px/1.5 'Inter',sans-serif;color:var(--stone,#6f675d);margin:8px 0 0}
+  .tl-seedbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid var(--line,#e2d8c9)}
+  .tl-seedbar .tl-seedval{font-family:ui-monospace,monospace;font-size:12px;font-weight:700;color:var(--ink,#171411)}
+  .tl-btn{appearance:none;border:1px solid var(--line-strong,#cdbcaa);background:var(--card-soft,#fbf8f1);color:var(--ink,#171411);font:600 11px/1 'Inter',sans-serif;padding:7px 11px;border-radius:6px;cursor:pointer;min-height:32px}
+  .tl-btn:active{transform:translateY(1px)}
+  details.tl-acc{margin-top:14px;border:1px solid var(--line,#e2d8c9);border-radius:8px;background:var(--card,#fffdf8);overflow:hidden}
+  details.tl-acc>summary{list-style:none;cursor:pointer;padding:12px 16px;font:600 12px/1.2 'Inter',sans-serif;letter-spacing:.04em;color:var(--ink,#171411);display:flex;align-items:center;justify-content:space-between;gap:10px}
+  details.tl-acc>summary::-webkit-details-marker{display:none}
+  details.tl-acc>summary .tl-chev{transition:transform .2s;color:var(--stone)}
+  details.tl-acc[open]>summary .tl-chev{transform:rotate(180deg)}
+  .tl-comp{padding:4px 16px 14px}
+  .tl-comprow{padding:10px 0;border-top:1px solid var(--line,#e2d8c9)}
+  .tl-comprow:first-child{border-top:0}
+  .tl-comphead{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+  .tl-comphead .tl-cname{font:600 12px/1.3 'Inter',sans-serif;color:var(--ink,#171411)}
+  .tl-comphead .tl-cpts{font-family:ui-monospace,monospace;font-size:12px;font-weight:700;color:var(--breakout-ink-soft,#2f2922)}
+  .tl-bar{height:6px;border-radius:99px;background:rgba(111,103,93,.16);margin:7px 0 5px;overflow:hidden}
+  .tl-bar>i{display:block;height:100%;border-radius:99px;background:var(--olive,#647049)}
+  .tl-comprow.warn .tl-bar>i{background:var(--gold,#a88442)}
+  .tl-comprow.bad .tl-bar>i{background:var(--ruby,#7f2737)}
+  .tl-comprow.weakest{background:rgba(127,39,55,.045);border-radius:6px;padding-left:10px;padding-right:10px;border-top-color:transparent}
+  .tl-comprow .tl-creason{font:400 11px/1.45 'Inter',sans-serif;color:var(--stone,#6f675d);margin:0}
+  .tl-fragile{display:flex;gap:12px;align-items:flex-start;margin-top:14px;padding:13px 15px;border:1px solid rgba(127,39,55,.35);border-left:3px solid var(--ruby,#7f2737);border-radius:8px;background:rgba(127,39,55,.05)}
+  .tl-fragile .tl-fk{font:600 10px/1.2 'Inter',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--ruby,#7f2737);margin:0 0 4px}
+  .tl-fragile p.tl-ft{font:500 12.5px/1.5 'Inter',sans-serif;color:var(--ink,#171411);margin:0}
+  .tl-honest{margin-top:12px;font:400 11px/1.55 'Inter',sans-serif;color:var(--stone,#6f675d)}
+  .tl-honest strong{color:var(--breakout-ink-soft,#2f2922);font-weight:600}
+  .tl-onboard{margin:0 0 16px;border:1px solid var(--line,#e2d8c9);border-radius:10px;background:linear-gradient(180deg,#fffefa,#fbf6ee);padding:14px 16px;box-shadow:0 8px 22px rgba(56,42,25,.05)}
+  .tl-onboard .tl-ohead{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .tl-onboard h3{font:600 13px/1.3 'Inter',sans-serif;color:var(--ink,#171411);margin:0}
+  .tl-onboard .tl-steps{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:11px}
+  .tl-onboard .tl-step{border:1px solid var(--line,#e2d8c9);border-radius:8px;padding:9px 11px;background:var(--card,#fffdf8)}
+  .tl-onboard .tl-step b{display:block;font:700 11px/1.2 'Inter',sans-serif;color:var(--terra,#c65b36);margin-bottom:4px}
+  .tl-onboard .tl-step span{font:400 11px/1.4 'Inter',sans-serif;color:var(--stone,#6f675d)}
+  .tl-x{appearance:none;border:0;background:transparent;color:var(--stone);font-size:18px;line-height:1;cursor:pointer;padding:2px 6px}
+  @media (max-width:560px){
+    .tl-onboard .tl-steps{grid-template-columns:1fr}
+    .tl-valrow .tl-nums{text-align:left;flex-basis:100%}
   }
-  #reportModelValidation,#reportHealthBreakdown,#reportDisclaimer{
-    display:block!important;
-    break-inside:avoid-page!important;
-    page-break-inside:avoid!important;
+  /* print-only trust report section */
+  #tlReport{display:none}
+  @media print{
+    #tlReport{display:block!important;break-inside:avoid;margin-top:18px}
+    #tlReport .tl-card,#tlReport details.tl-acc{box-shadow:none;break-inside:avoid}
+    details.tl-acc{open:true}
+    details.tl-acc>.tl-comp{display:block!important}
+    .tl-onboard,.tl-seedbar .tl-btn,.tl-btn{display:none!important}
+    #tlReport h2.tl-rh{font-family:'Cormorant Garamond',Georgia,serif;font-size:20px;color:var(--ink);margin:0 0 8px}
   }
-}
 </style>
 
-<script>
-/* === TRUST LAYER v8 · sanity checks, reproducibility, transparent score === */
+<!-- Print-only consolidated trust report (injected into PDF flow) -->
+<section id="tlReport" class="report-section" aria-label="Model Validation and Trust Report"></section>
+
+<script id="trustLayerScript">
 (function(){
   "use strict";
-  const $ = id => document.getElementById(id);
-  const q = sel => document.querySelector(sel);
-  const qa = sel => Array.from(document.querySelectorAll(sel));
-  const clamp = (v,a,b) => Math.max(a, Math.min(b, v));
-  const fmtPct = (x,d=1) => Number.isFinite(x) ? (x*100).toFixed(d).replace(".",",")+"%" : "—";
-  const fmtPct100 = (x,d=1) => Number.isFinite(x) ? Number(x).toFixed(d).replace(".",",")+"%" : "—";
-  const fmtNum = (x,d=2) => Number.isFinite(x) ? Number(x).toFixed(d).replace(".",",") : "—";
-  const fmtMoney = x => {
-    try { return new Intl.NumberFormat("tr-TR",{style:"currency",currency:"USD",maximumFractionDigits:0}).format(Number.isFinite(x)?x:0); }
-    catch(e){ return String(Math.round(Number.isFinite(x)?x:0)); }
-  };
-  const MODEL_VERSION_TRUST = "Breakout Risk Decision Engine v1.1 · Trust Layer";
-  const STORE_KEY = "trade_monte_carlo_strategy_library_v1";
-  const ONBOARD_KEY = "tmc_onboarding_hidden_v1";
-  let currentSeed = Number(localStorage.getItem("tmc_active_seed") || "") || generateNewSeed();
-  let seedLocked = localStorage.getItem("tmc_seed_locked") === "1";
+  if(window.__TRUST_LAYER_LOADED) return; window.__TRUST_LAYER_LOADED = true;
 
-  function mulberry32Local(seed){
-    let t = (Math.floor(Math.abs(seed)) || 1) >>> 0;
-    return function(){
-      t += 0x6D2B79F5;
-      let r = Math.imul(t ^ (t >>> 15), 1 | t);
-      r ^= r + Math.imul(r ^ (r >>> 7), 61 | r);
-      return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
-    };
-  }
-  function generateNewSeed(){
-    return Math.max(1, Math.floor((Date.now() ^ (Math.random()*2147483647)) % 2147483646));
-  }
-  function setSeed(seed){
-    const n = Math.max(1, Math.min(2147483646, Math.floor(Number(seed) || generateNewSeed())));
-    currentSeed = n;
-    localStorage.setItem("tmc_active_seed", String(currentSeed));
-    const st = window.__AETHELGARD_STATE;
-    if(st){
-      st.seedValue = currentSeed;
-      st.seedMode = seedLocked ? "fixed" : "auto";
-    }
-    renderSeedCard();
-    return currentSeed;
-  }
-  function getActiveSeed(){ return currentSeed; }
-  function setSeedLocked(locked){
-    seedLocked = !!locked;
-    localStorage.setItem("tmc_seed_locked", seedLocked ? "1" : "0");
-    const st = window.__AETHELGARD_STATE;
-    if(st){
-      st.seedMode = seedLocked ? "fixed" : "auto";
-      st.seedValue = currentSeed;
-    }
-    renderSeedCard();
-    return seedLocked;
-  }
-  function resetRandomStreamForRun(){
-    if(!seedLocked) setSeed(generateNewSeed());
-    const st = window.__AETHELGARD_STATE;
-    if(st){ st.seedValue = currentSeed; st.seedMode = "fixed"; }
-    window.__trustLayerRandom = mulberry32Local(currentSeed);
-    Math.random = window.__trustLayerRandom;
-    renderSeedCard();
-  }
+  /* ---------- BULLETPROOF PRINT GUARD ----------
+     Kills any automatic/programmatic print dialog on load. window.print()
+     only fires when triggered by a genuine user tap/click (e.g. the PDF button). */
+  (function(){
+    if(window.__printGuarded) return; window.__printGuarded = true;
+    var realPrint = (typeof window.print === "function") ? window.print.bind(window) : function(){};
+    var armed = false, timer;
+    ["click","touchend","keydown"].forEach(function(ev){
+      document.addEventListener(ev, function(){ armed = true; clearTimeout(timer); timer = setTimeout(function(){ armed = false; }, 1500); }, true);
+    });
+    function guarded(){ if(armed) return realPrint(); }
+    try{ Object.defineProperty(window, "print", { configurable:true, get:function(){ return guarded; }, set:function(){} }); }
+    catch(e){ try{ window.print = guarded; }catch(_){} }
+  })();
 
-  function readNum(id, fallback=0){
-    const el = $(id);
-    const raw = el ? (el.value ?? el.textContent ?? "") : "";
-    const n = parseFlexibleNumber(raw);
-    return Number.isFinite(n) ? n : fallback;
+  /* ---------- helpers ---------- */
+  var $ = function(id){ return document.getElementById(id); };
+  var clamp = function(v,a,b){ return Math.max(a,Math.min(b,v)); };
+  var pp = function(n,d){ d=d==null?1:d; return (isFinite(n)?n:0).toLocaleString("tr-TR",{minimumFractionDigits:d,maximumFractionDigits:d}); };
+  var pctS = function(n,d){ return pp(n,d)+"%"; };
+  var numS = function(n,d){ d=d==null?2:d; return (isFinite(n)?n:0).toLocaleString("tr-TR",{minimumFractionDigits:d,maximumFractionDigits:d}); };
+  var esc = function(s){ return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c];}); };
+
+  function readInput(id,def){
+    var el = $(id); if(!el) return def;
+    var raw = (el.dataset && el.dataset.applied !== undefined && el.dataset.applied !== "") ? el.dataset.applied : el.value;
+    var v = Number(String(raw).replace(",","."));
+    return isFinite(v) ? v : def;
   }
-  function readMainParams(){
-    const n = (key, fallback) => readNum(key+"Number", readNum(key+"Range", readNum(key, fallback)));
+  function getParam(key,def){
+    if($(key+"Number")) return readInput(key+"Number",def);
+    return readInput(key,def);
+  }
+  function readParams(){
     return {
-      initialCapital:n("initialCapital",100000),
-      targetCapital:n("targetCapital",200000),
-      days:n("days",126),
-      iterations:n("iterations",5000),
-      tradesPerDay:n("tradesPerDay",3),
-      winRate:n("winRate",55),
-      breakEvenRate:n("breakEvenRate",0),
-      avgWinR:n("avgWinR",1.8),
-      avgLossR:n("avgLossR",1),
-      riskPerTradePct:n("riskPerTradePct",1),
-      tradeCostR:n("tradeCostR",0.05),
-      ruinThresholdPct:n("ruinThresholdPct",50),
-      maxDailyLossPct:n("maxDailyLossPct",5),
-      volatilityFactor:n("volatilityFactor",1),
-      shockProbability:n("shockProbability",0),
-      shockImpactR:n("shockImpactR",0),
-      riskMode: $("riskMode")?.value || "compounding",
-      seedMode: seedLocked ? "fixed" : "auto",
-      simAnahtar: currentSeed
+      days:getParam("days",126), initialCapital:getParam("initialCapital",100000),
+      iterations:getParam("iterations",5000), tradesPerDay:getParam("tradesPerDay",3),
+      winRate:getParam("winRate",55), avgWinR:getParam("avgWinR",1.8), avgLossR:getParam("avgLossR",1),
+      riskPerTradePct:getParam("riskPerTradePct",1.3), tradeCostR:getParam("tradeCostR",0.05),
+      targetCapital:getParam("targetCapital",200000), ruinThresholdPct:getParam("ruinThresholdPct",50),
+      breakEvenRate:getParam("breakEvenRate",5), volatilityFactor:getParam("volatilityFactor",1),
+      shockProbability:getParam("shockProbability",3), shockImpactR:getParam("shockImpactR",2),
+      maxDailyLossPct:getParam("maxDailyLossPct",5)
     };
   }
-  function setInputValue(id, value){
-    const el = $(id);
-    if(!el) return;
-    el.value = String(value);
-    el.dataset.applied = String(value);
-    el.dispatchEvent(new Event("input",{bubbles:true}));
-    el.dispatchEvent(new Event("change",{bubbles:true}));
-  }
-  function setParamField(key, value){
-    setInputValue(key+"Number", value);
-    setInputValue(key+"Range", value);
-    setInputValue(key, value);
+  function normalizedProbs(p){
+    var w = clamp(p.winRate/100,0,.98), be = clamp(p.breakEvenRate/100,0,.80);
+    if(w+be > .98) be = Math.max(0,.98-w);
+    return {w:w,be:be,loss:Math.max(0,1-w-be)};
   }
 
+  /* ---------- coreMetrics + scoreComponents (replicated to match engine exactly) ---------- */
+  function scoreComponents(x){
+    var expPts = x.e <= 0 ? 0 : 20*clamp(x.e/.50,0,1);
+    var pfPts = 0;
+    if(x.pf >= 1.8) pfPts = 15; else if(x.pf >= 1.3) pfPts = 9 + (x.pf-1.3)/.5*6; else if(x.pf >= 1.1) pfPts = (x.pf-1.1)/.2*6;
+    var bePts = x.edgeBuffer <= 0 ? 0 : 15*clamp(x.edgeBuffer/15,0,1);
+    var streakPenalty = Math.max(x.p10Loss, clamp((x.expMaxStreak-7)/13,0,1));
+    var streakPts = 15*(1-streakPenalty);
+    var ddPts = 20*(1-clamp((x.dd-.08)/.42,0,1));
+    var costPts = 10*(1-clamp(x.costDrag/.45,0,1));
+    var stressed = [
+      Object.assign({},x.p,{winRate:Math.max(0,x.p.winRate-5)}),
+      Object.assign({},x.p,{avgWinR:x.p.avgWinR*.9}),
+      Object.assign({},x.p,{tradeCostR:x.p.tradeCostR*2})
+    ].map(function(sp){
+      var pr=normalizedProbs(sp);
+      var e=pr.w*(sp.avgWinR-sp.tradeCostR)-pr.loss*(sp.avgLossR+sp.tradeCostR)-pr.be*sp.tradeCostR;
+      return e>0?1:0;
+    }).reduce(function(a,b){return a+b;},0);
+    var robustPts = stressed/3*5;
+    var total = clamp(expPts+pfPts+bePts+streakPts+ddPts+costPts+robustPts,0,100);
+    return {expectancy:expPts,pf:pfPts,breakEven:bePts,streak:streakPts,drawdown:ddPts,cost:costPts,robustness:robustPts,total:total};
+  }
+  function verdictOf(score,e,pf,edgeBuffer,p10Loss,dd){
+    if(e <= 0 || score < 25) return "Untradable";
+    if(score < 45 || pf < 1.10 || edgeBuffer < 0) return "Fragile";
+    if(score < 62 || p10Loss > .35) return "Tradable but Streak-Sensitive";
+    if(score < 82 || dd > .32) return "Balanced";
+    return "Institutional Quality";
+  }
+  function coreMetrics(p){
+    var pr = normalizedProbs(p);
+    var netWin = p.avgWinR - p.tradeCostR, netLoss = p.avgLossR + p.tradeCostR, netBE = p.tradeCostR;
+    var e = pr.w*netWin - pr.loss*netLoss - pr.be*netBE;
+    var grossE = pr.w*p.avgWinR - pr.loss*p.avgLossR;
+    var pos = pr.w*Math.max(netWin,0);
+    var neg = pr.loss*Math.max(netLoss,0) + pr.be*Math.max(netBE,0) + pr.w*Math.max(-netWin,0);
+    var pf = neg > 0 ? pos/neg : Infinity;
+    var beWin = clamp((p.avgLossR + p.tradeCostR) / Math.max(.0001,p.avgWinR + p.avgLossR),0,.98);
+    var edgeBuffer = (pr.w - beWin) * 100;
+    var totalTrades = Math.max(1,Math.round(p.days * p.tradesPerDay));
+    var q = clamp(1-pr.w,0.0001,0.999);
+    var p10Loss = clamp(1 - Math.pow(1 - Math.pow(q,10), Math.max(1,totalTrades-9)),0,1);
+    var p20Loss = clamp(1 - Math.pow(1 - Math.pow(q,20), Math.max(1,totalTrades-19)),0,1);
+    var expMaxStreak = Math.max(1, Math.log(Math.max(2,totalTrades*(1-q))) / Math.max(0.0001,-Math.log(q)));
+    var risk = p.riskPerTradePct/100;
+    var streakDD = 1 - Math.pow(Math.max(.02,1-risk*netLoss), expMaxStreak);
+    var shockDD = (p.shockProbability/100) * (p.shockImpactR*risk) * Math.sqrt(Math.max(1,p.days/20));
+    var volDD = Math.max(0,p.volatilityFactor) * risk * Math.sqrt(totalTrades) * .20;
+    var dd = clamp(streakDD + shockDD + volDD,0,.95);
+    var recovery = dd < .999 ? dd/(1-dd) : 9.99;
+    var costDrag = Math.abs(grossE) > .0001 ? clamp((grossE-e)/Math.abs(grossE),0,2) : (p.tradeCostR>0?1:0);
+    var comp = scoreComponents({p:p,pr:pr,e:e,pf:pf,edgeBuffer:edgeBuffer,p10Loss:p10Loss,expMaxStreak:expMaxStreak,dd:dd,costDrag:costDrag});
+    var score = Math.round(comp.total);
+    var verdict = verdictOf(score,e,pf,edgeBuffer,p10Loss,dd);
+    return {p:p,pr:pr,e:e,grossE:grossE,pf:pf,beWin:beWin,edgeBuffer:edgeBuffer,totalTrades:totalTrades,
+      p10Loss:p10Loss,p20Loss:p20Loss,expMaxStreak:expMaxStreak,dd:dd,recovery:recovery,costDrag:costDrag,
+      comp:comp,score:score,verdict:verdict};
+  }
+
+  /* ---------- WP1A: analytical losing-streak probability (DP, near-exact) ---------- */
   function probabilityAtLeastOneLosingStreak(trials, lossProb, streakLength){
-    trials = Math.floor(Number(trials) || 0);
-    lossProb = clamp(Number(lossProb) || 0, 0, 1);
-    streakLength = Math.floor(Number(streakLength) || 0);
+    trials = Math.floor(trials); streakLength = Math.floor(streakLength);
     if(trials <= 0) return 0;
     if(streakLength <= 0) return 1;
     if(lossProb <= 0) return 0;
     if(lossProb >= 1) return trials >= streakLength ? 1 : 0;
-    if(trials < streakLength) return 0;
-    let dp = Array.from({length:streakLength},()=>0);
-    dp[0] = 1;
-    let hit = 0;
-    const winProb = 1 - lossProb;
-    for(let i=0;i<trials;i++){
-      const next = Array.from({length:streakLength},()=>0);
-      let safeMass = 0;
-      for(let r=0;r<streakLength;r++) safeMass += dp[r];
-      next[0] += safeMass * winProb;
-      for(let r=0;r<streakLength;r++){
-        const loseMass = dp[r] * lossProb;
-        if(r + 1 >= streakLength) hit += loseMass;
-        else next[r+1] += loseMass;
-      }
-      dp = next;
+    // Closed-form fallback for very large inputs (keeps mobile responsive)
+    if(trials > 60000 || streakLength > 400){
+      return clamp(1 - Math.pow(1 - Math.pow(lossProb,streakLength), Math.max(1,trials-streakLength+1)),0,1);
     }
-    return clamp(hit,0,1);
+    // DP over trailing-loss-count states 0..streakLength-1; absorbing failure at streakLength.
+    var q = lossProb, pwin = 1-lossProb;
+    var safe = new Array(streakLength).fill(0);
+    safe[0] = 1; // before any trial: 0 trailing losses, prob 1
+    var pFail = 0;
+    for(var t=0;t<trials;t++){
+      var next = new Array(streakLength).fill(0);
+      // any safe state, on a win -> state 0
+      var winMass = 0;
+      for(var s=0;s<streakLength;s++) winMass += safe[s];
+      next[0] += winMass * pwin;
+      // on a loss -> state s+1 (if s+1==streakLength -> fail)
+      for(var s2=0;s2<streakLength;s2++){
+        var m = safe[s2]*q;
+        if(s2+1 >= streakLength) pFail += m; else next[s2+1] += m;
+      }
+      safe = next;
+    }
+    return clamp(pFail,0,1);
   }
 
-  function analyticalRuinApproximation(params){
-    const p = Object.assign(readMainParams(), params || {});
-    const w = clamp((p.winRate||0)/100,0,1);
-    const be = clamp((p.breakEvenRate||0)/100,0,0.95);
-    const loss = clamp(1-w-be,0,1);
-    const winR = Math.max(0, (p.avgWinR||0) - (p.tradeCostR||0));
-    const lossR = Math.max(0.0001, (p.avgLossR||1) + (p.tradeCostR||0));
-    const risk = Math.max(0.000001, (p.riskPerTradePct||1)/100);
-    const trades = Math.max(1, Math.round((p.days||1) * (p.tradesPerDay||1)));
-    const ruinThreshold = clamp((p.ruinThresholdPct||50)/100, 0.01, 0.99);
-    const targetLogLoss = Math.abs(Math.log(Math.max(0.001, ruinThreshold)));
-    const outcomes = [
-      {p:w, r:Math.log(Math.max(0.0001, 1 + risk*winR))},
-      {p:be, r:Math.log(Math.max(0.0001, 1 - risk*(p.tradeCostR||0)))},
-      {p:loss, r:Math.log(Math.max(0.0001, 1 - risk*lossR))}
-    ].filter(x=>x.p>0 && Number.isFinite(x.r));
-    const mu = outcomes.reduce((a,x)=>a+x.p*x.r,0);
-    const variance = Math.max(1e-9, outcomes.reduce((a,x)=>a+x.p*Math.pow(x.r-mu,2),0));
-    if(!Number.isFinite(mu) || !Number.isFinite(variance) || variance <= 0){
-      return {probability:null,method:"log-growth drift approximation",note:"Analytical approximation not reliable for this parameter set.",assumptions:["Path-dependent sizing and drawdown rules dominate."]};
+  /* ---------- WP1B: analytical risk-of-ruin approximation (log-growth / barrier) ---------- */
+  function normalCdf(z){
+    // Abramowitz-Stegun
+    var t = 1/(1+0.2316419*Math.abs(z));
+    var d = 0.3989423*Math.exp(-z*z/2);
+    var p = d*t*(0.3193815+t*(-0.3565638+t*(1.781478+t*(-1.821256+t*1.330274))));
+    return z>0 ? 1-p : p;
+  }
+  function analyticalRuinApproximation(p){
+    var pr = normalizedProbs(p);
+    var f = p.riskPerTradePct/100;
+    var netWin = p.avgWinR - p.tradeCostR, netLoss = p.avgLossR + p.tradeCostR, netBE = p.tradeCostR;
+    var ruinFrac = clamp(1 - p.ruinThresholdPct/100, 0.01, 0.99); // equity floor as fraction of start
+    var n = Math.max(1, Math.round(p.days*p.tradesPerDay));
+    var assumptions = ["Sabit fraksiyonel risk (f="+pp(p.riskPerTradePct,2)+"%)","Bağımsız işlemler","Sembolik log-getiri yaklaşımı"];
+    // per-trade log multipliers
+    var lnWin = Math.log(Math.max(1e-6, 1 + f*netWin));
+    var lnLoss = Math.log(Math.max(1e-6, 1 - f*netLoss));
+    var lnBE = Math.log(Math.max(1e-6, 1 - f*netBE));
+    if(f*netLoss >= 1){
+      return {probability:null,method:"none",note:"Risk per trade tek işlemde sermayeyi tüketecek kadar yüksek; analitik yaklaşım güvenilir değil.",assumptions:assumptions};
     }
-    let probability;
-    if(mu <= 0){
-      probability = clamp(0.35 + Math.min(0.6, Math.abs(mu)*Math.sqrt(trades)/Math.sqrt(variance)*0.12),0,0.98);
+    var mu = pr.w*lnWin + pr.loss*lnLoss + pr.be*lnBE;
+    var m2 = pr.w*lnWin*lnWin + pr.loss*lnLoss*lnLoss + pr.be*lnBE*lnBE;
+    var varStep = Math.max(1e-9, m2 - mu*mu);
+    var sigma = Math.sqrt(varStep);
+    var a = -Math.log(ruinFrac); // positive distance (log) to the floor
+    var probability;
+    var method;
+    if(mu > 0){
+      // Brownian barrier "ever-ruin" approximation
+      probability = clamp(Math.exp(-2*mu*a/varStep),0,1)*100;
+      method = "barrier";
     } else {
-      probability = Math.exp(-2 * mu * targetLogLoss / variance);
-      probability = clamp(probability,0,0.98);
-      probability = Math.min(probability, probabilityAtLeastOneLosingStreak(trades, loss, Math.max(3, Math.ceil(targetLogLoss/Math.abs(Math.log(Math.max(0.001,1-risk*lossR)))))) * 1.15);
+      // negative/zero drift: finite-horizon terminal probability of crossing floor
+      var z = (-a - mu*n) / (sigma*Math.sqrt(n));
+      probability = clamp(normalCdf(z),0,1)*100;
+      // ever-ruin is at least terminal prob; nudge up modestly
+      probability = clamp(probability + (1-probability/100)*0.15*100,0,100);
+      method = "drift-negative";
     }
-    return {
-      probability:clamp(probability,0,1),
-      method:"log-growth drift / volatility approximation",
-      note:"Analytical approximation; Monte Carlo remains primary because the live model is path-dependent.",
-      assumptions:["Simplified independent win/loss R outcomes.","Fractional risk approximated with log returns.","Daily drawdown and trailing constraints are not fully closed-form."]
-    };
+    return {probability:probability,method:method,
+      note:"Bu değer Monte Carlo'nun yerine geçmez; bağımsız bir sanity-check yaklaşımıdır.",
+      assumptions:assumptions};
   }
 
-  function validationTone(sim, analytical){
-    if(!Number.isFinite(sim) || !Number.isFinite(analytical)) return {tone:"warn",label:"Approx unavailable",gap:null};
-    const gap = Math.abs(sim-analytical);
-    if(gap < .05) return {tone:"good",label:"Within expected band",gap};
-    if(gap < .12) return {tone:"warn",label:"Approximation gap",gap};
-    return {tone:"bad",label:"Model gap — check path assumptions",gap};
+  /* ---------- read heavy-MC simulation results from global engine state ---------- */
+  function simState(){ try{ return window.__AETHELGARD_STATE || null; }catch(e){ return null; } }
+  function simStreakProb(streakLen){
+    var st = simState(); if(!st || !st.last || !Array.isArray(st.last.streaks) || !st.last.streaks.length) return null;
+    var arr = st.last.streaks, hit = 0;
+    for(var i=0;i<arr.length;i++){ if(arr[i] >= streakLen) hit++; }
+    return hit/arr.length*100;
   }
-  function computeModelValidation(core){
-    const p = Object.assign(readMainParams(), core?.p || {});
-    const trades = Math.max(1, Math.round((p.days||126)*(p.tradesPerDay||1)));
-    const lossProb = clamp(1 - (p.winRate||0)/100 - (p.breakEvenRate||0)/100, 0, 1);
-    const streakLength = 10;
-    const analyticalStreak = probabilityAtLeastOneLosingStreak(trades, lossProb, streakLength);
-    let simStreak = Number.isFinite(core?.p10Loss) ? core.p10Loss : analyticalStreak;
-    const last = window.__AETHELGARD_STATE?.last;
-    if(last?.streaks?.length){
-      const hit = Array.from(last.streaks).filter(v=>v>=streakLength).length;
-      simStreak = hit / last.streaks.length;
-    }
-    const ruinApprox = analyticalRuinApproximation(p);
-    let simRuin = Number.isFinite(last?.ruinProb) ? last.ruinProb/100 : (Number.isFinite(core?.p10Loss) ? core.p10Loss : null);
-    const streakTone = validationTone(simStreak, analyticalStreak);
-    const ruinTone = validationTone(simRuin, ruinApprox.probability);
-    return {trades,lossProb,streakLength,simStreak,analyticalStreak,streakTone,simRuin,ruinApprox,ruinTone};
+  function simRuin(){
+    var st = simState(); if(!st || !st.last || typeof st.last.ruinProb !== "number") return null;
+    return st.last.ruinProb; // already percent
+  }
+  function activeSeed(){
+    var st = simState();
+    if(st && isFinite(st.seedValue)) return Math.floor(st.seedValue);
+    var inp = $("seedValueInput"); if(inp && isFinite(Number(inp.value))) return Math.floor(Number(inp.value));
+    return null;
   }
 
-  function scoreComponentsFromCore(core){
-    const p = Object.assign(readMainParams(), core?.p || {});
-    const e = Number(core?.e ?? 0);
-    const pf = Number(core?.pf ?? 0);
-    const edgeBuffer = Number(core?.edgeBuffer ?? 0);
-    const p10Loss = Number(core?.p10Loss ?? probabilityAtLeastOneLosingStreak(Math.round(p.days*p.tradesPerDay), 1-p.winRate/100, 10));
-    const approxDD = Number(core?.approxDD ?? 0);
-    const costDrag = Number(core?.costDrag ?? Math.max(0,(p.tradeCostR||0)));
-    const stressOK = [
-      Object.assign({},p,{winRate:Math.max(1,p.winRate-5)}),
-      Object.assign({},p,{avgWinR:p.avgWinR*.9}),
-      Object.assign({},p,{tradeCostR:p.tradeCostR*2})
-    ].filter(x=>{
-      const w=x.winRate/100, l=Math.max(0,1-w-(x.breakEvenRate||0)/100);
-      return w*(x.avgWinR-x.tradeCostR)-l*(x.avgLossR+x.tradeCostR)>0;
-    }).length;
-    const components = [
-      {key:"expectancy",label:"Expectancy quality",points:e<=0?0:clamp(e/.35,0,1)*20,max:20,reason:e<=0?"Net expectancy pozitif değil; sistem ölçeklenmemeli.":e<.15?"Net expectancy pozitif fakat hata payı sınırlı.":"Net expectancy güçlü ve pozitif."},
-      {key:"profitFactor",label:"Profit factor",points:pf<1.10?0:pf<1.30?5+(pf-1.10)/.20*4:pf<1.80?9+(pf-1.30)/.50*4:15,max:15,reason:pf<1.3?"Profit factor düşük; küçük performans düşüşü kırılganlık yaratır.":pf<1.8?"Profit factor kabul edilebilir ama izlenmeli.":"Profit factor güçlü bir edge gösteriyor."},
-      {key:"breakEven",label:"Break-even safety",points:edgeBuffer<=0?0:edgeBuffer<5?edgeBuffer/5*5:edgeBuffer<15?5+(edgeBuffer-5)/10*7:15,max:15,reason:edgeBuffer<5?"Break-even buffer düşük; sistem küçük sapmalara hassas.":"Break-even buffer varsayım hatalarına karşı tampon oluşturuyor."},
-      {key:"streak",label:"Losing streak risk",points:p10Loss>.65?0:p10Loss>.35?5:p10Loss>.15?10:15,max:15,reason:p10Loss>.35?"10 kayıp serisi olasılığı yüksek; daily stop/risk reduction gerekir.":"Kayıp serisi riski izlenebilir bantta."},
-      {key:"drawdown",label:"Drawdown / recovery burden",points:approxDD>.45?0:approxDD>.30?7:approxDD>.18?14:20,max:20,reason:approxDD>.30?"Recovery burden yüksek; risk sizing agresif kalıyor.":"Drawdown ve recovery yükü yönetilebilir görünüyor."},
-      {key:"cost",label:"Cost drag",points:costDrag>.20?0:costDrag>.10?5:10,max:10,reason:costDrag>.10?"Komisyon/spread/slippage edge’i belirgin aşındırıyor.":"Execution cost edge’i aşırı bozmuyor."},
-      {key:"robustness",label:"Robustness",points:stressOK/3*5,max:5,reason:stressOK<2?"Küçük streslerde sistem kırılganlaşıyor.":"Temel streslerde edge tamamen kaybolmuyor."}
-    ].map(c=>{
-      c.points = Math.round(clamp(c.points,0,c.max));
-      c.tone = c.points/c.max >= .72 ? "good" : c.points/c.max >= .42 ? "warn" : "bad";
-      return c;
+  /* ---------- consistency badge ---------- */
+  function badge(simV, anV){
+    if(simV==null || anV==null) return {cls:"warn",txt:"Tek kaynak"};
+    var diff = Math.abs(simV-anV);
+    if(diff < 5) return {cls:"ok",txt:"Tutarlı"};
+    if(diff <= 12) return {cls:"warn",txt:"Yaklaşık fark"};
+    return {cls:"bad",txt:"Model farkı"};
+  }
+
+  /* ---------- WP4: most fragile assumption ---------- */
+  function fragileAssumption(core){
+    var base = core.score, baseV = core.verdict;
+    var tests = [
+      {label:"win rate", apply:function(p){ return Object.assign({},p,{winRate:Math.max(0,p.winRate-5)}); }, desc:"win rate −5pp"},
+      {label:"average R", apply:function(p){ return Object.assign({},p,{avgWinR:p.avgWinR*0.9}); }, desc:"average R −%10"},
+      {label:"cost", apply:function(p){ return Object.assign({},p,{tradeCostR:p.tradeCostR*2}); }, desc:"cost ×2"},
+      {label:"risk per trade", apply:function(p){ return Object.assign({},p,{riskPerTradePct:p.riskPerTradePct*1.5}); }, desc:"risk per trade +%50"}
+    ];
+    var worst=null;
+    tests.forEach(function(t){
+      var c = coreMetrics(t.apply(core.p));
+      var drop = base - c.score;
+      if(!worst || drop > worst.drop) worst = {label:t.label, desc:t.desc, drop:drop, to:c.score, toVerdict:c.verdict};
     });
-    const weakestComponent = components.slice().sort((a,b)=>(a.points/a.max)-(b.points/b.max))[0];
-    return {components,weakestComponent};
+    worst.base = base; worst.baseVerdict = baseV;
+    return worst;
   }
 
-  function enhancedCore(params){
-    let core;
-    try {
-      core = window.__trustPrevCalculate ? window.__trustPrevCalculate(params || readMainParams()) : (window.calculateStrategyHealthScore ? window.calculateStrategyHealthScore(params || readMainParams()) : {});
-    } catch(e){ core = {}; }
-    core = Object.assign({}, core || {});
-    if(!Number.isFinite(core.score)){
-      const p = Object.assign(readMainParams(), params || {});
-      const w = clamp(p.winRate/100,0,1), loss = clamp(1-w-(p.breakEvenRate||0)/100,0,1);
-      core.e = w*(p.avgWinR-p.tradeCostR)-loss*(p.avgLossR+p.tradeCostR);
-      core.pf = (w*p.avgWinR)/Math.max(.0001, loss*(p.avgLossR+p.tradeCostR));
-      core.edgeBuffer = p.winRate - ((p.avgLossR+p.tradeCostR)/Math.max(.0001,p.avgWinR+p.avgLossR))*100;
-      core.p10Loss = probabilityAtLeastOneLosingStreak(Math.round(p.days*p.tradesPerDay), loss, 10);
-      core.approxDD = clamp(core.p10Loss * p.riskPerTradePct/100 * 10,0,.95);
-      core.costDrag = p.tradeCostR;
-      core.score = Math.round(clamp(50 + core.e*70 + Math.max(0,core.edgeBuffer)*1.2 - core.p10Loss*25 - core.approxDD*35 - p.tradeCostR*20,0,100));
-      core.verdict = core.score<35?"Untradable":core.score<55?"Fragile":core.score<70?"Tradable but Streak-Sensitive":core.score<85?"Balanced":"Institutional Quality";
-      core.primaryRisk = core.e<=0?"Negative expectancy":core.edgeBuffer<5?"Weak break-even buffer":core.p10Loss>.25?"High losing streak probability":"Recovery burden";
-      core.recommendedAction = core.e<=0?"Bu sistem ölçeklenmemeli; önce win rate veya average R iyileştirilmeli.":"Risk bandını doğrula ve scale-up için 300+ trade kanıtı bekle.";
-      core.p = p;
-    }
-    const bd = scoreComponentsFromCore(core);
-    core.components = bd.components;
-    core.weakestComponent = bd.weakestComponent;
-    core.modelValidation = computeModelValidation(core);
-    return core;
-  }
-
-  function renderHealthBreakdown(core){
-    core = core || enhancedCore(readMainParams());
-    const healthCard = $("healthCard") || q(".breakout-health-card") || $("breakoutExecutive");
-    if(!healthCard) return;
-    let card = $("healthBreakdownCard");
-    if(!card){
-      card = document.createElement("div");
-      card.id = "healthBreakdownCard";
-      card.className = "health-breakdown-card";
-      healthCard.insertAdjacentElement("afterend", card);
-    }
-    const rows = (core.components||[]).map(c=>`
-      <div class="health-component-row ${c.tone} ${core.weakestComponent && c.key===core.weakestComponent.key ? "weakest" : ""}">
-        <div class="health-component-label">${escapeHtml(c.label)}</div>
-        <div class="health-component-score">${Math.round(c.points)}/${c.max}</div>
-        <div class="health-mini-bar"><i style="--w:${clamp(c.points/c.max*100,0,100)}%"></i></div>
-        <div class="health-component-reason">${escapeHtml(c.reason)}</div>
-      </div>`).join("");
-    card.innerHTML = `<details open>
-      <summary><span>Health Score Breakdown</span><span class="audit-badge ${core.weakestComponent?.tone||"warn"}">Weakest: ${escapeHtml(core.weakestComponent?.label||"—")}</span></summary>
-      <div class="health-components">${rows}</div>
-      <p class="trust-disclaimer-line">Bu varsayımları sen giriyorsun. Sonuçlar girdiğin verinin kalitesine bağlıdır.</p>
-    </details>`;
-  }
-
-  function renderMostFragile(core){
-    core = core || enhancedCore(readMainParams());
-    const host = $("breakoutExecutive");
-    if(!host) return;
-    let strip = $("mostFragileAssumptionStrip");
-    if(!strip){
-      strip = document.createElement("div");
-      strip.id = "mostFragileAssumptionStrip";
-      strip.className = "fragility-strip";
-      host.insertAdjacentElement("afterend", strip);
-    }
-    const weak = core.weakestComponent || {};
-    const label = weak.label || core.primaryRisk || "assumption quality";
-    const reason = weak.reason || "Reality Check sonuçları çalıştırıldığında en kırılgan varsayım burada netleşir.";
-    strip.innerHTML = `<div class="trust-kicker">Most Fragile Assumption</div>
-      <div class="trust-note"><strong>Modeldeki en kırılgan alan: ${escapeHtml(label)}.</strong> ${escapeHtml(reason)}</div>
-      <div class="trust-disclaimer-line">Bu araç finansal tavsiye değil, varsayıma dayalı risk simülasyonudur. No account. No cloud. Verin cihazında kalır.</div>`;
-  }
-
-  function renderModelValidation(core){
-    core = core || enhancedCore(readMainParams());
-    const val = core.modelValidation || computeModelValidation(core);
-    const after = $("healthBreakdownCard") || $("breakoutExecutive") || q(".result-strip");
-    if(!after) return;
-    let card = $("modelValidationCard");
-    if(!card){
-      card = document.createElement("div");
-      card.id = "modelValidationCard";
-      card.className = "validation-card";
-      after.insertAdjacentElement("afterend", card);
-    }
-    const ruinApproxText = val.ruinApprox.probability === null ? "Unavailable" : fmtPct(val.ruinApprox.probability,1);
-    const ruinLine = val.ruinApprox.probability === null
-      ? "Analytical approximation unavailable — model is path-dependent. Monte Carlo result remains primary."
-      : `Simulation RoR: ${fmtPct(val.simRuin,1)} · Analytical Approx: ${ruinApproxText}`;
-    card.innerHTML = `<div class="trust-kicker">Model Validation · Sanity Check</div>
-      <h3>Analytical approximation</h3>
-      <p class="trust-note">Bu bölüm Monte Carlo sonuçlarını bağımsız ama yaklaşık kontrollerle sanity-check eder. Kapalı formül sonucu Monte Carlo’nun yerine geçmez.</p>
-      <div class="validation-grid">
-        <div class="validation-item"><strong>Losing streak</strong><span>Simülasyon: ${fmtPct(val.simStreak,1)} · Analitik: ${fmtPct(val.analyticalStreak,1)}</span><em class="validation-badge ${val.streakTone.tone}">${val.streakTone.label}</em></div>
-        <div class="validation-item"><strong>Risk of ruin</strong><span>${ruinLine}</span><em class="validation-badge ${val.ruinTone.tone}">${val.ruinApprox.probability===null ? "Monte Carlo primary" : val.ruinTone.label}</em></div>
-        <div class="validation-item"><strong>Method</strong><span>${escapeHtml(val.ruinApprox.method)}</span><em class="trust-note">${escapeHtml(val.ruinApprox.note)}</em></div>
-      </div>`;
-  }
-
-  function renderSeedCard(){
-    let anchor = q(".result-strip") || q(".hero") || document.body.firstElementChild;
-    if(!anchor) return;
-    let card = $("trustSeedCard");
-    if(!card){
-      card = document.createElement("section");
-      card.id = "trustSeedCard";
-      card.className = "seed-card";
-      anchor.insertAdjacentElement("afterend", card);
-    }
-    card.innerHTML = `<div>
-      <div class="trust-kicker">Simulation Seed</div>
-      <div class="seed-value">Seed: ${currentSeed}</div>
-      <p class="trust-note">Aynı parametreler ve aynı seed aynı sonucu üretir.</p>
-    </div>
-    <div class="seed-actions">
-      <button class="mini-btn" id="newSeedBtn" type="button">Yeni Seed</button>
-      <button class="mini-btn" id="toggleSeedLockBtn" type="button">${seedLocked ? "Kilidi Aç" : "Sabitle"}</button>
-    </div>`;
-    $("newSeedBtn")?.addEventListener("click",()=>{ setSeed(generateNewSeed()); setSeedLocked(true); });
-    $("toggleSeedLockBtn")?.addEventListener("click",()=>setSeedLocked(!seedLocked));
-  }
-
-  function detectDelimiter(text){
-    const sample = String(text||"").split(/\r?\n/).filter(x=>x.trim()).slice(0,10);
-    const candidates = [",",";","\t","|"];
-    let best = ",", bestScore = -Infinity;
-    for(const d of candidates){
-      const counts = sample.map(line => splitCsvLine(line,d).length).filter(n=>n>1);
-      if(!counts.length) continue;
-      const mode = counts.slice().sort((a,b)=>counts.filter(v=>v===a).length-counts.filter(v=>v===b).length).pop();
-      const consistency = counts.filter(n=>n===mode).length / Math.max(1, counts.length);
-      const score = consistency * 100 + mode;
-      if(score > bestScore){ bestScore = score; best = d; }
-    }
-    return best;
-  }
-  function splitCsvLine(line, delimiter){
-    const out=[]; let cur="", q=false;
-    line=String(line||"");
-    for(let i=0;i<line.length;i++){
-      const ch=line[i], nx=line[i+1];
-      if(ch === '"' && q && nx === '"'){ cur += '"'; i++; continue; }
-      if(ch === '"'){ q = !q; continue; }
-      if(ch === delimiter && !q){ out.push(cur.trim()); cur=""; continue; }
-      cur += ch;
-    }
-    out.push(cur.trim());
-    return out;
-  }
-  function parseFlexibleNumber(value){
-    if(typeof value === "number") return Number.isFinite(value) ? value : NaN;
-    let s = String(value ?? "").trim();
-    if(!s) return NaN;
-    let neg = false;
-    if(/^\(.*\)$/.test(s)){ neg = true; s = s.slice(1,-1); }
-    s = s.replace(/[$€£₺]/g,"").replace(/\s+/g,"").replace(/[^\d,.\-]/g,"");
-    if((s.match(/-/g)||[]).length){ neg = true; s = s.replace(/-/g,""); }
-    const lastComma = s.lastIndexOf(",");
-    const lastDot = s.lastIndexOf(".");
-    if(lastComma >= 0 && lastDot >= 0){
-      if(lastComma > lastDot) s = s.replace(/\./g,"").replace(",",".");
-      else s = s.replace(/,/g,"");
-    } else if(lastComma >= 0){
-      const decimals = s.length - lastComma - 1;
-      s = decimals === 3 && lastComma > 0 ? s.replace(/,/g,"") : s.replace(",",".");
-    } else if(lastDot >= 0){
-      const decimals = s.length - lastDot - 1;
-      if(decimals === 3 && lastDot > 0) s = s.replace(/\./g,"");
-    }
-    const n = Number(s);
-    return Number.isFinite(n) ? (neg ? -Math.abs(n) : n) : NaN;
-  }
-  function parseFlexibleDate(value){
-    const raw = String(value ?? "").trim();
-    if(!raw) return {date:null,warning:"missing date"};
-    let d = new Date(raw);
-    if(!isNaN(d.getTime())) return {date:d,warning:null};
-    const m = raw.match(/^(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4})(?:\s+(.+))?$/);
-    if(m){
-      const a=Number(m[1]), b=Number(m[2]), y=Number(m[3].length===2 ? "20"+m[3] : m[3]);
-      const dayFirst = a > 12 || /[.]/.test(raw);
-      d = new Date(y, (dayFirst?b:a)-1, dayFirst?a:b);
-      if(!isNaN(d.getTime())) return {date:d,warning:null};
-    }
-    return {date:null,warning:"unrecognized date"};
-  }
-  function hasHeader(rows){
-    if(!rows.length) return false;
-    const first = rows[0];
-    const textish = first.filter(c=>/[a-zA-ZğüşöçıİĞÜŞÖÇ]/.test(String(c))).length;
-    const numeric = first.filter(c=>Number.isFinite(parseFlexibleNumber(c))).length;
-    return textish >= Math.max(1,numeric);
-  }
-  const alias = {
-    pnl:["pnl","profit","net profit","closed pnl","realized pnl","profit/loss","profit loss","p/l","pl"],
-    r:["r","r multiple","r-multiple","r_mult","r_multiple","multiple"],
-    date:["date","time","close time","exit time","timestamp","open time"],
-    symbol:["symbol","instrument","market","ticker","pair"],
-    size:["size","qty","quantity","lots","contracts","volume"],
-    entry:["entry","entry price","open price","open"],
-    exit:["exit","exit price","close price","close"],
-    capital:["capital","equity","balance","account balance"]
-  };
-  function guessColumn(headers,names){
-    const wanted = Array.isArray(names) ? names : (alias[names] || [names]);
-    const lower = headers.map(h=>String(h||"").toLowerCase().replace(/[_\-]+/g," ").trim());
-    for(const name of wanted){
-      const n = String(name).toLowerCase();
-      let idx = lower.findIndex(h=>h===n);
-      if(idx >= 0) return idx;
-      idx = lower.findIndex(h=>h.includes(n));
-      if(idx >= 0) return idx;
-    }
-    return -1;
-  }
-  function parseCSVTradeHistory(text){
-    const delimiter = detectDelimiter(text);
-    const lines = String(text||"").split(/\r?\n/).filter(x=>x.trim());
-    const matrix = lines.map(line=>splitCsvLine(line, delimiter));
-    const headerDetected = hasHeader(matrix);
-    const headers = headerDetected ? matrix[0].map(h=>h||"") : (matrix[0]||[]).map((_,i)=>"Column "+(i+1));
-    const rows = headerDetected ? matrix.slice(1) : matrix;
-    const idx = {
-      date:guessColumn(headers,"date"), symbol:guessColumn(headers,"symbol"), pnl:guessColumn(headers,"pnl"), r:guessColumn(headers,"r"),
-      capital:guessColumn(headers,"capital"), entry:guessColumn(headers,"entry"), exit:guessColumn(headers,"exit"), size:guessColumn(headers,"size")
-    };
-    const values=[]; let badRows=0; let dateWarnings=0;
-    rows.forEach((row,rowIndex)=>{
-      let r = NaN;
-      if(idx.date >= 0 && parseFlexibleDate(row[idx.date]).warning) dateWarnings++;
-      if(idx.r >= 0) r = parseFlexibleNumber(row[idx.r]);
-      if(!Number.isFinite(r) && idx.pnl >= 0){
-        const pnl = parseFlexibleNumber(row[idx.pnl]);
-        const cap = idx.capital >= 0 ? parseFlexibleNumber(row[idx.capital]) : readMainParams().initialCapital;
-        const riskCash = Math.max(1, cap * readMainParams().riskPerTradePct/100);
-        if(Number.isFinite(pnl)) r = pnl / riskCash;
-      }
-      if(!Number.isFinite(r) && idx.entry >= 0 && idx.exit >= 0){
-        const entry = parseFlexibleNumber(row[idx.entry]), exit = parseFlexibleNumber(row[idx.exit]);
-        if(Number.isFinite(entry) && Number.isFinite(exit) && entry !== 0){
-          r = (exit-entry)/Math.abs(entry) * 100 / Math.max(.01, readMainParams().riskPerTradePct);
-        }
-      }
-      if(Number.isFinite(r)){
-        values.push({r,row,rowIndex,date:idx.date>=0?parseFlexibleDate(row[idx.date]).date:null,symbol:idx.symbol>=0?row[idx.symbol]:""});
-      } else badRows++;
-    });
-    const rVals = values.map(x=>x.r);
-    const wins = rVals.filter(x=>x>0), losses = rVals.filter(x=>x<0);
-    const validRows = rVals.length, totalRows = rows.length;
-    const winRate = validRows ? wins.length/validRows*100 : 0;
-    const avgWin = wins.length ? wins.reduce((a,b)=>a+b,0)/wins.length : 0;
-    const avgLoss = losses.length ? Math.abs(losses.reduce((a,b)=>a+b,0)/losses.length) : 0;
-    const pf = Math.abs(losses.reduce((a,b)=>a+b,0))>0 ? wins.reduce((a,b)=>a+b,0)/Math.abs(losses.reduce((a,b)=>a+b,0)) : (wins.length?Infinity:0);
-    const expectancy = validRows ? rVals.reduce((a,b)=>a+b,0)/validRows : 0;
-    let streak=0,maxStreak=0; rVals.forEach(x=>{ if(x<=0){ streak++; maxStreak=Math.max(maxStreak,streak); } else streak=0; });
-    let eq=1, peak=1, maxDrawdown=0; rVals.forEach(x=>{ eq = Math.max(.0001, eq*(1+x*readMainParams().riskPerTradePct/100)); peak=Math.max(peak,eq); maxDrawdown=Math.max(maxDrawdown,(peak-eq)/peak); });
-    const detectedFormat = idx.r>=0 ? "date,symbol,r_multiple" : idx.pnl>=0 && idx.capital>=0 ? "date,symbol,pnl,capital" : idx.pnl>=0 ? "date,symbol,pnl" : idx.entry>=0&&idx.exit>=0 ? "date,symbol,entry,exit,size,pnl" : "unknown / manual mapping recommended";
-    const badRatio = totalRows ? badRows/totalRows : 1;
-    let confidenceLabel = "Low";
-    if(validRows >= 100 && (idx.r>=0 || idx.pnl>=0 || (idx.entry>=0&&idx.exit>=0)) && badRatio < .05) confidenceLabel = "High";
-    else if(validRows >= 30 && badRatio < .15) confidenceLabel = "Medium";
-    const confidence = confidenceLabel==="High" ? .9 : confidenceLabel==="Medium" ? .62 : .28;
-    const sampleWarning = validRows < 30 ? "Too few trades for reliable Monte Carlo." :
-      validRows < 100 ? "Usable but still early sample." :
-      validRows < 300 ? "Good sample for initial review; 300+ trades recommended before scaling." :
-      "Sample size is strong enough for more stable strategy review.";
-    return {delimiter,headers,rows,values:rVals,badRows,validRows,detectedFormat,confidence,confidenceLabel,sampleWarning,dateWarnings,mapping:idx,summary:{trades:validRows,winRate,avgWin,avgLoss,pf,expectancy,maxStreak,maxDrawdown}};
-  }
-
-  function renderCsvTrust(parsed){
-    if(!parsed) return;
-    window.__lastCsvImportDiagnostics = parsed;
-    const diag = $("csvDiagnostics");
-    if(diag){
-      const delimName = parsed.delimiter === "\t" ? "tab" : parsed.delimiter === "," ? "comma" : parsed.delimiter === ";" ? "semicolon" : parsed.delimiter === "|" ? "pipe" : parsed.delimiter;
-      const tone = parsed.confidenceLabel.toLowerCase();
-      diag.innerHTML = `
-        <div class="csv-quality-grid">
-          <div class="csv-quality-item ${tone}"><strong>Detected delimiter</strong><span>${escapeHtml(delimName)}</span><em class="trust-note">Best consistency across first rows.</em></div>
-          <div class="csv-quality-item ${tone}"><strong>Detected format</strong><span>${escapeHtml(parsed.detectedFormat)}</span><em class="trust-note">Broker aliases are best-effort.</em></div>
-          <div class="csv-quality-item ${tone}"><strong>Valid trades</strong><span>${parsed.validRows}</span><em class="trust-note">${escapeHtml(parsed.sampleWarning)}</em></div>
-          <div class="csv-quality-item ${parsed.badRows ? "medium" : "high"}"><strong>Bad rows</strong><span>${parsed.badRows}</span><em class="trust-note">${parsed.badRows ? "Skipped without blocking import." : "No invalid trade rows detected."}</em></div>
-          <div class="csv-quality-item ${tone}"><strong>Import confidence</strong><span>${parsed.confidenceLabel}</span><em class="trust-note">${csvConfidenceAction(parsed.confidenceLabel)}</em></div>
-          <div class="csv-quality-item ${tone}"><strong>Imported PF</strong><span>${Number.isFinite(parsed.summary.pf)?fmtNum(parsed.summary.pf,2):"∞"}</span><em class="trust-note">Gross imported profit factor.</em></div>
-          <div class="csv-quality-item ${tone}"><strong>Expectancy</strong><span>${fmtNum(parsed.summary.expectancy,3)}R</span><em class="trust-note">Average imported R.</em></div>
-          <div class="csv-quality-item ${tone}"><strong>Max DD / Streak</strong><span>${fmtPct(parsed.summary.maxDrawdown,1)} · ${parsed.summary.maxStreak}</span><em class="trust-note">Imported equity curve proxy.</em></div>
-        </div>`;
-    }
-    const mapHost = $("csvMapping");
-    if(mapHost){
-      const fields = [["date","Date"],["symbol","Symbol"],["pnl","PnL"],["r","R Multiple"],["capital","Capital"],["entry","Entry"],["exit","Exit"],["size","Size"]];
-      const opts = `<option value="-1">—</option>` + parsed.headers.map((h,i)=>`<option value="${i}">${escapeHtml(h)}</option>`).join("");
-      mapHost.innerHTML = fields.map(([key,label])=>`<div class="input-card"><label>${label}</label><select class="csv-select trust-csv-map" id="csvMap_${key}" data-key="${key}">${opts}</select></div>`).join("");
-      fields.forEach(([key])=>{ const el=$("csvMap_"+key); if(el) el.value = String(parsed.mapping[key] ?? -1); });
-    }
-    const preview = $("csvPreview");
-    if(preview){
-      const head = "<tr>"+parsed.headers.map(h=>`<th>${escapeHtml(h)}</th>`).join("")+"</tr>";
-      const body = parsed.rows.slice(0,5).map(r=>"<tr>"+parsed.headers.map((_,i)=>`<td>${escapeHtml(r[i]||"")}</td>`).join("")+"</tr>").join("");
-      preview.classList.add("csv-trust-preview");
-      preview.innerHTML = `<div class="trust-kicker">Preview · first 5 rows</div><div class="table-wrap"><table><thead>${head}</thead><tbody>${body}</tbody></table></div><p class="trust-note">${parsed.validRows + parsed.badRows} satır okundu, ${parsed.badRows} satır hatalı olduğu için atlandı.</p>`;
-    }
-  }
-  function csvConfidenceAction(label){
-    if(label === "Low") return "Imported sample is weak; do not scale capital based only on this dataset.";
-    if(label === "Medium") return "Imported sample is usable but early; validate with more trades before scaling.";
-    return "Imported sample quality is strong enough for initial strategy review.";
-  }
-  function applyTrustedCsvToModel(){
-    const parsed = window.__lastCsvImportDiagnostics;
-    if(!parsed || !parsed.values?.length) return;
-    setParamField("winRate", clamp(parsed.summary.winRate,1,95));
-    if(parsed.summary.avgWin>0) setParamField("avgWinR", clamp(parsed.summary.avgWin,.05,20));
-    if(parsed.summary.avgLoss>0) setParamField("avgLossR", clamp(parsed.summary.avgLoss,.05,20));
-    setParamField("days", clamp(Math.ceil(parsed.validRows/Math.max(0.1, readMainParams().tradesPerDay)),30,365));
-    const summary = $("csvSummary");
-    if(summary){
-      summary.innerHTML = [
-        ["Trades Imported",parsed.validRows,"CSV sample applied"],
-        ["Win Rate",fmtPct100(parsed.summary.winRate,1),"Detected from positive trades"],
-        ["Avg R",fmtNum(parsed.summary.avgWin,2)+" / -"+fmtNum(parsed.summary.avgLoss,2),"Average win / loss R"],
-        ["Profit Factor",Number.isFinite(parsed.summary.pf)?fmtNum(parsed.summary.pf,2):"∞","Gross imported PF"],
-        ["Expectancy",fmtNum(parsed.summary.expectancy,3)+"R","Net imported average"],
-        ["Max Losing Streak",String(parsed.summary.maxStreak),"Consecutive non-positive trades"],
-        ["Max Drawdown",fmtPct(parsed.summary.maxDrawdown,1),"Approx. imported R curve"],
-        ["Decision Note",csvConfidenceAction(parsed.confidenceLabel),parsed.confidenceLabel+" confidence"]
-      ].map(x=>`<div class="breakout-output premium-metric-card"><div class="label">${escapeHtml(x[0])}</div><div class="value mono">${escapeHtml(x[1])}</div><div class="note">${escapeHtml(x[2])}</div></div>`).join("");
-    }
-    refreshTrustLayer();
-  }
-
-  function propCfgTrust(){
-    const val = id => readNum(id,0);
-    return {
-      balance:val("propBalance")||100000,target:val("propTarget")||8,totalDD:val("propTotalDD")||10,dailyDD:val("propDailyDD")||5,
-      minDays:val("propMinDays")||5,maxDays:val("propMaxDays")||30,risk:val("propRisk")||.75,riskPerTrade:val("propRisk")||.75,
-      trades:val("propTrades")||3,winRate:val("propWR")||readMainParams().winRate,wr:val("propWR")||readMainParams().winRate,
-      winR:val("propWinR")||readMainParams().avgWinR,lossR:val("propLossR")||readMainParams().avgLossR,costR:val("propCostR")||readMainParams().tradeCostR,
-      cost:val("propCostR")||readMainParams().tradeCostR,stopLosses:val("propStopLosses")||3,profitLock:val("propProfitLock")||0,
-      drawdownMode:$("propDrawdownMode")?.value || "static",paths:1200
-    };
-  }
-  function runPropAtRiskTrust(cfg, risk, paths=1200){
-    resetRandomStreamForRun();
-    const rand = Math.random;
-    let pass=0,daily=0,total=0,timeout=0; const passDays=[];
-    const start=cfg.balance, target=start*(1+cfg.target/100);
-    for(let i=0;i<paths;i++){
-      let eq=start, peak=start, status="active", targetDay=null;
-      for(let d=1; d<=cfg.maxDays; d++){
-        const dayStart=eq; let losses=0, locked=false;
-        const trades = Math.max(0, Math.round(cfg.trades));
-        for(let t=0;t<trades;t++){
-          if(locked) break;
-          const r = rand() < (cfg.winRate||cfg.wr)/100 ? (cfg.winR-cfg.costR) : -(cfg.lossR+cfg.costR);
-          if(r<0) losses++;
-          eq = Math.max(0, eq + eq*(risk/100)*r);
-          peak = Math.max(peak, eq);
-          if(cfg.stopLosses>0 && losses >= cfg.stopLosses) break;
-          if(cfg.profitLock>0 && (eq-dayStart)/dayStart*100 >= cfg.profitLock) locked=true;
-          if((dayStart-eq)/dayStart*100 >= cfg.dailyDD){ status="daily"; break; }
-          const totalLine = cfg.drawdownMode === "trailing" ? peak*(1-cfg.totalDD/100) : start*(1-cfg.totalDD/100);
-          if(eq <= totalLine){ status="total"; break; }
-          if(eq >= target && d >= cfg.minDays){ targetDay=d; status="pass"; break; }
-        }
-        if(status !== "active") break;
-      }
-      if(status==="pass"){ pass++; passDays.push(targetDay); }
-      else if(status==="daily") daily++;
-      else if(status==="total") total++;
-      else timeout++;
-    }
-    passDays.sort((a,b)=>a-b);
-    return {passProb:pass/paths,dailyFail:daily/paths,totalFail:total/paths,timeout:timeout/paths,medianDays:passDays.length?passDays[Math.floor(passDays.length/2)]:null,paths,drawdownMode:cfg.drawdownMode};
-  }
-
-  const propPresetTrust = [
-    {name:"Evaluation 8% Target · 5% Daily · 10% Total", v:{propTarget:8,propDailyDD:5,propTotalDD:10,propMinDays:5,propMaxDays:30,propRisk:.65,propDrawdownMode:"static"}},
-    {name:"Two-Step Conservative", v:{propTarget:8,propDailyDD:4,propTotalDD:8,propMinDays:5,propMaxDays:60,propRisk:.45,propDrawdownMode:"static"}},
-    {name:"One-Step Aggressive", v:{propTarget:10,propDailyDD:5,propTotalDD:6,propMinDays:3,propMaxDays:20,propRisk:.85,propDrawdownMode:"static"}},
-    {name:"Funded Account Survival", v:{propTarget:4,propDailyDD:4,propTotalDD:8,propMinDays:0,propMaxDays:60,propRisk:.35,propDrawdownMode:"static"}},
-    {name:"Static Drawdown", v:{propTarget:8,propDailyDD:5,propTotalDD:10,propMinDays:5,propMaxDays:30,propRisk:.55,propDrawdownMode:"static"}},
-    {name:"Generic High-Watermark Trailing Drawdown", v:{propTarget:8,propDailyDD:5,propTotalDD:8,propMinDays:5,propMaxDays:45,propRisk:.35,propDrawdownMode:"trailing"}}
+  /* ---------- component metadata ---------- */
+  var COMP_META = [
+    {k:"expectancy", max:20, name:"Expectancy quality", hint:"trade başına beklenen net R"},
+    {k:"pf",         max:15, name:"Profit factor",      hint:"kazanç verimliliği"},
+    {k:"breakEven",  max:15, name:"Break-even safety",  hint:"hata payı / edge buffer"},
+    {k:"streak",     max:15, name:"Losing streak risk", hint:"seri kayıp dayanıklılığı"},
+    {k:"drawdown",   max:20, name:"Drawdown / recovery", hint:"düşüşten toparlanma yükü"},
+    {k:"cost",       max:10, name:"Cost drag",          hint:"işlem maliyeti etkisi"},
+    {k:"robustness", max:5,  name:"Robustness",         hint:"stres altında dayanıklılık"}
   ];
-  function renderPropPresetLibrary(){
-    const host = $("propPresets");
-    if(!host || $("trustPropPresetLibrary")) return;
-    const wrap = document.createElement("div");
-    wrap.id = "trustPropPresetLibrary";
-    wrap.className = "prop-preset-library";
-    wrap.innerHTML = `<div class="trust-kicker">Prop Firm Preset Library</div>
-      <p class="trust-note">Generic setup’lar; marka veya firma özelinde kural iddiası değildir. Kullanıcı tüm değerleri değiştirebilir.</p>
-      <div class="drawdown-mode-row"><span>Total drawdown mode</span><select id="propDrawdownMode"><option value="static">Static drawdown</option><option value="trailing">Generic high-watermark trailing drawdown</option></select></div>
-      <div class="prop-preset-row">${propPresetTrust.map((p,i)=>`<button class="preset-pill" type="button" data-trust-prop-preset="${i}">${escapeHtml(p.name)}</button>`).join("")}</div>`;
-    host.insertAdjacentElement("afterbegin", wrap);
-  }
-  function applyPropPreset(i){
-    const p = propPresetTrust[i]; if(!p) return;
-    Object.entries(p.v).forEach(([id,v])=>{
-      if(id === "propDrawdownMode"){
-        if($("propDrawdownMode")) $("propDrawdownMode").value = v;
-      } else setInputValue(id,v);
-    });
-    setTimeout(()=>{ tryRunPropTrust(); },60);
-  }
-  function tryRunPropTrust(){
-    const cfg = propCfgTrust();
-    const result = runPropAtRiskTrust(cfg, cfg.risk, cfg.paths || 1200);
-    window.__lastPropResult = result;
-    if(typeof window.renderPropVerdict === "function") window.renderPropVerdict(result, cfg);
-    updatePropMetricFields(result,cfg);
-    refreshTrustLayer();
-    return result;
-  }
-  function updatePropMetricFields(result,cfg){
-    if($("propPass")) $("propPass").textContent = fmtPct(result.passProb,1);
-    if($("propDailyFail")) $("propDailyFail").textContent = fmtPct(result.dailyFail,1);
-    if($("propTotalFail")) $("propTotalFail").textContent = fmtPct(result.totalFail,1);
-    if($("propMedianDays")) $("propMedianDays").textContent = result.medianDays ? String(result.medianDays) : "—";
-  }
-
-  function renderReportTrust(core){
-    core = core || enhancedCore(readMainParams());
-    ensureReportSections();
-    const val = core.modelValidation || computeModelValidation(core);
-    const seedText = `Seed: ${currentSeed} · ${seedLocked ? "locked" : "auto-generated"}`;
-    if($("reportVersion")) $("reportVersion").textContent = MODEL_VERSION_TRUST;
-    if($("printModelVersion")) $("printModelVersion").textContent = `${MODEL_VERSION_TRUST} · ${seedText} · Local-only parameter ledger`;
-    if($("reportTrustSeed")) $("reportTrustSeed").textContent = seedText;
-    const h = $("reportHealthBreakdownRows");
-    if(h){
-      h.innerHTML = (core.components||[]).map(c=>`<tr><th>${escapeHtml(c.label)}</th><td class="mono">${Math.round(c.points)}/${c.max}</td><td>${escapeHtml(c.reason)}</td></tr>`).join("");
-    }
-    const v = $("reportModelValidationRows");
-    if(v){
-      v.innerHTML = `
-        <tr><th>Losing streak sanity check</th><td class="mono">Simulation ${fmtPct(val.simStreak,1)} · Analytical ${fmtPct(val.analyticalStreak,1)}</td><td>${escapeHtml(val.streakTone.label)}</td></tr>
-        <tr><th>Risk-of-ruin approximation</th><td class="mono">Simulation ${fmtPct(val.simRuin,1)} · Analytical ${val.ruinApprox.probability===null?"Unavailable":fmtPct(val.ruinApprox.probability,1)}</td><td>${escapeHtml(val.ruinApprox.note)}</td></tr>
-        <tr><th>Seed</th><td class="mono">${currentSeed}</td><td>${seedLocked ? "Reproducible run locked." : "Auto seed; lock seed for exact reruns."}</td></tr>`;
-    }
-    const led = $("reportLedgerRows");
-    if(led && !led.dataset.trustSeedAdded){
-      led.insertAdjacentHTML("beforeend", `<tr><th>Simulation Seed</th><td>${currentSeed}</td></tr><tr><th>CSV Import Confidence</th><td>${window.__lastCsvImportDiagnostics?.confidenceLabel || "Not used"}</td></tr><tr><th>Model Version</th><td>${MODEL_VERSION_TRUST}</td></tr>`);
-      led.dataset.trustSeedAdded = "1";
-    }
-    const rf = $("reportMostFragile");
-    if(rf) rf.textContent = `${core.weakestComponent?.label || core.primaryRisk}: ${core.weakestComponent?.reason || "Run the risk engine to populate this section with current simulation output."}`;
-  }
-  function ensureReportSections(){
-    const disclaimer = $("reportDisclaimer");
-    const before = disclaimer || $("reportLedger") || q(".report-section:last-of-type");
-    if(!$("reportHealthBreakdown")){
-      const sec = document.createElement("section");
-      sec.id = "reportHealthBreakdown";
-      sec.className = "report-health-breakdown report-section";
-      sec.innerHTML = `<div class="report-section-kicker">3 · Health Score Breakdown</div><h2>Score Transparency</h2><p>Component-level score explanation and weakest component.</p><div class="table-wrap report-table-wrap"><table class="fin-table"><tbody id="reportHealthBreakdownRows"></tbody></table></div>`;
-      before?.insertAdjacentElement("beforebegin", sec);
-    }
-    if(!$("reportModelValidation")){
-      const sec = document.createElement("section");
-      sec.id = "reportModelValidation";
-      sec.className = "report-model-validation report-section";
-      sec.innerHTML = `<div class="report-section-kicker">5 · Model Validation</div><h2>Analytical Approximation / Sanity Check</h2><p>Approximate checks; Monte Carlo remains primary for path-dependent rules.</p><div class="table-wrap report-table-wrap"><table class="fin-table"><tbody id="reportModelValidationRows"></tbody></table></div>`;
-      before?.insertAdjacentElement("beforebegin", sec);
-    }
-    if(disclaimer){
-      const h = disclaimer.querySelector("h2, .report-section-kicker");
-      if(h && !/10/.test(h.textContent)) h.textContent = "10 · Privacy & Model Disclaimer";
-    }
-    if($("reportCover") && !$("reportTrustSeed")){
-      $("reportCover").insertAdjacentHTML("beforeend", `<p class="mono" id="reportTrustSeed">Seed: ${currentSeed}</p>`);
-    }
-    if($("reportExecutive") && !$("reportMostFragile")){
-      $("reportExecutive").insertAdjacentHTML("beforeend", `<div class="report-trust-item"><strong>Most Fragile Assumption</strong><span id="reportMostFragile">Run the risk engine to populate this section with current simulation output.</span></div>`);
-    }
-  }
-
-  function renderOnboarding(){
-    if(localStorage.getItem(ONBOARD_KEY)==="1") return;
-    const hero = q(".hero");
-    if(!hero || $("trustOnboardingStrip")) return;
-    const strip = document.createElement("section");
-    strip.id = "trustOnboardingStrip";
-    strip.className = "onboarding-strip";
-    strip.innerHTML = `<div><div class="trust-kicker">First 15 seconds</div><h3>Start with a realistic survival memo</h3>
-      <p class="trust-note">Yeni kullanıcı ilk anda boş ekran görmez; örnek strateji kusursuz değil, kırılgan varsayımı ve next action üretmek için seçildi.</p>
-      <div class="onboarding-steps"><span>1. Parametreleri gir veya örnek stratejiyi incele</span><span>2. Skoru ve kırılgan varsayımı gör</span><span>3. Risk bandını ayarla</span></div></div>
-      <div class="onboarding-actions"><button class="mini-btn" id="exploreSampleStrategy" type="button">Örnekle keşfet</button><button class="mini-btn" id="manualStartStrategy" type="button">Manuel parametrelerle başla</button><button class="mini-btn" id="dismissOnboarding" type="button">Kapat</button></div>`;
-    hero.insertAdjacentElement("afterend", strip);
-    $("exploreSampleStrategy")?.addEventListener("click",()=>{
-      const sample = {initialCapital:100000,targetCapital:160000,days:126,iterations:5000,tradesPerDay:3,winRate:54,avgWinR:1.55,avgLossR:1,tradeCostR:.06,riskPerTradePct:.85,ruinThresholdPct:70,breakEvenRate:4,volatilityFactor:1.05,shockProbability:2,shockImpactR:1.5,maxDailyLossPct:4};
-      Object.entries(sample).forEach(([k,v])=>setParamField(k,v));
-      setSeed(48213); setSeedLocked(true);
-      refreshTrustLayer();
-    });
-    $("manualStartStrategy")?.addEventListener("click",()=>{ localStorage.setItem(ONBOARD_KEY,"1"); strip.remove(); });
-    $("dismissOnboarding")?.addEventListener("click",()=>{ localStorage.setItem(ONBOARD_KEY,"1"); strip.remove(); });
-  }
-
-  function escapeHtml(v){
-    return String(v ?? "").replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
-  }
-
-  function refreshTrustLayer(){
-    const core = enhancedCore(readMainParams());
-    renderSeedCard();
-    renderHealthBreakdown(core);
-    renderMostFragile(core);
-    renderModelValidation(core);
-    renderReportTrust(core);
-    if(window.__lastCsvImportDiagnostics){
-      const action = csvConfidenceAction(window.__lastCsvImportDiagnostics.confidenceLabel);
-      const el = $("actionImmediate") || $("recommendedAction");
-      if(el && !el.textContent.includes(action)) el.textContent = `${el.textContent} · ${action}`;
-    }
-    try { if(typeof window.applyPremiumUiClasses === "function") window.applyPremiumUiClasses(); } catch(e){}
-    return core;
-  }
-
-  const prev = {
-    calculate: window.calculateStrategyHealthScore,
-    parseCSV: window.parseCSVTradeHistory,
-    exportJSON: window.exportStrategyJSON,
-    importJSON: window.importStrategyJSON,
-    generatePrintReport: window.generatePrintReport,
-    runProp: window.runPropSurvivalMonteCarlo,
-    runRiskOpt: window.optimizeRiskPerTrade,
-    readiness: window.runProductReadinessCheck
-  };
-  window.__trustPrevCalculate = prev.calculate;
-
-  window.calculateStrategyHealthScore = function(params){
-    return enhancedCore(params || readMainParams());
-  };
-  window.probabilityAtLeastOneLosingStreak = probabilityAtLeastOneLosingStreak;
-  window.analyticalRuinApproximation = analyticalRuinApproximation;
-  window.generateNewSeed = function(){ const s = generateNewSeed(); setSeed(s); return s; };
-  window.setSeed = setSeed;
-  window.getActiveSeed = getActiveSeed;
-  window.parseFlexibleNumber = parseFlexibleNumber;
-  window.parseFlexibleDate = parseFlexibleDate;
-  window.detectDelimiter = detectDelimiter;
-  window.parseCSVTradeHistory = parseCSVTradeHistory;
-
-  window.runPropSurvivalMonteCarlo = function(cfg){
-    cfg = Object.assign(propCfgTrust(), cfg || {});
-    const res = runPropAtRiskTrust(cfg, cfg.risk || cfg.riskPerTrade || .75, cfg.paths || 1200);
-    window.__lastPropResult = res;
-    if(typeof window.renderPropVerdict === "function") window.renderPropVerdict(res,cfg);
-    updatePropMetricFields(res,cfg);
-    refreshTrustLayer();
-    return res;
-  };
-  window.optimizeRiskPerTrade = function(options){
-    resetRandomStreamForRun();
-    const res = prev.runRiskOpt ? prev.runRiskOpt(options || {}) : null;
-    setTimeout(refreshTrustLayer,160);
-    return res;
-  };
-  window.exportStrategyJSON = function(){
-    const payload = {name:$("strategyName")?.value || "Strategy Survival Setup",timestamp:new Date().toISOString(),modelVersion:MODEL_VERSION_TRUST,seed:currentSeed,seedLocked,params:readMainParams(),prop:propCfgTrust(),csvConfidence:window.__lastCsvImportDiagnostics?.confidenceLabel || null};
-    const blob = new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = "strategy-survival-"+new Date().toISOString().slice(0,10)+".json";
-    document.body.appendChild(a); a.click(); a.remove();
-    setTimeout(()=>URL.revokeObjectURL(a.href),500);
-    return payload;
-  };
-  window.importStrategyJSON = function(fileOrText){
-    function apply(obj){
-      const data = obj.params ? obj : {params:obj};
-      if(data.seed){ setSeed(data.seed); setSeedLocked(!!data.seedLocked); }
-      Object.entries(data.params || {}).forEach(([k,v])=>setParamField(k,v));
-      Object.entries(data.prop || {}).forEach(([k,v])=>{
-        const id = k.startsWith("prop") ? k : ({balance:"propBalance",target:"propTarget",totalDD:"propTotalDD",dailyDD:"propDailyDD",minDays:"propMinDays",maxDays:"propMaxDays",risk:"propRisk",trades:"propTrades",winRate:"propWR",wr:"propWR",winR:"propWinR",lossR:"propLossR",costR:"propCostR"}[k]);
-        if(id) setInputValue(id,v);
-      });
-      refreshTrustLayer();
-      return data;
-    }
-    if(fileOrText instanceof File){
-      const r = new FileReader();
-      r.onload = () => { try{ apply(JSON.parse(r.result)); } catch(e){ alert("JSON import failed: "+e.message); } };
-      r.readAsText(fileOrText);
-      return true;
-    }
-    try { return apply(JSON.parse(String(fileOrText || "{}"))); }
-    catch(e){ alert("JSON import failed: "+e.message); return null; }
-  };
-  window.generatePrintReport = function(){
-    refreshTrustLayer();
-    window.print();
-    return true;
-  };
-  window.runProductReadinessCheck = function(){
-    const res = prev.readiness ? prev.readiness() : [];
-    const checks = Array.isArray(res) ? res : [];
-    const critical = ["calculateStrategyHealthScore","runPropSurvivalMonteCarlo","optimizeRiskPerTrade","parseCSVTradeHistory","generatePrintReport","probabilityAtLeastOneLosingStreak","analyticalRuinApproximation","getActiveSeed"].filter(k=>typeof window[k] !== "function");
-    const acceptance = {
-      breakoutReady: critical.length === 0 && !!$("reportDisclaimer") && (document.body.innerText||"").toLowerCase().includes("no cloud"),
-      missingCriticalItems: critical,
-      pendingItems: checks.filter(c=>c.status==="PENDING").map(c=>c.name),
-      publicApiReady: critical.length===0,
-      reportReady: !!$("reportModelValidation") && !!$("reportHealthBreakdown") && !!$("reportDisclaimer"),
-      privacyReady: (document.body.innerText||"").toLowerCase().includes("no account") && (document.body.innerText||"").toLowerCase().includes("no cloud"),
-      trustLayerReady: true,
-      activeSeed: currentSeed
+  function compReason(k, ratio, core){
+    var t = ratio>=0.75?"good":ratio>=0.45?"warn":"bad";
+    var map = {
+      expectancy: core.e<=0?"Net expectancy sıfır/negatif — sistem ölçeklenmemeli.":t==="good"?"Net beklenti güçlü; edge sağlam.":"Pozitif fakat sınırlı; küçük düşüşlere hassas.",
+      pf: t==="good"?"Kazanç verimliliği yüksek.":t==="warn"?"PF kabul edilebilir bandın alt-orta kısmında.":"PF zayıf; kayıplar kazançları yakından izliyor.",
+      breakEven: core.edgeBuffer<0?"Win rate başabaşın altında — yapısal açık.":t==="good"?"Edge buffer geniş; hata payı sağlıklı.":"Edge buffer dar; küçük performans düşüşü kırılganlık yaratır.",
+      streak: t==="good"?"Seri kayıp olasılığı düşük.":t==="warn"?"Seri kayıp riski orta; günlük stop düşünülmeli.":"Yüksek seri kayıp olasılığı; prop limitlerini zorlayabilir.",
+      drawdown: t==="good"?"Drawdown ve recovery yükü kontrol altında.":t==="warn"?"Drawdown orta; recovery yükü artıyor.":"Drawdown yüksek; toparlanma yükü sermayeyi zorlar.",
+      cost: t==="good"?"Maliyet etkisi düşük.":t==="warn"?"Maliyet edge'i gözle görülür azaltıyor.":"Maliyet sürükleme yüksek; execution iyileştirilmeli.",
+      robustness: t==="good"?"Stres senaryolarında pozitif kalıyor.":t==="warn"?"Bazı stres senaryolarında zorlanıyor.":"Stres altında expectancy negatife dönüyor."
     };
-    try { console.table ? console.table(acceptance) : console.log(acceptance); } catch(e){ console.log(acceptance); }
-    window.__lastProductReadiness = acceptance;
-    return checks;
-  };
-
-  function bootTrustLayer(){
-    setSeed(currentSeed);
-    renderSeedCard();
-    renderOnboarding();
-    renderPropPresetLibrary();
-    ensureReportSections();
-    refreshTrustLayer();
-
-    ["click"].forEach(ev=>{
-      document.addEventListener(ev, e=>{
-        if(e.target.closest(".run-sim,#riskOptRun,#propRun,#optRunFast,#optRunDeep,#optRunProbability")){
-          resetRandomStreamForRun();
-          setTimeout(refreshTrustLayer,500);
-        }
-      }, true);
-    });
-    $("propRun")?.addEventListener("click", e=>{
-      e.preventDefault();
-      e.stopImmediatePropagation();
-      tryRunPropTrust();
-    }, true);
-    document.addEventListener("click", e=>{
-      const btn = e.target.closest("[data-trust-prop-preset]");
-      if(btn){ e.preventDefault(); applyPropPreset(Number(btn.dataset.trustPropPreset)); }
-    }, true);
-    $("csvFile")?.addEventListener("change", e=>{
-      const file = e.target.files && e.target.files[0];
-      if(!file) return;
-      e.stopImmediatePropagation();
-      const reader = new FileReader();
-      reader.onload = () => {
-        try { renderCsvTrust(parseCSVTradeHistory(reader.result)); }
-        catch(err){ alert("CSV parse error: "+err.message); }
-      };
-      reader.readAsText(file);
-    }, true);
-    $("applyCsvMapping")?.addEventListener("click", e=>{
-      e.preventDefault();
-      e.stopImmediatePropagation();
-      applyTrustedCsvToModel();
-    }, true);
-    document.addEventListener("input", e=>{
-      if(e.target && /Number|Range|prop|csvMap_/.test(e.target.id||"")) setTimeout(refreshTrustLayer,180);
-    }, true);
-    window.addEventListener("beforeprint",()=>refreshTrustLayer());
+    return {tone:t, text:map[k]};
   }
 
-  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", bootTrustLayer);
-  else bootTrustLayer();
-})();
-</script>
+  /* ---------- builders ---------- */
+  function buildValidationHTML(core, forPrint){
+    var anStreak = probabilityAtLeastOneLosingStreak(core.totalTrades, core.pr.loss, 10)*100;
+    var sStreak = simStreakProb(10);
+    var bStreak = badge(sStreak, anStreak);
+    var ruinObj = analyticalRuinApproximation(core.p);
+    var sRuin = simRuin();
+    var anRuin = ruinObj.probability;
+    var bRuin = (anRuin==null)?{cls:"warn",txt:"Yaklaşım yok"}:badge(sRuin, anRuin);
 
+    var streakNums = forPrint || sStreak!=null
+      ? '<span class="tl-nums">Simülasyon <b>'+(sStreak==null?"—":pctS(sStreak,1))+'</b> · Analitik <b>'+pctS(anStreak,1)+'</b></span>'
+      : '<span class="tl-nums">Analitik <b>'+pctS(anStreak,1)+'</b> <span class="tl-muted">(simülasyonu çalıştır → karşılaştır)</span></span>';
+    var ruinAnTxt = anRuin==null ? '<span class="tl-muted">'+esc(ruinObj.note)+'</span>'
+      : 'Simülasyon <b>'+(sRuin==null?"—":pctS(sRuin,1))+'</b> · Analitik ≈ <b>'+pctS(anRuin,1)+'</b>';
 
-<style>
-/* === USER PATCH · Scenario Memory like index.html, quieter localStorage === */
-.scenario-memory-panel{
-  margin-top:14px;
-  display:grid;
-  gap:12px;
-  padding:16px 18px;
-  border:0 !important;
-  background:transparent !important;
-  box-shadow:none !important;
-}
-.scenario-memory-card{
-  background:linear-gradient(180deg,#fffefa,#fbf6ee);
-  border:1px solid rgba(226,216,201,.95);
-  border-radius:16px;
-  box-shadow:0 10px 28px rgba(56,42,25,.045);
-  padding:16px 18px;
-}
-.scenario-memory-head{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-  gap:14px;
-  border-bottom:1px solid rgba(226,216,201,.72);
-  padding-bottom:12px;
-  margin-bottom:12px;
-}
-.scenario-memory-title{
-  font-size:10px;
-  letter-spacing:.15em;
-  text-transform:uppercase;
-  font-weight:900;
-  color:var(--ink);
-}
-.scenario-memory-copy{
-  margin-top:6px;
-  max-width:760px;
-  color:var(--stone);
-  font-size:12px;
-  line-height:1.55;
-}
-.scenario-memory-actions{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  justify-content:flex-end;
-}
-.scenario-memory-actions .mini-btn,
-.scenario-memory-actions .btn{
-  min-height:38px;
-  border-radius:999px;
-}
-.scenario-memory-state{
-  display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:10px;
-}
-.scenario-memory-empty{
-  border:1px dashed rgba(205,191,174,.95);
-  background:rgba(255,253,248,.62);
-  color:var(--stone);
-  border-radius:14px;
-  padding:14px;
-  font-size:12px;
-  line-height:1.5;
-}
-.scenario-memory-kpi{
-  min-width:0;
-  background:#fffdf8;
-  border:1px solid rgba(226,216,201,.84);
-  border-left:2px solid var(--line-strong);
-  border-radius:14px;
-  padding:12px 13px;
-}
-.scenario-memory-kpi.good{border-left-color:var(--olive)}
-.scenario-memory-kpi.warn{border-left-color:var(--gold)}
-.scenario-memory-kpi.bad{border-left-color:var(--ruby)}
-.scenario-memory-kpi .label{
-  color:var(--stone);
-  font-size:8px;
-  letter-spacing:.12em;
-  text-transform:uppercase;
-  font-weight:900;
-}
-.scenario-memory-kpi .value{
-  margin-top:7px;
-  font-family:"Cormorant Garamond",Georgia,serif;
-  font-size:24px;
-  line-height:1;
-  font-weight:600;
-  color:var(--ink);
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-}
-.scenario-memory-kpi .note{
-  margin-top:7px;
-  padding:0;
-  border:0;
-  background:transparent;
-  color:var(--muted);
-  font-size:10px;
-  line-height:1.35;
-}
-.library-card.is-advanced-library{
-  margin-top:14px !important;
-}
-.advanced-library-details{
-  margin-top:4px;
-  border:1px solid rgba(226,216,201,.82);
-  border-radius:16px;
-  background:rgba(255,253,248,.54);
-  overflow:hidden;
-}
-.advanced-library-details > summary{
-  list-style:none;
-  cursor:pointer;
-  padding:12px 14px;
-  color:var(--stone);
-  font-size:10px;
-  letter-spacing:.12em;
-  text-transform:uppercase;
-  font-weight:900;
-}
-.advanced-library-details > summary::-webkit-details-marker{display:none}
-.advanced-library-details[open] > summary{
-  border-bottom:1px solid rgba(226,216,201,.72);
-}
-.advanced-library-details .library-card{
-  margin-top:0 !important;
-  border:0 !important;
-  box-shadow:none !important;
-  background:transparent !important;
-}
-@media (max-width:680px){
-  .scenario-memory-panel{padding:0;margin-top:12px}
-  .scenario-memory-card{padding:14px;border-radius:14px}
-  .scenario-memory-head{display:grid;gap:10px}
-  .scenario-memory-actions{justify-content:stretch}
-  .scenario-memory-actions .mini-btn,
-  .scenario-memory-actions .btn{width:100%;min-height:44px}
-  .scenario-memory-state{grid-template-columns:1fr}
-}
-@media print{
-  .scenario-memory-actions,
-  .advanced-library-details{display:none !important}
-  .scenario-memory-card{box-shadow:none !important;background:#fff !important}
-}
-</style>
-<script>
-/* === USER PATCH · Scenario Memory localStorage panel === */
-(function(){
-  "use strict";
-  const MEMORY_KEY = "trade_monte_carlo_locked_scenario_v1";
-  const $ = id => document.getElementById(id);
-  const q = sel => document.querySelector(sel);
-  const money = n => new Intl.NumberFormat("tr-TR",{style:"currency",currency:"USD",maximumFractionDigits:0}).format(Number.isFinite(n)?n:0);
-  const pct = (n,d=1) => (Number.isFinite(n)?Number(n):0).toFixed(d).replace(".",",")+"%";
-  const num = (n,d=2) => (Number.isFinite(n)?Number(n):0).toFixed(d).replace(".",",");
-  function readControl(base, fallback){
-    const number = $(base+"Number");
-    const range = $(base+"Range");
-    const source = number || range || $(base);
-    if(!source) return fallback;
-    const raw = String(source.value ?? source.textContent ?? "").replace(",",".").replace(/[^\d.\-]/g,"");
-    const v = Number(raw);
-    return Number.isFinite(v) ? v : fallback;
+    return ''+
+      '<div class="tl-card">'+
+        '<p class="tl-kicker">Tutarlılık Kontrolü</p>'+
+        '<div class="tl-valrow"><span class="tl-label">10+ kayıp serisi olasılığı</span>'+streakNums+
+          '<span class="tl-badge '+bStreak.cls+'">'+bStreak.txt+'</span></div>'+
+        '<div class="tl-valrow"><span class="tl-label">İflas riski (risk-of-ruin)</span><span class="tl-nums">'+ruinAnTxt+'</span>'+
+          '<span class="tl-badge '+bRuin.cls+'">'+bRuin.txt+'</span></div>'+
+        '<p class="tl-note">Bu değerler Monte Carlo sonucunu bağımsız, yaklaşık bir matematiksel hesapla karşılaştırır. '+
+        (anRuin==null?'İflas riski bu parametre kümesinde yola bağımlı olduğundan Monte Carlo birincil kalır.':'Sapma büyükse simülasyon varsayımlarını kontrol edin.')+'</p>'+
+      '</div>';
   }
-  function readCurrentScenarioParams(){
-    return {
-      initialCapital: readControl("initialCapital",100000),
-      days: readControl("days",250),
-      tradesPerDay: readControl("tradesPerDay",3),
-      winRate: readControl("winRate",55),
-      avgWinR: readControl("avgWinR",1.8),
-      avgLossR: readControl("avgLossR",1),
-      riskPerTradePct: readControl("riskPerTradePct",1),
-      costR: readControl("costR",0.05)
-    };
+
+  function buildBreakdownHTML(core, forPrint){
+    var rows = COMP_META.map(function(m){
+      var pts = core.comp[m.k], ratio = m.max>0?pts/m.max:0;
+      var r = compReason(m.k, ratio, core);
+      var weakest = (m.k === weakestKey(core));
+      return '<div class="tl-comprow '+r.tone+(weakest?' weakest':'')+'">'+
+        '<div class="tl-comphead"><span class="tl-cname">'+m.name+' <span class="tl-muted">· '+m.hint+'</span></span>'+
+        '<span class="tl-cpts">'+numS(pts,1)+'/'+m.max+'</span></div>'+
+        '<div class="tl-bar"><i style="width:'+(clamp(ratio,0,1)*100).toFixed(0)+'%"></i></div>'+
+        '<p class="tl-creason">'+r.text+'</p></div>';
+    }).join("");
+    var inner = '<div class="tl-comp">'+rows+
+      '<p class="tl-note" style="margin-top:10px">Yapısal kompozit: <b class="tl-mono">'+numS(core.comp.total,0)+'/100</b> · Karar: <b>'+esc(core.verdict)+'</b>. '+
+      'En zayıf bileşen kırmızı ile işaretlenmiştir ve Ana Risk ile aynı kökten gelir.</p></div>';
+    if(forPrint){
+      return '<div class="tl-card"><p class="tl-kicker">Skor Detayı</p>'+inner+'</div>';
+    }
+    return inner;
   }
-  function safeHealth(params){
+  function weakestKey(core){
+    var best=null;
+    COMP_META.forEach(function(m){ var ratio = m.max>0?core.comp[m.k]/m.max:1; if(best==null||ratio<best.r) best={k:m.k,r:ratio}; });
+    return best?best.k:"expectancy";
+  }
+
+  function buildFragileHTML(core){
+    var f = fragileAssumption(core);
+    var shift = (f.baseVerdict !== f.toVerdict) ? (' · '+esc(f.baseVerdict)+' → '+esc(f.toVerdict)) : '';
+    return '<div class="tl-card"><p class="tl-kicker">En Kırılgan Varsayım</p>'+
+      '<p class="tl-muted">Modeldeki en kırılgan varsayım: <b>'+esc(f.label)+'</b>. '+
+      esc(f.desc)+' uygulandığında skor '+f.base+' → '+f.to+shift+'. '+
+      'Bu varsayımı doğrulamadan ölçekleme yapma.</p></div>';
+  }
+
+  function buildHonestHTML(){
+    var csv = (window.__lastCsvImportDiagnostics)||null;
+    var csvNote = "";
+    if(csv){
+      var conf = (typeof csv.confidence==="number") ? (csv.confidence<=1?csv.confidence*100:csv.confidence) : null;
+      if(conf!=null){
+        var msg = conf>=80 ? "Import edilen örnek kalitesi ilk strateji incelemesi için yeterince güçlü."
+                : conf>=50 ? "Import edilen örnek kullanılabilir ama erken; ölçekleme öncesi daha fazla trade ile doğrula."
+                : "Import edilen örnek zayıf; yalnızca bu veriye dayanarak sermaye ölçekleme.";
+        csvNote = '<br><strong>CSV güveni:</strong> '+pctS(conf,0)+' — '+esc(msg);
+      }
+    }
+    return '<p class="tl-honest"><strong>Bu varsayımları sen giriyorsun.</strong> Sonuçlar girdiğin verinin kalitesine bağlıdır. '+
+      'Bu araç finansal tavsiye değil, varsayıma dayalı risk simülasyonudur. Hesap yok · Bulut yok · Verin cihazında kalır.'+csvNote+'</p>';
+  }
+
+  /* ---------- mount points & render ---------- */
+  function ensureHost(){
+    var exec = $("breakoutExecutive"); if(!exec) return null;
+    var host = $("tlExecHost");
+    if(!host){
+      host = document.createElement("div");
+      host.id = "tlExecHost"; host.className = "tl-block";
+      exec.appendChild(host);
+    }
+    return host;
+  }
+
+  var rafPending = false, lastSig = "";
+  function renderTrust(){
     try{
-      if(typeof window.calculateStrategyHealthScore === "function"){
-        return window.calculateStrategyHealthScore(params);
-      }
-    }catch(err){}
-    const win = params.winRate/100, loss = 1-win;
-    const e = win*params.avgWinR - loss*params.avgLossR - (params.costR||0);
-    const score = Math.max(0, Math.min(100, Math.round(50 + e*22 - Math.max(0, params.riskPerTradePct-1)*8)));
-    return {
-      score,
-      verdict: score >= 75 ? "Balanced" : score >= 55 ? "Tradable but Streak-Sensitive" : "Fragile",
-      primaryRisk: e <= 0 ? "Negative expectancy" : (params.riskPerTradePct > 1.25 ? "Excessive risk per trade" : "Losing streak sensitivity")
-    };
+      var host = ensureHost(); if(!host) return;
+      var core = coreMetrics(readParams());
+      host.innerHTML =
+        '<details class="tl-acc" id="tlPanel"><summary>Doğrulama &amp; skor detayı — neden '+core.score+'/100? <span class="tl-chev">▾</span></summary>'+
+          '<div class="tl-panelbody">'+
+            buildBreakdownHTML(core,false)+
+            buildValidationHTML(core,false)+
+            buildFragileHTML(core)+
+          '</div>'+
+        '</details>';
+      buildPrintReport(core);
+      localizeVerdicts();
+    }catch(e){ if(window.console) console.warn("[trust-layer]",e); }
   }
-  function lockedScenario(){
-    try{return JSON.parse(localStorage.getItem(MEMORY_KEY) || "null");}
-    catch(err){return null;}
+  function scheduleRender(){
+    if(rafPending) return; rafPending = true;
+    setTimeout(function(){ rafPending = false; renderTrust(); }, 220);
   }
-  function saveLockedScenario(){
-    const params = readCurrentScenarioParams();
-    const health = safeHealth(params) || {};
-    const name = ($("strategyName") && $("strategyName").value) || "Kilitli Senaryo";
-    const scenario = {
-      id:"locked_"+Date.now(),
-      name,
-      lockedAt:new Date().toISOString(),
-      params,
-      healthScore: health.score,
-      verdict: health.verdict,
-      primaryRisk: health.primaryRisk,
-      seed: (typeof window.getActiveSeed === "function" ? window.getActiveSeed() : null)
-    };
-    localStorage.setItem(MEMORY_KEY, JSON.stringify(scenario));
-    renderScenarioMemory();
-    return scenario;
-  }
-  function clearLockedScenario(){
-    localStorage.removeItem(MEMORY_KEY);
-    renderScenarioMemory();
-  }
-  function tone(score){
-    if(!Number.isFinite(Number(score))) return "";
-    if(score >= 70) return "good";
-    if(score >= 50) return "warn";
-    return "bad";
-  }
-  function escapeHtml(s){
-    return String(s ?? "").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
-  }
-  function renderScenarioMemory(){
-    const host = $("scenarioMemoryState");
-    if(!host) return;
-    const s = lockedScenario();
-    if(!s){
-      host.innerHTML = '<div class="scenario-memory-empty">Henüz kilitli senaryo yok.</div>';
-      return;
-    }
-    const p = s.params || {};
-    host.innerHTML = [
-      ["Senaryo", escapeHtml(s.name || "Kilitli Senaryo"), new Date(s.lockedAt || Date.now()).toLocaleString("tr-TR"), ""],
-      ["Health Score", (Number.isFinite(Number(s.healthScore)) ? s.healthScore+"/100" : "—"), escapeHtml(s.verdict || "Karar bekliyor"), tone(Number(s.healthScore))],
-      ["Sermaye / Risk", money(Number(p.initialCapital || 0))+" · "+pct(Number(p.riskPerTradePct || 0),2), "Aynı nakit planıyla karşılaştırma referansı", ""],
-      ["WR / R", pct(Number(p.winRate || 0),1)+" · "+num(Number(p.avgWinR || 0),2)+"R / -"+num(Number(p.avgLossR || 0),2)+"R", escapeHtml(s.primaryRisk || "Primary risk hesaplandı"), ""]
-    ].map(x=>`<div class="scenario-memory-kpi ${x[3]}"><div class="label">${x[0]}</div><div class="value">${x[1]}</div><div class="note">${x[2]}</div></div>`).join("");
-  }
-  function installScenarioMemoryPanel(){
-    const libraryPanel = $("library");
-    const panel = libraryPanel && libraryPanel.querySelector(".panel");
-    if(!panel || $("scenarioMemoryPanel")) return;
 
-    const existingCard = panel.querySelector(".library-card");
-    if(existingCard){
-      existingCard.classList.add("is-advanced-library");
-      const details = document.createElement("details");
-      details.className = "advanced-library-details";
-      details.innerHTML = '<summary>Gelişmiş strateji arşivi / JSON işlemleri</summary>';
-      existingCard.parentNode.insertBefore(details, existingCard);
-      details.appendChild(existingCard);
-    }
+  /* ---------- seed control ---------- */
+  function wireSeed(){
+    var btn = $("tlNewSeed"); if(!btn || btn.__wired) return; btn.__wired = true;
+    btn.addEventListener("click", function(){
+      var st = simState();
+      var s = Math.floor(Math.random()*2147483646)+1;
+      if(st){ st.seedValue = s; st.seedMode = "fixed"; }
+      var inp = $("seedValueInput"); if(inp){ inp.value = String(s); }
+      var fixedBtn = document.querySelector('[data-seed-mode="fixed"]');
+      if(fixedBtn){ fixedBtn.click(); }
+      renderTrust();
+      btn.textContent = "Seed: "+s+" ✓";
+      setTimeout(function(){ btn.textContent = "Yeni Seed"; }, 1600);
+    });
+  }
 
-    const memory = document.createElement("div");
-    memory.className = "scenario-memory-panel";
-    memory.id = "scenarioMemoryPanel";
-    memory.innerHTML = `
-      <div class="scenario-memory-card">
-        <div class="scenario-memory-head">
-          <div>
-            <div class="scenario-memory-title">SENARYO HAFIZASI</div>
-            <p class="scenario-memory-copy">Mevcut varsayımı kilitleyin; sonra senaryo karşılaştırmasında aynı nakit planıyla birlikte izleyin.</p>
-          </div>
-          <div class="scenario-memory-actions">
-            <button class="mini-btn primary" id="lockScenarioMemory" type="button">SENARYOYU KİLİTLE</button>
-            <button class="mini-btn" id="clearScenarioMemory" type="button">TEMİZLE</button>
-          </div>
-        </div>
-        <div class="scenario-memory-state" id="scenarioMemoryState">
-          <div class="scenario-memory-empty">Henüz kilitli senaryo yok.</div>
-        </div>
-      </div>
-    `;
-    const note = panel.querySelector(".local-note");
-    if(note && note.parentNode){
-      note.parentNode.insertBefore(memory, note.nextSibling);
-    }else{
-      panel.appendChild(memory);
-    }
-    $("lockScenarioMemory")?.addEventListener("click", function(e){
-      e.preventDefault();
-      saveLockedScenario();
-    });
-    $("clearScenarioMemory")?.addEventListener("click", function(e){
-      e.preventDefault();
-      clearLockedScenario();
-    });
-    renderScenarioMemory();
+  /* ---------- WP5: print/PDF report ---------- */
+  function buildPrintReport(core){
+    var sec = $("tlReport"); if(!sec) return;
+    var f = fragileAssumption(core);
+    var seed = activeSeed();
+    sec.innerHTML =
+      '<h2 class="tl-rh">Model Doğrulama &amp; Güven Raporu</h2>'+
+      buildValidationHTML(core,true)+
+      buildBreakdownHTML(core,true)+
+      '<div class="tl-card"><p class="tl-kicker">En Kırılgan Varsayım</p>'+
+        '<p class="tl-muted">En kırılgan varsayım: <b>'+esc(f.label)+'</b> ('+esc(f.desc)+'). Skor '+f.base+' → '+f.to+'.</p></div>'+
+      '<div class="tl-card"><p class="tl-kicker">Parametre Defteri · Güven</p>'+
+        '<p class="tl-muted">Simülasyon anahtarı (seed): <span class="tl-mono">'+(seed==null?"otomatik":seed)+'</span> · Model: Breakout Quant Decision Engine v1.0 · Yalnızca cihazda.</p>'+
+        '<p class="tl-muted">Bu araç finansal tavsiye değil, varsayıma dayalı risk simülasyonudur. Sonuçlar varsayımlara, içe aktarılan verinin kalitesine ve simülasyon parametrelerine bağlıdır.</p></div>';
   }
-  function quietLocalStorageCopy(){
-    const title = q("#library .panel-title");
-    if(title && /Local Strategy Library/i.test(title.textContent || "")){
-      title.innerHTML = title.innerHTML.replace(/Local Strategy Library & CSV Import/i, "Senaryo Hafızası & CSV Import");
-    }
-    const save = $("saveStrategy");
-    if(save) save.textContent = "SENARYOYU KİLİTLE";
-    const list = $("strategyList");
-    if(list && !list.children.length) list.innerHTML = '<div class="local-note">Henüz kilitli senaryo yok.</div>';
+
+  /* ---------- WP8: onboarding strip ---------- */
+  function mountOnboarding(){
+    var KEY = "tl_onboard_dismissed_v1";
+    try{ if(localStorage.getItem(KEY)) return; }catch(e){}
+    var exec = $("breakoutExecutive"); if(!exec || $("tlOnboard")) return;
+    var bar = document.createElement("div");
+    bar.className = "tl-onboard"; bar.id = "tlOnboard";
+    bar.innerHTML =
+      '<div class="tl-ohead"><h3>Stratejiniz kârlı görünebilir — ama sermaye dayanıklılığından geçiyor mu?</h3>'+
+      '<button class="tl-x" id="tlOnboardX" aria-label="Kapat">×</button></div>'+
+      '<div class="tl-steps">'+
+        '<div class="tl-step"><b>1 · Gir / İncele</b><span>Parametreleri gir veya yüklü örnek stratejiyi incele.</span></div>'+
+        '<div class="tl-step"><b>2 · Gör</b><span>Health Score, verdict ve en kırılgan varsayımı oku.</span></div>'+
+        '<div class="tl-step"><b>3 · Ayarla</b><span>Risk bandını ayarla, Prop Survival ile test et.</span></div>'+
+      '</div>';
+    exec.parentNode.insertBefore(bar, exec);
+    $("tlOnboardX").addEventListener("click", function(){
+      try{ localStorage.setItem(KEY,"1"); }catch(e){}
+      bar.remove();
+    });
   }
+
+  /* ---------- display-only Turkish localization of dynamic verdict/risk strings ---------- */
+  var VERDICT_TR = [
+    ["Tradable but Streak-Sensitive","İşlenebilir ama Seriye Duyarlı"],
+    ["High losing streak probability","Yüksek seri kayıp olasılığı"],
+    ["Excessive risk per trade","İşlem başına aşırı risk"],
+    ["Profit factor fragility","Kâr faktörü kırılganlığı"],
+    ["Weak break-even buffer","Zayıf başabaş tamponu"],
+    ["Robustness / sensitivity","Sağlamlık / duyarlılık"],
+    ["No single dominant risk","Tek baskın risk yok"],
+    ["Institutional Quality","Kurumsal Kalite"],
+    ["Negative expectancy","Negatif beklenti"],
+    ["Recovery burden","Toparlanma yükü"],
+    ["Reality Check","Gerçeklik Kontrolü"],
+    ["MOST DANGEROUS","EN TEHLİKELİ"],
+    ["Most Dangerous","En Tehlikeli"],
+    ["STRESS IMPACT","STRES ETKİSİ"],
+    ["Stress Impact","Stres Etkisi"],
+    ["Cost drag","Maliyet sürüklemesi"],
+    ["Untradable","İşlenemez"],
+    ["Fragile","Kırılgan"],
+    ["Balanced","Dengeli"],
+    ["Verdict:","Karar:"]
+  ];
+  function localizeVerdicts(){
+    var root = $("breakoutExecutive"); if(!root || !document.createTreeWalker) return;
+    var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null), nodes=[], n;
+    while(n = w.nextNode()) nodes.push(n);
+    nodes.forEach(function(tn){
+      var t = tn.nodeValue, o = t;
+      for(var i=0;i<VERDICT_TR.length;i++){ if(t.indexOf(VERDICT_TR[i][0])!==-1) t = t.split(VERDICT_TR[i][0]).join(VERDICT_TR[i][1]); }
+      if(t !== o) tn.nodeValue = t;
+    });
+  }
+
+  /* ---- move the score/verdict/action block into the RESULTS area (un-crowds Strategy) ---- */
+  function relocateExecutive(){
+    if(window.__execMoved) return;
+    var exec = $("breakoutExecutive");
+    var pano = document.querySelector(".results-panorama");
+    if(!exec || !pano || !pano.parentNode) return;
+    pano.parentNode.insertBefore(exec, pano);
+    window.__execMoved = true;
+  }
+
+  /* ---------- make the scenario drawer visible (it was collapsed and hard to find) ---------- */
+  function openPresetDrawer(){
+    var d = document.querySelector('details.preset-drawer'); if(d) d.open = true;
+  }
+
+  /* ---------- "Stratejiyi Kaydet" inside the Strategy tab — saves the LIVE parameters ---------- */
+  var TL_STORE_KEY = "trade_monte_carlo_strategy_library_v1";
+  var TL_PARAM_VIEW = [
+    ["winRate","Kazanma %","%"],["riskPerTradePct","Risk/İşlem","%"],
+    ["avgWinR","Ort. Kazanç R","R"],["avgLossR","Ort. Kayıp R","R"],
+    ["tradeCostR","Maliyet R","R"],["tradesPerDay","İşlem/Gün",""],
+    ["days","Gün",""],["initialCapital","Sermaye",""]
+  ];
+  function tlLoadStore(){ try{ return JSON.parse(localStorage.getItem(TL_STORE_KEY)||"[]"); }catch(e){ return []; } }
+  function tlParamLine(p){
+    if(!p) return "";
+    return TL_PARAM_VIEW.filter(function(f){ return p[f[0]]!=null; }).map(function(f){
+      var v = p[f[0]]; if(f[2]==="%"||f[2]==="R") v = (Math.round(Number(v)*100)/100);
+      return '<span class="tl-pchip"><b>'+f[1]+'</b> '+v+f[2]+'</span>';
+    }).join("");
+  }
+  function renderSavedList(){
+    var host = $("tlSavedList"); if(!host) return;
+    var items = tlLoadStore();
+    if(!items.length){ host.innerHTML = '<p class="tl-muted" style="margin:0">Henüz kayıtlı strateji yok. Yukarıdan kaydet.</p>'; return; }
+    host.innerHTML = items.slice(0,12).map(function(s){
+      return '<div class="tl-saved-item"><div class="tl-saved-head"><b>'+esc(s.name||"Strateji")+'</b>'+
+             '<span class="tl-saved-actions"><button type="button" class="tl-loadbtn" data-tlload="'+esc(s.id||"")+'">Yükle</button>'+
+             '<button type="button" class="tl-delbtn" data-tldel="'+esc(s.id||"")+'">Sil</button></span></div>'+
+             '<div class="tl-pchips">'+tlParamLine(s.params)+'</div></div>';
+    }).join("");
+    host.querySelectorAll("[data-tlload]").forEach(function(b){
+      b.addEventListener("click", function(){
+        var id = b.getAttribute("data-tlload");
+        var it = tlLoadStore().find(function(x){ return x.id===id; });
+        if(!it || !it.params) return;
+        Object.keys(it.params).forEach(function(k){
+          var n = $(k+"Number")||$(k), r = $(k+"Range");
+          if(n && "value" in n){ n.value = it.params[k]; n.dispatchEvent(new Event("input",{bubbles:true})); }
+          if(r && "value" in r){ r.value = it.params[k]; r.dispatchEvent(new Event("input",{bubbles:true})); }
+        });
+        if($("tlSaveName")) $("tlSaveName").value = it.name||"";
+        renderTrust();
+      });
+    });
+    host.querySelectorAll("[data-tldel]").forEach(function(b){
+      b.addEventListener("click", function(){
+        var id = b.getAttribute("data-tldel");
+        try{
+          var items2 = tlLoadStore().filter(function(x){ return x.id!==id; });
+          localStorage.setItem(TL_STORE_KEY, JSON.stringify(items2));
+        }catch(e){}
+        renderSavedList();
+      });
+    });
+  }
+  function mountStrategySave(){
+    if(window.__saveMounted) return;
+    var bc = $("basicControls"); if(!bc) return;
+    var panel = bc.closest(".panel"); if(!panel) return;
+    var box = document.createElement("div");
+    box.className = "tl-savebox";
+    box.innerHTML =
+      '<input id="tlSaveName" class="tl-saveinput" type="text" placeholder="Strateji adı (örn. Prop 10K Konservatif)" />'+
+      '<button type="button" class="tl-savebtn" id="tlSaveBtn">Stratejiyi Kaydet</button>'+
+      '<span class="tl-savemsg" id="tlSaveMsg"></span>'+
+      '<div class="tl-saved-wrap"><div class="tl-saved-title">Bu cihazda kayıtlı stratejiler</div><div id="tlSavedList" class="tl-saved-list"></div></div>';
+    panel.appendChild(box);
+    $("tlSaveBtn").addEventListener("click", function(){
+      var nm = (($("tlSaveName")&&$("tlSaveName").value)||"").trim();
+      if(!nm){ var msg0=$("tlSaveMsg"); if(msg0){ msg0.textContent="Önce bir strateji adı yaz."; } return; }
+      var nameEl = $("strategyName"); if(nameEl) nameEl.value = nm;
+      var btn = $("saveStrategy");
+      if(btn){ btn.click(); }
+      else if(window.saveStrategyLocal){ try{ window.saveStrategyLocal(nm); }catch(e){} }
+      var msg = $("tlSaveMsg");
+      if(msg){ msg.textContent = "✓ Kaydedildi: "+nm; setTimeout(function(){ msg.textContent=""; }, 3000); }
+      if($("tlSaveName")) $("tlSaveName").value = "";   /* clear → next farklı senaryo yeni isim ister */
+      setTimeout(renderSavedList, 60);
+    });
+    renderSavedList();
+    window.__saveMounted = true;
+  }
+
+  /* ---------- boot ---------- */
   function boot(){
-    installScenarioMemoryPanel();
-    quietLocalStorageCopy();
-    const save = $("saveStrategy");
-    if(save && !save.dataset.scenarioMemoryBound){
-      save.dataset.scenarioMemoryBound = "1";
-      save.addEventListener("click", function(e){
-        e.preventDefault();
-        e.stopImmediatePropagation();
-        saveLockedScenario();
-      }, true);
+    try{
+      var bk=document.querySelector('.brand-kicker');
+      if(bk && !/v8\.1/.test(bk.textContent)) bk.insertAdjacentHTML('beforeend',' · <span style="opacity:.55;font-weight:600">Build v8.1 · '+new Date().toISOString().slice(0,10)+'</span>');
+    }catch(e){}
+    relocateExecutive();
+    mountStrategySave();
+    renderTrust();
+    localizeVerdicts();
+    // re-render on any control change (lightweight; no heavy MC triggered)
+    document.addEventListener("input", scheduleRender, true);
+    document.addEventListener("change", scheduleRender, true);
+    // observe engine health updates (fires after heavy MC completes -> pulls in sim values)
+    var hs = $("healthScore");
+    if(hs && window.MutationObserver){
+      new MutationObserver(scheduleRender).observe(hs, {childList:true,characterData:true,subtree:true});
     }
-    renderScenarioMemory();
+    // refresh print report right before printing
+    window.addEventListener("beforeprint", function(){ try{ buildPrintReport(coreMetrics(readParams())); }catch(e){} });
+    // periodic light sync to catch sim-state updates that don't touch the DOM
+    setInterval(function(){
+      var st = simState(); var sig = st && st.last ? (st.last.seed+"|"+(st.last.ruinProb||0).toFixed(2)) : "";
+      if(sig !== lastSig){ lastSig = sig; renderTrust(); }
+    }, 1500);
   }
-  window.lockScenarioMemory = saveLockedScenario;
-  window.clearScenarioMemory = clearLockedScenario;
-  window.getLockedScenarioMemory = lockedScenario;
   if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
   else boot();
+
+  // expose for debugging / reuse (non-breaking)
+  window.TrustLayer = {
+    probabilityAtLeastOneLosingStreak:probabilityAtLeastOneLosingStreak,
+    analyticalRuinApproximation:analyticalRuinApproximation,
+    coreMetrics:coreMetrics, render:renderTrust
+  };
 })();
 </script>
+<!-- =================== END TRUST LAYER =================== -->
 
+<!-- ============ MOBILE REDESIGN / LAYOUT FIX (authoritative, last in cascade) ============ -->
+<style id="mobileRedesignFix">
+/* ---- GLOBAL: kill horizontal overflow everywhere ---- */
+html,body{max-width:100% !important;overflow-x:hidden !important}
+*{min-width:0}
+img,canvas,svg,video,table,pre{max-width:100%}
 
-<script>
-(function(){
-  try{
-    document.querySelectorAll('a,button').forEach(function(el){
-      var label=(el.textContent||'').trim().toLowerCase();
-      if(label === 'ana rapor' && el.tagName.toLowerCase() === 'a'){
-        el.setAttribute('href','index.html');
-        el.removeAttribute('data-mode');
-        el.removeAttribute('data-tab');
-      }
-    });
-  }catch(e){}
-})();
-</script>
-
-
-<style>
-/* === EMERGENCY FLOW FIX · no auto print, usable first screen, calmer Turkish product UI === */
-@media screen{
-  /* Layout order: hero -> tabs -> scenario memory -> active inputs -> results -> decision/trust */
-  .app{
-    display:flex !important;
-    flex-direction:column !important;
-    gap:14px !important;
-  }
-  .hero{order:1 !important}
-  .onboarding-strip{order:2 !important}
-  .mode-tabs,.legacy-mode-tabs{order:3 !important}
-  #scenarioMemoryPanel{order:4 !important}
-  .mode-panel{order:10 !important}
-  .result-strip{order:20 !important}
-  .breakout-exec{order:30 !important}
-  .chart-grid,.results-grid,.interpretation,.footer-actions{order:40 !important}
-  .committee-report,.breakout-print-cover,.print-params{order:90 !important}
-
-  /* Report is a report, not a first-screen blocker. It still prints. */
-  .committee-report,
-  .breakout-print-cover,
-  .print-params{
-    display:none !important;
-  }
-
-  /* Sticky HUD was covering inputs on tablet/mobile; keep it readable but not sticky. */
+@media (max-width:768px){
+  /* ============================================================
+     1) STICKY HUD OVERLAP FIX
+     The top metric band (.result-strip) and duplicate (.metric-dock)
+     were made fixed/sticky by several stacked patches whose reserved
+     heights did not match the rendered height -> content slid under it.
+     On mobile we make the band STATIC (scrolls with the page) and zero
+     any phantom padding reserved for a fixed dock. This removes the
+     overlap deterministically (no height-matching required).
+     ============================================================ */
+  body{padding-top:0 !important}
+  .metric-dock,.live-hud,.sticky-hud{display:none !important}
   .result-strip{
-    position:relative !important;
+    position:static !important;
     top:auto !important;
-    z-index:1 !important;
-    background:transparent !important;
+    transform:none !important;
+    z-index:auto !important;
     backdrop-filter:none !important;
-    box-shadow:none !important;
-    border:0 !important;
-    padding:0 !important;
-    margin:2px 0 0 !important;
-    overflow-x:auto !important;
-    -webkit-overflow-scrolling:touch !important;
-  }
-  .metric-dock{
-    display:none !important;
-  }
-
-  /* Executive block must not swallow the product. Keep it as a result summary after inputs. */
-  .breakout-exec{
-    grid-template-columns:1fr !important;
-    gap:12px !important;
-    margin-top:0 !important;
-  }
-  .breakout-health-card,
-  .breakout-action-card{
-    padding:16px !important;
-    border-radius:16px !important;
-    box-shadow:0 10px 26px rgba(56,42,25,.035) !important;
-    border:1px solid rgba(226,216,201,.92) !important;
-    border-left:1px solid rgba(226,216,201,.92) !important;
-    background:linear-gradient(180deg,#fffefa,#fbf6ee) !important;
-  }
-  .breakout-score{
-    font-size:clamp(38px,5vw,58px) !important;
-  }
-  .breakout-health-title{
-    font-size:clamp(24px,2.3vw,34px) !important;
-    line-height:1.04 !important;
-  }
-  .breakout-decision-grid{
-    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
-    gap:9px !important;
-  }
-  .breakout-decision{
-    padding:11px 12px !important;
-    border-radius:12px !important;
-    background:#fffdf8 !important;
-    border:1px solid rgba(226,216,201,.78) !important;
-  }
-
-  /* Keep trust details away from first-screen decision flow. They belong to audit/report. */
-  .seed-card,
-  .validation-card,
-  .health-breakdown-card,
-  .fragility-strip,
-  .trust-layer-card,
-  .report-validation-block{
-    display:none !important;
-  }
-  .breakout-reality-strip{
-    display:none !important;
-  }
-
-  /* Calmer metric cards: no loud orange hero card, no angular/screaming accent. */
-  .premium-metric-card,
-  .metric,
-  .stat-card,
-  .breakout-output,
-  .risk-band,
-  .csv-card,
-  .csv-diagnostic,
-  .library-card,
-  .report-kpi > div,
-  .readiness-item,
-  .system-card,
-  .math-system-card,
-  .choice-card,
-  .optimization-card,
-  .opt-result-card,
-  .opt-summary-card,
-  .reality-card,
-  .stress-card,
-  .prop-go-card,
-  .prop-go-card-executive,
-  .risk-depth-status,
-  .risk-current-memo,
-  .csv-empty-memo,
-  .pending-memo,
-  .empty-state,
-  .error-box{
-    background:linear-gradient(180deg,#fffefa,#fbf6ee) !important;
-    border:1px solid rgba(226,216,201,.92) !important;
-    border-left:1px solid rgba(226,216,201,.92) !important;
-    border-radius:16px !important;
-    box-shadow:0 10px 24px rgba(56,42,25,.035) !important;
-  }
-  .result-strip .metric.hero-metric,
-  .metric.hero-metric,
-  .tail-avg-metric{
-    border-left:1px solid rgba(226,216,201,.92) !important;
-    border-color:rgba(226,216,201,.92) !important;
-    background:linear-gradient(180deg,#fffefa,#fbf6ee) !important;
-  }
-  .metric-value,
-  .stat-value,
-  .r-value{
-    color:var(--ink) !important;
-  }
-  .metric-label,
-  .stat-label,
-  .r-label{
-    color:var(--stone) !important;
-  }
-
-  /* The input panel comes first: sliders must be reachable immediately. */
-  #basic .panel:first-child{
-    order:1 !important;
-  }
-  #basic .panel,
-  .panel,
-  .chart-shell{
-    border-radius:18px !important;
-    box-shadow:0 10px 28px rgba(56,42,25,.035) !important;
-    background:rgba(255,253,248,.92) !important;
-  }
-  .control-grid{
-    grid-template-columns:repeat(4,minmax(0,1fr)) !important;
-    gap:12px !important;
-  }
-  .control-card{
-    min-height:154px !important;
-  }
-
-  /* Seed/trust controls hidden from main setup; reproducibility remains in report/audit internals. */
-  .audit-toolbar{
-    display:none !important;
-  }
-
-  /* Scenario memory must be easy to find, not buried inside Library. */
-  #scenarioMemoryPanel{
-    margin:0 !important;
-    padding:0 !important;
-    border:0 !important;
-    background:transparent !important;
-    box-shadow:none !important;
-  }
-  #scenarioMemoryPanel .scenario-memory-card{
-    padding:14px 16px !important;
-    border-radius:16px !important;
-  }
-  .scenario-memory-title{
-    font-size:9px !important;
-    letter-spacing:.14em !important;
-  }
-  .scenario-memory-copy{
-    font-size:11.5px !important;
-    max-width:760px !important;
-  }
-
-  /* Tabs: cleaner and less button-like. */
-  .mode-tabs,.legacy-mode-tabs{
-    position:relative !important;
+    -webkit-backdrop-filter:none !important;
+    /* compact, swipeable single row -> fewer "cards" before the sliders */
     display:flex !important;
+    flex-wrap:nowrap !important;
+    grid-template-columns:none !important;
     overflow-x:auto !important;
-    gap:6px !important;
-    padding:6px !important;
-    border-radius:16px !important;
-    background:rgba(255,253,248,.72) !important;
-    border:1px solid rgba(226,216,201,.82) !important;
-    box-shadow:none !important;
+    overflow-y:hidden !important;
+    -webkit-overflow-scrolling:touch;
+    scroll-snap-type:x proximity;
+    gap:8px !important;
+    padding:10px 12px 12px !important;
+    margin:0 0 12px !important;
+    border:0 !important;
+    border-bottom:1px solid var(--line,#e2d8c9) !important;
+    border-radius:0 !important;
+    background:var(--card,#fffdf8) !important;
+    box-shadow:0 6px 16px rgba(32,27,21,.05) !important;
   }
-  .mode-btn,.legacy-mode-btn{
-    flex:0 0 auto !important;
-    min-height:44px !important;
-    border-radius:12px !important;
-    border:1px solid transparent !important;
-    padding:10px 13px !important;
-    background:transparent !important;
-    color:var(--stone) !important;
-    font-size:9.5px !important;
-    letter-spacing:.10em !important;
+  .result-strip::-webkit-scrollbar{height:0;display:none}
+  .result-strip .metric{
+    flex:0 0 70% !important;
+    max-width:78% !important;
+    min-width:0 !important;
+    grid-column:auto !important;
+    margin:0 !important;
+    scroll-snap-align:start;
+    padding:11px 13px !important;
+    border-radius:10px !important;
   }
-  .mode-btn.active,.legacy-mode-btn.active{
-    color:var(--ink) !important;
-    border-color:rgba(205,191,174,.86) !important;
-    background:linear-gradient(180deg,#fffdf8,#f5eddf) !important;
-    box-shadow:inset 0 -2px 0 rgba(198,91,54,.45) !important;
-  }
+  .result-strip .metric .metric-value{font-size:18px !important;line-height:1.15 !important;white-space:nowrap}
+  .result-strip .metric .metric-label{font-size:9.5px !important;letter-spacing:.10em !important}
+  .result-strip .metric .metric-sub{font-size:10px !important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
-  /* Prop Survival: reduce visual chaos, make the verdict the one hero card. */
-  #prop .panel,
-  #riskopt .panel,
-  #library .panel{
-    gap:14px !important;
-  }
-  .prop-go-card,
-  .prop-go-card-executive{
-    padding:18px !important;
-    border-left-width:3px !important;
-    box-shadow:0 14px 34px rgba(56,42,25,.055) !important;
-  }
-  .prop-go-card.go,.prop-go-card-executive.go{border-left-color:rgba(100,112,73,.72) !important}
-  .prop-go-card.watch,.prop-go-card-executive.watch{border-left-color:rgba(168,132,66,.72) !important}
-  .prop-go-card.reduce,.prop-go-card-executive.reduce{border-left-color:rgba(198,91,54,.70) !important}
-  .prop-go-card.nogo,.prop-go-card-executive.nogo{border-left-color:rgba(127,39,55,.72) !important}
-  .prop-output-grid,
-  .risk-band-grid,
-  .csv-summary-grid,
-  .csv-mapping-grid{
-    gap:10px !important;
-  }
+  /* tab nav: if shown, keep it static so nothing overlaps */
+  .mode-tabs{position:static !important;top:auto !important}
 
-  /* Action Engine and sanity/validation must not duplicate as top-level noise. */
-  #actionEngine{
-    margin-top:0 !important;
+  /* ============================================================
+     2) OPTIMIZATION TAB -> single column, no overflow, scrollable tables
+     ============================================================ */
+  #optimization,.opt-panel{padding:14px !important;overflow-x:hidden !important}
+  .opt-layout{display:block !important;grid-template-columns:1fr !important}
+  .opt-card{padding:13px !important;margin-bottom:12px !important}
+  .opt-param-grid{display:grid !important;grid-template-columns:1fr 1fr !important;gap:9px !important}
+  .opt-field-card{padding:10px !important}
+  .opt-input{width:100% !important;max-width:100% !important;box-sizing:border-box !important}
+  .opt-segmented,.opt-goals{
+    display:flex !important;flex-wrap:nowrap !important;
+    overflow-x:auto !important;-webkit-overflow-scrolling:touch;
+    gap:6px !important;padding-bottom:4px !important
   }
-  #actionEngine .breakout-kicker::before{
-    content:"Karar Notu · ";
+  .opt-segmented::-webkit-scrollbar,.opt-goals::-webkit-scrollbar{height:0;display:none}
+  .opt-option{flex:0 0 auto !important;white-space:nowrap !important;min-height:40px;display:flex;align-items:center;justify-content:center}
+  .opt-table-wrap,.table-wrap{
+    overflow-x:auto !important;-webkit-overflow-scrolling:touch;
+    max-width:100% !important;border-radius:12px
   }
+  .opt-table-wrap table,.table-wrap table{min-width:520px}
+  .opt-mobile-intro{display:block}
 
-  /* Mobile / tablet cleanup. */
-  @media (max-width:1180px){
-    .control-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
-    .breakout-decision-grid{grid-template-columns:1fr !important}
-  }
-  @media (max-width:680px){
-    html,body{
-      max-width:100% !important;
-      overflow-x:hidden !important;
-    }
-    body{padding:10px !important}
-    .app{gap:12px !important}
-    .hero{padding:14px !important}
-    .hero h1{
-      font-size:clamp(27px,8.5vw,38px) !important;
-      line-height:1.03 !important;
-      letter-spacing:-.025em !important;
-    }
-    .hero-actions{
-      display:grid !important;
-      grid-template-columns:1fr !important;
-      width:100% !important;
-    }
-    .hero-actions .btn{width:100% !important}
-    .control-grid,
-    .prop-output-grid,
-    .risk-band-grid,
-    .csv-mapping-grid,
-    .csv-summary-grid,
-    .report-kpi,
-    .form-grid,
-    .r-summary{
-      grid-template-columns:1fr !important;
-    }
-    .result-strip{
-      display:flex !important;
-      gap:8px !important;
-      margin-inline:0 !important;
-      padding-bottom:2px !important;
-    }
-    .result-strip .metric{
-      flex:0 0 156px !important;
-      min-height:70px !important;
-      padding:9px 10px !important;
-      border-radius:14px !important;
-    }
-    .metric-value{font-size:20px !important}
-    .panel,.chart-shell{padding:14px !important}
-    .table-wrap,
-    .math-matrix-wrap,
-    .opt-table-wrap,
-    .report-table-wrap{
-      overflow-x:auto !important;
-    }
-    canvas{max-width:100% !important}
-  }
+  /* ============================================================
+     3) STRATEGY LIBRARY -> stacked, full-width controls
+     ============================================================ */
+  .library-card{padding:14px !important}
+  .library-toolbar{display:flex !important;flex-wrap:wrap !important;gap:8px !important;align-items:stretch !important}
+  .library-toolbar .btn,.library-toolbar button{flex:1 1 auto;min-height:42px}
+  .library-input{flex:1 1 100% !important;width:100% !important;max-width:100% !important;box-sizing:border-box !important;min-height:42px}
+  .library-presets{display:flex !important;flex-wrap:nowrap !important;overflow-x:auto !important;-webkit-overflow-scrolling:touch;gap:7px !important;padding-bottom:4px !important}
+  .library-presets::-webkit-scrollbar{height:0;display:none}
+  .library-presets .preset-pill{flex:0 0 auto !important;white-space:nowrap !important;min-height:38px}
+  .library-list{display:grid !important;grid-template-columns:1fr !important;gap:10px !important}
+
+  /* ============================================================
+     4) CSV IMPORT -> single column, scrollable preview
+     ============================================================ */
+  .csv-card{padding:14px !important;overflow-x:hidden !important}
+  .csv-mapping-grid,.csv-summary-grid{display:grid !important;grid-template-columns:1fr !important;gap:9px !important}
+  .csv-diagnostics{display:grid !important;grid-template-columns:1fr 1fr !important;gap:8px !important}
+  .csv-diagnostic{padding:10px !important;min-width:0}
+  .csv-select{width:100% !important;max-width:100% !important;box-sizing:border-box !important;min-height:42px}
+  .csv-preview{overflow-x:auto !important;-webkit-overflow-scrolling:touch;max-width:100% !important}
+  .csv-preview table{min-width:480px}
+
+  /* generic touch targets */
+  .btn,.preset-pill,.opt-option,.csv-select,.tl-btn{min-height:40px}
 }
 
-/* Print must still be a report and must not inherit the hidden screen report rule. */
+@media (max-width:430px){
+  .result-strip .metric{flex-basis:80% !important;max-width:86% !important}
+  .opt-param-grid{grid-template-columns:1fr !important}
+  .csv-diagnostics{grid-template-columns:1fr !important}
+  #optimization,.opt-panel,.csv-card,.library-card{padding:12px !important}
+}
+
+/* never let the de-stickied band reserve fixed space in print either */
 @media print{
-  .committee-report,
-  .breakout-print-cover,
-  .print-params{
-    display:block !important;
-  }
-  .mode-tabs,.legacy-mode-tabs,.hero-actions,.footer-actions,.btn,.mode-panel,.result-strip,.metric-dock,#scenarioMemoryPanel{
-    display:none !important;
-  }
-  .seed-card,
-  .validation-card,
-  .health-breakdown-card,
-  .fragility-strip,
-  .trust-layer-card,
-  .report-validation-block{
-    display:block !important;
-  }
-  body{
-    background:#fff !important;
-    padding:0 !important;
-  }
+  .result-strip{position:static !important;overflow:visible !important}
+  .result-strip .metric{flex-basis:auto !important;max-width:none !important}
+  body{padding-top:0 !important}
 }
 </style>
+<!-- ============ END MOBILE REDESIGN / LAYOUT FIX ============ -->
 
-<script>
-/* === EMERGENCY FLOW FIX · print separation, Turkish copy, top-level scenario memory === */
-(function(){
-  "use strict";
-  const $ = id => document.getElementById(id);
-  const q = sel => document.querySelector(sel);
-  const qa = sel => Array.from(document.querySelectorAll(sel));
+<!-- ============ LAYOUT POLISH (authoritative final) ============ -->
+<style id="layoutPolish">
+/* Remove the fixed/blurred top HUD on ALL viewports: it was semi-transparent
+   and overlapped the content beneath it. The metrics now sit in normal flow. */
+body{padding-top:0 !important}
+.metric-dock,.live-hud,.sticky-hud{display:none !important}
+.result-strip{
+  position:static !important; top:auto !important; left:auto !important;
+  transform:none !important; width:auto !important; max-width:100% !important;
+  z-index:auto !important; margin:0 0 14px !important;
+  backdrop-filter:none !important; -webkit-backdrop-filter:none !important;
+  background:var(--card,#fffdf8) !important;
+  border-bottom:1px solid var(--line,#e2d8c9) !important;
+  box-shadow:0 6px 16px rgba(32,27,21,.05) !important;
+}
+.mode-tabs{top:0 !important}
+.sim-progress{top:8px !important}
 
-  function textExact(oldText, newText){
-    qa("button,a,div,span,strong,h1,h2,h3,p,summary").forEach(el=>{
-      if((el.childNodes.length === 1 || el.children.length === 0) && (el.textContent||"").trim() === oldText){
-        el.textContent = newText;
-      }
-    });
-  }
+/* Normalize the "Medyan Final" card so it no longer clashes (no orange, rounded like siblings) */
+.result-strip .metric.hero-metric{
+  border-left:4px solid var(--line-strong,#cdbcaa) !important;
+  border-radius:10px !important;
+  background:var(--card,#fffdf8) !important;
+}
+.result-strip .metric.hero-metric .metric-value{
+  color:var(--ink,#171411) !important;
+}
 
-  function polishLanguage(){
-    textExact("What Should I Change?", "Ne Değişmeli?");
-    textExact("Action Engine", "Aksiyon Motoru");
-    textExact("Immediate Action", "İlk Aksiyon");
-    textExact("Risk Control", "Risk Kontrolü");
-    textExact("Scaling Rule", "Ölçekleme Kuralı");
-    textExact("Executive Verdict", "Yönetici Kararı");
-    textExact("Primary Risk", "Ana Risk");
-    textExact("Recommended Action", "Önerilen Aksiyon");
-    textExact("Strategy Health Score", "Strateji Sağlık Skoru");
-    textExact("Health Score Breakdown", "Skor Dökümü");
-    textExact("Risk Optimizer", "Risk Optimizasyonu");
-    textExact("Sanity Check", "Tutarlılık Kontrolü");
-    textExact("Simulation Seed", "Simülasyon Anahtarı");
-    textExact("Median Final Capital", "Medyan Final Sermaye");
+/* Trust panel: collapsed by default, compact, quiet */
+#tlExecHost{margin-top:14px}
+#tlPanel{border-color:var(--line,#e2d8c9)}
+#tlPanel>summary{color:var(--breakout-ink-soft,#2f2922);font-weight:600}
+.tl-panelbody{padding:2px 12px 12px}
+.tl-panelbody .tl-card{box-shadow:none !important;border-left-color:var(--line,#e2d8c9) !important;margin-top:10px}
+.tl-panelbody .tl-card:first-child{margin-top:6px}
 
-    const actionKicker = q("#actionEngine .breakout-kicker");
-    if(actionKicker) actionKicker.textContent = "Ne Değişmeli?";
-    const actionTitle = q("#actionEngine h3");
-    if(actionTitle) actionTitle.textContent = "Aksiyon Motoru";
-  }
+/* Restrained, CONSISTENT corner radius across all major cards (index.html DNA:
+   "border radius abartılı olmamalı"). Was an inconsistent 22px. */
+.breakout-health-card,.breakout-action-card,.breakout-mini-card,
+.prop-card,.riskopt-card,.library-card,.csv-card,
+.panel,.opt-card,.input-card,.callout,.chart-shell,.stat-card{
+  border-radius:12px !important;
+}
+.result-strip .metric{ border-radius:0 !important; }
 
-  function ensureScenarioMemoryTop(){
-    const tabs = q(".mode-tabs") || q(".legacy-mode-tabs");
-    if(!tabs) return;
-    let panel = $("scenarioMemoryPanel");
-    if(!panel){
-      panel = document.createElement("section");
-      panel.id = "scenarioMemoryPanel";
-      panel.className = "scenario-memory-panel";
-      panel.innerHTML = `
-        <div class="scenario-memory-card">
-          <div class="scenario-memory-head">
-            <div>
-              <div class="scenario-memory-title">SENARYO HAFIZASI</div>
-              <p class="scenario-memory-copy">Mevcut varsayımı kilitleyin; sonra senaryo karşılaştırmasında aynı nakit planıyla birlikte izleyin.</p>
-            </div>
-            <div class="scenario-memory-actions">
-              <button class="mini-btn primary" id="lockScenarioMemory" type="button">SENARYOYU KİLİTLE</button>
-              <button class="mini-btn" id="clearScenarioMemory" type="button">TEMİZLE</button>
-            </div>
-          </div>
-          <div class="scenario-memory-list" id="scenarioMemoryList"><div class="scenario-memory-empty">Henüz kilitli senaryo yok.</div></div>
-        </div>`;
-    }
-    if(panel.parentElement !== tabs.parentElement || panel.previousElementSibling !== tabs){
-      tabs.insertAdjacentElement("afterend", panel);
-    }
-  }
+/* ===================================================================
+   METRIC STRIP = index.html card DNA (.guide-card / .hud-card)
+   - SOLID #fffdf8 background  (NOT transparent)
+   - LEFT color accent bar (terra / olive / ruby per card)
+   - SQUARE corners (border-radius:0)
+   - HORIZONTALLY SCROLLABLE left/right (overflow-x:auto + scroll-snap)
+   - clashing-colored frame/band behind the strip removed
+   =================================================================== */
+.result-strip{
+  position:static !important;
+  display:flex !important;
+  flex-wrap:nowrap !important;
+  overflow-x:auto !important;
+  overflow-y:hidden !important;
+  -webkit-overflow-scrolling:touch !important;
+  scroll-snap-type:x mandatory !important;
+  scrollbar-width:none !important;
+  gap:10px !important;
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+  backdrop-filter:none !important; -webkit-backdrop-filter:none !important;
+  padding:0 !important;
+  margin:0 0 16px !important;
+}
+.result-strip::-webkit-scrollbar{ display:none !important; height:0 !important; }
+.result-strip .metric,
+.result-strip .metric.hero-metric,
+.result-strip .metric.good,
+.result-strip .metric.bad,
+.result-strip .metric.tail-avg-metric{
+  flex:0 0 auto !important;
+  min-width:172px !important;
+  max-width:none !important;
+  background:#fffdf8 !important;
+  border:1px solid var(--line,#e2d8c9) !important;
+  border-left:4px solid var(--gold,#a88442) !important;
+  border-radius:0 !important;
+  box-shadow:none !important;
+  padding:14px 16px !important;
+  margin:0 !important;
+  scroll-snap-align:start !important;
+}
+.result-strip .metric.bad,
+.result-strip .metric.tail-avg-metric{ border-left:4px solid var(--ruby,#7f2737) !important; }
+.result-strip .metric.good{ border-left:4px solid var(--olive,#647049) !important; }
+.result-strip .metric.hero-metric{ border-left:4px solid var(--terra,#c65b36) !important; }
+.result-strip .metric .metric-label{
+  color:var(--stone,#6f675d) !important;
+  font:900 9px/1.2 'Inter',system-ui,sans-serif !important;
+  letter-spacing:.13em !important; text-transform:uppercase !important;
+}
+.result-strip .metric .metric-value{
+  font-size:24px !important; line-height:1 !important;
+  margin-top:7px !important; font-weight:600 !important;
+  color:var(--ink,#171411) !important; white-space:nowrap !important;
+}
+.result-strip .metric .metric-sub{
+  color:var(--stone,#6f675d) !important; margin-top:7px !important;
+  font-size:10px !important; white-space:nowrap !important;
+}
 
-  function preventAutoPrintAndPrepareManualPrint(){
-    const nativePrint = window.__nativePrint || window.print.bind(window);
-    window.__nativePrint = nativePrint;
+/* Median distribution card (.pano-card.hero) was oversized/odd — match its siblings */
+.pano-card.hero{
+  background:var(--metric-paper,#fffdf8) !important;
+  border:1px solid var(--metric-border,rgba(222,212,196,.56)) !important;
+  border-left:4px solid var(--terra,#c65b36) !important;
+  border-radius:0 !important;
+  text-align:left !important; align-items:stretch !important;
+  padding:11px 12px !important; min-height:90px !important;
+  box-shadow:0 7px 16px rgba(32,27,21,.016) !important;
+}
+.pano-card.hero .pano-k,.pano-card.hero .pano-v,.pano-card.hero .pano-foot{ text-align:left !important; }
+.pano-card.hero .pano-v{ font-size:clamp(18px,1.5vw,23px) !important; margin-top:8px !important; color:var(--terra,#c65b36) !important; }
 
-    window.prepareRiskReport = function(){
-      try{ if(typeof refreshTrustLayer === "function") refreshTrustLayer(); }catch(e){}
-      try{ if(typeof applyPremiumUiClasses === "function") applyPremiumUiClasses(); }catch(e){}
-      return true;
-    };
+/* Strategy save control (lives in the Strategy tab, saves the live parameters) */
+.tl-savebox{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:16px;padding-top:14px;border-top:1px solid var(--line,#e2d8c9)}
+.tl-saveinput{flex:1 1 200px;min-width:0;min-height:40px;border:1px solid var(--line-strong,#cdbcaa);border-radius:10px;padding:8px 12px;font:500 13px 'Inter',sans-serif;background:var(--card,#fffdf8);color:var(--ink,#171411)}
+.tl-savebtn{min-height:40px;border:0;border-radius:10px;padding:9px 16px;background:var(--olive,#647049);color:#fff;font:600 12px 'Inter',sans-serif;cursor:pointer}
+.tl-savebtn:active{transform:translateY(1px)}
+.tl-savemsg{flex:1 1 100%;font:600 11px 'Inter',sans-serif;color:var(--olive,#647049);min-height:14px}
 
-    window.generatePrintReport = function(){
-      window.prepareRiskReport();
-      return true;
-    };
+/* (#4) Scroll-triggered sticky dock: re-enable (was hidden) + make it opaque.
+   The existing scroll logic toggles body.show-metric-dock to slide it in. */
+.metric-dock{ display:flex !important; background:#fffdf8 !important; backdrop-filter:none !important; -webkit-backdrop-filter:none !important; }
 
-    window.printRiskReport = function(){
-      window.prepareRiskReport();
-      nativePrint();
-      return true;
-    };
+/* (#2) Run button must not resize the hero section when its label swaps to "Hesaplanıyor..." — sabit genişlik vererek auto kolon daralmasını önle */
+.run-sim{ min-height:48px !important; box-sizing:border-box !important; white-space:nowrap !important; }
+.hero-actions .run-sim{ width:220px !important; min-width:220px !important; }
+@media(max-width:860px){ .hero-actions .run-sim{ width:100% !important; min-width:0 !important; } }
 
-    qa('button[onclick*="print"],a[onclick*="print"]').forEach(el=>{
-      el.setAttribute("onclick","window.printRiskReport(); return false;");
-    });
-    qa("button,a").forEach(el=>{
-      const t=(el.textContent||"").trim();
-      if(t === "PDF Risk Raporu" || t === "PDF Rapor" || t === "PDF"){
-        el.onclick = function(ev){ ev.preventDefault(); window.printRiskReport(); return false; };
-      }
-    });
-  }
+/* (#6) Optimizer: kill the horizontal bleed/shift (second column min 320px overflowed) */
+#optimization,.opt-panel{ overflow-x:hidden !important; max-width:100% !important; }
+@media(max-width:980px){ .opt-layout{ grid-template-columns:1fr !important; } }
+.opt-param-grid{ grid-template-columns:repeat(auto-fit,minmax(150px,1fr)) !important; }
+.opt-segmented{ max-width:100% !important; overflow-x:auto !important; }
 
-  function calmTopFlow(){
-    document.body.classList.add("flow-corrected-v11");
-    const median = $("hudMedian")?.closest(".metric");
-    if(median){
-      median.classList.remove("hero-metric");
-      median.classList.add("neutral-metric");
-    }
-    const healthDetails = q(".health-breakdown-card details");
-    if(healthDetails) healthDetails.removeAttribute("open");
-  }
+/* (#5) Saved-strategies list (shows slider data, not score) */
+.tl-saved-wrap{flex:1 1 100%;margin-top:12px}
+.tl-saved-title{font:700 10px/1.2 'Inter',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--stone,#6f675d);margin-bottom:8px}
+.tl-saved-list{display:flex;flex-direction:column;gap:8px}
+.tl-saved-item{border:1px solid var(--line,#e2d8c9);border-left:3px solid var(--olive,#647049);border-radius:0;padding:9px 11px;background:#fffdf8}
+.tl-saved-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.tl-saved-head b{font:600 12.5px/1.2 'Inter',sans-serif;color:var(--ink,#171411)}
+.tl-loadbtn{border:1px solid var(--line-strong,#cdbcaa);background:var(--card-soft,#fbf8f1);color:var(--ink,#171411);font:600 11px 'Inter',sans-serif;padding:5px 11px;border-radius:6px;cursor:pointer;min-height:30px}
+.tl-pchips{display:flex;flex-wrap:wrap;gap:5px 7px;margin-top:7px}
+.tl-pchip{font:500 10.5px/1.3 'Inter',sans-serif;color:var(--stone,#6f675d);background:rgba(111,103,93,.07);border-radius:5px;padding:3px 7px}
+.tl-pchip b{color:var(--breakout-ink-soft,#2f2922);font-weight:700}
 
-  function patchPropCopy(){
-    qa(".prop-go-card,.prop-go-card-executive").forEach(card=>{
-      card.innerHTML = card.innerHTML
-        .replace(/Current risk: inside safe band/gi, "Current risk: inside recommended band")
-        .replace(/Current risk: above safe band/gi, "Current risk: above recommended band");
-    });
-  }
+/* (sticky dock) make it VIVID, not faded: darker labels + solid colored left bars */
+.metric-dock .dock-card span,.metric-dock .dock-card em{ color:var(--stone,#6f675d) !important; }
+.metric-dock .dock-card strong{ color:var(--ink,#171411) !important; }
+.metric-dock .dock-card{ border-left:3px solid var(--line-strong,#cdbcaa) !important; }
+.metric-dock .dock-primary{ border-left:3px solid var(--terra,#c65b36) !important; }
+.metric-dock .dock-life{ border-left:3px solid var(--olive,#647049) !important; }
+.metric-dock .dock-tail,.metric-dock .dock-risk{ border-left:3px solid var(--ruby,#7f2737) !important; }
 
-  function boot(){
-    preventAutoPrintAndPrepareManualPrint();
-    ensureScenarioMemoryTop();
-    polishLanguage();
-    calmTopFlow();
-    patchPropCopy();
-    setTimeout(()=>{ preventAutoPrintAndPrepareManualPrint(); ensureScenarioMemoryTop(); polishLanguage(); calmTopFlow(); patchPropCopy(); }, 250);
-    setTimeout(()=>{ preventAutoPrintAndPrepareManualPrint(); ensureScenarioMemoryTop(); polishLanguage(); calmTopFlow(); patchPropCopy(); }, 900);
-  }
+/* (optimizer) Hızlı/Dengeli/Derin toggle must fit its card — no shift */
+#optQuality,.risk-depth-selector{ grid-template-columns:repeat(3,minmax(0,1fr)) !important; width:100% !important; max-width:100% !important; }
+#optQuality button,.risk-depth-selector button{ min-width:0 !important; padding:7px 8px !important; font-size:9px !important; }
 
-  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
-  else boot();
+/* (prop survival) stop layout shift/overflow; stack columns on narrow screens */
+#prop{ overflow-x:hidden !important; max-width:100% !important; }
+#prop .input-grid,#prop .prop-output-grid,#prop .visual-why-grid,#prop .breakout-tab-grid{ max-width:100% !important; }
+@media(max-width:980px){
+  #prop .breakout-tab-grid,#prop .prop-output-grid,#prop .visual-why-grid,#prop .input-grid{ grid-template-columns:1fr !important; }
+}
 
-  document.addEventListener("click", function(ev){
-    if(ev.target && ev.target.closest && ev.target.closest(".mode-btn,.legacy-mode-btn")){
-      setTimeout(()=>{ ensureScenarioMemoryTop(); polishLanguage(); calmTopFlow(); patchPropCopy(); }, 80);
-    }
-  }, true);
-})();
-</script>
+/* saved-list delete button */
+.tl-saved-actions{display:flex;gap:6px}
+.tl-delbtn{border:1px solid rgba(127,39,55,.4);background:rgba(127,39,55,.06);color:var(--ruby,#7f2737);font:600 11px 'Inter',sans-serif;padding:5px 11px;border-radius:6px;cursor:pointer;min-height:30px}
+
+@media print{ #tlPanel{display:none !important} }
+
+/* Defensive: print-only report containers must NEVER show on screen
+   (prevents any 'looks like a printed page' rendering on open) */
+@media screen{
+  .committee-report,.breakout-print-cover,#tlReport{display:none !important}
+}
+
+/* ============ PROP SURVIVAL REDESIGN ============ */
+.prop-howit-banner{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
+  margin:16px 0 20px;
+  padding:16px 18px;
+  background:rgba(168,132,66,.04);
+  border:1px solid rgba(168,132,66,.20);
+  border-radius:18px;
+}
+.prop-howit-step{
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
+}
+.prop-howit-num{
+  flex-shrink:0;
+  width:26px;
+  height:26px;
+  border-radius:50%;
+  background:var(--gold,#a88442);
+  color:#fffaf0;
+  font-size:12px;
+  font-weight:900;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-top:1px;
+}
+.prop-howit-step strong{
+  display:block;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.10em;
+  text-transform:uppercase;
+  color:var(--ink,#171411);
+  margin-bottom:4px;
+}
+.prop-howit-step span{
+  font-size:11px;
+  color:var(--stone,#6f675d);
+  line-height:1.45;
+}
+.prop-section-kicker{
+  font-size:9px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  font-weight:900;
+  color:var(--stone,#6f675d);
+  margin:0 0 10px;
+}
+#propPresets.prop-presets{
+  grid-template-columns:repeat(auto-fit,minmax(155px,1fr)) !important;
+  gap:10px !important;
+  margin:0 0 18px !important;
+}
+.preset-card-prop{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  min-height:84px;
+  padding:13px 15px;
+  border:1px solid rgba(205,191,174,.82);
+  background:linear-gradient(180deg,#fffefa,#fbf6ee);
+  border-radius:16px;
+  text-align:left;
+  cursor:pointer;
+  transition:border-color .18s,background .18s,box-shadow .18s;
+}
+.preset-card-prop:hover{
+  border-color:rgba(198,91,54,.35);
+  background:rgba(198,91,54,.03);
+  box-shadow:0 6px 18px rgba(198,91,54,.07);
+}
+.preset-card-prop.active{
+  border-color:var(--terra,#c65b36);
+  background:rgba(198,91,54,.055);
+  box-shadow:0 8px 22px rgba(198,91,54,.11);
+}
+.preset-card-prop.main-source{
+  border-style:dashed;
+  border-color:rgba(100,112,73,.38);
+  background:linear-gradient(180deg,#fffefa,rgba(100,112,73,.03));
+}
+.preset-card-prop.main-source:hover,.preset-card-prop.main-source.active{
+  border-style:solid;
+  border-color:var(--olive,#647049);
+  background:rgba(100,112,73,.055);
+  box-shadow:0 6px 18px rgba(100,112,73,.07);
+}
+.pcp-badge{
+  font-size:8px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  font-weight:900;
+  color:var(--terra,#c65b36);
+  line-height:1;
+}
+.preset-card-prop.main-source .pcp-badge{ color:var(--olive,#647049); }
+.pcp-name{
+  font-size:11.5px;
+  font-weight:700;
+  color:var(--ink,#171411);
+  line-height:1.25;
+}
+.pcp-desc{
+  font-size:10px;
+  color:var(--stone,#6f675d);
+  line-height:1.35;
+  margin-top:1px;
+}
+/* Failure Reason Decomposition chart overflow fix */
+.prop-failure-chart-shell{
+  overflow:hidden !important;
+  min-width:0 !important;
+}
+.prop-failure-chart-shell .canvas-wrap{
+  overflow:hidden !important;
+  min-width:0 !important;
+}
+.prop-failure-chart-shell canvas{
+  max-width:100% !important;
+}
+@media(max-width:900px){
+  .prop-howit-banner{ grid-template-columns:1fr; }
+}
+@media(max-width:620px){
+  #propPresets.prop-presets{ grid-template-columns:1fr 1fr !important; }
+}
+
+/* square corners + badge overflow fix */
+#prop .prop-go-card,
+#prop .prop-go-card-executive { border-radius:0 !important; }
+#prop .prop-go-badge {
+  border-radius:0 !important;
+  word-break:break-word;
+  overflow-wrap:break-word;
+  hyphens:auto;
+  font-size:clamp(18px,2.6vw,40px) !important;
+  min-height:80px;
+}
+</style>
+<!-- ============ END LAYOUT POLISH ============ -->
 
 </body>
 </html>
