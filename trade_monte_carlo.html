@@ -1601,7 +1601,7 @@ table{width:100%;border-collapse:collapse}
 .opt-third-options{grid-template-columns:repeat(3,minmax(0,1fr))}
 .opt-option,
 .opt-toggle{
-  min-height:38px;
+  min-height:44px;
   border:0;
   border-radius:999px;
   background:transparent;
@@ -3506,17 +3506,19 @@ body{
   .opt-output-grid{
     grid-template-columns:1fr !important;
   }
-  .opt-goals,
+  .opt-goals{
+    display:grid !important;
+    grid-template-columns:1fr 1fr !important;
+    overflow-x:unset !important;
+  }
   .opt-third-options{
-    display:flex !important;
-    overflow-x:auto !important;
-    gap:6px !important;
-    scroll-snap-type:x proximity !important;
+    display:grid !important;
+    grid-template-columns:1fr !important;
+    overflow-x:unset !important;
   }
   .opt-option{
-    flex:0 0 auto !important;
-    min-width:120px !important;
-    scroll-snap-align:start !important;
+    min-width:0 !important;
+    min-height:44px !important;
   }
   .opt-param-grid,
   .opt-constraint{
@@ -5976,7 +5978,7 @@ body.show-metric-dock .mode-tabs{
 .math-narrative{display:grid;gap:10px;color:var(--stone);font-size:12px;line-height:1.6}
 .math-narrative strong{color:var(--ink)}
 .math-narrative .callout{border-left:3px solid var(--terra);padding:10px 12px;background:rgba(198,91,54,.055);color:#3b332c}
-@media (min-width:1121px){.mode-tabs{grid-template-columns:repeat(5,minmax(0,1fr)) !important}}
+@media (min-width:1121px){.mode-tabs{grid-template-columns:minmax(0,1fr) minmax(0,1fr) 3px minmax(0,1fr) minmax(0,1fr) minmax(0,1fr) minmax(0,1fr) 3px minmax(0,1fr) minmax(0,1fr) !important}}
 @media (max-width:1120px){.mathlab-hero{display:grid}.mathlab-actions{justify-items:start}.mathlab-grid{grid-template-columns:1fr}.mathlab-controls{position:relative;top:auto}.mathlab-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.mathlab-lower{grid-template-columns:1fr}}
 @media (max-width:640px){.mathlab-hero h2{font-size:33px}.mathlab-metrics{grid-template-columns:1fr}.math-control-row{grid-template-columns:1fr}.mathlab-equity-wrap{height:320px}}
 @media print{#mathlab .mathlab-controls,#mathLabResample{display:none !important}}
@@ -8674,6 +8676,67 @@ input.range{touch-action:none;-webkit-user-select:none;user-select:none;}
   *{overflow:visible!important;max-height:none!important;}
   .p5-confirm-overlay{display:none!important;}
 }
+/* ── nav: explicit columns so sep only takes 3px, not 1fr ── */
+.mode-tabs{
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr) 3px minmax(0,1fr) minmax(0,1fr) minmax(0,1fr) minmax(0,1fr) 3px minmax(0,1fr) minmax(0,1fr) !important;
+}
+.nav-group-sep{
+  display:block;
+  width:1px;
+  min-height:28px;
+  background:var(--line);
+  border-radius:1px;
+  align-self:center;
+  justify-self:center;
+  opacity:.5;
+}
+/* ── advanced param sub-groups ── */
+.adv-subgroup{margin-top:16px}
+.adv-subgroup:first-child{margin-top:0}
+.adv-subgroup-label{
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--stone);
+  padding:6px 2px 8px;
+  border-bottom:1px solid var(--line);
+  margin-bottom:10px;
+}
+.adv-subgroup .control-grid{margin-top:0}
+/* ── P5 curve cap note ── */
+.p5-curve-cap-note{
+  font-size:10.5px;
+  color:var(--gold);
+  background:rgba(168,132,66,.07);
+  border:1px solid rgba(168,132,66,.22);
+  border-radius:8px;
+  padding:7px 11px;
+  margin-top:10px;
+  line-height:1.5;
+}
+/* ── opt-segmented vertical card shape (p5 mode ≤860px, obj ≤640px) ── */
+@media(max-width:860px){
+  #p5ModeSelector{border-radius:12px !important;padding:4px !important;}
+  #p5ModeSelector .opt-option{border-radius:8px !important;}
+  #p5ModeSelector .opt-option.active{
+    border-left:3px solid rgba(100,112,73,.4) !important;
+    padding-left:11px !important;
+  }
+}
+@media(max-width:768px){
+  .opt-goals{border-radius:12px !important;padding:4px !important;}
+  .opt-goals .opt-option{border-radius:8px !important;}
+  .opt-goals .opt-option.active{
+    border-left:3px solid rgba(100,112,73,.4) !important;
+    padding-left:11px !important;
+  }
+}
+/* ── opt-frontier collapsed drawer ── */
+.opt-frontier-drawer{margin-top:12px}
+.opt-frontier-drawer > summary{border-radius:10px;background:transparent}
+/* ── dist detail drawer ── */
+#distDetailDrawer > summary{border-radius:10px;background:transparent}
 </style>
 </head>
 <body data-active-mode="basic">
@@ -8884,11 +8947,12 @@ input.range{touch-action:none;-webkit-user-select:none;user-select:none;}
 <nav aria-label="Çalışma alanları" class="mode-tabs">
 <button class="mode-btn active" data-mode="basic" data-short="Strateji" type="button">Strateji</button>
 <button class="mode-btn" data-mode="optimization" data-short="Optimizasyon" type="button">Optimizasyon</button>
-<button class="mode-btn" data-mode="mathlab" data-short="Model" type="button">Matematik Modeli</button>
+<span class="nav-group-sep" aria-hidden="true"></span>
 <button class="mode-btn" data-mode="diagnostics" data-short="Yollar" type="button">Sermaye Yolları</button>
-
+<button class="mode-btn" data-mode="mathlab" data-short="Lab" type="button">Lab · Model</button>
 <button class="mode-btn" data-mode="prop" data-short="Prop" type="button">Prop Survival</button>
 <button class="mode-btn" data-mode="riskopt" data-short="Risk" type="button">Risk Optimizer</button>
+<span class="nav-group-sep" aria-hidden="true"></span>
 <button class="mode-btn" data-mode="library" data-short="Library" type="button">Library / CSV</button>
 <button class="mode-btn" data-mode="concepts" data-short="Rehber" type="button">Rehber</button>
 </nav>
@@ -9040,7 +9104,7 @@ input.range{touch-action:none;-webkit-user-select:none;user-select:none;}
     </div>
   </div>
   <div class="opt-block-title" style="margin-top:14px;font-size:11px">Kısıtlar <span class="opt-muted" style="font-weight:400;font-size:10px">(boş = devre dışı)</span></div>
-  <div style="margin-top:6px">
+  <div class="p5-constraints-list" style="margin-top:6px">
     <div class="p5-constraint-row">
       <span class="p5-constraint-label">Max Medyan Drawdown %</span>
       <input class="opt-input mono p5-constraint-val" id="p5MaxMedDD" min="0" max="100" step="1" placeholder="—" type="number"/>
@@ -9095,6 +9159,7 @@ input.range{touch-action:none;-webkit-user-select:none;user-select:none;}
     <div class="chart-title" id="p5CurveTitle">P5 Sermaye / Test Edilen Parametre</div>
     <p class="p5-curve-desc">Her nokta, yalnızca seçili parametre değiştirilerek hesaplanan P5 final sermayeyi gösterir. Yatay çizgi hedef P5 sermayedir.</p>
     <div class="canvas-wrap" style="height:400px;position:relative"><canvas id="p5CurveChart"></canvas></div>
+    <div class="p5-curve-cap-note" id="p5CurveCapNote" style="display:none"></div>
   </div>
 </div>
 <div class="opt-output-card" id="p5AuditCard" style="display:none">
@@ -9249,6 +9314,15 @@ input.range{touch-action:none;-webkit-user-select:none;user-select:none;}
 </div>
 </div>
 </div>
+<details class="advanced-accordion opt-frontier-drawer">
+<summary>
+<div>
+<strong>Etkin Sınır Haritası</strong>
+<em>Risk-getiri uzayında aday dağılımı — ileri düzey analiz</em>
+</div>
+<span class="accordion-indicator">Aç</span>
+</summary>
+<div class="advanced-accordion-body">
 <div class="opt-output-card opt-frontier-card">
 <div class="chart-title">Etkin Sınır Haritası · Optimizasyon Kararı</div>
 <div class="chart-copy">Isı haritası skoru gösterir; etkin sınır haritası ise aynı adayları risk-getiri uzayına taşır. X ekseni ortalama drawdown yükünü, Y ekseni P50 final sermayeyi gösterir. İdeal alan sol-üsttür: daha düşük risk ile daha yüksek medyan sonuç.</div>
@@ -9262,6 +9336,8 @@ input.range{touch-action:none;-webkit-user-select:none;user-select:none;}
 </div>
 </div>
 </div>
+</div>
+</details>
 <div class="opt-narrative" id="optNarrative">Analiz çalıştırılınca kombinasyon yorumu burada görünür.</div>
 <div class="opt-current-compare" id="optCurrentCompare">Mevcut parametre karşılaştırması analizden sonra görünür.</div>
 </div>
@@ -9305,16 +9381,27 @@ input.range{touch-action:none;-webkit-user-select:none;user-select:none;}
 
         <div class="math-slider-grid" id="mathEditorControls"></div>
 
-        <div class="math-thresholds">
-          <div class="math-threshold-card">
-            <span>Grade eşikleri</span>
-            <p><strong>Negative</strong>: E_net ≤ 0R · <strong>Fragile</strong>: PF &lt; 1.30 veya Edge Buffer &lt; 5pp veya g ≤ 0 · <strong>Aggressive</strong>: pozitif edge ama P(10 kayıp) ≥ 25% · <strong>Balanced</strong>: g &gt; 0, PF ≥ 1.30, Edge Buffer ≥ 5pp · <strong>Institutional</strong>: PF ≥ 1.80, Edge Buffer ≥ 15pp, P(10 kayıp) &lt; 15%.</p>
+        <details class="advanced-accordion" style="margin-top:8px">
+          <summary>
+            <div>
+              <strong>Grade Metodolojisi</strong>
+              <em>Sistem derecelendirme eşikleri ve model notları</em>
+            </div>
+            <span class="accordion-indicator">Aç</span>
+          </summary>
+          <div class="advanced-accordion-body">
+            <div class="math-thresholds">
+              <div class="math-threshold-card">
+                <span>Grade eşikleri</span>
+                <p><strong>Negative</strong>: E_net ≤ 0R · <strong>Fragile</strong>: PF &lt; 1.30 veya Edge Buffer &lt; 5pp veya g ≤ 0 · <strong>Aggressive</strong>: pozitif edge ama P(10 kayıp) ≥ 25% · <strong>Balanced</strong>: g &gt; 0, PF ≥ 1.30, Edge Buffer ≥ 5pp · <strong>Institutional</strong>: PF ≥ 1.80, Edge Buffer ≥ 15pp, P(10 kayıp) &lt; 15%.</p>
+              </div>
+              <div class="math-threshold-card">
+                <span>Performans notu</span>
+                <p>Slider değişiminde yalnızca metrikler ve aktif sekme güncellenir. Monte Carlo yolları manuel butonla yenilenir; böylece tarayıcı slider sırasında kilitlenmez.</p>
+              </div>
+            </div>
           </div>
-          <div class="math-threshold-card">
-            <span>Performans notu</span>
-            <p>Slider değişiminde yalnızca metrikler ve aktif sekme güncellenir. Monte Carlo yolları manuel butonla yenilenir; böylece tarayıcı slider sırasında kilitlenmez.</p>
-          </div>
-        </div>
+        </details>
       </section>
     </div>
   </div>
@@ -9322,10 +9409,10 @@ input.range{touch-action:none;-webkit-user-select:none;user-select:none;}
   <nav class="math-result-tabs" aria-label="Matematik model sonuçları">
     <button class="math-result-tab active" data-math-view="compare" type="button">Kıyaslama</button>
     <button class="math-result-tab" data-math-view="growth" type="button">Büyüme</button>
-    <button class="math-result-tab" data-math-view="burden" type="button">Psikoloji</button>
+    <button class="math-result-tab" data-math-view="burden" type="button">Behavioral Load</button>
     <button class="math-result-tab" data-math-view="montecarlo" type="button">Monte Carlo</button>
     <button class="math-result-tab" data-math-view="surface" type="button">Heatmap</button>
-    <button class="math-result-tab" data-math-view="cost" type="button">Cost</button>
+    <button class="math-result-tab" data-math-view="cost" type="button">Execution Cost</button>
   </nav>
 
   <section class="math-result-pane active" data-math-pane="compare">
@@ -9618,7 +9705,8 @@ input.range{touch-action:none;-webkit-user-select:none;user-select:none;}
       </div>
       <div class="csv-mapping-grid" id="csvMapping"></div>
       <div class="csv-summary-grid" id="csvSummary" style="margin-top:12px"></div>
-      <div class="csv-diagnostics" id="csvDiagnostics">
+      <p class="csv-pre-hint" id="csvPreHint" style="font-size:12px;color:var(--stone);margin:10px 0 2px;line-height:1.5">CSV yükleyin; sistem örneklem kalitesi, hatalı satır ve alan eşleşmesini analiz edecek.</p>
+      <div class="csv-diagnostics" id="csvDiagnostics" style="display:none">
         <div class="csv-diagnostic"><strong>Algılanan Format</strong><span>—</span><em>Delimiter and column structure will appear after import.</em></div>
         <div class="csv-diagnostic"><strong>İçe Aktarma Güveni</strong><span>—</span><em>Based on mapped fields, numeric validity and sample size.</em></div>
         <div class="csv-diagnostic"><strong>Hatalı Satır</strong><span>—</span><em>Rows skipped due to missing or invalid values.</em></div>
@@ -9636,7 +9724,6 @@ input.range{touch-action:none;-webkit-user-select:none;user-select:none;}
 <div class="panel-title"><svg viewbox="0 0 24 24"><path d="M12 20h9"></path><path d="M12 4h9"></path><path d="M4 9h16"></path><path d="M4 15h16"></path><path d="M4 4h.01"></path><path d="M4 20h.01"></path></svg>Kavramlar ve Model Rehberi</div>
 <p class="panel-copy">Bu bölüm, simülasyondaki her ana kavramı yatırımcı diliyle açıklar. Amaç yalnızca tanım vermek değil; her parametrenin sermaye, risk, psikoloji ve rapor yorumu üzerinde neyi değiştirdiğini örnekle göstermektir.</p>
 </div>
-<button class="btn primary run-sim" type="button">Çalıştır</button>
 </div>
 <div class="guide-accordion"><details class="guide-group" open=""><summary><div><strong>İşlem Matematiği</strong><span>R, işlem riski, maliyet ve beklenen değer hesaplarını aynı dilde toplar.</span></div><em>Aç</em></summary><div class="guide-group-grid"><article class="concept-card deep">
 <div class="concept-kicker mono">tradeCostR</div>
@@ -9972,6 +10059,15 @@ input.range{touch-action:none;-webkit-user-select:none;user-select:none;}
 <div class="canvas-wrap priority-sensitivity"><canvas id="sensitivityChart"></canvas></div>
 <div class="sensitivity-note" id="sensitivityNarrative">Simülasyonu çalıştırınca en etkili parametreler burada açıklanır.</div>
 </section>
+<details class="advanced-accordion" id="distDetailDrawer">
+<summary>
+<div>
+<strong>Dağılım Detayları</strong>
+<em>Final sermaye dağılımı ve olasılık dilimi sonuçları</em>
+</div>
+<span class="accordion-indicator">Aç</span>
+</summary>
+<div class="advanced-accordion-body">
 <section class="chart-grid equal">
 <div class="chart-shell">
 <div class="chart-head">
@@ -9986,6 +10082,8 @@ input.range{touch-action:none;-webkit-user-select:none;user-select:none;}
 <div class="canvas-wrap small"><canvas id="outcomeChart"></canvas></div>
 </div>
 </section>
+</div>
+</details>
 <section aria-label="Senaryo karşılaştırması" class="chart-shell scenario-compare-shell">
 <div class="chart-head">
 <div>
@@ -10010,6 +10108,17 @@ input.range{touch-action:none;-webkit-user-select:none;user-select:none;}
 </div>
 <div class="canvas-wrap small"><canvas id="underwaterChart"></canvas></div>
 </div>
+</section>
+<details class="advanced-accordion" id="advancedDiagnosticsDrawer">
+<summary>
+<div>
+<strong>İleri Düzey Dağılım Analizi</strong>
+<em>Drawdown histogramı, kayıp serisi ve toparlanma süresi dağılımları</em>
+</div>
+<span class="accordion-indicator">Aç</span>
+</summary>
+<div class="advanced-accordion-body">
+<section class="chart-grid equal">
 <div class="chart-shell">
 <div class="chart-head">
 <div><div class="chart-title">Drawdown Derinliği Histogramı</div><div class="chart-copy">Simülasyon yollarında yaşanan maksimum drawdown dağılımını gösterir.</div></div>
@@ -10031,6 +10140,8 @@ input.range{touch-action:none;-webkit-user-select:none;user-select:none;}
 <div class="canvas-wrap small"><canvas id="recoveryChart"></canvas></div>
 </div>
 </section>
+</div>
+</details>
 <section aria-label="Gerçek Monte Carlo sensitivity" class="chart-shell mc-sensitivity-shell">
 <div class="chart-head">
 <div>
@@ -10300,7 +10411,20 @@ input.range{touch-action:none;-webkit-user-select:none;user-select:none;}
     const basicHost = $("basicControls");
     const advancedHost = $("advancedControls");
     if(basicHost) basicHost.innerHTML = controls.filter(c => c.group === "basic").map(controlMarkup).join("");
-    if(advancedHost) advancedHost.innerHTML = controls.filter(c => c.group === "advanced").map(controlMarkup).join("");
+    if(advancedHost){
+      const advGroups = [
+        {label:"Gelişmiş Risk Varsayımları", keys:["breakEvenRate","volatilityFactor"]},
+        {label:"Stres Olayları", keys:["shockProbability","shockImpactR"]},
+        {label:"Uygulama Limitleri", keys:["maxDailyLossPct"]}
+      ];
+      const allAdvKeys = advGroups.flatMap(g => g.keys);
+      const adv = controls.filter(c => c.group === "advanced");
+      advancedHost.innerHTML = advGroups.map(g => {
+        const items = adv.filter(c => g.keys.includes(c.key));
+        if(!items.length) return "";
+        return `<div class="adv-subgroup"><div class="adv-subgroup-label">${g.label}</div><div class="control-grid">${items.map(controlMarkup).join("")}</div></div>`;
+      }).join("") + adv.filter(c => !allAdvKeys.includes(c.key)).map(controlMarkup).join("");
+    }
     controls.forEach(c => setParam(c.key, c.value, "init"));
   }
 
@@ -13698,6 +13822,15 @@ function renderCharts(result){
     const bestIdx=bestPV!=null&&bestPV!==minPV&&bestPV!==robPV?pts.findIndex(c=>Math.abs(c.paramValue-bestPV)<0.0001):-1;
     function sparseData(idx,val){ const a=Array(labels.length).fill(null); if(idx>=0) a[idx]=val; return a; }
     if(window._p5CurveInst){ try{ window._p5CurveInst.destroy(); }catch(e){} }
+    // Smart Y-axis cap: prevent extreme outliers from collapsing the readable range
+    const _vp5=p5data.filter(v=>v!=null&&isFinite(v)&&v>0).sort((a,b)=>a-b);
+    const _vLen=_vp5.length;
+    const _p95cap=_vLen>0?_vp5[Math.floor(_vLen*0.95)]:0;
+    const _p98cap=_vLen>0?_vp5[Math.floor(_vLen*0.98)]:0;
+    const _maxRaw=_vLen>0?_vp5[_vLen-1]:0;
+    const _isCapped=_p95cap>0&&(_maxRaw/_p95cap)>2.5&&_vLen>10;
+    const _yCapRaw=_isCapped?Math.max(_p98cap,targetP5*2)*1.08:undefined;
+    const yCapValue=_yCapRaw?Math.ceil(_yCapRaw/1000)*1000:undefined;
     const hasConstrained=constrainedData.some(v=>v!==null);
     const datasets=[
       {label:"P5 Final Sermaye",data:p5data,borderColor:"#647049",backgroundColor:"rgba(100,112,73,.07)",borderWidth:2,pointRadius:0,tension:0.3,fill:true,order:4},
@@ -13707,13 +13840,22 @@ function renderCharts(result){
     if(robIdx>=0) datasets.push({label:"Robust Recommendation",data:sparseData(robIdx,pts[robIdx].p5),borderColor:"#2d5c20",backgroundColor:"#2d5c20",pointRadius:7,pointStyle:"triangle",showLine:false,order:1});
     if(bestIdx>=0) datasets.push({label:"Best Available",data:sparseData(bestIdx,pts[bestIdx].p5),borderColor:"#a88442",backgroundColor:"#a88442",pointRadius:6,pointStyle:"star",showLine:false,order:1});
     if(hasConstrained) datasets.push({label:"Kısıt İhlali",data:constrainedData,borderColor:"rgba(127,39,55,.4)",backgroundColor:"rgba(127,39,55,.15)",pointRadius:2,showLine:false,order:2});
+    if(_isCapped&&yCapValue){
+      const _clipped=p5data.map(v=>(v!=null&&v>yCapValue)?yCapValue*0.99:null);
+      if(_clipped.some(v=>v!==null)) datasets.push({label:"Eksen Üstü Aday ▲",data:_clipped,borderColor:"rgba(168,132,66,.9)",backgroundColor:"rgba(168,132,66,.75)",pointRadius:7,pointStyle:"triangle",showLine:false,order:0});
+    }
+    const _capNote=document.getElementById("p5CurveCapNote");
+    if(_capNote){
+      if(_isCapped&&yCapValue){_capNote.textContent="⚑ Y ekseni okunurluk için "+fmtMoney(yCapValue)+" ile sınırlandı. ▲ simgesi eksen üstü adayları işaretler; gerçek P5 değerleri tooltip'te gösterilir.";_capNote.style.display="";}
+      else{_capNote.style.display="none";}
+    }
     window._p5CurveInst=new Chart(canvas,{
       type:"line",
       data:{labels,datasets},
       options:{
         responsive:true,maintainAspectRatio:false,animation:{duration:0},
         plugins:{
-          legend:{display:true,position:"bottom",labels:{font:{size:10},boxWidth:14,padding:10,filter:item=>item.datasetIndex===0||item.datasetIndex===1||(item.datasetIndex===2&&minIdx>=0)||(item.datasetIndex===3&&robIdx>=0)||(item.datasetIndex===4&&bestIdx>=0)||(hasConstrained&&item.label==="Kısıt İhlali")}},
+          legend:{display:true,position:"bottom",labels:{font:{size:10},boxWidth:14,padding:10,filter:item=>item.datasetIndex===0||item.datasetIndex===1||(item.datasetIndex===2&&minIdx>=0)||(item.datasetIndex===3&&robIdx>=0)||(item.datasetIndex===4&&bestIdx>=0)||(hasConstrained&&item.label==="Kısıt İhlali")||item.label==="Eksen Üstü Aday ▲"}},
           tooltip:{
             callbacks:{
               title:([item])=>{
@@ -13755,7 +13897,7 @@ function renderCharts(result){
         },
         scales:{
           x:{title:{display:true,text:xAxisLabel,font:{size:10}},ticks:{maxTicksLimit:10,font:{size:9}},grid:{display:false}},
-          y:{title:{display:true,text:"P5 Final Sermaye",font:{size:10}},ticks:{callback:v=>fmtMoney(v),font:{size:9}}}
+          y:{title:{display:true,text:"P5 Final Sermaye",font:{size:10}},ticks:{callback:v=>fmtMoney(v),font:{size:9}},...(yCapValue?{max:yCapValue}:{})}
         }
       }
     });
@@ -15825,6 +15967,8 @@ function renderCharts(result){
       ["Bad Rows", String(parsed.badRows), "Skipped or invalid trade rows"],
       ["Sample Warning", parsed.sampleWarning, "Use 300+ trades before capital scale-up"]
     ].map(x=>`<div class="csv-diagnostic"><strong>${x[0]}</strong><span>${x[1]}</span><em>${x[2]}</em></div>`).join("");
+    host.style.display = '';
+    const hint = document.getElementById('csvPreHint'); if(hint) hint.style.display = 'none';
   }
   function generatePrintReport(){
     const core=calcCore();
@@ -16147,6 +16291,8 @@ function updateCsvDiagnostics(parsed){
     ["Imported expectancy", Number.isFinite(s.expectancy) ? s.expectancy.toFixed(3) : "—", "Average imported PnL/R proxy per trade."]
   ];
   host.innerHTML = cells.map(c=>`<div class="csv-diagnostic"><strong>${c[0]}</strong><span>${c[1]}</span><em>${c[2]}</em></div>`).join("");
+  host.style.display = '';
+  const csvHint = document.getElementById('csvPreHint'); if(csvHint) csvHint.style.display = 'none';
   window.__lastCsvImportDiagnostics = parsed;
   return parsed;
 }
@@ -17660,8 +17806,124 @@ body{padding-top:0 !important}
   font-size:clamp(18px,2.6vw,40px) !important;
   min-height:80px;
 }
+
+/* ═══════════════════════════════════════════════════
+   P5 Target Solver + Surface Explorer — Mobile Fixes
+   ═══════════════════════════════════════════════════ */
+
+/* 1 ── P5 upper input grid: phone → 1 col */
+@media(max-width:640px){
+  .p5-inputs-grid{grid-template-columns:1fr !important;}
+}
+
+/* 2 ── P5 mode selector (3 options): grid → 3 col desktop, 1 col phone */
+#p5ModeSelector{
+  display:grid !important;
+  grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+}
+@media(max-width:860px){
+  #p5ModeSelector{grid-template-columns:1fr !important;}
+  #p5ModeSelector .opt-option{min-height:44px !important;justify-content:flex-start !important;padding-left:14px !important;}
+}
+
+/* 3 ── Constraint rows: premium field-card stack on phone */
+.p5-constraints-list{display:flex;flex-direction:column;}
+@media(max-width:640px){
+  .p5-constraints-list{gap:7px !important;}
+  .p5-constraint-row{
+    flex-direction:column !important;
+    align-items:flex-start !important;
+    gap:6px !important;
+    padding:10px 12px !important;
+    background:rgba(255,253,248,.95) !important;
+    border:1px solid var(--line) !important;
+    border-bottom:1px solid var(--line) !important;
+    border-radius:10px !important;
+  }
+  .p5-constraint-row:last-child{border-bottom:1px solid var(--line) !important;}
+  .p5-constraint-label{
+    flex:none !important;
+    width:100% !important;
+    font-size:10px !important;
+    font-weight:700 !important;
+    letter-spacing:.06em !important;
+    text-transform:uppercase !important;
+    color:var(--stone) !important;
+    white-space:normal !important;
+    line-height:1.35 !important;
+  }
+  .p5-constraint-val{
+    width:100% !important;
+    min-height:46px !important;
+    font-size:14px !important;
+    box-sizing:border-box !important;
+    background:rgba(244,236,223,.45) !important;
+    border-radius:8px !important;
+  }
+}
+
+/* 4 ── "Kısıtlar (boş = devre dışı)" header: readable + wrappable on phone */
+@media(max-width:640px){
+  .p5-section .opt-block-title{
+    font-size:12px !important;
+    white-space:normal !important;
+    line-height:1.5 !important;
+  }
+  .p5-section .opt-block-title .opt-muted{
+    font-size:11px !important;
+    display:inline !important;
+  }
+}
+
+/* 5 ── Seed row: wrap on phone */
+.p5-seed-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+@media(max-width:640px){
+  .p5-seed-row .opt-toggle{flex:1 1 auto !important;min-height:44px !important;}
+}
+
+/* 6 ── Surface Explorer objective selector
+   mobileRedesignFix (max-width:768px) forces display:flex !important on .opt-goals.
+   768px override → 2×2 grid; 640px override → 1-col stack on phone.
+   Source order: 640px block is AFTER 768px block → wins at ≤640px. */
+@media(max-width:768px){
+  .opt-goals{
+    display:grid !important;
+    grid-template-columns:1fr 1fr !important;
+    overflow-x:unset !important;
+    flex-wrap:unset !important;
+  }
+  .opt-goals .opt-option{
+    flex:none !important;
+    white-space:normal !important;
+    min-height:44px !important;
+  }
+}
+@media(max-width:640px){
+  .opt-goals{
+    grid-template-columns:1fr !important;
+    padding-bottom:0 !important;
+  }
+}
+
+/* 7 ── No inner vertical scroll in P5/Surface panels */
+#optSubP5,#optSubSurface,.opt-subtab-panel{
+  overflow:visible !important;
+  max-height:none !important;
+}
 </style>
 <!-- ============ END LAYOUT POLISH ============ -->
-
+<script>
+(function(){
+  try{
+    if(new URLSearchParams(location.search).get('dev')==='1'){
+      document.querySelectorAll('.quality-check-drawer').forEach(function(el){el.setAttribute('open','');});
+      var badge = document.createElement('span');
+      badge.textContent = 'DEV';
+      badge.style.cssText = 'position:fixed;bottom:12px;right:12px;z-index:9999;background:#7f2737;color:#fff;font-size:10px;font-weight:900;letter-spacing:.08em;padding:4px 8px;border-radius:6px;pointer-events:none';
+      document.body.appendChild(badge);
+    }
+  }catch(e){}
+})();
+</script>
 </body>
 </html>
