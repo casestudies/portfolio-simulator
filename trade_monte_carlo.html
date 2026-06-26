@@ -1597,7 +1597,7 @@ table{width:100%;border-collapse:collapse}
   border-radius:999px;
   margin-top:10px;
 }
-.opt-goals{grid-template-columns:repeat(7,minmax(0,1fr));border-radius:16px}
+.opt-goals{grid-template-columns:repeat(4,minmax(0,1fr));border-radius:16px}
 .opt-third-options{grid-template-columns:repeat(3,minmax(0,1fr))}
 .opt-option,
 .opt-toggle{
@@ -8567,6 +8567,91 @@ input.range{touch-action:none;-webkit-user-select:none;user-select:none;}
   .control-row{padding-block:4px;}
 }
 
+/* ===== P5 TARGET OPTIMIZER ===== */
+.p5-section{margin-top:18px;border-top:1px solid var(--line);padding-top:18px;}
+.p5-inputs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:10px;margin-top:10px;}
+.p5-constraint-row{display:flex;align-items:center;gap:10px;padding:5px 0;border-bottom:1px solid var(--line);}
+.p5-constraint-row:last-child{border-bottom:none;}
+.p5-constraint-label{flex:1;font-size:11px;color:var(--stone);}
+.p5-constraint-val{width:90px;}
+.p5-exec{padding:12px 16px;border-radius:12px;background:rgba(100,112,73,.08);border:1px solid rgba(100,112,73,.2);margin:14px 0;font-size:13px;line-height:1.6;color:var(--ink);}
+.p5-exec.infeasible{background:rgba(198,91,54,.07);border-color:rgba(198,91,54,.22);color:var(--terra);}
+.p5-results-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:10px;margin:12px 0;}
+.p5-metric{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;}
+.p5-metric.highlight{border-color:var(--olive);background:rgba(100,112,73,.05);}
+.p5-metric.robust-card{border-color:var(--gold);background:rgba(168,132,66,.04);}
+.p5-metric-label{font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--stone);margin-bottom:4px;}
+.p5-metric-val{font-size:17px;font-weight:700;font-family:"JetBrains Mono",monospace;}
+.p5-metric-val.good{color:var(--olive);}
+.p5-metric-val.bad{color:var(--terra);}
+.p5-metric-val.warn{color:var(--gold);}
+.p5-metric-sub{font-size:10px;color:var(--muted);margin-top:2px;}
+.p5-snapshot{margin-top:14px;}
+.p5-snapshot-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px 20px;margin-top:8px;}
+.p5-snap-row{display:flex;justify-content:space-between;align-items:center;padding:3px 0;border-bottom:1px solid var(--line);}
+.p5-snap-key{font-size:11px;color:var(--stone);}
+.p5-snap-val{font-size:11px;font-weight:600;font-family:"JetBrains Mono",monospace;display:flex;align-items:center;gap:4px;}
+.p5-snap-badge{font-size:8.5px;letter-spacing:.07em;text-transform:uppercase;padding:1px 5px;border-radius:3px;}
+.p5-snap-badge.opt-badge{background:rgba(198,91,54,.13);color:var(--terra);font-weight:700;}
+.p5-snap-badge.fixed-badge{background:rgba(100,112,73,.10);color:var(--olive);}
+.p5-sec-divider{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700;margin:16px 0 8px;display:flex;align-items:center;gap:8px;}
+.p5-sec-divider::after{content:"";flex:1;height:1px;background:var(--line);}
+.p5-violations{margin:4px 0 10px;font-size:11.5px;color:var(--terra);}
+.p5-violations ul{padding-left:16px;margin:4px 0;}
+.p5-capacity-warn{display:inline-block;margin-top:6px;padding:4px 10px;border-radius:6px;font-size:11px;background:rgba(168,132,66,.10);border:1px solid rgba(168,132,66,.25);color:var(--gold);}
+.p5-stability-table{width:100%;border-collapse:collapse;margin-top:8px;font-size:12px;}
+.p5-stability-table th,.p5-stability-table td{padding:5px 9px;border:1px solid var(--line);text-align:right;}
+.p5-stability-table th{background:var(--soft);font-weight:600;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--stone);}
+.p5-stability-label{display:inline-block;padding:2px 8px;border-radius:6px;font-size:9.5px;font-weight:700;letter-spacing:.06em;}
+.p5-stability-label.low{background:rgba(100,112,73,.12);color:var(--olive);}
+.p5-stability-label.medium{background:rgba(168,132,66,.12);color:var(--gold);}
+.p5-stability-label.high{background:rgba(198,91,54,.12);color:var(--terra);}
+.p5-feasmap-wrap{overflow:auto;margin-top:10px;}
+.p5-feasmap-wrap canvas{display:block;}
+.p5-feasmap-tt{margin-top:6px;font-size:11px;color:var(--stone);min-height:16px;}
+@media(max-width:660px){
+  .p5-inputs-grid{grid-template-columns:1fr 1fr;}
+  .p5-snapshot-grid{grid-template-columns:1fr;}
+  .p5-results-grid{grid-template-columns:1fr 1fr;}
+}
+/* ===== OPT SUB-TAB NAV ===== */
+.opt-subnav{display:flex;gap:0;border-bottom:2px solid var(--line);margin-bottom:16px;overflow-x:auto;}
+.opt-subtab{background:none;border:none;padding:10px 18px;font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--stone);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap;transition:color .15s,border-color .15s;}
+.opt-subtab.active{color:var(--ink);border-bottom-color:var(--olive);}
+.opt-subtab-panel{display:none;}
+.opt-subtab-panel.active{display:block;}
+/* ===== SCROLL FIX ===== */
+.opt-panel{overflow:visible!important;max-height:none!important;}
+.opt-results{overflow:visible!important;max-height:none!important;}
+.opt-output-card{overflow:visible!important;}
+.opt-heatmap{overflow-x:auto;}
+.opt-table-wrap,.table-wrap{overflow-x:auto;}
+/* ===== AUDIT TABLE ===== */
+.p5-audit-table{width:100%;border-collapse:collapse;font-size:11px;margin-top:4px;}
+.p5-audit-table th,.p5-audit-table td{padding:4px 8px;border:1px solid var(--line);text-align:right;white-space:nowrap;}
+.p5-audit-table th{background:var(--soft);font-size:9.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--stone);font-weight:700;}
+.p5-audit-table tr.audit-min td{background:rgba(100,112,73,.10);font-weight:700;}
+.p5-audit-row-label{text-align:left!important;}
+/* ===== SEED DISPLAY ===== */
+.p5-seed-row{display:flex;align-items:center;gap:8px;margin-top:4px;flex-wrap:wrap;}
+.p5-seed-val{font-size:10.5px;font-family:"JetBrains Mono",monospace;color:var(--stone);background:var(--soft);padding:3px 8px;border-radius:6px;}
+.p5-used-seed{font-size:10px;color:var(--muted);font-style:italic;margin-top:3px;}
+/* ===== CONFIRM DIALOG ===== */
+.p5-confirm-overlay{position:fixed;inset:0;background:rgba(30,22,12,.45);z-index:9999;display:flex;align-items:center;justify-content:center;}
+.p5-confirm-box{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px 28px;max-width:460px;width:90%;box-shadow:0 16px 48px rgba(0,0,0,.18);}
+.p5-confirm-title{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:10px;}
+.p5-confirm-body{font-size:12.5px;color:var(--stone);line-height:1.55;margin-bottom:18px;}
+.p5-confirm-actions{display:flex;gap:10px;justify-content:flex-end;}
+/* ===== PRINT ===== */
+@media print{
+  body>*{display:none!important;}
+  #optimization{display:block!important;}
+  .opt-subnav,.opt-actions,button,#optSubSurface{display:none!important;}
+  #optSubP5{display:block!important;}
+  .p5-exec,.p5-snapshot,.p5-results-grid,.p5-sec-divider,#p5ResultsOuter,#p5SnapshotCard,#p5AuditCard,#p5FeasMapCard,#p5StabilityCard{display:block!important;}
+  canvas{max-width:100%!important;}
+  .p5-confirm-overlay{display:none!important;}
+}
 </style>
 </head>
 <body data-active-mode="basic">
@@ -8892,21 +8977,129 @@ input.range{touch-action:none;-webkit-user-select:none;user-select:none;}
 <div class="panel-head">
 <div>
 <div class="panel-title"><svg viewbox="0 0 24 24"><path d="M4 19V5"></path><path d="M4 19h16"></path><path d="M8 16l3-3 3 2 5-7"></path><path d="M15 7h4v4"></path></svg>Optimizasyon</div>
-<p class="panel-copy">Seçili hedefe göre risk, getiri ve kötü senaryo dengesini tarar. Hızlı analiz adayları sıralar; Olasılık Testi öne çıkan kombinasyonları daha ayrıntılı karşılaştırır.</p>
+<p class="panel-copy">Strateji yüzeyi hedef bazlı aday taraması yapar; P5 Hedef Çözücü belirli bir kötü senaryo eşiğine ulaşmak için gereken minimum parametre değerini bulur.</p>
 </div>
-<button class="btn primary" id="optRunFast" type="button">Hızlı Analiz</button>
 </div>
-<div class="opt-mobile-intro"><strong>Optimizasyon Akışı</strong><span>1. Hedefi seçin · 2. Aralık ve sınırları belirleyin · 3. Öne çıkan kombinasyonları karşılaştırın.</span></div>
+<div class="opt-mobile-intro"><strong>Optimizasyon Akışı</strong><span>1. Sekmeyi seçin · 2. Hedef ve kısıtları belirleyin · 3. Çalıştır.</span></div>
+<div class="opt-subnav" role="tablist">
+<button aria-selected="false" class="opt-subtab" data-subtab="p5" role="tab" type="button">P5 Hedef Çözücü</button>
+<button aria-selected="true" class="opt-subtab active" data-subtab="surface" role="tab" type="button">Strateji Yüzey Gezgini</button>
+</div>
+
+<!-- ===== P5 PANEL ===== -->
+<div class="opt-subtab-panel" id="optSubP5" role="tabpanel">
+<div class="opt-card p5-section">
+  <div class="opt-block-title">P5 Hedef Optimizasyonu</div>
+  <p class="opt-muted">Strateji tabındaki aktif parametreler sabit tutularak seçili P5 çarpan hedefine ulaşmak için gereken minimum parametre bulunur. Diğer tüm parametreler değişmez.</p>
+  <div class="p5-inputs-grid">
+    <label class="opt-field-card">
+      <span class="opt-field-title">Hedef Çarpan (P5)</span>
+      <input class="opt-input mono" id="p5TargetMultiple" max="50" min="0.1" step="0.1" type="number" value="2.0"/>
+    </label>
+    <div class="opt-field-card">
+      <span class="opt-field-title">Optimizasyon Modu</span>
+      <div aria-label="P5 modu" class="opt-segmented" id="p5ModeSelector" role="group" style="margin-top:5px">
+        <button aria-pressed="true"  class="opt-option active" data-p5mode="risk"      type="button">Min. Risk %</button>
+        <button aria-pressed="false" class="opt-option"        data-p5mode="frequency" type="button">Min. Frekans</button>
+        <button aria-pressed="false" class="opt-option"        data-p5mode="winrate"   type="button">Min. Kazanma %</button>
+      </div>
+    </div>
+    <label class="opt-field-card">
+      <span class="opt-field-title">Tarama Simülasyonu</span>
+      <input class="opt-input mono" id="p5OptIter" max="3000" min="200" step="100" type="number" value="800"/>
+    </label>
+    <div class="opt-field-card">
+      <span class="opt-field-title">Seed Kilidi</span>
+      <div class="p5-seed-row">
+        <button aria-pressed="true" class="opt-toggle" id="p5SeedLockBtn" type="button">Sabit Seed · Açık</button>
+        <span class="p5-seed-val" id="p5SeedDisplay">314159265</span>
+      </div>
+      <div class="p5-used-seed" id="p5UsedSeedNote"></div>
+    </div>
+  </div>
+  <div class="opt-block-title" style="margin-top:14px;font-size:11px">Kısıtlar <span class="opt-muted" style="font-weight:400;font-size:10px">(boş = devre dışı)</span></div>
+  <div style="margin-top:6px">
+    <div class="p5-constraint-row">
+      <span class="p5-constraint-label">Max Medyan Drawdown %</span>
+      <input class="opt-input mono p5-constraint-val" id="p5MaxMedDD" min="0" max="100" step="1" placeholder="—" type="number"/>
+    </div>
+    <div class="p5-constraint-row">
+      <span class="p5-constraint-label">Max P95 Drawdown %</span>
+      <input class="opt-input mono p5-constraint-val" id="p5MaxP95DD" min="0" max="100" step="1" placeholder="—" type="number"/>
+    </div>
+    <div class="p5-constraint-row">
+      <span class="p5-constraint-label">Max Kritik Kayıp Olasılığı %</span>
+      <input class="opt-input mono p5-constraint-val" id="p5MaxSevereLoss" min="0" max="100" step="1" placeholder="—" type="number"/>
+    </div>
+    <div class="p5-constraint-row">
+      <span class="p5-constraint-label">Max Risk / Trade %</span>
+      <input class="opt-input mono p5-constraint-val" id="p5MaxRiskCap" min="0" max="100" step="0.1" placeholder="—" type="number"/>
+    </div>
+    <div class="p5-constraint-row">
+      <span class="p5-constraint-label">Min Kazanma Oranı Tabanı %</span>
+      <input class="opt-input mono p5-constraint-val" id="p5MinWinFloor" min="0" max="99" step="1" placeholder="—" type="number"/>
+    </div>
+    <div class="p5-constraint-row">
+      <span class="p5-constraint-label">Max Haftalık Frekans Üst Sınırı</span>
+      <input class="opt-input mono p5-constraint-val" id="p5MaxFreqCap" min="0" max="5000" step="1" placeholder="—" type="number"/>
+    </div>
+  </div>
+  <div class="opt-actions" style="margin-top:12px">
+    <button class="btn primary" id="p5RunBtn" type="button">P5 Optimizasyon Çalıştır</button>
+    <button class="btn ghost" disabled id="p5StabilityBtn" type="button">Seed Stability</button>
+    <button class="btn ghost" disabled id="p5MapBtn" type="button">Uygulanabilirlik Haritası</button>
+  </div>
+  <div aria-hidden="true" id="p5Progress" style="display:none" class="opt-progress">
+    <div class="sim-progress-top"><span id="p5ProgressText">Hesaplanıyor…</span><span class="mono" id="p5ProgressPct">0%</span></div>
+    <div class="sim-progress-track"><div class="sim-progress-bar" id="p5ProgressBar"></div></div>
+  </div>
+</div>
+<div class="opt-card p5-snapshot" id="p5SnapshotCard" style="display:none">
+  <div class="opt-block-title">Sabit Varsayımlar Özeti</div>
+  <p class="opt-muted">Optimizasyon bu değerleri sabit tutarak çalıştı. <strong>OPT</strong> = optimize edilen, <strong>SABİT</strong> = değişmeyen.</p>
+  <div class="p5-snapshot-grid" id="p5SnapshotBody"></div>
+</div>
+<div class="p5-exec" id="p5ExecSummary" style="display:none"></div>
+<div id="p5ResultsOuter" style="display:none">
+  <div class="p5-sec-divider">Sonuç Metrikleri</div>
+  <div class="p5-results-grid" id="p5ResultsGrid"></div>
+  <div class="p5-sec-divider">Beklenti Analizi</div>
+  <div class="p5-results-grid" id="p5ExpectancyGrid"></div>
+  <div class="p5-sec-divider p5-violation-title" id="p5ViolationTitle" style="display:none">Kısıt İhlalleri</div>
+  <div class="p5-violations" id="p5ViolationsList" style="display:none"></div>
+  <div class="p5-sec-divider">Optimizasyon Eğrisi</div>
+  <div class="opt-output-card">
+    <div class="chart-title">P5 Sermaye / Test Edilen Parametre</div>
+    <div class="canvas-wrap small"><canvas id="p5CurveChart"></canvas></div>
+  </div>
+</div>
+<div class="opt-output-card" id="p5AuditCard" style="display:none">
+  <div class="chart-title">Aday Denetim Tablosu</div>
+  <p class="chart-copy">Minimum gerekli değer etrafındaki ±10 aday. Koyu satır = minimum uygulanabilir çözüm.</p>
+  <div style="overflow-x:auto"><table class="p5-audit-table"><thead id="p5AuditHead"></thead><tbody id="p5AuditBody"></tbody></table></div>
+</div>
+<div class="opt-output-card" id="p5FeasMapCard" style="display:none">
+  <div class="chart-title">Risk × Kazanma Oranı · Uygulanabilirlik Haritası</div>
+  <p class="chart-copy">Her hücre hedef P5'e ulaşılıp ulaşılmadığını gösterir. Koyu yeşil = güçlü fazla, kırmızı = hedef altı.</p>
+  <div class="p5-feasmap-wrap"><canvas id="p5FeasMapCanvas"></canvas></div>
+  <div class="p5-feasmap-tt" id="p5FeasMapTooltip"></div>
+</div>
+<div class="opt-output-card" id="p5StabilityCard" style="display:none">
+  <div class="chart-title">Seed Stability Check</div>
+  <p class="chart-copy">5 farklı seed ile çözülen parametre aralığı ve hassasiyet sınıfı.</p>
+  <div id="p5StabilityBody"></div>
+</div>
+</div>
+
+<!-- ===== SURFACE PANEL ===== -->
+<div class="opt-subtab-panel active" id="optSubSurface" role="tabpanel">
 <div class="opt-goal-block">
 <div class="opt-block-title">Optimizasyon Hedefi <span class="mono" id="optGoalCode">dengeli</span></div>
 <div aria-label="Optimizasyon hedefi" class="opt-segmented opt-goals" role="group">
 <button aria-pressed="true" class="opt-option active" data-opt-goal="balanced" type="button">Dengeli</button>
 <button aria-pressed="false" class="opt-option" data-opt-goal="target" type="button">Hedefe Ulaşma</button>
-<button aria-pressed="false" class="opt-option" data-opt-goal="ruin" type="button">Kritik Riski Azalt</button>
-<button aria-pressed="false" class="opt-option" data-opt-goal="drawdown" type="button">Drawdown Azalt</button>
+<button aria-pressed="false" class="opt-option" data-opt-goal="ruin" type="button">Sermaye Koruma</button>
 <button aria-pressed="false" class="opt-option" data-opt-goal="riskAdjusted" type="button">Risk Ayarlı</button>
-<button aria-pressed="false" class="opt-option" data-opt-goal="p5p75" type="button">Kötü Senaryoyu Koru</button>
-<button aria-pressed="false" class="opt-option" data-opt-goal="median" type="button">P50 Öncelikli</button>
 </div>
 <div class="opt-goal-copy" id="optGoalHelp">Dengeli hedef; profit factor, drawdown ve kritik sermaye riskini birlikte dengeler.</div>
 </div>
@@ -8989,7 +9182,7 @@ input.range{touch-action:none;-webkit-user-select:none;user-select:none;}
 </div>
 <div class="opt-combo-summary" id="optComboSummary">72 kombinasyon · hızlı analiz hazır</div>
 <div class="opt-actions">
-<button class="btn primary" id="optRunFastSecondary" type="button">Hızlı Analiz</button>
+<button class="btn primary" id="optRunFast" type="button">Hızlı Analiz</button>
 <button class="btn olive" disabled="" id="optRunMC" type="button">Olasılık Testi</button>
 </div>
 <div aria-hidden="true" class="opt-progress" id="optProgress">
@@ -9041,6 +9234,18 @@ input.range{touch-action:none;-webkit-user-select:none;user-select:none;}
 <div class="opt-narrative" id="optNarrative">Analiz çalıştırılınca kombinasyon yorumu burada görünür.</div>
 <div class="opt-current-compare" id="optCurrentCompare">Mevcut parametre karşılaştırması analizden sonra görünür.</div>
 </div>
+<div class="p5-confirm-overlay" id="optConfirmOverlay" style="display:none" role="dialog" aria-modal="true">
+  <div class="p5-confirm-box">
+    <div class="p5-confirm-title">Parametreleri Uygula?</div>
+    <div class="p5-confirm-body" id="optConfirmBody">Bu işlem Strateji tabındaki parametreleri değiştirecek.</div>
+    <div class="p5-confirm-actions">
+      <button class="btn ghost" id="optConfirmCancel" type="button">İptal</button>
+      <button class="btn olive" id="optConfirmOk" type="button">Uygula</button>
+    </div>
+  </div>
+</div>
+</div>
+
 </div>
 </section>
 
@@ -11409,11 +11614,8 @@ function renderCharts(result){
     const map = {
       balanced:{code:"dengeli", help:"Dengeli hedef; profit factor, drawdown ve kritik sermaye riskini birlikte dengeler."},
       target:{code:"hedefe_ulaşma", help:"Hedefe ulaşma olasılığını maksimize eder. Kısıt kapalıysa kötü senaryo riski ikinci planda kalabilir."},
-      ruin:{code:"ruin_minimize", help:"Kritik sermaye eşiğine temas olasılığını minimize eder. Büyüme yerine sermaye savunması öne çıkar."},
-      drawdown:{code:"drawdown_minimize", help:"Ortalama maksimum drawdown değerini minimize eder. Daha sakin ama daha yavaş kombinasyonlar öne çıkabilir."},
-      riskAdjusted:{code:"risk_adjusted", help:"Beklenen R / drawdown dengesiyle risk başına verimi maksimize eder."},
-      p5p75:{code:"p5_koruyarak_p75", help:"P5 kötü senaryo eşiğini koruyarak P75 güçlü senaryo sonucunu büyütür."},
-      median:{code:"medyan_maksimize", help:"P50 medyan final sermayeyi maksimize eder. Kısıt yoksa kuyruk riski ihmal edilebilir."}
+      ruin:{code:"sermaye_koruma", help:"Kritik sermaye eşiğine temas olasılığını minimize eder. Büyüme yerine sermaye savunması öne çıkar."},
+      riskAdjusted:{code:"risk_adjusted", help:"Beklenen R / drawdown dengesiyle risk başına verimi maksimize eder."}
     };
     return map[goal] || map.balanced;
   }
@@ -11517,20 +11719,8 @@ function renderCharts(result){
       case "ruin":
         score = -metrics.ruinProb;
         break;
-      case "drawdown":
-        score = -metrics.avgDD;
-        break;
       case "riskAdjusted":
         score = (metrics.erAdjusted ?? metrics.er) / Math.max(metrics.avgDD / 100, .01);
-        break;
-      case "p5p75": {
-        const minP5 = constraints.minP5 !== null ? constraints.minP5 : metrics.p.initialCapital * .60;
-        const penalty = metrics.p5 < minP5 ? (minP5 - metrics.p5) * 3 : 0;
-        score = metrics.p75 - penalty;
-        break;
-      }
-      case "median":
-        score = metrics.p50;
         break;
       case "balanced":
       default:
@@ -12001,14 +12191,26 @@ function renderCharts(result){
       const el = $(id);
       if(el) ["input","change"].forEach(evt => el.addEventListener(evt, optUpdateComboSummary));
     });
-    ["optRunFast","optRunFastSecondary"].forEach(id => {
-      const btn = $(id);
-      if(btn) btn.addEventListener("click", optRunFast);
-    });
+    const runFastBtn = $("optRunFast");
+    if(runFastBtn) runFastBtn.addEventListener("click", optRunFast);
     const mc = $("optRunMC");
     if(mc) mc.addEventListener("click", optRunMCValidate);
     const apply = $("optApplySelected");
-    if(apply) apply.addEventListener("click", optApplySelected);
+    const ov = $("optConfirmOverlay");
+    if(apply) apply.addEventListener("click", () => {
+      const row = state.optResults?.rows?.filter(x=>x.eligible)?.[state.optSelectedIndex||0];
+      if(!row) return;
+      const params = ["Risk % → "+fmtNum(row.p.riskPerTradePct,2), "AvgWinR → "+fmtNum(row.p.avgWinR,2)+"R"];
+      if(row.thirdKey&&row.thirdKey!=="none"&&row.z!==null)
+        params.push((row.thirdKey==="tradeCostR"?"Maliyet R":"Frekans")+" → "+fmtNum(row.p[row.thirdKey],2));
+      const body=$("optConfirmBody");
+      if(body) body.innerHTML=`Bu işlem <strong>Strateji</strong> tabındaki şu değerleri değiştirecek:<br><br><span class="mono">${params.join(" · ")}</span>`;
+      if(ov) ov.style.display="";
+    });
+    const confirmOk=$("optConfirmOk"), confirmCancel=$("optConfirmCancel");
+    if(confirmOk) confirmOk.addEventListener("click",()=>{optApplySelected();if(ov)ov.style.display="none";});
+    if(confirmCancel) confirmCancel.addEventListener("click",()=>{if(ov)ov.style.display="none";});
+    if(ov) ov.addEventListener("click",(e)=>{if(e.target===ov)ov.style.display="none";});
     optUpdateComboSummary();
   }
 
@@ -13154,6 +13356,592 @@ function renderCharts(result){
       }
     });
   }
+
+  // ===== P5 TARGET OPTIMIZER =====
+  const p5Opt = {
+    busy: false,
+    cancel: {cancelled:false},
+    baseConfig: null,
+    result: null,
+    allCandidates: [],
+    mode: "risk",
+    targetP5Capital: 0,
+    usedSeed: 0
+  };
+
+  function p5GetActiveMode(){
+    const btn = document.querySelector("#p5ModeSelector .opt-option.active");
+    return btn ? (btn.dataset.p5mode || "risk") : "risk";
+  }
+
+  function p5GetConstraints(){
+    function v(id){ const el=$(id); const n=parseFloat(el?el.value:""); return isFinite(n)?n:null; }
+    return {
+      maxMedDD:      v("p5MaxMedDD"),
+      maxP95DD:      v("p5MaxP95DD"),
+      maxSevereLoss: v("p5MaxSevereLoss"),
+      maxRiskCap:    v("p5MaxRiskCap"),
+      minWinFloor:   v("p5MinWinFloor"),
+      maxFreqCap:    v("p5MaxFreqCap")
+    };
+  }
+
+  function p5CheckConstraints(metrics, constraints, cfg){
+    const violations = [];
+    if(constraints.maxMedDD!==null && metrics.avgDD>constraints.maxMedDD)
+      violations.push("Medyan drawdown "+fmtPct(metrics.avgDD)+" > üst sınır "+fmtPct(constraints.maxMedDD));
+    if(constraints.maxP95DD!==null && metrics.p95DD>constraints.maxP95DD)
+      violations.push("P95 drawdown "+fmtPct(metrics.p95DD)+" > üst sınır "+fmtPct(constraints.maxP95DD));
+    if(constraints.maxSevereLoss!==null && metrics.severeLoss>constraints.maxSevereLoss)
+      violations.push("Kritik kayıp "+fmtPct(metrics.severeLoss)+" > üst sınır "+fmtPct(constraints.maxSevereLoss));
+    if(constraints.maxRiskCap!==null && cfg.riskPerTradePct>constraints.maxRiskCap)
+      violations.push("Risk "+fmtPct(cfg.riskPerTradePct)+" > üst sınır "+fmtPct(constraints.maxRiskCap));
+    if(constraints.minWinFloor!==null && cfg.winRate<constraints.minWinFloor)
+      violations.push("Kazanma oranı "+fmtPct(cfg.winRate)+" < taban "+fmtPct(constraints.minWinFloor));
+    if(constraints.maxFreqCap!==null && cfg.tradesPerDay*5>constraints.maxFreqCap)
+      violations.push("Haftalık frekans "+fmtNum(cfg.tradesPerDay*5,1)+" > üst sınır "+fmtNum(constraints.maxFreqCap,1));
+    return {valid:violations.length===0, violations};
+  }
+
+  function p5EvalCandidate(baseConfig, paramKey, paramValue, seed, iterations, constraints, mode){
+    const cfg = mergeParams(baseConfig, {[paramKey]:paramValue});
+    let effectiveIter = Math.max(150, iterations);
+    if(paramKey==="tradesPerDay" && paramValue>10)
+      effectiveIter = Math.max(100, Math.round(iterations*10/Math.max(10,paramValue)));
+    const res = runLiteSimulation(cfg, {iterations:effectiveIter, seed});
+    const initial = baseConfig.initialCapital;
+    const severeLoss = res.finals && res.finals.length
+      ? res.finals.filter(f=>f<initial*0.5).length/res.finals.length*100
+      : res.ruinProb;
+    const sortedDDs = res.dds;
+    const p95DD = sortedDDs && sortedDDs.length
+      ? (sortedDDs[Math.floor(sortedDDs.length*0.95)] || 0)
+      : 0;
+    const metrics = {
+      p5:res.p5, p50:res.p50, p95:res.p95,
+      avgDD:res.avgDD, p95DD, worstDD:res.worstDD,
+      ruinProb:res.ruinProb, severeLoss,
+      targetProb:res.targetProb, er:res.er
+    };
+    const {valid,violations} = p5CheckConstraints(metrics, constraints, cfg);
+    return {paramValue, ...metrics, valid, violations};
+  }
+
+  function p5GenRiskCandidates(baseConfig){
+    const avgLossR = baseConfig.avgLossR || 1;
+    const tradeCostR = baseConfig.tradeCostR || 0;
+    const safeMax = Math.min(99 / (avgLossR + tradeCostR + 0.001) * 0.97, 50);
+    const minR = 0.01;
+    const maxR = Math.min(safeMax, Math.max(20, Math.min(50, baseConfig.riskPerTradePct*18)));
+    const n = 130;
+    const cands = new Set();
+    for(let i=0;i<n;i++){
+      const t = i/(n-1);
+      const v = Math.round(minR*Math.pow(maxR/minR,t)*1000)/1000;
+      if(v>0) cands.add(v);
+    }
+    return [...cands].sort((a,b)=>a-b);
+  }
+
+  function p5GenFreqCandidates(){
+    const segs = [
+      {lo:0.01, hi:1,    step:0.01},
+      {lo:1,    hi:10,   step:0.1 },
+      {lo:10,   hi:100,  step:1   },
+      {lo:100,  hi:1000, step:10  },
+      {lo:1000, hi:5000, step:50  }
+    ];
+    const cands = new Set();
+    segs.forEach(s=>{
+      let v=s.lo;
+      while(v<=s.hi+s.step*0.001){
+        cands.add(Math.round(v*1000)/1000);
+        v=Math.round((v+s.step)*100000)/100000;
+      }
+    });
+    return [...cands].sort((a,b)=>a-b).map(w=>Math.round(w/5*10000)/10000);
+  }
+
+  function p5GenWinRateCandidates(){
+    const c=[];
+    for(let wr=1;wr<=99;wr++) c.push(wr);
+    return c;
+  }
+
+  function p5GenWinRateRefined(coarseWR, spread){
+    const sp=spread||3;
+    const lo=Math.max(0.5,coarseWR-sp), hi=Math.min(98.5,coarseWR+sp);
+    const c=new Set();
+    let v=lo;
+    while(v<=hi+0.001){
+      c.add(Math.round(v*10)/10);
+      v=Math.round((v+0.1)*10)/10;
+    }
+    return [...c].sort((a,b)=>a-b);
+  }
+
+  function p5Progress(text, pct){
+    const prog=$("p5Progress");
+    if(prog) prog.style.display="";
+    const t=$("p5ProgressText"), p=$("p5ProgressPct"), b=$("p5ProgressBar");
+    if(t) t.textContent=text;
+    if(p) p.textContent=Math.round(pct)+"%";
+    if(b) b.style.width=clamp(pct,0,100)+"%";
+  }
+
+  function p5RunBatch(candidates, paramKey, baseConfig, constraints, seed, iter, mode, cancel, onProgress, onDone){
+    const results=[], BATCH=8;
+    let idx=0;
+    const freqEarlyStop=(paramKey==="tradesPerDay");
+    let feasibleFound=false;
+    function step(){
+      if(cancel.cancelled){ onDone(results,true); return; }
+      const end=Math.min(idx+BATCH,candidates.length);
+      for(let i=idx;i<end;i++){
+        const r=p5EvalCandidate(baseConfig, paramKey, candidates[i], seed, iter, constraints, mode);
+        results.push(r);
+        if(freqEarlyStop&&r.p5>=p5Opt.targetP5Capital&&r.valid) feasibleFound=true;
+      }
+      idx=end;
+      onProgress(candidates.length, idx, "Taranıyor…");
+      if(freqEarlyStop&&feasibleFound&&idx<candidates.length){
+        const extra=Math.min(candidates.length,idx+16);
+        for(let i=idx;i<extra;i++)
+          results.push(p5EvalCandidate(baseConfig, paramKey, candidates[i], seed, iter, constraints, mode));
+        idx=extra;
+        onDone(results,false); return;
+      }
+      if(idx>=candidates.length){ onDone(results,false); return; }
+      requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  function p5FindBest(candidates, targetP5, robustTarget){
+    const sorted=[...candidates].sort((a,b)=>a.paramValue-b.paramValue);
+    const feasible=sorted.filter(c=>c.p5>=targetP5);
+    const validFeasible=feasible.filter(c=>c.valid);
+    const minimum=validFeasible[0]||feasible[0]||sorted.reduce((b,c)=>c.p5>b.p5?c:b,sorted[0]);
+    const robustFeas=sorted.filter(c=>c.p5>=robustTarget&&c.valid);
+    const robust=robustFeas[0]||minimum;
+    const bestAvailable=sorted.reduce((b,c)=>c.p5>b.p5?c:b,sorted[0]);
+    return {minimum,robust,bestAvailable,feasible_exists:feasible.length>0,allSorted:sorted};
+  }
+
+  function p5BuildExec(result, baseConfig, mode, targetMultiple){
+    if(!result.feasible_exists)
+      return "Hedef, seçili parametre aralığında ve aktif kısıtlarla uygulanamaz olarak değerlendirildi.";
+    const m=result.minimum;
+    const tLabel=targetMultiple.toFixed(1)+"× P5 hedefine";
+    const fixed=[];
+    if(mode!=="risk")      fixed.push("risk %"+fmtNum(baseConfig.riskPerTradePct,2));
+    if(mode!=="winrate")   fixed.push("kazanma %"+fmtNum(baseConfig.winRate,1));
+    if(mode!=="frequency") fixed.push("frekans "+fmtNum(baseConfig.tradesPerDay*5,1)+" trade/hafta");
+    fixed.push("ort. kazanç "+fmtNum(baseConfig.avgWinR,2)+"R");
+    fixed.push("ort. kayıp "+fmtNum(baseConfig.avgLossR,2)+"R");
+    let pStr="";
+    if(mode==="risk")       pStr="en az %"+fmtNum(m.paramValue,2)+" trade başına risk";
+    else if(mode==="frequency") pStr="en az "+fmtNum(m.paramValue*5,1)+" trade/hafta";
+    else                    pStr="en az %"+fmtNum(m.paramValue,1)+" kazanma oranı";
+    return tLabel+" ulaşmak için model "+pStr+" gerektiriyor; sabit: "+fixed.join(", ")+".";
+  }
+
+  function p5RenderSnapshot(baseConfig, mode, seed){
+    const card=$("p5SnapshotCard"), body=$("p5SnapshotBody");
+    if(!card||!body) return;
+    const row=(k,v,isOpt)=>`<div class="p5-snap-row"><span class="p5-snap-key">${k}</span><span class="p5-snap-val">${v}<span class="p5-snap-badge ${isOpt?"opt-badge":"fixed-badge"}">${isOpt?"OPT":"SABİT"}</span></span></div>`;
+    body.innerHTML=[
+      row("Başlangıç Sermayesi",   fmtMoney(baseConfig.initialCapital),           false),
+      row("Hedef Sermaye",         fmtMoney(baseConfig.targetCapital||0),          false),
+      row("Simülasyon Günleri",    fmtNum(baseConfig.days,0)+" gün",               false),
+      row("Simülasyon Sayısı",     fmtNum(baseConfig.iterations,0)+" yol",         false),
+      row("Ruin Eşiği %",          fmtNum(baseConfig.ruinThresholdPct||50,0)+"%",  false),
+      row("Ortalama Kazanç R",     fmtNum(baseConfig.avgWinR,2)+"R",              false),
+      row("Ortalama Kayıp R",      fmtNum(baseConfig.avgLossR,2)+"R",             false),
+      row("Trade Maliyeti",        fmtNum(baseConfig.tradeCostR,3)+"R",            false),
+      row("Başa Baş Oranı",        fmtNum(baseConfig.breakEvenRate||0,1)+"%",      false),
+      row("Volatilite Faktörü",    fmtNum(baseConfig.volatilityFactor||1,2),       false),
+      row("Şok Olasılığı",         fmtNum(baseConfig.shockProbability||0,1)+"%",   false),
+      row("Şok Etkisi",            fmtNum(baseConfig.shockImpactR||0,2)+"R",       false),
+      row("Risk Modu",             baseConfig.riskMode==="compounding"?"Bileşik":"Sabit", false),
+      row("Kazanma Oranı %",       fmtNum(baseConfig.winRate,1)+"%",               mode==="winrate"),
+      row("Trade Başına Risk %",   fmtNum(baseConfig.riskPerTradePct,2)+"%",       mode==="risk"),
+      row("Haftalık Trade",        fmtNum(baseConfig.tradesPerDay*5,2)+" trade/hafta", mode==="frequency"),
+      row("Kullanılan Seed",       String(seed||0),                                false)
+    ].join("");
+    card.style.display="";
+  }
+
+  function p5MetricCard(label, val, sub, cls){
+    const valCls=cls&&/good|bad|warn/.test(cls)?" "+(cls.match(/good|bad|warn/)[0]||""):"";
+    return `<div class="p5-metric${cls?" "+cls:""}"><div class="p5-metric-label">${label}</div><div class="p5-metric-val${valCls}">${val}</div>${sub?`<div class="p5-metric-sub">${sub}</div>`:""}</div>`;
+  }
+
+  function p5RenderResults(result, baseConfig, targetP5, targetMultiple, mode, constraints){
+    const g=$("p5ResultsGrid"), eg=$("p5ExpectancyGrid");
+    if(!g||!eg) return;
+    const {minimum,robust,bestAvailable,feasible_exists}=result;
+    const main=feasible_exists?minimum:bestAvailable;
+    const modeLabel=mode==="risk"?"Min. Risk / Trade":mode==="frequency"?"Min. Haftalık Trade":"Min. Kazanma Oranı";
+    const mainFmt=mode==="risk"?fmtNum(main.paramValue,2)+"%":mode==="frequency"?fmtNum(main.paramValue*5,1)+" trade/hafta":fmtNum(main.paramValue,1)+"%";
+    const robustFmt=mode==="risk"?fmtNum(robust.paramValue,2)+"%":mode==="frequency"?fmtNum(robust.paramValue*5,1)+" trade/hafta":fmtNum(robust.paramValue,1)+"%";
+    const gap=main.p5-targetP5;
+
+    g.innerHTML=[
+      p5MetricCard(modeLabel, mainFmt, feasible_exists?"Minimum yeterli değer":"En iyi mevcut", feasible_exists?"highlight":""),
+      p5MetricCard("Güvenli Öneri (%2 Tampon)", robustFmt, "P5 ≥ hedef × 1.02", "robust-card"),
+      p5MetricCard("P5 Final Sermaye", fmtMoney(main.p5), "", feasible_exists?"good":"bad"),
+      p5MetricCard("Hedef P5 Sermaye", fmtMoney(targetP5), targetMultiple.toFixed(1)+"× başlangıç", ""),
+      p5MetricCard("Hedefe Fark", (gap>=0?"+":"")+fmtMoney(gap), "", gap>=0?"good":"bad"),
+      p5MetricCard("P50 Final Sermaye", fmtMoney(main.p50), "Medyan senaryo", ""),
+      p5MetricCard("P95 Final Sermaye", fmtMoney(main.p95), "İyimser senaryo", ""),
+      p5MetricCard("Hedefe Ulaşma Olasılığı", fmtPct(main.targetProb), "targetCapital'e ulaşan yollar", ""),
+      p5MetricCard("Kritik Kayıp Olasılığı", fmtPct(main.severeLoss), "Sermaye < %50", main.severeLoss>10?"bad":"good"),
+      p5MetricCard("Medyan Maks. Drawdown", fmtPct(main.avgDD), "", main.avgDD>35?"bad":"good"),
+      p5MetricCard("P95 Maks. Drawdown", fmtPct(main.p95DD), "Kötü senaryo drawdown", main.p95DD>55?"bad":""),
+      p5MetricCard("Uygulanabilir", feasible_exists?"Evet":"Hayır — aralık dışı", "", feasible_exists?"good":"bad")
+    ].join("");
+
+    const wP=baseConfig.winRate/100, beP=(baseConfig.breakEvenRate||0)/100;
+    const lP=Math.max(0,1-wP-beP);
+    const curER=wP*baseConfig.avgWinR - lP*baseConfig.avgLossR - baseConfig.tradeCostR;
+    let solvedER=curER;
+    if(mode==="winrate"){
+      const wP2=main.paramValue/100, lP2=Math.max(0,1-wP2-beP);
+      solvedER=wP2*baseConfig.avgWinR - lP2*baseConfig.avgLossR - baseConfig.tradeCostR;
+    }
+    const edgeGap=solvedER-curER;
+    eg.innerHTML=[
+      p5MetricCard("Mevcut Beklenti R", fmtNum(curER,3)+"R / trade", "Aktif strateji", curER>0?"good":"bad"),
+      p5MetricCard("Çözüm Beklenti R", fmtNum(solvedER,3)+"R / trade", "Minimum aday", solvedER>0?"good":"bad"),
+      p5MetricCard("Edge Farkı", (edgeGap>=0?"+":"")+fmtNum(edgeGap,3)+"R", "Ek gerekli edge", Math.abs(edgeGap)<0.001?"":"warn")
+    ].join("");
+
+    const vt=$("p5ViolationTitle"), vl=$("p5ViolationsList");
+    if(main.violations&&main.violations.length){
+      if(vt) vt.style.display="";
+      if(vl){ vl.style.display=""; vl.innerHTML="<ul>"+main.violations.map(v=>`<li>${v}</li>`).join("")+"</ul>"; }
+    } else {
+      if(vt) vt.style.display="none";
+      if(vl) vl.style.display="none";
+    }
+    const ro=$("p5ResultsOuter"); if(ro) ro.style.display="";
+  }
+
+  function p5RenderAuditTable(allSorted, minimum, mode){
+    const card=$("p5AuditCard"), thead=$("p5AuditHead"), tbody=$("p5AuditBody");
+    if(!card||!thead||!tbody||!allSorted||!allSorted.length) return;
+    const minIdx=allSorted.indexOf(minimum);
+    const lo=Math.max(0,minIdx-10), hi=Math.min(allSorted.length-1,minIdx+10);
+    const slice=allSorted.slice(lo,hi+1);
+    const colLabel=mode==="risk"?"Risk %":mode==="frequency"?"Trade/Hafta":"Kazanma %";
+    thead.innerHTML=`<tr><th class="p5-audit-row-label">${colLabel}</th><th>P5</th><th>P50</th><th>DD</th><th>P95 DD</th><th>Kritik %</th><th>Kısıt</th></tr>`;
+    tbody.innerHTML=slice.map(c=>{
+      const isMin=c===minimum;
+      const pv=mode==="frequency"?fmtNum(c.paramValue*5,1):fmtNum(c.paramValue,2);
+      return `<tr class="${isMin?"audit-min":""}"><td class="p5-audit-row-label mono">${pv}</td><td class="mono">${fmtMoney(c.p5)}</td><td class="mono">${fmtMoney(c.p50)}</td><td class="mono">${fmtPct(c.avgDD)}</td><td class="mono">${fmtPct(c.p95DD)}</td><td class="mono">${fmtPct(c.severeLoss)}</td><td>${c.valid?"✓":"✗ "+(c.violations&&c.violations.length?c.violations[0].substring(0,28):"")}</td></tr>`;
+    }).join("");
+    card.style.display="";
+  }
+
+  function p5RenderCurve(allSorted, targetP5, mode){
+    const canvas=$("p5CurveChart");
+    if(!canvas) return;
+    const stride=Math.max(1,Math.floor(allSorted.length/120));
+    const pts=allSorted.filter((_,i)=>i%stride===0);
+    const labels=pts.map(c=>mode==="risk"?fmtNum(c.paramValue,1)+"%":mode==="frequency"?fmtNum(c.paramValue*5,1):fmtNum(c.paramValue,1)+"%");
+    const p5data=pts.map(c=>c.p5);
+    if(window._p5CurveInst){ try{ window._p5CurveInst.destroy(); }catch(e){} }
+    window._p5CurveInst=new Chart(canvas,{
+      type:"line",
+      data:{labels,datasets:[
+        {label:"P5 Final Sermaye",data:p5data,borderColor:"#647049",backgroundColor:"rgba(100,112,73,.07)",borderWidth:1.5,pointRadius:0,tension:0.3,fill:true},
+        {label:"Hedef P5",data:Array(labels.length).fill(targetP5),borderColor:"#c65b36",borderDash:[5,4],borderWidth:1.5,pointRadius:0}
+      ]},
+      options:{responsive:true,animation:{duration:0},plugins:{legend:{display:false}},scales:{
+        x:{ticks:{maxTicksLimit:10,font:{size:9}},grid:{display:false}},
+        y:{ticks:{callback:v=>fmtMoney(v),font:{size:9}}}
+      }}
+    });
+  }
+
+  function p5RunFeasibilityMap(baseConfig, targetP5, seed, iter, cancel, onProgress, onDone){
+    const riskSteps=[], wrSteps=[];
+    for(let r=0.5;r<=20.01;r+=1) riskSteps.push(Math.round(r*10)/10);
+    for(let w=10;w<=90;w+=4) wrSteps.push(w);
+    const total=riskSteps.length*wrSteps.length;
+    const results=[];
+    let idx=0, ri=0, wi=0;
+    function step(){
+      if(cancel.cancelled){ onDone(null); return; }
+      for(let b=0;b<12&&idx<total;b++,idx++){
+        const risk=riskSteps[ri], wr=wrSteps[wi];
+        const cfg=mergeParams(baseConfig,{riskPerTradePct:risk,winRate:wr});
+        const res=runLiteSimulation(cfg,{iterations:Math.min(iter,250),seed});
+        const sev=res.finals&&res.finals.length?res.finals.filter(f=>f<baseConfig.initialCapital*0.5).length/res.finals.length*100:0;
+        const p95DD=res.dds&&res.dds.length?(res.dds[Math.floor(res.dds.length*0.95)]||0):0;
+        results.push({risk,wr,p5:res.p5,feasible:res.p5>=targetP5,ratio:res.p5/Math.max(1,targetP5),avgDD:res.avgDD,p95DD,severeLoss:sev});
+        wi++; if(wi>=wrSteps.length){wi=0;ri++;}
+      }
+      onProgress(total,idx,"Uygulanabilirlik haritası…");
+      if(idx>=total){ onDone({results,riskSteps,wrSteps}); return; }
+      requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  function p5RenderFeasibilityMap(mapResult, targetP5){
+    const card=$("p5FeasMapCard");
+    if(!card||!mapResult) return;
+    card.style.display="";
+    const canvas=$("p5FeasMapCanvas");
+    if(!canvas) return;
+    const {results,riskSteps,wrSteps}=mapResult;
+    const CW=18,CH=14,PAD_L=32,PAD_B=18;
+    canvas.width=riskSteps.length*CW+PAD_L;
+    canvas.height=wrSteps.length*CH+PAD_B;
+    const ctx2=canvas.getContext("2d");
+    ctx2.clearRect(0,0,canvas.width,canvas.height);
+    ctx2.font="9px Inter,sans-serif";
+    results.forEach(r=>{
+      const xi=riskSteps.indexOf(r.risk), yi=wrSteps.indexOf(r.wr);
+      if(xi<0||yi<0) return;
+      const x=PAD_L+xi*CW, y=(wrSteps.length-1-yi)*CH;
+      const ratio=r.ratio;
+      ctx2.fillStyle=ratio>=1.2?"#2d5c20":ratio>=1.0?"#647049":ratio>=0.8?"#a88442":ratio>=0.6?"#c65b36":"#7f2737";
+      ctx2.fillRect(x,y,CW-1,CH-1);
+    });
+    ctx2.fillStyle="#6f675d";
+    riskSteps.forEach((r,i)=>{ if(i%3===0) ctx2.fillText(r+"%",PAD_L+i*CW,wrSteps.length*CH+PAD_B-2); });
+    wrSteps.forEach((w,j)=>{ if(j%2===0){ ctx2.fillStyle="#6f675d"; ctx2.fillText(w+"%",0,(wrSteps.length-1-j)*CH+CH-2); } });
+    const tt=$("p5FeasMapTooltip");
+    canvas.onmousemove=function(e){
+      const rect=canvas.getBoundingClientRect(), sx=canvas.width/rect.width, sy=canvas.height/rect.height;
+      const mx=(e.clientX-rect.left)*sx-PAD_L, my=(e.clientY-rect.top)*sy;
+      const xi=Math.floor(mx/CW), yiInv=Math.floor(my/CH), yi=wrSteps.length-1-yiInv;
+      const r=results.find(r=>riskSteps.indexOf(r.risk)===xi&&wrSteps.indexOf(r.wr)===yi);
+      if(r&&tt) tt.innerHTML=`Risk <strong>${r.risk}%</strong> · Kazanma <strong>${r.wr}%</strong> → P5 <strong>${fmtMoney(r.p5)}</strong> · DD ${fmtPct(r.avgDD)} · P95DD ${fmtPct(r.p95DD)} · Kritik ${fmtPct(r.severeLoss)} (${r.feasible?"✓":"✗"})`;
+      else if(tt) tt.textContent="";
+    };
+    canvas.onmouseleave=function(){ if(tt) tt.textContent=""; };
+  }
+
+  function p5RunStabilityCheck(baseConfig, mode, constraints, mainIter, onProgress, onDone){
+    const seeds=[271828182,141421356,577350269,999999937,123456789];
+    const paramKey=mode==="risk"?"riskPerTradePct":mode==="frequency"?"tradesPerDay":"winRate";
+    const targetP5=baseConfig.initialCapital*(parseFloat(($("p5TargetMultiple")||{}).value||"2")||2);
+    const results=[];
+    let si=0;
+    function nextSeed(){
+      if(si>=seeds.length){ onDone(results); return; }
+      const seed=seeds[si++];
+      onProgress(seeds.length,si,"Seed "+seed+"…");
+      const cands=mode==="risk"?p5GenRiskCandidates(baseConfig):mode==="frequency"?p5GenFreqCandidates():p5GenWinRateCandidates();
+      const bIter=Math.max(200,Math.round(mainIter*0.35));
+      const evals=cands.map(v=>p5EvalCandidate(baseConfig,paramKey,v,seed,bIter,constraints,mode));
+      const r=p5FindBest(evals,targetP5,targetP5*1.02);
+      const cand=r.feasible_exists?r.minimum:r.bestAvailable;
+      results.push({seed,paramValue:mode==="frequency"?cand.paramValue*5:cand.paramValue,p5:cand.p5,feasible:r.feasible_exists});
+      requestAnimationFrame(nextSeed);
+    }
+    requestAnimationFrame(nextSeed);
+  }
+
+  function p5RenderStability(results, mode){
+    const card=$("p5StabilityCard");
+    if(!card||!results.length) return;
+    card.style.display="";
+    const vals=results.map(r=>r.paramValue).filter(isFinite);
+    const sorted=[...vals].sort((a,b)=>a-b);
+    const mn=sorted[0], mx=sorted[sorted.length-1], med=sorted[Math.floor(sorted.length/2)];
+    const band=med>0?(mx-mn)/med*100:0;
+    const sens=band<10?"low":band<25?"medium":"high";
+    const sensLabel={low:"Düşük",medium:"Orta",high:"Yüksek"};
+    const sfx=mode==="risk"?"%":mode==="frequency"?" trade/hafta":"%";
+    const body=$("p5StabilityBody");
+    if(!body) return;
+    body.innerHTML=`<table class="p5-stability-table"><thead><tr><th>Seed</th><th>Çözüm</th><th>P5</th><th>Uygulanabilir</th></tr></thead><tbody>${
+      results.map(r=>`<tr><td class="mono">${r.seed}</td><td class="mono">${fmtNum(r.paramValue,2)}${sfx}</td><td class="mono">${fmtMoney(r.p5)}</td><td>${r.feasible?"Evet":"Hayır"}</td></tr>`).join("")
+    }</tbody></table><div style="margin-top:8px;font-size:12px"><strong>Bant:</strong> <span class="mono">${fmtNum(mn,2)}–${fmtNum(mx,2)}${sfx}</span> &nbsp;<strong>Medyan:</strong> <span class="mono">${fmtNum(med,2)}${sfx}</span> &nbsp;<span class="p5-stability-label ${sens}">${sensLabel[sens]} Hassasiyet</span></div>`;
+  }
+
+  function p5RunOptimization(){
+    if(p5Opt.busy) return;
+    const mode=p5GetActiveMode();
+    const targetMultiple=Math.max(0.1,parseFloat(($("p5TargetMultiple")||{}).value||"2")||2);
+    const baseConfig=getParams();
+    const targetP5=baseConfig.initialCapital*targetMultiple;
+    const constraints=p5GetConstraints();
+    const scanIter=clamp(parseInt(($("p5OptIter")||{}).value||"800")||800,200,3000);
+    const seedLocked=($("p5SeedLockBtn")||{}).getAttribute("aria-pressed")==="true";
+    const seed=seedLocked?314159265:Math.floor(Date.now()%2147483647);
+    const paramKey=mode==="risk"?"riskPerTradePct":mode==="frequency"?"tradesPerDay":"winRate";
+
+    const seedDisp=$("p5SeedDisplay");
+    if(seedDisp) seedDisp.textContent=String(seed);
+    const usedNote=$("p5UsedSeedNote");
+    if(usedNote) usedNote.textContent=seedLocked?"Sabit seed":"Rastgele seed";
+
+    let candidates;
+    if(mode==="risk") candidates=p5GenRiskCandidates(baseConfig);
+    else if(mode==="frequency") candidates=p5GenFreqCandidates();
+    else candidates=p5GenWinRateCandidates();
+
+    p5Opt.busy=true;
+    p5Opt.cancel={cancelled:false};
+    p5Opt.baseConfig=baseConfig;
+    p5Opt.mode=mode;
+    p5Opt.targetP5Capital=targetP5;
+    p5Opt.usedSeed=seed;
+
+    const runBtn=$("p5RunBtn");
+    if(runBtn){runBtn.disabled=true;runBtn.textContent="Çalışıyor…";}
+    ["p5ExecSummary","p5ResultsOuter","p5FeasMapCard","p5StabilityCard","p5AuditCard"].forEach(id=>{
+      const el=$(id); if(el) el.style.display="none";
+    });
+    p5Progress("Taranıyor…",0);
+    p5RenderSnapshot(baseConfig,mode,seed);
+
+    function onProg(total,done){ p5Progress("Taranıyor…",total>0?done/total*100:0); }
+
+    p5RunBatch(candidates,paramKey,baseConfig,constraints,seed,scanIter,mode,p5Opt.cancel,onProg,(coarse,cancelled)=>{
+      if(cancelled||p5Opt.cancel.cancelled){finishRun();return;}
+
+      const sorted=[...coarse].sort((a,b)=>a.paramValue-b.paramValue);
+      const firstFeasIdx=sorted.findIndex(c=>c.p5>=targetP5);
+
+      if(mode==="winrate"&&firstFeasIdx>=0&&!p5Opt.cancel.cancelled){
+        const coarseWR=sorted[firstFeasIdx].paramValue;
+        p5Progress("İnceleniyor…",60);
+        const refined=p5GenWinRateRefined(coarseWR,3).map(v=>
+          p5EvalCandidate(baseConfig,paramKey,v,seed,scanIter,constraints,mode)
+        );
+        const all=[...coarse,...refined];
+        p5Opt.allCandidates=all;
+        p5Finish(all);
+      } else if(firstFeasIdx>0&&mode!=="winrate"&&!p5Opt.cancel.cancelled){
+        const lo=sorted[Math.max(0,firstFeasIdx-2)].paramValue;
+        const hi=sorted[Math.min(sorted.length-1,firstFeasIdx+2)].paramValue;
+        const refinedCands=[];
+        for(let i=0;i<70;i++) refinedCands.push(lo+(hi-lo)*i/69);
+        p5Progress("İnceleniyor…",50);
+        p5RunBatch(refinedCands,paramKey,baseConfig,constraints,seed,Math.min(scanIter*1.5,3000),mode,p5Opt.cancel,
+          (t,d)=>p5Progress("İnceleniyor…",50+d/t*50),
+          (refined,c2)=>{
+            if(c2){finishRun();return;}
+            const all=[...coarse,...refined];
+            all.sort((a,b)=>a.paramValue-b.paramValue);
+            p5Opt.allCandidates=all;
+            p5Finish(all);
+          }
+        );
+      } else {
+        p5Opt.allCandidates=coarse;
+        p5Finish(coarse);
+      }
+    });
+
+    function p5Finish(allCands){
+      const result=p5FindBest(allCands,targetP5,targetP5*1.02);
+      p5Opt.result=result;
+      const execEl=$("p5ExecSummary");
+      if(execEl){
+        execEl.textContent=p5BuildExec(result,baseConfig,mode,targetMultiple);
+        execEl.className="p5-exec"+(result.feasible_exists?"":" infeasible");
+        execEl.style.display="";
+      }
+      p5RenderResults(result,baseConfig,targetP5,targetMultiple,mode,constraints);
+      p5RenderCurve(result.allSorted,targetP5,mode);
+      p5RenderAuditTable(result.allSorted,result.minimum,mode);
+      if(mode==="frequency"&&result.feasible_exists){
+        const wf=(result.minimum.paramValue||0)*5;
+        if(wf>=750){
+          const span=document.createElement("span");
+          span.className="p5-capacity-warn";
+          span.textContent=wf>=2500?"Kurumsal / sistematik yürütme kapasitesi gerektirir.":"Yüksek otomasyon kapasitesi gerektirir.";
+          const capEl=$("p5ExecSummary"); if(capEl) capEl.appendChild(span);
+        }
+      }
+      finishRun();
+    }
+
+    function finishRun(){
+      p5Opt.busy=false;
+      if(runBtn){runBtn.disabled=false;runBtn.textContent="P5 Optimizasyon Çalıştır";}
+      const prog=$("p5Progress");if(prog)prog.style.display="none";
+      const sb=$("p5StabilityBtn"),mb=$("p5MapBtn");
+      if(sb)sb.disabled=false;if(mb)mb.disabled=false;
+    }
+  }
+
+  function p5InitUI(){
+    document.querySelectorAll(".opt-subtab").forEach(tab=>{
+      tab.addEventListener("click",()=>{
+        document.querySelectorAll(".opt-subtab").forEach(t=>{t.classList.remove("active");t.setAttribute("aria-selected","false");});
+        document.querySelectorAll(".opt-subtab-panel").forEach(p=>p.classList.remove("active"));
+        tab.classList.add("active");tab.setAttribute("aria-selected","true");
+        const key=tab.dataset.subtab;
+        const panel=document.getElementById("optSub"+key.charAt(0).toUpperCase()+key.slice(1));
+        if(panel) panel.classList.add("active");
+      });
+    });
+
+    document.querySelectorAll("#p5ModeSelector .opt-option").forEach(btn=>{
+      btn.addEventListener("click",()=>{
+        document.querySelectorAll("#p5ModeSelector .opt-option").forEach(b=>{b.classList.remove("active");b.setAttribute("aria-pressed","false");});
+        btn.classList.add("active");btn.setAttribute("aria-pressed","true");
+      });
+    });
+
+    const sl=$("p5SeedLockBtn");
+    if(sl) sl.addEventListener("click",()=>{
+      const on=sl.getAttribute("aria-pressed")==="true";
+      sl.setAttribute("aria-pressed",String(!on));
+      sl.textContent=!on?"Sabit Seed · Açık":"Sabit Seed · Kapalı";
+      const sd=$("p5SeedDisplay");
+      if(sd) sd.textContent=!on?"314159265":"—";
+    });
+
+    const rb=$("p5RunBtn");
+    if(rb) rb.addEventListener("click",p5RunOptimization);
+
+    const sb=$("p5StabilityBtn");
+    if(sb) sb.addEventListener("click",()=>{
+      if(!p5Opt.baseConfig||p5Opt.busy) return;
+      sb.disabled=true;
+      const sc=$("p5StabilityCard");if(sc)sc.style.display="none";
+      const iter=clamp(parseInt(($("p5OptIter")||{}).value||"800")||800,200,3000);
+      p5Progress("Seed stability…",0);
+      p5RunStabilityCheck(p5Opt.baseConfig,p5Opt.mode,p5GetConstraints(),iter,
+        (t,d,l)=>p5Progress(l,d/t*100),
+        (res)=>{
+          p5RenderStability(res,p5Opt.mode);
+          sb.disabled=false;
+          const prog=$("p5Progress");if(prog)prog.style.display="none";
+        }
+      );
+    });
+
+    const mb=$("p5MapBtn");
+    if(mb) mb.addEventListener("click",()=>{
+      if(!p5Opt.baseConfig||p5Opt.busy) return;
+      mb.disabled=true;
+      const fm=$("p5FeasMapCard");if(fm)fm.style.display="none";
+      const iter=clamp(parseInt(($("p5OptIter")||{}).value||"800")||800,200,3000);
+      const cancel={cancelled:false};
+      p5Progress("Uygulanabilirlik haritası…",0);
+      p5RunFeasibilityMap(p5Opt.baseConfig,p5Opt.targetP5Capital,p5Opt.usedSeed||314159265,iter,cancel,
+        (t,d,l)=>p5Progress(l,d/t*100),
+        (mr)=>{
+          p5RenderFeasibilityMap(mr,p5Opt.targetP5Capital);
+          mb.disabled=false;
+          const prog=$("p5Progress");if(prog)prog.style.display="none";
+        }
+      );
+    });
+  }
+
+  p5InitUI();
 
 })();
 </script>
