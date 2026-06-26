@@ -8606,9 +8606,26 @@ input.range{touch-action:none;-webkit-user-select:none;user-select:none;}
 .p5-stability-label.low{background:rgba(100,112,73,.12);color:var(--olive);}
 .p5-stability-label.medium{background:rgba(168,132,66,.12);color:var(--gold);}
 .p5-stability-label.high{background:rgba(198,91,54,.12);color:var(--terra);}
-.p5-feasmap-wrap{overflow:auto;margin-top:10px;}
+.p5-feasmap-wrap{overflow-x:auto;overflow-y:visible;max-height:none;margin-top:10px;}
 .p5-feasmap-wrap canvas{display:block;}
-.p5-feasmap-tt{margin-top:6px;font-size:11px;color:var(--stone);min-height:16px;}
+.p5-feasmap-legend{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;font-size:11px;color:var(--stone);}
+.p5-feasmap-legend span{display:flex;align-items:center;gap:4px;}
+.p5-feasmap-legend i{display:inline-block;width:12px;height:12px;border-radius:2px;flex-shrink:0;}
+.p5-curve-desc{font-size:11px;color:var(--stone);margin:4px 0 6px;max-width:680px;}
+.p5-constraint-summary{font-size:12px;padding:6px 10px;border-radius:8px;margin-bottom:8px;font-weight:600;}
+.p5-constraint-summary.ok{background:rgba(100,112,73,.1);color:#3a4a20;}
+.p5-constraint-summary.warn{background:rgba(198,91,54,.1);color:#7f2737;}
+.p5-constraint-summary.none{background:rgba(111,103,93,.08);color:var(--stone);}
+.p5-stale-warn{font-size:11px;color:var(--terra);background:rgba(198,91,54,.08);border-radius:6px;padding:4px 8px;margin-bottom:6px;display:none;}
+.p5-btn-running{opacity:.75;cursor:not-allowed;}
+@keyframes p5pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.p5-btn-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:currentColor;margin-right:5px;animation:p5pulse 1.2s ease-in-out infinite;}
+#optSubP5 .canvas-wrap{height:400px!important;}
+@media(max-width:860px){#optSubP5 .canvas-wrap{height:340px!important;}}
+@media(max-width:480px){#optSubP5 .canvas-wrap{height:290px!important;}}
+#optSubP5 .opt-output-card{overflow-x:auto;overflow-y:visible;}
+#optSubP5 .p5-results-grid,#optSubP5 .p5-audit-table{max-width:100%;}
+.p5-feasmap-tt{margin-top:6px;font-size:11px;color:var(--stone);min-height:16px;word-break:break-word;overflow-wrap:anywhere;}
 @media(max-width:660px){
   .p5-inputs-grid{grid-template-columns:1fr 1fr;}
   .p5-snapshot-grid{grid-template-columns:1fr;}
@@ -8616,7 +8633,7 @@ input.range{touch-action:none;-webkit-user-select:none;user-select:none;}
 }
 /* ===== OPT SUB-TAB NAV ===== */
 .opt-subnav{display:flex;gap:0;border-bottom:2px solid var(--line);margin-bottom:16px;overflow-x:auto;}
-.opt-subtab{background:none;border:none;padding:10px 18px;font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--stone);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap;transition:color .15s,border-color .15s;}
+.opt-subtab{background:none;border:none;padding:10px 18px;font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--stone);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap;transition:color .15s,border-color .15s;min-height:44px;touch-action:manipulation;}
 .opt-subtab.active{color:var(--ink);border-bottom-color:var(--olive);}
 .opt-subtab-panel{display:none;}
 .opt-subtab-panel.active{display:block;}
@@ -8646,10 +8663,15 @@ input.range{touch-action:none;-webkit-user-select:none;user-select:none;}
 @media print{
   body>*{display:none!important;}
   #optimization{display:block!important;}
-  .opt-subnav,.opt-actions,button,#optSubSurface{display:none!important;}
+  .opt-subnav,.opt-actions,button,#optSubSurface,#p5ProgressWrap,.p5-stale-warn,.p5-confirm-overlay,#p5ConstraintSummary{display:none!important;}
   #optSubP5{display:block!important;}
   .p5-exec,.p5-snapshot,.p5-results-grid,.p5-sec-divider,#p5ResultsOuter,#p5SnapshotCard,#p5AuditCard,#p5FeasMapCard,#p5StabilityCard{display:block!important;}
-  canvas{max-width:100%!important;}
+  .opt-subtab-panel{display:none!important;}
+  #optSubP5{display:block!important;overflow:visible!important;}
+  canvas{max-width:100%!important;max-height:none!important;}
+  .canvas-wrap{height:auto!important;max-height:none!important;overflow:visible!important;}
+  .p5-feasmap-wrap{overflow:visible!important;max-height:none!important;}
+  *{overflow:visible!important;max-height:none!important;}
   .p5-confirm-overlay{display:none!important;}
 }
 </style>
@@ -8982,12 +9004,12 @@ input.range{touch-action:none;-webkit-user-select:none;user-select:none;}
 </div>
 <div class="opt-mobile-intro"><strong>Optimizasyon Akışı</strong><span>1. Sekmeyi seçin · 2. Hedef ve kısıtları belirleyin · 3. Çalıştır.</span></div>
 <div class="opt-subnav" role="tablist">
-<button aria-selected="false" class="opt-subtab" data-subtab="p5" role="tab" type="button">P5 Hedef Çözücü</button>
-<button aria-selected="true" class="opt-subtab active" data-subtab="surface" role="tab" type="button">Strateji Yüzey Gezgini</button>
+<button aria-selected="true" class="opt-subtab active" data-subtab="p5" role="tab" type="button">P5 Hedef Çözücü</button>
+<button aria-selected="false" class="opt-subtab" data-subtab="surface" role="tab" type="button">Strateji Yüzey Gezgini</button>
 </div>
 
 <!-- ===== P5 PANEL ===== -->
-<div class="opt-subtab-panel" id="optSubP5" role="tabpanel">
+<div class="opt-subtab-panel active" id="optSubP5" role="tabpanel">
 <div class="opt-card p5-section">
   <div class="opt-block-title">P5 Hedef Optimizasyonu</div>
   <p class="opt-muted">Strateji tabındaki aktif parametreler sabit tutularak seçili P5 çarpan hedefine ulaşmak için gereken minimum parametre bulunur. Diğer tüm parametreler değişmez.</p>
@@ -9068,20 +9090,28 @@ input.range{touch-action:none;-webkit-user-select:none;user-select:none;}
   <div class="p5-sec-divider p5-violation-title" id="p5ViolationTitle" style="display:none">Kısıt İhlalleri</div>
   <div class="p5-violations" id="p5ViolationsList" style="display:none"></div>
   <div class="p5-sec-divider">Optimizasyon Eğrisi</div>
+  <div id="p5ConstraintSummary" class="p5-constraint-summary none" style="display:none"></div>
   <div class="opt-output-card">
-    <div class="chart-title">P5 Sermaye / Test Edilen Parametre</div>
-    <div class="canvas-wrap small"><canvas id="p5CurveChart"></canvas></div>
+    <div class="chart-title" id="p5CurveTitle">P5 Sermaye / Test Edilen Parametre</div>
+    <p class="p5-curve-desc">Her nokta, yalnızca seçili parametre değiştirilerek hesaplanan P5 final sermayeyi gösterir. Yatay çizgi hedef P5 sermayedir.</p>
+    <div class="canvas-wrap" style="height:400px;position:relative"><canvas id="p5CurveChart"></canvas></div>
   </div>
 </div>
 <div class="opt-output-card" id="p5AuditCard" style="display:none">
   <div class="chart-title">Aday Denetim Tablosu</div>
   <p class="chart-copy">Minimum gerekli değer etrafındaki ±10 aday. Koyu satır = minimum uygulanabilir çözüm.</p>
-  <div style="overflow-x:auto"><table class="p5-audit-table"><thead id="p5AuditHead"></thead><tbody id="p5AuditBody"></tbody></table></div>
+  <div style="overflow-x:auto;overflow-y:visible"><table class="p5-audit-table"><thead id="p5AuditHead"></thead><tbody id="p5AuditBody"></tbody></table></div>
 </div>
 <div class="opt-output-card" id="p5FeasMapCard" style="display:none">
-  <div class="chart-title">Risk × Kazanma Oranı · Uygulanabilirlik Haritası</div>
-  <p class="chart-copy">Her hücre hedef P5'e ulaşılıp ulaşılmadığını gösterir. Koyu yeşil = güçlü fazla, kırmızı = hedef altı.</p>
+  <div class="chart-title">Risk × Kazanma Oranı · P5 Hedef Uygulanabilirlik Haritası</div>
+  <p class="chart-copy">Renkler P5 / Hedef oranını gösterir. Kırmızı hedef altı, açık ton hedefe yakın, zeytin hedef üstü, koyu zeytin güçlü tampon anlamına gelir.</p>
   <div class="p5-feasmap-wrap"><canvas id="p5FeasMapCanvas"></canvas></div>
+  <div class="p5-feasmap-legend">
+    <span><i style="background:#7f2737"></i>&lt; 0.90 Hedef altı</span>
+    <span><i style="background:#c65b36"></i>0.90–1.00 Hedefe yakın</span>
+    <span><i style="background:#647049"></i>1.00–1.02 Hedef üstü</span>
+    <span><i style="background:#2d5c20"></i>&gt; 1.02 Robust tampon</span>
+  </div>
   <div class="p5-feasmap-tt" id="p5FeasMapTooltip"></div>
 </div>
 <div class="opt-output-card" id="p5StabilityCard" style="display:none">
@@ -9092,7 +9122,7 @@ input.range{touch-action:none;-webkit-user-select:none;user-select:none;}
 </div>
 
 <!-- ===== SURFACE PANEL ===== -->
-<div class="opt-subtab-panel active" id="optSubSurface" role="tabpanel">
+<div class="opt-subtab-panel" id="optSubSurface" role="tabpanel">
 <div class="opt-goal-block">
 <div class="opt-block-title">Optimizasyon Hedefi <span class="mono" id="optGoalCode">dengeli</span></div>
 <div aria-label="Optimizasyon hedefi" class="opt-segmented opt-goals" role="group">
@@ -9191,6 +9221,7 @@ input.range{touch-action:none;-webkit-user-select:none;user-select:none;}
 </div>
 </div>
 </div>
+<div class="p5-stale-warn" id="optStaleWarn"></div>
 <div aria-hidden="true" class="opt-results" id="optResults">
 <div class="opt-best-card">
 <div>
@@ -11812,6 +11843,7 @@ function renderCharts(result){
       const pack = optGenerateRows(false);
       state.optResults = pack;
       state.optSelectedIndex = 0;
+      const sw=$("optStaleWarn");if(sw)sw.style.display="none";
       optRenderResults(pack);
       const btn = $("optRunMC");
       if(btn) btn.disabled = !pack.rows.some(x => x.eligible);
@@ -11992,7 +12024,16 @@ function renderCharts(result){
         } else {
           const active = selected && Math.abs(selected.x-x)<1e-9 && Math.abs(selected.y-y)<1e-9;
           const extra = thirdLabel(row);
-          const title = `${optRowLabel(row)} · Skor ${optScoreDisplay(row)} · P50 ${fmtMoney(row.metrics.p50)}${extra ? " · Hücrede seçilen " + extra : ""}`;
+          const goalLabel={balanced:"Dengeli",target:"Hedefe Ulaşma",ruin:"Sermaye Koruma",riskAdjusted:"Risk Ayarlı"}[state.optGoal]||state.optGoal;
+          const cStatus=row.eligible?"✓ Kısıtsız":`✗ ${row.reason||"Kısıt ihlali"}`;
+          const title = [
+            `Risk ${fmtPct(row.p.riskPerTradePct,1)} · AvgWinR ${fmtNum(row.p.avgWinR,2)}R`,
+            `Skor: ${optScoreDisplay(row)}`,
+            `P5: ${fmtMoney(row.metrics.p5)} · P50: ${fmtMoney(row.metrics.p50)}`,
+            `Kritik Risk: ${fmtPct(row.metrics.ruinProb,1)} · DD: ${fmtPct(row.metrics.avgDD,1)}`,
+            `Beklenti: ${fmtNum(row.metrics.erAdjusted??row.metrics.er,2)}R · Hedef: ${state.optGoal?goalLabel:"—"}`,
+            cStatus + (extra?" · "+extra:"")
+          ].join("\n");
           html += `<div class="opt-heatmap-cell" data-opt-heat="${row.id}" style="background:${optHeatColor(row.score,minScore,maxScore)};${active ? "outline:2px solid #171411;outline-offset:1px;" : ""}" title="${title}"><span class="opt-cell-score">${optScoreDisplay(row)}</span>${extra ? `<span class="opt-cell-extra">${extra}</span>` : ""}</div>`;
         }
       });
@@ -12176,6 +12217,8 @@ function renderCharts(result){
         state.optGoal = btn.dataset.optGoal || "balanced";
         optUpdateGoalUI();
         optUpdateComboSummary();
+        const stale=$("optStaleWarn");
+        if(stale&&state.optResults){stale.style.display="";stale.textContent="Hedef değişti — sonuçlar eski. Yeniden çalıştırın.";}
       });
     });
     document.querySelectorAll("[data-opt-third]").forEach(btn => {
@@ -13413,13 +13456,12 @@ function renderCharts(result){
     const severeLoss = res.finals && res.finals.length
       ? res.finals.filter(f=>f<initial*0.5).length/res.finals.length*100
       : res.ruinProb;
-    const sortedDDs = res.dds;
-    const p95DD = sortedDDs && sortedDDs.length
-      ? (sortedDDs[Math.floor(sortedDDs.length*0.95)] || 0)
-      : 0;
+    const sortedDDs = [...(res.dds||[])].sort((a,b)=>a-b);
+    const p95DD = sortedDDs.length ? (sortedDDs[Math.floor(sortedDDs.length*0.95)]||0) : 0;
+    const medianDD = sortedDDs.length ? (sortedDDs[Math.floor(sortedDDs.length*0.50)]||0) : 0;
     const metrics = {
       p5:res.p5, p50:res.p50, p95:res.p95,
-      avgDD:res.avgDD, p95DD, worstDD:res.worstDD,
+      avgDD:res.avgDD, p95DD, medianDD, worstDD:res.worstDD,
       ruinProb:res.ruinProb, severeLoss,
       targetProb:res.targetProb, er:res.er
     };
@@ -13492,25 +13534,15 @@ function renderCharts(result){
   function p5RunBatch(candidates, paramKey, baseConfig, constraints, seed, iter, mode, cancel, onProgress, onDone){
     const results=[], BATCH=8;
     let idx=0;
-    const freqEarlyStop=(paramKey==="tradesPerDay");
-    let feasibleFound=false;
     function step(){
       if(cancel.cancelled){ onDone(results,true); return; }
       const end=Math.min(idx+BATCH,candidates.length);
       for(let i=idx;i<end;i++){
         const r=p5EvalCandidate(baseConfig, paramKey, candidates[i], seed, iter, constraints, mode);
         results.push(r);
-        if(freqEarlyStop&&r.p5>=p5Opt.targetP5Capital&&r.valid) feasibleFound=true;
       }
       idx=end;
       onProgress(candidates.length, idx, "Taranıyor…");
-      if(freqEarlyStop&&feasibleFound&&idx<candidates.length){
-        const extra=Math.min(candidates.length,idx+16);
-        for(let i=idx;i<extra;i++)
-          results.push(p5EvalCandidate(baseConfig, paramKey, candidates[i], seed, iter, constraints, mode));
-        idx=extra;
-        onDone(results,false); return;
-      }
       if(idx>=candidates.length){ onDone(results,false); return; }
       requestAnimationFrame(step);
     }
@@ -13647,21 +13679,85 @@ function renderCharts(result){
   function p5RenderCurve(allSorted, targetP5, mode){
     const canvas=$("p5CurveChart");
     if(!canvas) return;
+    const result=p5Opt.result;
+    const minPV=result&&result.minimum?result.minimum.paramValue:null;
+    const robPV=result&&result.robust?result.robust.paramValue:null;
+    const bestPV=result&&result.bestAvailable?result.bestAvailable.paramValue:null;
     const stride=Math.max(1,Math.floor(allSorted.length/120));
     const pts=allSorted.filter((_,i)=>i%stride===0);
-    const labels=pts.map(c=>mode==="risk"?fmtNum(c.paramValue,1)+"%":mode==="frequency"?fmtNum(c.paramValue*5,1):fmtNum(c.paramValue,1)+"%");
+    const toLabel=c=>mode==="risk"?fmtNum(c.paramValue,1)+"%":mode==="frequency"?fmtNum(c.paramValue*5,1):fmtNum(c.paramValue,1)+"%";
+    const labels=pts.map(toLabel);
     const p5data=pts.map(c=>c.p5);
+    const p50data=pts.map(c=>c.p50||null);
+    const constrainedData=pts.map(c=>(!c.valid?c.p5:null));
+    const xAxisLabel=mode==="risk"?"Trade Başına Risk %":mode==="frequency"?"Haftalık Trade Frekansı":"Kazanma Oranı %";
+    const titleEl=$("p5CurveTitle");
+    if(titleEl) titleEl.textContent="P5 Final Sermaye / "+xAxisLabel;
+    const minIdx=minPV!=null?pts.findIndex(c=>Math.abs(c.paramValue-minPV)<0.0001):-1;
+    const robIdx=robPV!=null&&robPV!==minPV?pts.findIndex(c=>Math.abs(c.paramValue-robPV)<0.0001):-1;
+    const bestIdx=bestPV!=null&&bestPV!==minPV&&bestPV!==robPV?pts.findIndex(c=>Math.abs(c.paramValue-bestPV)<0.0001):-1;
+    function sparseData(idx,val){ const a=Array(labels.length).fill(null); if(idx>=0) a[idx]=val; return a; }
     if(window._p5CurveInst){ try{ window._p5CurveInst.destroy(); }catch(e){} }
+    const hasConstrained=constrainedData.some(v=>v!==null);
+    const datasets=[
+      {label:"P5 Final Sermaye",data:p5data,borderColor:"#647049",backgroundColor:"rgba(100,112,73,.07)",borderWidth:2,pointRadius:0,tension:0.3,fill:true,order:4},
+      {label:"Hedef P5",data:Array(labels.length).fill(targetP5),borderColor:"#c65b36",borderDash:[5,4],borderWidth:1.5,pointRadius:0,order:3}
+    ];
+    if(minIdx>=0) datasets.push({label:"Minimum Required",data:sparseData(minIdx,pts[minIdx].p5),borderColor:"#c65b36",backgroundColor:"#c65b36",pointRadius:7,pointStyle:"circle",showLine:false,order:1});
+    if(robIdx>=0) datasets.push({label:"Robust Recommendation",data:sparseData(robIdx,pts[robIdx].p5),borderColor:"#2d5c20",backgroundColor:"#2d5c20",pointRadius:7,pointStyle:"triangle",showLine:false,order:1});
+    if(bestIdx>=0) datasets.push({label:"Best Available",data:sparseData(bestIdx,pts[bestIdx].p5),borderColor:"#a88442",backgroundColor:"#a88442",pointRadius:6,pointStyle:"star",showLine:false,order:1});
+    if(hasConstrained) datasets.push({label:"Kısıt İhlali",data:constrainedData,borderColor:"rgba(127,39,55,.4)",backgroundColor:"rgba(127,39,55,.15)",pointRadius:2,showLine:false,order:2});
     window._p5CurveInst=new Chart(canvas,{
       type:"line",
-      data:{labels,datasets:[
-        {label:"P5 Final Sermaye",data:p5data,borderColor:"#647049",backgroundColor:"rgba(100,112,73,.07)",borderWidth:1.5,pointRadius:0,tension:0.3,fill:true},
-        {label:"Hedef P5",data:Array(labels.length).fill(targetP5),borderColor:"#c65b36",borderDash:[5,4],borderWidth:1.5,pointRadius:0}
-      ]},
-      options:{responsive:true,animation:{duration:0},plugins:{legend:{display:false}},scales:{
-        x:{ticks:{maxTicksLimit:10,font:{size:9}},grid:{display:false}},
-        y:{ticks:{callback:v=>fmtMoney(v),font:{size:9}}}
-      }}
+      data:{labels,datasets},
+      options:{
+        responsive:true,maintainAspectRatio:false,animation:{duration:0},
+        plugins:{
+          legend:{display:true,position:"bottom",labels:{font:{size:10},boxWidth:14,padding:10,filter:item=>item.datasetIndex===0||item.datasetIndex===1||(item.datasetIndex===2&&minIdx>=0)||(item.datasetIndex===3&&robIdx>=0)||(item.datasetIndex===4&&bestIdx>=0)||(hasConstrained&&item.label==="Kısıt İhlali")}},
+          tooltip:{
+            callbacks:{
+              title:([item])=>{
+                const c=pts[item.dataIndex];
+                if(!c) return item.label;
+                return xAxisLabel+": "+toLabel(c);
+              },
+              label:()=>null,
+              afterBody:([item])=>{
+                const c=pts[item.dataIndex];
+                if(!c) return [];
+                const lines=[];
+                lines.push("P5: "+fmtMoney(c.p5));
+                lines.push("Hedef P5: "+fmtMoney(targetP5));
+                const gap=c.p5-targetP5;
+                lines.push("Hedef Farkı: "+(gap>=0?"+":"")+fmtMoney(gap));
+                lines.push("P5/Hedef: "+(c.p5/Math.max(1,targetP5)*100).toFixed(1)+"%");
+                if(c.p50) lines.push("P50: "+fmtMoney(c.p50));
+                if(c.p95) lines.push("P95: "+fmtMoney(c.p95));
+                if(c.severeLoss!=null) lines.push("Ağır Kayıp: "+fmtPct(c.severeLoss));
+                if(c.p95DD!=null) lines.push("P95 DD: "+fmtPct(c.p95DD));
+                const status=!c.valid?"Kısıt İhlali":"✓ Kısıtsız";
+                lines.push("Durum: "+status);
+                const roles=[];
+                if(minIdx>=0&&pts[minIdx]===c) roles.push("Minimum");
+                if(robIdx>=0&&pts[robIdx]===c) roles.push("Robust");
+                if(bestIdx>=0&&pts[bestIdx]===c) roles.push("Best");
+                if(roles.length) lines.push("Rol: "+roles.join(", "));
+                return lines;
+              }
+            },
+            displayColors:false,
+            backgroundColor:"rgba(30,26,20,.9)",
+            titleFont:{size:11,weight:"bold"},
+            bodyFont:{size:11},
+            padding:10,
+            maxWidth:220
+          }
+        },
+        scales:{
+          x:{title:{display:true,text:xAxisLabel,font:{size:10}},ticks:{maxTicksLimit:10,font:{size:9}},grid:{display:false}},
+          y:{title:{display:true,text:"P5 Final Sermaye",font:{size:10}},ticks:{callback:v=>fmtMoney(v),font:{size:9}}}
+        }
+      }
     });
   }
 
@@ -13679,8 +13775,20 @@ function renderCharts(result){
         const cfg=mergeParams(baseConfig,{riskPerTradePct:risk,winRate:wr});
         const res=runLiteSimulation(cfg,{iterations:Math.min(iter,250),seed});
         const sev=res.finals&&res.finals.length?res.finals.filter(f=>f<baseConfig.initialCapital*0.5).length/res.finals.length*100:0;
-        const p95DD=res.dds&&res.dds.length?(res.dds[Math.floor(res.dds.length*0.95)]||0):0;
-        results.push({risk,wr,p5:res.p5,feasible:res.p5>=targetP5,ratio:res.p5/Math.max(1,targetP5),avgDD:res.avgDD,p95DD,severeLoss:sev});
+        const sdds=res.dds&&res.dds.length?[...res.dds].sort((a,b)=>a-b):[];
+        const p95DD=sdds.length?(sdds[Math.floor(sdds.length*0.95)]||0):0;
+        const ratio=res.p5/Math.max(1,targetP5);
+        const feasible=res.p5>=targetP5;
+        const cViol=[];
+        if(p5Opt.constraints){
+          const cn=p5Opt.constraints;
+          if(cn.maxDD!==null&&res.avgDD>cn.maxDD) cViol.push("Max DD");
+          if(cn.maxSevereLoss!==null&&sev>cn.maxSevereLoss) cViol.push("Max Severe Loss");
+          if(cn.maxRiskCap!==null&&risk>cn.maxRiskCap) cViol.push("Max Risk");
+          if(cn.minWinFloor!==null&&wr<cn.minWinFloor) cViol.push("Min Win Rate");
+        }
+        const constraintOK=cViol.length===0;
+        results.push({risk,wr,p5:res.p5,feasible,ratio,avgDD:res.avgDD,p95DD,severeLoss:sev,constraintOK,cViol});
         wi++; if(wi>=wrSteps.length){wi=0;ri++;}
       }
       onProgress(total,idx,"Uygulanabilirlik haritası…");
@@ -13697,31 +13805,42 @@ function renderCharts(result){
     const canvas=$("p5FeasMapCanvas");
     if(!canvas) return;
     const {results,riskSteps,wrSteps}=mapResult;
-    const CW=18,CH=14,PAD_L=32,PAD_B=18;
+    const CW=20,CH=15,PAD_L=36,PAD_B=22,PAD_T=4;
     canvas.width=riskSteps.length*CW+PAD_L;
-    canvas.height=wrSteps.length*CH+PAD_B;
+    canvas.height=wrSteps.length*CH+PAD_B+PAD_T;
     const ctx2=canvas.getContext("2d");
     ctx2.clearRect(0,0,canvas.width,canvas.height);
     ctx2.font="9px Inter,sans-serif";
     results.forEach(r=>{
       const xi=riskSteps.indexOf(r.risk), yi=wrSteps.indexOf(r.wr);
       if(xi<0||yi<0) return;
-      const x=PAD_L+xi*CW, y=(wrSteps.length-1-yi)*CH;
+      const x=PAD_L+xi*CW, y=PAD_T+(wrSteps.length-1-yi)*CH;
       const ratio=r.ratio;
-      ctx2.fillStyle=ratio>=1.2?"#2d5c20":ratio>=1.0?"#647049":ratio>=0.8?"#a88442":ratio>=0.6?"#c65b36":"#7f2737";
+      const alpha=r.constraintOK===false?0.45:1;
+      ctx2.globalAlpha=alpha;
+      ctx2.fillStyle=ratio>=1.02?"#2d5c20":ratio>=1.0?"#647049":ratio>=0.9?"#a88442":ratio>=0.7?"#c65b36":"#7f2737";
       ctx2.fillRect(x,y,CW-1,CH-1);
+      ctx2.globalAlpha=1;
     });
     ctx2.fillStyle="#6f675d";
-    riskSteps.forEach((r,i)=>{ if(i%3===0) ctx2.fillText(r+"%",PAD_L+i*CW,wrSteps.length*CH+PAD_B-2); });
-    wrSteps.forEach((w,j)=>{ if(j%2===0){ ctx2.fillStyle="#6f675d"; ctx2.fillText(w+"%",0,(wrSteps.length-1-j)*CH+CH-2); } });
+    const xStep=Math.max(1,Math.ceil(riskSteps.length/8));
+    riskSteps.forEach((r,i)=>{ if(i%xStep===0){ ctx2.fillText(r+"%",PAD_L+i*CW,wrSteps.length*CH+PAD_T+PAD_B-4); } });
+    ctx2.fillStyle="#5a5248";
+    ctx2.save(); ctx2.textAlign="right";
+    const yStep=Math.max(1,Math.ceil(wrSteps.length/7));
+    wrSteps.forEach((w,j)=>{ if(j%yStep===0||j===0||j===wrSteps.length-1){ ctx2.fillText(w+"%",PAD_L-3,PAD_T+(wrSteps.length-1-j)*CH+CH-2); } });
+    ctx2.restore();
     const tt=$("p5FeasMapTooltip");
     canvas.onmousemove=function(e){
       const rect=canvas.getBoundingClientRect(), sx=canvas.width/rect.width, sy=canvas.height/rect.height;
-      const mx=(e.clientX-rect.left)*sx-PAD_L, my=(e.clientY-rect.top)*sy;
+      const mx=(e.clientX-rect.left)*sx-PAD_L, my=(e.clientY-rect.top)*sy-PAD_T;
       const xi=Math.floor(mx/CW), yiInv=Math.floor(my/CH), yi=wrSteps.length-1-yiInv;
       const r=results.find(r=>riskSteps.indexOf(r.risk)===xi&&wrSteps.indexOf(r.wr)===yi);
-      if(r&&tt) tt.innerHTML=`Risk <strong>${r.risk}%</strong> · Kazanma <strong>${r.wr}%</strong> → P5 <strong>${fmtMoney(r.p5)}</strong> · DD ${fmtPct(r.avgDD)} · P95DD ${fmtPct(r.p95DD)} · Kritik ${fmtPct(r.severeLoss)} (${r.feasible?"✓":"✗"})`;
-      else if(tt) tt.textContent="";
+      if(r&&tt){
+        const ratio=(r.p5/Math.max(1,targetP5)*100).toFixed(1);
+        const cStatus=r.constraintOK===false?"⚠ "+((r.cViol&&r.cViol.length)?r.cViol.join(", "):"Kısıt İhlali"):"✓ OK";
+        tt.innerHTML=`<strong>Risk ${r.risk}% · Kazanma ${r.wr}%</strong> &nbsp;|&nbsp; P5 ${fmtMoney(r.p5)} &nbsp;|&nbsp; Hedef P5 ${fmtMoney(targetP5)} &nbsp;|&nbsp; P5/Hedef <strong>${ratio}%</strong> &nbsp;|&nbsp; ${r.feasible?"✓ Uygulanabilir":"✗ Hedef Altı"} &nbsp;|&nbsp; Kritik ${fmtPct(r.severeLoss)} &nbsp;|&nbsp; DD ${fmtPct(r.avgDD)} &nbsp;|&nbsp; ${cStatus}`;
+      } else if(tt) tt.textContent="";
     };
     canvas.onmouseleave=function(){ if(tt) tt.textContent=""; };
   }
@@ -13732,17 +13851,22 @@ function renderCharts(result){
     const targetP5=baseConfig.initialCapital*(parseFloat(($("p5TargetMultiple")||{}).value||"2")||2);
     const results=[];
     let si=0;
+    const cancel={cancelled:false};
     function nextSeed(){
       if(si>=seeds.length){ onDone(results); return; }
       const seed=seeds[si++];
-      onProgress(seeds.length,si,"Seed "+seed+"…");
       const cands=mode==="risk"?p5GenRiskCandidates(baseConfig):mode==="frequency"?p5GenFreqCandidates():p5GenWinRateCandidates();
       const bIter=Math.max(200,Math.round(mainIter*0.35));
-      const evals=cands.map(v=>p5EvalCandidate(baseConfig,paramKey,v,seed,bIter,constraints,mode));
-      const r=p5FindBest(evals,targetP5,targetP5*1.02);
-      const cand=r.feasible_exists?r.minimum:r.bestAvailable;
-      results.push({seed,paramValue:mode==="frequency"?cand.paramValue*5:cand.paramValue,p5:cand.p5,feasible:r.feasible_exists});
-      requestAnimationFrame(nextSeed);
+      const seedEvals=[];
+      p5RunBatch(cands,paramKey,baseConfig,constraints,seed,bIter,mode,cancel,
+        (t,d)=>onProgress(seeds.length*t,((si-1)*t)+d,"Seed "+seed+"…"),
+        (evals)=>{
+          const r=p5FindBest(evals,targetP5,targetP5*1.02);
+          const cand=r.feasible_exists?r.minimum:r.bestAvailable;
+          results.push({seed,paramValue:mode==="frequency"?cand.paramValue*5:cand.paramValue,p5:cand.p5,feasible:r.feasible_exists});
+          requestAnimationFrame(nextSeed);
+        }
+      );
     }
     requestAnimationFrame(nextSeed);
   }
@@ -13793,16 +13917,22 @@ function renderCharts(result){
     p5Opt.mode=mode;
     p5Opt.targetP5Capital=targetP5;
     p5Opt.usedSeed=seed;
+    p5Opt.constraints=constraints;
 
     const runBtn=$("p5RunBtn");
-    if(runBtn){runBtn.disabled=true;runBtn.textContent="Çalışıyor…";}
-    ["p5ExecSummary","p5ResultsOuter","p5FeasMapCard","p5StabilityCard","p5AuditCard"].forEach(id=>{
+    if(runBtn){runBtn.disabled=true;runBtn.classList.add("p5-btn-running");runBtn.innerHTML='<span class="p5-btn-dot"></span>Hazırlanıyor…';}
+    ["p5ExecSummary","p5ResultsOuter","p5FeasMapCard","p5StabilityCard","p5AuditCard","p5ConstraintSummary"].forEach(id=>{
       const el=$(id); if(el) el.style.display="none";
     });
-    p5Progress("Taranıyor…",0);
+    p5Progress("Sabit parametreler hazırlanıyor…",0);
     p5RenderSnapshot(baseConfig,mode,seed);
+    if(runBtn) runBtn.innerHTML='<span class="p5-btn-dot"></span>Taranıyor…';
 
-    function onProg(total,done){ p5Progress("Taranıyor…",total>0?done/total*100:0); }
+    function onProg(total,done){
+      const pct=total>0?done/total*100:0;
+      p5Progress("Adaylar taranıyor… ("+done+"/"+total+")",pct);
+      if(runBtn&&pct>30&&pct<80) runBtn.innerHTML='<span class="p5-btn-dot"></span>Taranıyor…';
+    }
 
     p5RunBatch(candidates,paramKey,baseConfig,constraints,seed,scanIter,mode,p5Opt.cancel,onProg,(coarse,cancelled)=>{
       if(cancelled||p5Opt.cancel.cancelled){finishRun();return;}
@@ -13812,21 +13942,27 @@ function renderCharts(result){
 
       if(mode==="winrate"&&firstFeasIdx>=0&&!p5Opt.cancel.cancelled){
         const coarseWR=sorted[firstFeasIdx].paramValue;
-        p5Progress("İnceleniyor…",60);
-        const refined=p5GenWinRateRefined(coarseWR,3).map(v=>
-          p5EvalCandidate(baseConfig,paramKey,v,seed,scanIter,constraints,mode)
+        if(runBtn) runBtn.innerHTML='<span class="p5-btn-dot"></span>İnceleniyor…';
+        p5Progress("Eşik değer iyileştiriliyor…",55);
+        const refinedCands=p5GenWinRateRefined(coarseWR,3);
+        p5RunBatch(refinedCands,paramKey,baseConfig,constraints,seed,scanIter,mode,p5Opt.cancel,
+          (t,d)=>p5Progress("Kazanma oranı iyileştiriliyor…",55+d/t*35),
+          (refined,c2)=>{
+            if(c2){finishRun();return;}
+            const all=[...coarse,...refined];
+            p5Opt.allCandidates=all;
+            p5Finish(all);
+          }
         );
-        const all=[...coarse,...refined];
-        p5Opt.allCandidates=all;
-        p5Finish(all);
       } else if(firstFeasIdx>0&&mode!=="winrate"&&!p5Opt.cancel.cancelled){
         const lo=sorted[Math.max(0,firstFeasIdx-2)].paramValue;
         const hi=sorted[Math.min(sorted.length-1,firstFeasIdx+2)].paramValue;
         const refinedCands=[];
         for(let i=0;i<70;i++) refinedCands.push(lo+(hi-lo)*i/69);
-        p5Progress("İnceleniyor…",50);
+        if(runBtn) runBtn.innerHTML='<span class="p5-btn-dot"></span>İnceleniyor…';
+        p5Progress("Eşik aralığı iyileştiriliyor…",50);
         p5RunBatch(refinedCands,paramKey,baseConfig,constraints,seed,Math.min(scanIter*1.5,3000),mode,p5Opt.cancel,
-          (t,d)=>p5Progress("İnceleniyor…",50+d/t*50),
+          (t,d)=>p5Progress("Kısıtlar kontrol ediliyor…",50+d/t*40),
           (refined,c2)=>{
             if(c2){finishRun();return;}
             const all=[...coarse,...refined];
@@ -13842,6 +13978,8 @@ function renderCharts(result){
     });
 
     function p5Finish(allCands){
+      if(runBtn) runBtn.innerHTML='<span class="p5-btn-dot"></span>Render ediliyor…';
+      p5Progress("Optimizasyon eğrisi render ediliyor…",90);
       const result=p5FindBest(allCands,targetP5,targetP5*1.02);
       p5Opt.result=result;
       const execEl=$("p5ExecSummary");
@@ -13849,6 +13987,15 @@ function renderCharts(result){
         execEl.textContent=p5BuildExec(result,baseConfig,mode,targetMultiple);
         execEl.className="p5-exec"+(result.feasible_exists?"":" infeasible");
         execEl.style.display="";
+      }
+      const activeConstraints=Object.values(constraints).filter(v=>v!==null&&v!==false&&v!==undefined).length;
+      const violated=result.allSorted?result.allSorted.filter(c=>!c.valid&&c.p5>=targetP5).length:0;
+      const csEl=$("p5ConstraintSummary");
+      if(csEl){
+        if(activeConstraints===0){csEl.className="p5-constraint-summary none";csEl.textContent="Aktif kısıt yok";}
+        else if(violated===0){csEl.className="p5-constraint-summary ok";csEl.textContent="Tüm aktif kısıtlar sağlandı ✓";}
+        else{csEl.className="p5-constraint-summary warn";csEl.textContent=violated+" aktif kısıt ihlali var";}
+        csEl.style.display="";
       }
       p5RenderResults(result,baseConfig,targetP5,targetMultiple,mode,constraints);
       p5RenderCurve(result.allSorted,targetP5,mode);
@@ -13867,7 +14014,7 @@ function renderCharts(result){
 
     function finishRun(){
       p5Opt.busy=false;
-      if(runBtn){runBtn.disabled=false;runBtn.textContent="P5 Optimizasyon Çalıştır";}
+      if(runBtn){runBtn.disabled=false;runBtn.classList.remove("p5-btn-running");runBtn.textContent="P5 Optimizasyon Çalıştır";}
       const prog=$("p5Progress");if(prog)prog.style.display="none";
       const sb=$("p5StabilityBtn"),mb=$("p5MapBtn");
       if(sb)sb.disabled=false;if(mb)mb.disabled=false;
