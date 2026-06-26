@@ -6961,17 +6961,6 @@ body[data-active-mode]:not([data-active-mode="basic"]) .simulation-output{displa
   line-height:1.55;
 }
 .breakout-sales-line strong{color:var(--ruby)}
-.prop-go-card{
-  display:grid;
-  grid-template-columns:minmax(140px,.36fr) minmax(0,1fr);
-  gap:12px;
-  align-items:stretch;
-  margin-top:12px;
-  border:1px solid rgba(127,39,55,.18);
-  background:linear-gradient(180deg,#fffdf8,#fbf5ef);
-  border-radius:18px;
-  padding:13px;
-}
 .prop-go-badge{
   display:flex;
   flex-direction:column;
@@ -6986,17 +6975,6 @@ body[data-active-mode]:not([data-active-mode="basic"]) .simulation-output{displa
   font-size:34px;
   line-height:.95;
   letter-spacing:-.02em;
-}
-.prop-go-badge.go{color:var(--olive);border-color:rgba(100,112,73,.28);background:rgba(100,112,73,.055)}
-.prop-go-badge.reduce{color:var(--gold);border-color:rgba(168,132,66,.30);background:rgba(168,132,66,.06)}
-.prop-go-badge.nogo{color:var(--ruby);border-color:rgba(127,39,55,.30);background:rgba(127,39,55,.06)}
-.prop-go-badge small{
-  font-family:Inter,system-ui,sans-serif;
-  color:var(--stone);
-  font-size:9px;
-  letter-spacing:.14em;
-  text-transform:uppercase;
-  font-weight:900;
 }
 .prop-go-copy{display:grid;gap:7px;align-content:center}
 .prop-go-copy strong{font-size:11px;letter-spacing:.12em;text-transform:uppercase}
@@ -7212,13 +7190,6 @@ body[data-active-mode]:not([data-active-mode="basic"]) .simulation-output{displa
 }
 
 
-/* === Final audit contract polish v3: public contract, report, mobile QA === */
-.prop-go-card{order:-1}
-.prop-go-badge{font-size:clamp(24px,3vw,42px);letter-spacing:.05em}
-.prop-go-badge.go{color:var(--olive);border-color:rgba(100,112,73,.40);background:rgba(100,112,73,.08)}
-.prop-go-badge.watch{color:var(--gold);border-color:rgba(168,132,66,.42);background:rgba(168,132,66,.08)}
-.prop-go-badge.reduce{color:var(--terra);border-color:rgba(198,91,54,.42);background:rgba(198,91,54,.08)}
-.prop-go-badge.nogo{color:var(--ruby);border-color:rgba(127,39,55,.42);background:rgba(127,39,55,.08)}
 .risk-depth-status,.readiness-checklist{
   margin-top:12px;
   border:1px solid rgba(226,216,201,.92);
@@ -7386,40 +7357,10 @@ body[data-active-mode]:not([data-active-mode="basic"]) .simulation-output{displa
   font-family:"Cormorant Garamond",Georgia,serif;
   letter-spacing:-.025em;
 }
-.prop-go-card{
-  background:linear-gradient(180deg,#fffefa,#fbf6ee) !important;
-  border:1px solid rgba(226,216,201,.95) !important;
-  border-left:5px solid var(--terra) !important;
-  border-radius:22px !important;
-  box-shadow:0 16px 38px rgba(56,42,25,.055) !important;
-}
 .prop-go-card:has(.prop-go-badge.go){border-left-color:var(--olive) !important}
 .prop-go-card:has(.prop-go-badge.watch){border-left-color:var(--gold) !important}
 .prop-go-card:has(.prop-go-badge.reduce){border-left-color:var(--terra) !important}
 .prop-go-card:has(.prop-go-badge.nogo){border-left-color:var(--ruby) !important}
-.prop-go-card-executive{
-  margin:0 0 16px;
-  display:grid;
-  grid-template-columns:minmax(170px,.30fr) minmax(0,1fr);
-  gap:18px;
-  align-items:center;
-  padding:20px !important;
-}
-.prop-go-badge{
-  font-family:"Cormorant Garamond",Georgia,serif !important;
-  font-size:clamp(34px,4vw,58px) !important;
-  line-height:.9 !important;
-  letter-spacing:-.035em !important;
-  min-height:110px;
-  border-radius:18px !important;
-  background:#fffdf8 !important;
-}
-.prop-go-badge small{
-  font-family:Inter,system-ui,sans-serif !important;
-  font-size:9px !important;
-  letter-spacing:.16em !important;
-  text-transform:uppercase !important;
-}
 .prop-go-badge.go{color:var(--olive) !important;border-color:rgba(100,112,73,.30) !important}
 .prop-go-badge.watch{color:var(--gold) !important;border-color:rgba(168,132,66,.32) !important}
 .prop-go-badge.reduce{color:var(--terra) !important;border-color:rgba(198,91,54,.32) !important}
@@ -8616,6 +8557,14 @@ canvas{max-width:100% !important}
   #reportDisclaimer{
     border-left-width:1px !important;
   }
+}
+
+/* === Enhanced touch slider styles === */
+input.range{touch-action:none;-webkit-user-select:none;user-select:none;}
+@media(pointer:coarse){
+  input.range::-webkit-slider-thumb{width:30px;height:30px;margin-top:-12px;}
+  input.range::-moz-range-thumb{width:30px;height:30px;}
+  .control-row{padding-block:4px;}
 }
 
 </style>
@@ -9903,7 +9852,7 @@ canvas{max-width:100% !important}
     {group:"basic",key:"days",label:"Gün Sayısı",code:"days",min:30,max:365,step:1,value:126,suffix:"gün",tone:"terra",help:"Simülasyonun kaç işlem günü süreceğini belirler. Varsayılan 126 gün yaklaşık 6 aylık işlem takvimidir; günlük trade sayısıyla birlikte toplam trade adımını oluşturur."},
     {group:"basic",key:"initialCapital",label:"Başlangıç Sermayesi",code:"initialCapital",min:1000,max:5000000,step:1000,value:100000,prefix:"₺",tone:"olive",help:"Tüm yollar bu sermayeyle başlar. Sabit risk modunda nominal risk bu tutara göre korunur."},
     {group:"basic",key:"iterations",label:"Simülasyon Sayısı",code:"iterations",min:500,max:10000,step:500,value:5000,suffix:"yol",tone:"terra",help:"Üretilecek bağımsız equity curve sayısıdır. Varsayılan 5.000 yol, percentile kararlılığı ile hesap hızı arasında dengeli bir kurumsal test seviyesidir."},
-    {group:"basic",key:"tradesPerDay",label:"Trade Frekansı",code:"tradesPerDay",min:0.1,max:150,step:0.1,value:3,suffix:"trade/gün",tone:"olive",periodToggle:true,help:"Günlük veya haftalık ortalama işlem frekansını belirler. Swing trade için 0,1 trade/gün ya da 0,5 trade/hafta gibi düşük değerler desteklenir; 0,5 trade/hafta yaklaşık ayda iki trade demektir."},
+    {group:"basic",key:"tradesPerDay",label:"Trade Frekansı",code:"tradesPerDay",min:0.002,max:1000,step:0.01,value:3,suffix:"trade/gün",tone:"olive",periodToggle:true,help:"Günlük veya haftalık ortalama işlem frekansını belirler. Swing trade için 0,1 trade/gün ya da 0,5 trade/hafta gibi düşük değerler desteklenir; 0,5 trade/hafta yaklaşık ayda iki trade demektir."},
     {group:"basic",key:"winRate",label:"Kazanma Oranı",code:"winRate",min:5,max:90,step:0.5,value:55,suffix:"%",tone:"terra",help:"Trade’in kârlı kapanma olasılığıdır. Tek başına başarı değildir; ortalama kazanç R, kayıp R ve maliyet R ile birlikte edge’i belirler."},
     {group:"basic",key:"avgWinR",label:"Ortalama Kazanç R",code:"avgWinR",min:0.2,max:20,step:0.05,value:1.8,suffix:"R",tone:"olive",help:"Kazanan trade’in ortalama ödülüdür. 2R, riske edilen birimin iki katı kâr anlamına gelir."},
     {group:"basic",key:"avgLossR",label:"Ortalama Kayıp R",code:"avgLossR",min:0.2,max:20,step:0.05,value:1,suffix:"R",tone:"ruby",help:"Kaybeden trade’in ortalama zararıdır. 1R tipik stop-loss kaybıdır; 1.3R ve üstü stop disiplini veya slippage kaynaklı kayıp genişlemesini gösterir. Ekstrem stres testi için limit 20R’ye kadar açıktır."},
@@ -10029,7 +9978,7 @@ canvas{max-width:100% !important}
   function tradeFrequencySpec(){
     const weekly = state.tradeFrequency === "weekly";
     return weekly
-      ? {period:"weekly",min:0.5,max:750,step:0.1,suffix:"trade/hafta",multiplier:5,label:"Haftalık"}
+      ? {period:"weekly",min:0.01,max:5000,step:0.01,suffix:"trade/hafta",multiplier:5,label:"Haftalık"}
       : {period:"daily",min:0.1,max:150,step:0.1,suffix:"trade/gün",multiplier:1,label:"Günlük"};
   }
 
@@ -10163,9 +10112,14 @@ canvas{max-width:100% !important}
     const c = getControl(key);
     const r = $(key + "Range");
     if(!c || !r) return;
-    const spec = displaySpec(c);
     const v = parseFloat(r.value);
-    const pct = ((v - spec.min) / (spec.max - spec.min)) * 100;
+    let pct;
+    if(r.dataset.virtualRange === "1"){
+      pct = v / 100;
+    } else {
+      const spec = displaySpec(c);
+      pct = ((v - spec.min) / (spec.max - spec.min)) * 100;
+    }
     r.style.setProperty("--fill", clamp(pct,0,100).toFixed(2) + "%");
   }
 
@@ -10203,7 +10157,14 @@ canvas{max-width:100% !important}
     const str = decimals ? appliedDisplay.toFixed(decimals) : String(Math.round(appliedDisplay));
     const r = $(key + "Range");
     const n = $(key + "Number");
-    if(r) r.value = str;
+    if(r){
+      if(r.dataset.virtualRange === "1"){
+        const virt = realToVirtual(key, appliedDisplay);
+        if(isFinite(virt)) r.value = String(virt);
+      } else {
+        r.value = str;
+      }
+    }
     if(n && source !== "typing") n.value = str;
     if(n) n.dataset.applied = String(applied);
     updateFill(key);
@@ -10282,7 +10243,10 @@ canvas{max-width:100% !important}
       el.addEventListener("input", () => setParam(el.dataset.key, el.value, "range"));
     });
     document.querySelectorAll(".num-input").forEach(el => {
-      el.addEventListener("input", () => setParam(el.dataset.key, el.value, "typing"));
+      el.addEventListener("input", () => {
+        const loose = parseLooseNumber(el.value);
+        if(loose !== null) setParam(el.dataset.key, loose, "typing");
+      });
       el.addEventListener("change", () => setParam(el.dataset.key, el.value, "number"));
       el.addEventListener("blur", () => setParam(el.dataset.key, el.value, "number"));
     });
@@ -10336,12 +10300,19 @@ canvas{max-width:100% !important}
     const decimals = stepDecimals(spec.step);
     const str = decimals ? displayValue.toFixed(decimals) : String(Math.round(displayValue));
 
-    [r,n].forEach(el => {
-      el.min = String(spec.min);
-      el.max = String(spec.max);
-      el.step = String(spec.step);
-      el.value = str;
-    });
+    n.min = String(spec.min);
+    n.max = String(spec.max);
+    n.step = String(spec.step);
+    n.value = str;
+    if(r.dataset.virtualRange === "1"){
+      const virt = realToVirtual("tradesPerDay", parseFloat(str));
+      if(isFinite(virt)) r.value = String(virt);
+    } else {
+      r.min = String(spec.min);
+      r.max = String(spec.max);
+      r.step = String(spec.step);
+      r.value = str;
+    }
     const suffix = $("tradesPerDaySuffix");
     if(suffix) suffix.textContent = spec.suffix;
     const labels = $("tradesPerDayRangeLabels");
@@ -12986,9 +12957,26 @@ function renderCharts(result){
   }
 
 
+  // Const declarations for enhanced sliders — must be before init() call
+  const SLIDER_LOG_KEYS = new Set(["riskPerTradePct"]);
+  const SLIDER_SEG_KEYS = new Set(["tradesPerDay"]);
+  const WEEKLY_SEGS = [
+    {lo:0.01,hi:1,   w:1,step:0.01},
+    {lo:1,   hi:10,  w:1,step:0.1 },
+    {lo:10,  hi:100, w:1,step:1   },
+    {lo:100, hi:1000,w:1,step:10  },
+    {lo:1000,hi:5000,w:1,step:50  }
+  ];
+  const DAILY_SEGS = [
+    {lo:0.1, hi:1,   w:1,step:0.01},
+    {lo:1,   hi:10,  w:1,step:0.1 },
+    {lo:10,  hi:150, w:1,step:1   }
+  ];
+
   function init(){
     renderControls();
     setupControlEvents();
+    setupEnhancedSliders();
     setupRiskModeEvents();
     setupTradeFrequencyEvents();
     setupDirectionEvents();
@@ -13013,6 +13001,160 @@ function renderCharts(result){
   } else {
     init();
   }
+
+  // =====================================================================
+  // ENHANCED TOUCH SLIDERS
+  // =====================================================================
+
+  function parseLooseNumber(raw){
+    if(raw == null) return null;
+    const cleaned = String(raw).trim().replace(",",".");
+    if(cleaned===""||cleaned==="-"||cleaned==="."||cleaned==="-.") return null;
+    const v = Number(cleaned);
+    return Number.isFinite(v) ? v : null;
+  }
+
+  // SLIDER_LOG_KEYS, SLIDER_SEG_KEYS, WEEKLY_SEGS, DAILY_SEGS declared before init() above
+
+  function getSliderSegs(){ return state.tradeFrequency==="weekly" ? WEEKLY_SEGS : DAILY_SEGS; }
+
+  function realToVirtual(key, real){
+    if(SLIDER_LOG_KEYS.has(key)){
+      const c = getControl(key); const sp = displaySpec(c);
+      const logMin = Math.log(sp.min), logMax = Math.log(sp.max);
+      return Math.round(((Math.log(clamp(real, sp.min, sp.max)) - logMin) / (logMax - logMin)) * 10000);
+    }
+    if(SLIDER_SEG_KEYS.has(key)){
+      const segs = getSliderSegs();
+      const total = segs.reduce((s,sg) => s+sg.w, 0);
+      let offset = 0;
+      for(const sg of segs){
+        if(real <= sg.hi || sg === segs[segs.length-1]){
+          const f = clamp((real - sg.lo) / (sg.hi - sg.lo), 0, 1);
+          return Math.round((offset + f * sg.w) / total * 10000);
+        }
+        offset += sg.w;
+      }
+      return 10000;
+    }
+    return NaN;
+  }
+
+  function virtualToReal(key, virtual){
+    if(SLIDER_LOG_KEYS.has(key)){
+      const c = getControl(key); const sp = displaySpec(c);
+      const logMin = Math.log(sp.min), logMax = Math.log(sp.max);
+      const raw = Math.exp(logMin + (virtual / 10000) * (logMax - logMin));
+      const snapped = Math.round(raw / sp.step) * sp.step;
+      return parseFloat(clamp(snapped, sp.min, sp.max).toFixed(10));
+    }
+    if(SLIDER_SEG_KEYS.has(key)){
+      const segs = getSliderSegs();
+      const total = segs.reduce((s,sg) => s+sg.w, 0);
+      let rem = clamp(virtual / 10000, 0, 1) * total;
+      for(const sg of segs){
+        if(rem <= sg.w){
+          const f = clamp(rem / sg.w, 0, 1);
+          const raw = sg.lo + f * (sg.hi - sg.lo);
+          return parseFloat((Math.round(raw / sg.step) * sg.step).toFixed(10));
+        }
+        rem -= sg.w;
+      }
+      return segs[segs.length-1].hi;
+    }
+    return NaN;
+  }
+
+  function initVirtualRange(rangeEl, key){
+    rangeEl.dataset.virtualRange = "1";
+    rangeEl.min = "0"; rangeEl.max = "10000"; rangeEl.step = "1";
+    const n = $(key + "Number");
+    const c = getControl(key);
+    const internalVal = parseFloat(n?.dataset?.applied ?? c?.value);
+    if(isFinite(internalVal)){
+      // realToVirtual expects display value; convert internal → display first
+      const displayVal = internalToDisplayValue(c, internalVal);
+      const virt = realToVirtual(key, displayVal);
+      if(isFinite(virt)) rangeEl.value = String(virt);
+    }
+    updateFill(key);
+  }
+
+  function applyVirtual(rangeEl, key, virtual){
+    const vClamped = clamp(virtual, 0, 10000);
+    const displayVal = virtualToReal(key, vClamped); // display units (e.g. trades/week)
+    if(!isFinite(displayVal)) return;
+    const c = getControl(key);
+    const internalVal = displayToInternalValue(c, displayVal); // internal units (e.g. trades/day)
+    rangeEl.value = String(vClamped);
+    const n = $(key + "Number");
+    const spec = displaySpec(c);
+    const decimals = stepDecimals(spec.step);
+    const str = decimals ? displayVal.toFixed(decimals) : String(Math.round(displayVal));
+    if(n){ n.value = str; n.dataset.applied = String(internalVal); }
+    rangeEl.style.setProperty("--fill", (vClamped / 100).toFixed(2) + "%");
+    updateApplied(key, internalVal, displayVal);
+    if(key === "riskPerTradePct" || key === "initialCapital") updateRiskMath();
+    if(key === "winRate" || key === "breakEvenRate") enforceBreakEvenConstraint("range");
+    updatePrintParams();
+  }
+
+  function setupEnhancedSliders(){
+    document.querySelectorAll("input.range[data-key]").forEach(el => {
+      const key = el.dataset.key;
+      if(!key) return;
+      const isVirtual = SLIDER_LOG_KEYS.has(key) || SLIDER_SEG_KEYS.has(key);
+
+      if(isVirtual) initVirtualRange(el, key);
+
+      // touch-action:none prevents page scroll while dragging (all sliders)
+      el.style.touchAction = "none";
+
+      // Custom pointer handling only for virtual-range sliders
+      if(!isVirtual) return;
+
+      let dragging = false;
+      let rafId = null;
+
+      el.addEventListener("pointerdown", e => {
+        dragging = true;
+        try{ el.setPointerCapture(e.pointerId); }catch(_){}
+        e.preventDefault();
+        handleVirtualMove(e);
+      }, {passive: false});
+
+      el.addEventListener("pointermove", e => {
+        if(!dragging) return;
+        e.preventDefault();
+        if(rafId) cancelAnimationFrame(rafId);
+        rafId = requestAnimationFrame(() => handleVirtualMove(e));
+      }, {passive: false});
+
+      el.addEventListener("pointerup",     () => { dragging = false; rafId = null; });
+      el.addEventListener("pointercancel", () => { dragging = false; rafId = null; });
+
+      el.addEventListener("keydown", e => {
+        const cur = parseFloat(el.value) || 0;
+        let delta = 0;
+        if(e.key==="ArrowRight"||e.key==="ArrowUp")      delta = e.shiftKey ? 500 : 50;
+        else if(e.key==="ArrowLeft"||e.key==="ArrowDown") delta = e.shiftKey ? -500 : -50;
+        else if(e.key==="PageUp")   delta =  1000;
+        else if(e.key==="PageDown") delta = -1000;
+        else if(e.key==="Home"){ applyVirtual(el, key, 0);     e.preventDefault(); return; }
+        else if(e.key==="End") { applyVirtual(el, key, 10000); e.preventDefault(); return; }
+        else return;
+        e.preventDefault();
+        applyVirtual(el, key, cur + delta);
+      });
+
+      function handleVirtualMove(e){
+        const rect = el.getBoundingClientRect();
+        const fraction = clamp((e.clientX - rect.left) / rect.width, 0, 1);
+        applyVirtual(el, key, Math.round(fraction * 10000));
+      }
+    });
+  }
+
 })();
 </script>
 <script>
