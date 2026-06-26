@@ -8634,7 +8634,7 @@ input.range{touch-action:none;-webkit-user-select:none;user-select:none;}
   .p5-results-grid{grid-template-columns:1fr 1fr;}
 }
 /* ===== OPT SUB-TAB NAV ===== */
-.opt-subnav{display:flex;gap:0;border-bottom:2px solid var(--line);margin-bottom:16px;overflow-x:auto;}
+.opt-subnav{display:flex;gap:0;border-bottom:2px solid var(--line);margin-bottom:16px;overflow-x:auto;overflow-y:hidden;}
 .opt-subtab{background:none;border:none;padding:10px 18px;font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--stone);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap;transition:color .15s,border-color .15s;min-height:44px;touch-action:manipulation;}
 .opt-subtab.active{color:var(--ink);border-bottom-color:var(--olive);}
 .opt-subtab-panel{display:none;}
@@ -8715,22 +8715,43 @@ input.range{touch-action:none;-webkit-user-select:none;user-select:none;}
   margin-top:10px;
   line-height:1.5;
 }
-/* ── opt-segmented vertical card shape (p5 mode ≤860px, obj ≤640px) ── */
-@media(max-width:860px){
-  #p5ModeSelector{border-radius:12px !important;padding:4px !important;}
-  #p5ModeSelector .opt-option{border-radius:8px !important;}
-  #p5ModeSelector .opt-option.active{
-    border-left:3px solid rgba(100,112,73,.4) !important;
-    padding-left:11px !important;
-  }
+/* ── P5 context strip (mini full-range chart) ── */
+.p5-context-strip{margin-top:8px;border:1px solid var(--line);border-radius:8px;padding:6px 10px 8px;background:rgba(244,236,223,.22);}
+.p5-context-strip-label{font-size:7.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+/* ── P5 mode select: premium styled dropdown ── */
+.p5-mode-select{
+  width:100%;min-height:40px;padding:0 28px 0 10px;
+  background:var(--soft) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23786450'/%3E%3C/svg%3E") no-repeat right 10px center;
+  border:1px solid var(--line);border-radius:8px;
+  color:var(--ink);font-family:inherit;font-size:10px;font-weight:700;letter-spacing:.07em;
+  cursor:pointer;appearance:none;-webkit-appearance:none;text-transform:uppercase;
 }
+.p5-mode-select:focus{outline:2px solid rgba(100,112,73,.3);outline-offset:2px;}
+/* ── Chart view controls ── */
+.p5-chart-header{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:6px;}
+.p5-chart-header .p5-curve-desc{margin:0;flex:1 1 auto;}
+.p5-chart-controls{display:flex;gap:4px;flex-shrink:0;align-items:center;}
+.p5-chart-btn{
+  border:1px solid var(--line);background:var(--soft);border-radius:6px;
+  padding:4px 10px;font-size:8.5px;font-weight:700;letter-spacing:.07em;
+  text-transform:uppercase;color:var(--stone);cursor:pointer;white-space:nowrap;
+  transition:background .15s,color .15s,border-color .15s;min-height:30px;
+}
+.p5-chart-btn.active{background:var(--card);border-color:var(--olive);color:var(--ink);box-shadow:0 2px 6px rgba(56,42,25,.07);}
+.p5-chart-btn:hover{color:var(--ink);}
+/* ── Surface Explorer objective: slimmer options on desktop ── */
+@media(min-width:769px){
+  .opt-goals .opt-option{min-height:34px !important;padding:4px 8px !important;}
+}
+/* ── Surface Explorer objective: card shape on mobile ── */
 @media(max-width:768px){
   .opt-goals{border-radius:12px !important;padding:4px !important;}
   .opt-goals .opt-option{border-radius:8px !important;}
-  .opt-goals .opt-option.active{
-    border-left:3px solid rgba(100,112,73,.4) !important;
-    padding-left:11px !important;
-  }
+  .opt-goals .opt-option.active{border-left:3px solid rgba(100,112,73,.4) !important;padding-left:11px !important;}
+}
+/* ── Seed lock button: refined height ── */
+@media(min-width:641px){
+  #p5SeedLockBtn{min-height:36px !important;padding:5px 12px !important;}
 }
 /* ── opt-frontier collapsed drawer ── */
 .opt-frontier-drawer{margin-top:12px}
@@ -9082,14 +9103,14 @@ input.range{touch-action:none;-webkit-user-select:none;user-select:none;}
       <span class="opt-field-title">Hedef Çarpan (P5)</span>
       <input class="opt-input mono" id="p5TargetMultiple" max="50" min="0.1" step="0.1" type="number" value="2.0"/>
     </label>
-    <div class="opt-field-card">
+    <label class="opt-field-card">
       <span class="opt-field-title">Optimizasyon Modu</span>
-      <div aria-label="P5 modu" class="opt-segmented" id="p5ModeSelector" role="group" style="margin-top:5px">
-        <button aria-pressed="true"  class="opt-option active" data-p5mode="risk"      type="button">Min. Risk %</button>
-        <button aria-pressed="false" class="opt-option"        data-p5mode="frequency" type="button">Min. Frekans</button>
-        <button aria-pressed="false" class="opt-option"        data-p5mode="winrate"   type="button">Min. Kazanma %</button>
-      </div>
-    </div>
+      <select class="opt-input p5-mode-select" id="p5ModeSelector" aria-label="P5 modu">
+        <option value="risk">Min. Risk %</option>
+        <option value="frequency">Min. Frekans</option>
+        <option value="winrate">Min. Kazanma %</option>
+      </select>
+    </label>
     <label class="opt-field-card">
       <span class="opt-field-title">Tarama Simülasyonu</span>
       <input class="opt-input mono" id="p5OptIter" max="3000" min="200" step="100" type="number" value="800"/>
@@ -9157,9 +9178,20 @@ input.range{touch-action:none;-webkit-user-select:none;user-select:none;}
   <div id="p5ConstraintSummary" class="p5-constraint-summary none" style="display:none"></div>
   <div class="opt-output-card">
     <div class="chart-title" id="p5CurveTitle">P5 Sermaye / Test Edilen Parametre</div>
-    <p class="p5-curve-desc">Her nokta, yalnızca seçili parametre değiştirilerek hesaplanan P5 final sermayeyi gösterir. Yatay çizgi hedef P5 sermayedir.</p>
+    <div class="p5-chart-header">
+      <p class="p5-curve-desc" id="p5CurveDesc">Her nokta, yalnızca seçili parametre değiştirilerek hesaplanan P5 final sermayeyi gösterir. Yatay çizgi hedef P5 sermayedir.</p>
+      <div class="p5-chart-controls" id="p5ChartControls" style="display:none">
+        <button class="p5-chart-btn active" data-chartview="decision" type="button">Karar Aralığı</button>
+        <button class="p5-chart-btn" data-chartview="full" type="button">Tam Aralık</button>
+        <button class="p5-chart-btn" data-chartview="log" type="button">Log</button>
+      </div>
+    </div>
     <div class="canvas-wrap" style="height:400px;position:relative"><canvas id="p5CurveChart"></canvas></div>
     <div class="p5-curve-cap-note" id="p5CurveCapNote" style="display:none"></div>
+    <div class="p5-context-strip" id="p5ContextStrip" style="display:none">
+      <div class="p5-context-strip-label">Tam Veri Aralığı (karar aralığı yeşil band)</div>
+      <div style="height:56px;position:relative"><canvas id="p5ContextChart"></canvas></div>
+    </div>
   </div>
 </div>
 <div class="opt-output-card" id="p5AuditCard" style="display:none">
@@ -13537,8 +13569,8 @@ function renderCharts(result){
   };
 
   function p5GetActiveMode(){
-    const btn = document.querySelector("#p5ModeSelector .opt-option.active");
-    return btn ? (btn.dataset.p5mode || "risk") : "risk";
+    const el = document.getElementById("p5ModeSelector");
+    return el ? (el.value || "risk") : "risk";
   }
 
   function p5GetConstraints(){
@@ -13801,104 +13833,264 @@ function renderCharts(result){
   }
 
   function p5RenderCurve(allSorted, targetP5, mode){
-    const canvas=$("p5CurveChart");
+    const canvas=$('p5CurveChart');
     if(!canvas) return;
+    window._p5LastCurveArgs={allSorted,targetP5,mode};
     const result=p5Opt.result;
-    const minPV=result&&result.minimum?result.minimum.paramValue:null;
-    const robPV=result&&result.robust?result.robust.paramValue:null;
-    const bestPV=result&&result.bestAvailable?result.bestAvailable.paramValue:null;
+
+    // Anchor param values from result — authoritative source, not from pts array
+    const minPV  = result&&result.minimum       ? result.minimum.paramValue       : null;
+    const robPV  = result&&result.robust        ? result.robust.paramValue        : null;
+    const bestPV = result&&result.bestAvailable ? result.bestAvailable.paramValue : null;
+
+    const xAxisLabel = mode==='risk'?'Trade Başına Risk %':mode==='frequency'?'Haftalık Trade Frekansı':'Kazanma Oranı %';
+    const fmtX = v => mode==='risk'?fmtNum(v,1)+'%':mode==='frequency'?fmtNum(v*5,1):fmtNum(v,1)+'%';
+    const titleEl=$('p5CurveTitle');
+    if(titleEl) titleEl.textContent='P5 Final Sermaye / '+xAxisLabel;
+
+    // Downsample for main curve but FORCE anchor points into pts
     const stride=Math.max(1,Math.floor(allSorted.length/120));
-    const pts=allSorted.filter((_,i)=>i%stride===0);
-    const toLabel=c=>mode==="risk"?fmtNum(c.paramValue,1)+"%":mode==="frequency"?fmtNum(c.paramValue*5,1):fmtNum(c.paramValue,1)+"%";
-    const labels=pts.map(toLabel);
-    const p5data=pts.map(c=>c.p5);
-    const p50data=pts.map(c=>c.p50||null);
-    const constrainedData=pts.map(c=>(!c.valid?c.p5:null));
-    const xAxisLabel=mode==="risk"?"Trade Başına Risk %":mode==="frequency"?"Haftalık Trade Frekansı":"Kazanma Oranı %";
-    const titleEl=$("p5CurveTitle");
-    if(titleEl) titleEl.textContent="P5 Final Sermaye / "+xAxisLabel;
-    const minIdx=minPV!=null?pts.findIndex(c=>Math.abs(c.paramValue-minPV)<0.0001):-1;
-    const robIdx=robPV!=null&&robPV!==minPV?pts.findIndex(c=>Math.abs(c.paramValue-robPV)<0.0001):-1;
-    const bestIdx=bestPV!=null&&bestPV!==minPV&&bestPV!==robPV?pts.findIndex(c=>Math.abs(c.paramValue-bestPV)<0.0001):-1;
-    function sparseData(idx,val){ const a=Array(labels.length).fill(null); if(idx>=0) a[idx]=val; return a; }
-    if(window._p5CurveInst){ try{ window._p5CurveInst.destroy(); }catch(e){} }
-    // Smart Y-axis cap: prevent extreme outliers from collapsing the readable range
-    const _vp5=p5data.filter(v=>v!=null&&isFinite(v)&&v>0).sort((a,b)=>a-b);
-    const _vLen=_vp5.length;
-    const _p95cap=_vLen>0?_vp5[Math.floor(_vLen*0.95)]:0;
-    const _p98cap=_vLen>0?_vp5[Math.floor(_vLen*0.98)]:0;
-    const _maxRaw=_vLen>0?_vp5[_vLen-1]:0;
-    const _isCapped=_p95cap>0&&(_maxRaw/_p95cap)>2.5&&_vLen>10;
-    const _yCapRaw=_isCapped?Math.max(_p98cap,targetP5*2)*1.08:undefined;
-    const yCapValue=_yCapRaw?Math.ceil(_yCapRaw/1000)*1000:undefined;
-    const hasConstrained=constrainedData.some(v=>v!==null);
+    const anchorSet=new Set([minPV,robPV,bestPV].filter(v=>v!=null));
+    const rawPts=allSorted.filter((_,i)=>i%stride===0||anchorSet.has(_.paramValue));
+    const seenPV=new Set();
+    const pts=[];
+    for(const c of rawPts){if(!seenPV.has(c.paramValue)){seenPV.add(c.paramValue);pts.push(c);}}
+    pts.sort((a,b)=>a.paramValue-b.paramValue);
+
+    // Anchor indices — exact match guaranteed since anchors are forced into pts
+    const minIdx  = minPV!=null  ? pts.findIndex(c=>c.paramValue===minPV)  : -1;
+    const robIdx  = (robPV!=null&&robPV!==minPV)             ? pts.findIndex(c=>c.paramValue===robPV)  : -1;
+    const bestIdx = (bestPV!=null&&bestPV!==minPV&&bestPV!==robPV) ? pts.findIndex(c=>c.paramValue===bestPV) : -1;
+
+    // Decision window boundaries (numeric paramValues — no string label ambiguity)
+    let dwLeftPV=minPV, dwRightPV=null;
+    if(robIdx>=0)        dwRightPV=robPV;
+    else if(bestIdx>=0)  dwRightPV=bestPV;
+    else if(minPV!=null){
+      const pvs=pts.map(c=>c.paramValue);
+      const range=(pvs[pvs.length-1]||0)-(pvs[0]||0);
+      dwRightPV=minPV+Math.max(range*0.20, range/Math.max(pts.length-1,1)*5);
+    }
+    // robust===minimum edge case: apply auto margin
+    if(dwLeftPV!=null&&dwRightPV!=null&&Math.abs(dwLeftPV-dwRightPV)<0.00001){
+      const pvs=pts.map(c=>c.paramValue);
+      const range=(pvs[pvs.length-1]||0)-(pvs[0]||0);
+      dwRightPV=dwLeftPV+Math.max(range*0.18, range/Math.max(pts.length-1,1)*4);
+    }
+    const hasDW=dwLeftPV!=null&&dwRightPV!=null&&(dwRightPV-dwLeftPV)>0.00001;
+
+    if(window._p5CurveInst){try{window._p5CurveInst.destroy();}catch(e){}}
+    if(window._p5ContextInst){try{window._p5ContextInst.destroy();}catch(e){}}
+
+    const viewMode=window._p5ChartViewMode||'decision';
+
+    // X and Y range options
+    let xOpts={}, yOpts={}, yType='linear';
+    if(viewMode==='decision'&&hasDW){
+      const margin=(dwRightPV-dwLeftPV)*0.22;
+      xOpts={min:dwLeftPV-margin, max:dwRightPV+margin};
+      const vis=pts.filter(c=>c.paramValue>=xOpts.min&&c.paramValue<=xOpts.max&&c.p5!=null&&isFinite(c.p5)&&c.p5>0).map(c=>c.p5);
+      if(vis.length>0){
+        const visMin=Math.min(...vis),visMax=Math.max(...vis);
+        yOpts={min:Math.max(0,visMin*0.93),max:Math.max(visMax,targetP5)*1.07};
+      }
+    } else if(viewMode==='log'){
+      yType='logarithmic';
+    } else {
+      const vp5=pts.filter(c=>c.p5!=null&&isFinite(c.p5)&&c.p5>0).map(c=>c.p5).sort((a,b)=>a-b);
+      const vLen=vp5.length;
+      const p95c=vLen>0?vp5[Math.floor(vLen*0.95)]:0;
+      const p98c=vLen>0?vp5[Math.floor(vLen*0.98)]:0;
+      const maxR=vLen>0?vp5[vLen-1]:0;
+      if(p95c>0&&(maxR/p95c)>2.5&&vLen>10) yOpts={max:Math.ceil(Math.max(p98c,targetP5*2)*1.08/1000)*1000};
+    }
+
+    // Datasets with numeric {x,y} format for reliable linear x-scale
+    const mkXY=c=>({x:c.paramValue,y:c.p5});
+    const constrainedPts=pts.filter(c=>!c.valid);
+    const hasConstrained=constrainedPts.length>0;
+    const KNOWN_LABELS=['P5 Final Sermaye','Hedef P5','Minimum Required','Robust Recommendation','Best Available','Kısıt İhlali'];
     const datasets=[
-      {label:"P5 Final Sermaye",data:p5data,borderColor:"#647049",backgroundColor:"rgba(100,112,73,.07)",borderWidth:2,pointRadius:0,tension:0.3,fill:true,order:4},
-      {label:"Hedef P5",data:Array(labels.length).fill(targetP5),borderColor:"#c65b36",borderDash:[5,4],borderWidth:1.5,pointRadius:0,order:3}
+      {_r:'main',label:'P5 Final Sermaye',data:pts.map(mkXY),borderColor:'#647049',backgroundColor:'rgba(100,112,73,.07)',borderWidth:2,pointRadius:0,tension:0.3,fill:true,order:4},
+      {_r:'tgt',label:'Hedef P5',data:pts.map(c=>({x:c.paramValue,y:targetP5})),borderColor:'#c65b36',borderDash:[5,4],borderWidth:1.5,pointRadius:0,order:3}
     ];
-    if(minIdx>=0) datasets.push({label:"Minimum Required",data:sparseData(minIdx,pts[minIdx].p5),borderColor:"#c65b36",backgroundColor:"#c65b36",pointRadius:7,pointStyle:"circle",showLine:false,order:1});
-    if(robIdx>=0) datasets.push({label:"Robust Recommendation",data:sparseData(robIdx,pts[robIdx].p5),borderColor:"#2d5c20",backgroundColor:"#2d5c20",pointRadius:7,pointStyle:"triangle",showLine:false,order:1});
-    if(bestIdx>=0) datasets.push({label:"Best Available",data:sparseData(bestIdx,pts[bestIdx].p5),borderColor:"#a88442",backgroundColor:"#a88442",pointRadius:6,pointStyle:"star",showLine:false,order:1});
-    if(hasConstrained) datasets.push({label:"Kısıt İhlali",data:constrainedData,borderColor:"rgba(127,39,55,.4)",backgroundColor:"rgba(127,39,55,.15)",pointRadius:2,showLine:false,order:2});
-    if(_isCapped&&yCapValue){
-      const _clipped=p5data.map(v=>(v!=null&&v>yCapValue)?yCapValue*0.99:null);
-      if(_clipped.some(v=>v!==null)) datasets.push({label:"Eksen Üstü Aday ▲",data:_clipped,borderColor:"rgba(168,132,66,.9)",backgroundColor:"rgba(168,132,66,.75)",pointRadius:7,pointStyle:"triangle",showLine:false,order:0});
+    if(minIdx>=0)  datasets.push({_r:'min', label:'Minimum Required',      data:[mkXY(pts[minIdx])],  borderColor:'#c65b36',backgroundColor:'#c65b36',pointRadius:7,pointStyle:'circle',  showLine:false,order:1});
+    if(robIdx>=0)  datasets.push({_r:'rob', label:'Robust Recommendation', data:[mkXY(pts[robIdx])],  borderColor:'#2d5c20',backgroundColor:'#2d5c20',pointRadius:7,pointStyle:'triangle',showLine:false,order:1});
+    if(bestIdx>=0) datasets.push({_r:'best',label:'Best Available',        data:[mkXY(pts[bestIdx])], borderColor:'#a88442',backgroundColor:'#a88442',pointRadius:6,pointStyle:'star',    showLine:false,order:1});
+    if(hasConstrained) datasets.push({_r:'con',label:'Kısıt İhlali',data:constrainedPts.map(mkXY),borderColor:'rgba(127,39,55,.4)',backgroundColor:'rgba(127,39,55,.15)',pointRadius:2,showLine:false,order:2});
+
+    // Decision band plugin — afterDraw renders ON TOP of datasets (always visible)
+    const _bShow=viewMode==='decision'&&hasDW;
+    const _dwL=dwLeftPV, _dwR=dwRightPV;
+    const bandPlugin={
+      id:'p5band',
+      afterDraw(chart){
+        if(!_bShow) return;
+        const {ctx,chartArea,scales}=chart;
+        const xS=scales.x;
+        if(!xS||!chartArea) return;
+        const lx=xS.getPixelForValue(_dwL);
+        const rx=xS.getPixelForValue(_dwR);
+        if(!isFinite(lx)||!isFinite(rx)||Math.abs(lx-rx)<2) return;
+        const L=Math.min(lx,rx),R=Math.max(lx,rx);
+        ctx.save();
+        ctx.fillStyle='rgba(100,112,73,.09)';
+        ctx.fillRect(L,chartArea.top,R-L,chartArea.height);
+        ctx.setLineDash([6,3]);ctx.lineWidth=2;
+        ctx.strokeStyle='rgba(198,91,54,.82)';
+        ctx.beginPath();ctx.moveTo(lx,chartArea.top);ctx.lineTo(lx,chartArea.bottom);ctx.stroke();
+        ctx.strokeStyle='rgba(45,92,32,.82)';
+        ctx.beginPath();ctx.moveTo(rx,chartArea.top);ctx.lineTo(rx,chartArea.bottom);ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.font='bold 9px system-ui,sans-serif';
+        ctx.textAlign='left';ctx.fillStyle='rgba(198,91,54,.92)';
+        ctx.fillText('Min',lx+4,chartArea.top+13);
+        ctx.textAlign='right';ctx.fillStyle='rgba(45,92,32,.92)';
+        ctx.fillText(robIdx>=0?'Rob':bestIdx>=0?'Best':'─',rx-4,chartArea.top+13);
+        ctx.restore();
+      }
+    };
+
+    function findCandAt(xVal){
+      if(!pts.length) return null;
+      return pts.reduce((b,c)=>Math.abs(c.paramValue-xVal)<Math.abs(b.paramValue-xVal)?c:b,pts[0]);
     }
-    const _capNote=document.getElementById("p5CurveCapNote");
-    if(_capNote){
-      if(_isCapped&&yCapValue){_capNote.textContent="⚑ Y ekseni okunurluk için "+fmtMoney(yCapValue)+" ile sınırlandı. ▲ simgesi eksen üstü adayları işaretler; gerçek P5 değerleri tooltip'te gösterilir.";_capNote.style.display="";}
-      else{_capNote.style.display="none";}
+
+    const descEl=document.getElementById('p5CurveDesc');
+    const capNote=document.getElementById('p5CurveCapNote');
+    if(viewMode==='decision'){
+      const rightName=robIdx>=0?'Robust Recommendation':bestIdx>=0?'Best Available':'otomatik sağ sınır';
+      if(descEl) descEl.textContent=hasDW
+        ?'Karar Aralığı — sol (kırmızı): Minimum Required; sağ (yeşil): '+rightName+'. Y ekseni karar bölgesine uyarlandı.'
+        :'Karar aralığı için yeterli farklı anchor bulunamadı; tam aralık gösteriliyor.';
+      if(capNote) capNote.style.display='none';
+    } else if(viewMode==='log'){
+      if(descEl) descEl.textContent='Log ölçek — küçük ve büyük P5 değerleri arasındaki fark okunabilir hale gelir.';
+      if(capNote) capNote.style.display='none';
+    } else {
+      if(descEl) descEl.textContent='Her nokta, yalnızca seçili parametre değiştirilerek hesaplanan P5 final sermayeyi gösterir. Yatay çizgi hedef P5 sermayedir.';
+      if(capNote){
+        if(yOpts.max){capNote.textContent='⚑ Y ekseni okunurluk için '+fmtMoney(yOpts.max)+' ile sınırlandı; gerçek değerler tooltip\'te gösterilir.';capNote.style.display='';}
+        else capNote.style.display='none';
+      }
     }
+
+    const ctrlEl=document.getElementById('p5ChartControls');
+    if(ctrlEl){
+      ctrlEl.style.display='';
+      ctrlEl.querySelectorAll('.p5-chart-btn').forEach(b=>b.classList.toggle('active',b.dataset.chartview===viewMode));
+    }
+
     window._p5CurveInst=new Chart(canvas,{
-      type:"line",
-      data:{labels,datasets},
+      type:'line',
+      plugins:[bandPlugin],
+      data:{datasets},
       options:{
         responsive:true,maintainAspectRatio:false,animation:{duration:0},
+        parsing:false,
         plugins:{
-          legend:{display:true,position:"bottom",labels:{font:{size:10},boxWidth:14,padding:10,filter:item=>item.datasetIndex===0||item.datasetIndex===1||(item.datasetIndex===2&&minIdx>=0)||(item.datasetIndex===3&&robIdx>=0)||(item.datasetIndex===4&&bestIdx>=0)||(hasConstrained&&item.label==="Kısıt İhlali")||item.label==="Eksen Üstü Aday ▲"}},
+          legend:{display:true,position:'bottom',labels:{font:{size:10},boxWidth:14,padding:10,
+            filter:item=>KNOWN_LABELS.includes(item.text)
+          }},
           tooltip:{
+            mode:'nearest',intersect:false,
             callbacks:{
-              title:([item])=>{
-                const c=pts[item.dataIndex];
-                if(!c) return item.label;
-                return xAxisLabel+": "+toLabel(c);
+              title:items=>{
+                if(!items.length) return '';
+                const x=items[0].parsed&&items[0].parsed.x;
+                if(x==null||!isFinite(x)) return '';
+                const c=findCandAt(x);
+                return c?xAxisLabel+': '+fmtX(c.paramValue):'';
               },
               label:()=>null,
-              afterBody:([item])=>{
-                const c=pts[item.dataIndex];
+              afterBody:items=>{
+                if(!items.length) return [];
+                const x=items[0].parsed&&items[0].parsed.x;
+                if(x==null||!isFinite(x)) return [];
+                const c=findCandAt(x);
                 if(!c) return [];
                 const lines=[];
-                lines.push("P5: "+fmtMoney(c.p5));
-                lines.push("Hedef P5: "+fmtMoney(targetP5));
+                lines.push('P5: '+fmtMoney(c.p5));
+                lines.push('Hedef P5: '+fmtMoney(targetP5));
                 const gap=c.p5-targetP5;
-                lines.push("Hedef Farkı: "+(gap>=0?"+":"")+fmtMoney(gap));
-                lines.push("P5/Hedef: "+(c.p5/Math.max(1,targetP5)*100).toFixed(1)+"%");
-                if(c.p50) lines.push("P50: "+fmtMoney(c.p50));
-                if(c.p95) lines.push("P95: "+fmtMoney(c.p95));
-                if(c.severeLoss!=null) lines.push("Ağır Kayıp: "+fmtPct(c.severeLoss));
-                if(c.p95DD!=null) lines.push("P95 DD: "+fmtPct(c.p95DD));
-                const status=!c.valid?"Kısıt İhlali":"✓ Kısıtsız";
-                lines.push("Durum: "+status);
+                lines.push('Hedef Farkı: '+(gap>=0?'+':'')+fmtMoney(gap));
+                lines.push('P5/Hedef: '+(c.p5/Math.max(1,targetP5)*100).toFixed(1)+'%');
+                if(c.p50) lines.push('P50: '+fmtMoney(c.p50));
+                if(c.p95) lines.push('P95: '+fmtMoney(c.p95));
+                if(c.severeLoss!=null) lines.push('Ağır Kayıp: '+fmtPct(c.severeLoss));
+                if(c.p95DD!=null) lines.push('P95 DD: '+fmtPct(c.p95DD));
+                lines.push('Durum: '+(!c.valid?'Kısıt İhlali':'✓ Kısıtsız'));
                 const roles=[];
-                if(minIdx>=0&&pts[minIdx]===c) roles.push("Minimum");
-                if(robIdx>=0&&pts[robIdx]===c) roles.push("Robust");
-                if(bestIdx>=0&&pts[bestIdx]===c) roles.push("Best");
-                if(roles.length) lines.push("Rol: "+roles.join(", "));
+                if(minIdx>=0&&pts[minIdx]===c) roles.push('Minimum');
+                if(robIdx>=0&&pts[robIdx]===c) roles.push('Robust');
+                if(bestIdx>=0&&pts[bestIdx]===c) roles.push('Best');
+                if(roles.length) lines.push('Rol: '+roles.join(', '));
                 return lines;
               }
             },
-            displayColors:false,
-            backgroundColor:"rgba(30,26,20,.9)",
-            titleFont:{size:11,weight:"bold"},
-            bodyFont:{size:11},
-            padding:10,
-            maxWidth:220
+            displayColors:false,backgroundColor:'rgba(30,26,20,.9)',
+            titleFont:{size:11,weight:'bold'},bodyFont:{size:11},padding:10,maxWidth:220
           }
         },
         scales:{
-          x:{title:{display:true,text:xAxisLabel,font:{size:10}},ticks:{maxTicksLimit:10,font:{size:9}},grid:{display:false}},
-          y:{title:{display:true,text:"P5 Final Sermaye",font:{size:10}},ticks:{callback:v=>fmtMoney(v),font:{size:9}},...(yCapValue?{max:yCapValue}:{})}
+          x:{type:'linear',...xOpts,title:{display:true,text:xAxisLabel,font:{size:10}},ticks:{maxTicksLimit:10,font:{size:9},callback:v=>fmtX(v)},grid:{display:false}},
+          y:{type:yType,...(yType==='logarithmic'?{}:yOpts),title:{display:true,text:'P5 Final Sermaye',font:{size:10}},ticks:{callback:v=>fmtMoney(v),font:{size:9}}}
         }
+      }
+    });
+
+    _p5RenderContextStrip(pts,targetP5,hasDW?{left:dwLeftPV,right:dwRightPV}:null,(viewMode==='decision'&&hasDW)?xOpts:null);
+  }
+
+  function _p5RenderContextStrip(pts,targetP5,dw,mainXOpts){
+    const stripEl=document.getElementById('p5ContextStrip');
+    const canvas=document.getElementById('p5ContextChart');
+    if(!canvas){if(stripEl)stripEl.style.display='none';return;}
+    if(window._p5ContextInst){try{window._p5ContextInst.destroy();}catch(e){}}
+    if(!pts||pts.length<4||!dw){if(stripEl)stripEl.style.display='none';return;}
+    if(stripEl) stripEl.style.display='';
+    const dwBandPlugin={
+      id:'p5ctxband',
+      afterDraw(chart){
+        const {ctx,chartArea,scales}=chart;
+        const xS=scales.x;
+        if(!xS||!chartArea) return;
+        ctx.save();
+        if(dw){
+          const lx=xS.getPixelForValue(dw.left);
+          const rx=xS.getPixelForValue(dw.right);
+          if(isFinite(lx)&&isFinite(rx)){
+            const L=Math.min(lx,rx),R=Math.max(lx,rx);
+            ctx.fillStyle='rgba(100,112,73,.20)';
+            ctx.fillRect(L,chartArea.top,R-L,chartArea.height);
+            ctx.strokeStyle='rgba(100,112,73,.55)';
+            ctx.lineWidth=1.5;ctx.setLineDash([]);
+            ctx.strokeRect(L,chartArea.top,R-L,chartArea.height);
+          }
+        }
+        if(mainXOpts&&mainXOpts.min!=null&&mainXOpts.max!=null){
+          const lx=xS.getPixelForValue(mainXOpts.min);
+          const rx=xS.getPixelForValue(mainXOpts.max);
+          if(isFinite(lx)&&isFinite(rx)){
+            ctx.strokeStyle='rgba(198,91,54,.55)';
+            ctx.lineWidth=1;ctx.setLineDash([3,2]);
+            ctx.strokeRect(Math.min(lx,rx),chartArea.top,Math.abs(rx-lx),chartArea.height);
+          }
+        }
+        ctx.restore();
+      }
+    };
+    window._p5ContextInst=new Chart(canvas,{
+      type:'line',
+      plugins:[dwBandPlugin],
+      data:{datasets:[
+        {data:pts.map(c=>({x:c.paramValue,y:c.p5})),borderColor:'rgba(100,112,73,.6)',backgroundColor:'rgba(100,112,73,.05)',borderWidth:1.2,pointRadius:0,tension:0.2,fill:true},
+        {data:pts.map(c=>({x:c.paramValue,y:targetP5})),borderColor:'rgba(198,91,54,.45)',borderDash:[4,3],borderWidth:1,pointRadius:0}
+      ]},
+      options:{
+        responsive:true,maintainAspectRatio:false,animation:{duration:0},parsing:false,
+        plugins:{legend:{display:false},tooltip:{enabled:false}},
+        scales:{x:{type:'linear',display:false},y:{type:'linear',display:false}}
       }
     });
   }
@@ -14175,10 +14367,13 @@ function renderCharts(result){
       });
     });
 
-    document.querySelectorAll("#p5ModeSelector .opt-option").forEach(btn=>{
+    document.querySelectorAll(".p5-chart-btn").forEach(btn=>{
       btn.addEventListener("click",()=>{
-        document.querySelectorAll("#p5ModeSelector .opt-option").forEach(b=>{b.classList.remove("active");b.setAttribute("aria-pressed","false");});
-        btn.classList.add("active");btn.setAttribute("aria-pressed","true");
+        window._p5ChartViewMode=btn.dataset.chartview;
+        if(window._p5LastCurveArgs){
+          const {allSorted,targetP5,mode}=window._p5LastCurveArgs;
+          p5RenderCurve(allSorted,targetP5,mode);
+        }
       });
     });
 
@@ -17816,15 +18011,8 @@ body{padding-top:0 !important}
   .p5-inputs-grid{grid-template-columns:1fr !important;}
 }
 
-/* 2 ── P5 mode selector (3 options): grid → 3 col desktop, 1 col phone */
-#p5ModeSelector{
-  display:grid !important;
-  grid-template-columns:repeat(3,minmax(0,1fr)) !important;
-}
-@media(max-width:860px){
-  #p5ModeSelector{grid-template-columns:1fr !important;}
-  #p5ModeSelector .opt-option{min-height:44px !important;justify-content:flex-start !important;padding-left:14px !important;}
-}
+/* 2 ── P5 mode selector is now a <select> — no segmented grid overrides needed */
+.p5-mode-select{min-height:44px !important;}
 
 /* 3 ── Constraint rows: premium field-card stack on phone */
 .p5-constraints-list{display:flex;flex-direction:column;}
