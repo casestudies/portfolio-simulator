@@ -9262,6 +9262,7 @@ input.range{touch-action:none;-webkit-user-select:none;user-select:none;}
   <ul>
     <li>P5, simüle edilen dağılımın 5. persantilidir. Garantili bir taban değildir.</li>
     <li>Monte Carlo sonuçları seed ve yol sayısına göre değişir. Daha fazla yol kuyruk tahminlerini stabilize eder.</li>
+    <li><b>P1 Final</b> tanısal amaçlıdır ve audit tablosunda gösterilir. Yol sayısı ve seed değişimine P5'ten çok daha duyarlıdır; birincil karar metriği olarak kullanmayın. <b>P1–P5 Kuyruk Ortalaması</b>, uç kuyruk kalitesini değerlendirmek için daha istikrarlı bir göstergedir.</li>
     <li>Final P5 Cohort, kötü sonuçlanan yolların gerçekte nasıl evrildiğini görmek için daha uygundur.</li>
     <li>Drawdown Fan, final sonuçlar kabul edilebilir olsa bile yol boyunca yaşanan stresi gösterir.</li>
   </ul>
@@ -11393,13 +11394,14 @@ function setupModes(){
     if(!cohortPaths.length) return null;
     const step = Math.max(1, Math.ceil(days / 70));
     const labels = [];
-    const series = {median:[],p25:[],p75:[]};
+    const series = {median:[],p25:[],p75:[],worst:[]};
     const push = d => {
       const vals = cohortPaths.map(pp=>pp[d]).sort((a,b)=>a-b);
       labels.push(String(d));
       series.median.push(percentile(vals,.50));
       series.p25.push(percentile(vals,.25));
       series.p75.push(percentile(vals,.75));
+      series.worst.push(vals.length ? vals[0] : null);
     };
     for(let d=0; d<=days; d+=step) push(d);
     if(labels[labels.length-1] !== String(days)) push(days);
@@ -11637,13 +11639,17 @@ function renderCharts(result){
     const cohortShell = $("p5CohortShell");
     if(cohort && cohort.labels && cohort.labels.length){
       if(cohortShell) cohortShell.style.display="";
+      const cohortDatasets = [
+        {label:"Kohort P75 (Bant Üst)",data:cohort.series.p75,borderColor:"#a88442",backgroundColor:"rgba(168,132,66,.12)",borderWidth:1,pointRadius:0,tension:.28,fill:false},
+        {label:"Kohort P50 (Medyan)",data:cohort.series.median,borderColor:"#7f2737",backgroundColor:"transparent",borderWidth:2.5,pointRadius:0,tension:.28,fill:false},
+        {label:"Kohort P25 (Bant Alt)",data:cohort.series.p25,borderColor:"#c65b36",backgroundColor:"rgba(198,91,54,.10)",borderWidth:1,pointRadius:0,tension:.28,fill:"-2"}
+      ];
+      if(cohort.series.worst && cohort.series.worst.some(v=>v!=null)){
+        cohortDatasets.push({label:"Kohort P1 (En Kötü Yol)",data:cohort.series.worst,borderColor:"rgba(127,39,55,.45)",backgroundColor:"transparent",borderWidth:1,borderDash:[4,3],pointRadius:0,tension:.18,fill:false});
+      }
       chart("p5CohortChart", {
         type:"line",
-        data:{labels:cohort.labels,datasets:[
-          {label:"Cohort P75",data:cohort.series.p75,borderColor:"#a88442",backgroundColor:"rgba(168,132,66,.10)",borderWidth:1.5,pointRadius:0,tension:.28,fill:false},
-          {label:"Cohort Medyan",data:cohort.series.median,borderColor:"#7f2737",backgroundColor:"rgba(127,39,55,.12)",borderWidth:2.5,pointRadius:0,tension:.28,fill:false},
-          {label:"Cohort P25",data:cohort.series.p25,borderColor:"#c65b36",backgroundColor:"rgba(198,91,54,.10)",borderWidth:1.5,pointRadius:0,tension:.28,fill:false}
-        ]},
+        data:{labels:cohort.labels,datasets:cohortDatasets},
         options:{responsive:true,maintainAspectRatio:false,interaction:{mode:"index",intersect:false},plugins:{legend:{position:"bottom"}},scales:{x:{grid:{display:false},title:{display:true,text:"Gün"}},y:{ticks:{callback:moneyTick},grid:{color:"rgba(226,216,201,.55)"}}}}
       });
     } else if(cohortShell){ cohortShell.style.display="none"; }
@@ -13199,13 +13205,14 @@ function renderCharts(result){
           const sortedPS = pathStats.slice().sort((a,b)=>a.final-b.final);
           const k = Math.max(1, Math.floor(sortedPS.length * 0.05));
           const cohortIdx = sortedPS.slice(0,k).map(s=>s.index);
-          const cseries = {median:[],p25:[],p75:[]};
+          const cseries = {median:[],p25:[],p75:[],worst:[]};
           const clabels = sampleDays.map(String);
           for(let s=0; s<sampleCount; s++){
             const vals = cohortIdx.map(idx=>fanMatrix[s*iterations+idx]).sort((a,b)=>a-b);
             cseries.median.push(percentile(vals,.50));
             cseries.p25.push(percentile(vals,.25));
             cseries.p75.push(percentile(vals,.75));
+            cseries.worst.push(vals.length ? vals[0] : null);
           }
           cohort = {labels:clabels, series:cseries};
         }
@@ -13735,12 +13742,15 @@ function renderCharts(result){
     const sortedDDs = [...(res.dds||[])].sort((a,b)=>a-b);
     const p95DD = sortedDDs.length ? (sortedDDs[Math.floor(sortedDDs.length*0.95)]||0) : 0;
     const medianDD = sortedDDs.length ? (sortedDDs[Math.floor(sortedDDs.length*0.50)]||0) : 0;
+    const sortedFinalsTmp = res.finals && res.finals.length ? [...res.finals].sort((a,b)=>a-b) : null;
+    const p1Final = sortedFinalsTmp ? percentile(sortedFinalsTmp, .01) : (res.p5||0);
     const metrics = {
       p5:res.p5, p50:res.p50, p95:res.p95,
       avgDD:res.avgDD, p95DD, medianDD, worstDD:res.worstDD,
       medianMaxDrawdown:medianDD, p95MaxDrawdown:p95DD,
       ruinProb:res.ruinProb, severeLoss,
       criticalTouchPct, finalCriticalPct,
+      p1Final,
       p1TailAvg:res.p1p5Avg,
       targetProb:res.targetProb, er:res.er,
       iterUsed:effectiveIter
@@ -14018,7 +14028,7 @@ function renderCharts(result){
     const colLabel=mode==="risk"?"Risk %":mode==="frequency"?"Trade/Hafta":"Kazanma %";
     const tgt=targetP5||0;
     const valLabel=v=>v==="finalist"?"Finalist":v==="refine"?"Rafine":"Ön Tarama";
-    thead.innerHTML=`<tr><th class="p5-audit-row-label">Parametre</th><th>P5/Hedef</th><th>P5 Farkı</th><th>P5 Final</th><th>P1-P5 Kuyruk Ort.</th><th>P50 Final</th><th>Medyan DD</th><th>P95 DD</th><th>Kritik Temas %</th><th>Final Kritik %</th><th>Kısıt Marjı</th><th>Validasyon</th></tr>`;
+    thead.innerHTML=`<tr><th class="p5-audit-row-label">Parametre</th><th>P5/Hedef</th><th>P5 Farkı</th><th>P5 Final</th><th title="Tanısal: yol sayısına duyarlı">P1 Final</th><th>P1-P5 Kuyruk Ort.</th><th>P50 Final</th><th>Medyan DD</th><th>P95 DD</th><th>Kritik Temas %</th><th>Final Kritik %</th><th>Kısıt Marjı</th><th>Validasyon</th></tr>`;
     tbody.innerHTML=slice.map(c=>{
       const isMin=c===minimum;
       const pv=mode==="frequency"?fmtNum(c.paramValue*5,1):fmtNum(c.paramValue,2);
@@ -14026,7 +14036,7 @@ function renderCharts(result){
       const diff=c.p5-tgt;
       const ratioCls=ratio>=100?"good":ratio>=90?"":"bad";
       const marginTxt=c.valid?"✓":"✗ "+(c.violations&&c.violations.length?c.violations[0].substring(0,24):"");
-      return `<tr class="${isMin?"audit-min":""}"><td class="p5-audit-row-label mono">${pv}</td><td class="mono ${ratioCls}">${fmtNum(ratio,0)}%</td><td class="mono ${diff>=0?"good":"bad"}">${(diff>=0?"+":"")+fmtMoney(diff)}</td><td class="mono">${fmtMoney(c.p5)}</td><td class="mono">${fmtMoney(c.p1TailAvg||0)}</td><td class="mono">${fmtMoney(c.p50)}</td><td class="mono">${fmtPct(c.medianMaxDrawdown!=null?c.medianMaxDrawdown:c.avgDD)}</td><td class="mono">${fmtPct(c.p95MaxDrawdown!=null?c.p95MaxDrawdown:c.p95DD)}</td><td class="mono">${fmtPct(c.criticalTouchPct!=null?c.criticalTouchPct:c.severeLoss)}</td><td class="mono">${fmtPct(c.finalCriticalPct!=null?c.finalCriticalPct:c.severeLoss)}</td><td>${marginTxt}</td><td><span class="p5-val-badge ${c.validation||"scan"}">${valLabel(c.validation)}</span></td></tr>`;
+      return `<tr class="${isMin?"audit-min":""}"><td class="p5-audit-row-label mono">${pv}</td><td class="mono ${ratioCls}">${fmtNum(ratio,0)}%</td><td class="mono ${diff>=0?"good":"bad"}">${(diff>=0?"+":"")+fmtMoney(diff)}</td><td class="mono">${fmtMoney(c.p5)}</td><td class="mono" style="opacity:.75">${fmtMoney(c.p1Final||0)}</td><td class="mono">${fmtMoney(c.p1TailAvg||0)}</td><td class="mono">${fmtMoney(c.p50)}</td><td class="mono">${fmtPct(c.medianMaxDrawdown!=null?c.medianMaxDrawdown:c.avgDD)}</td><td class="mono">${fmtPct(c.p95MaxDrawdown!=null?c.p95MaxDrawdown:c.p95DD)}</td><td class="mono">${fmtPct(c.criticalTouchPct!=null?c.criticalTouchPct:c.severeLoss)}</td><td class="mono">${fmtPct(c.finalCriticalPct!=null?c.finalCriticalPct:c.severeLoss)}</td><td>${marginTxt}</td><td><span class="p5-val-badge ${c.validation||"scan"}">${valLabel(c.validation)}</span></td></tr>`;
     }).join("");
     let legend=$("p5AuditLegend");
     if(!legend){
@@ -14040,7 +14050,8 @@ function renderCharts(result){
       <li><b>P5/Hedef</b> — adayın P5 final sermayesinin hedefe oranı (100% = hedefte).</li>
       <li><b>P5 Farkı</b> — P5 final sermaye eksi hedef P5 (para birimi).</li>
       <li><b>P5 Final</b> — 5. persantil final sermaye.</li>
-      <li><b>P1-P5 Kuyruk Ort.</b> — en kötü kuyruğun (P1–P5) ortalaması.</li>
+      <li><b>P1 Final</b> — 1. persantil final sermaye (tanısal); yol sayısı ve seed değişimine P5'ten daha duyarlıdır, birincil karar metriği olarak kullanılmamalıdır.</li>
+      <li><b>P1-P5 Kuyruk Ort.</b> — en kötü kuyruğun (P1–P5) ortalaması; tercih edilen kuyruk kalite metriğidir.</li>
       <li><b>P50 Final</b> — medyan final sermaye.</li>
       <li><b>Medyan DD</b> — medyan maksimum drawdown.</li>
       <li><b>P95 DD</b> — 95. persantil maksimum drawdown.</li>
