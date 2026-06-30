@@ -940,10 +940,11 @@ table{width:100%;border-collapse:collapse}
 }
 .param-toolbar{
   display:grid;
-  grid-template-columns:minmax(0,1fr);
+  grid-template-columns:1fr 1fr;
   gap:10px;
   margin:6px 0 16px;
 }
+.param-toolbar>:nth-child(n+3){grid-column:1/-1}
 .risk-mode-compact{
   display:grid;
   grid-template-columns:minmax(0,1fr) minmax(170px,230px);
@@ -2596,10 +2597,8 @@ table{width:100%;border-collapse:collapse}
 
 /* v18: core path metrics and executive scatter narratives */
 .audit-toolbar{
-  display:grid;
-  grid-template-columns:1.2fr 1fr;
-  gap:14px;
-  margin:0 0 18px;
+  display:block;
+  margin:0;
 }
 .audit-card{
   display:flex;
@@ -8690,10 +8689,11 @@ input.range{touch-action:none;-webkit-user-select:none;user-select:none;}
   justify-self:center;
   opacity:.5;
 }
-/* ── advanced param sub-groups ── */
-.adv-subgroup{margin-top:16px}
-.adv-subgroup:first-child{margin-top:0}
+/* ── advanced param sub-groups — flat grid, labels span full width ── */
+.adv-subgroup{display:contents}
+.adv-subgroup>.control-grid{display:contents}
 .adv-subgroup-label{
+  grid-column:1/-1;
   font-size:9px;
   font-weight:900;
   letter-spacing:.1em;
@@ -8701,9 +8701,10 @@ input.range{touch-action:none;-webkit-user-select:none;user-select:none;}
   color:var(--stone);
   padding:6px 2px 8px;
   border-bottom:1px solid var(--line);
-  margin-bottom:10px;
+  margin-bottom:2px;
+  margin-top:14px;
 }
-.adv-subgroup .control-grid{margin-top:0}
+.adv-subgroup-label:first-child{margin-top:0}
 /* ── P5 curve cap note ── */
 .p5-curve-cap-note{
   font-size:10.5px;
@@ -18885,6 +18886,7 @@ body.is-dev .quality-check-drawer{display:block !important;}
 
 /* ── Phone (≤640px) ── */
 @media(max-width:640px){
+  .param-toolbar{grid-template-columns:1fr}
   body{padding:14px 12px;}
   .app{gap:14px;}
   .hero{padding:18px 14px;border-radius:18px;grid-template-columns:1fr;}
